@@ -44,14 +44,15 @@ def block_constants(x: int, pattern: tuple[int, ...]) -> tuple[int, int, int]:
 
 
 def repetition_bound(x: int, n: int, pattern: tuple[int, ...]) -> int | None:
-    """Return the rigorous repetition upper bound, or None at the block fixed point."""
+    """Return a nonnegative repetition upper bound, or None at the fixed point."""
     if n <= 0 or n % 2 == 0:
         raise ValueError("n must be a positive odd integer")
     total, b, d = block_constants(x, pattern)
     witness = d * n + b
     if witness == 0:
         return None
-    return max(-1, (v2(abs(witness)) - 1) // total)
+    # If the witness is odd, not even one complete exact block can occur.
+    return max(0, (v2(abs(witness)) - 1) // total)
 
 
 def actual_repetitions(x: int, n: int, pattern: tuple[int, ...], limit: int) -> int:
