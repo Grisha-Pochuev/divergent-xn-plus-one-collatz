@@ -14,7 +14,7 @@ ELL = 1_860_810_887_857_924_950
 P_MAX = 10**36
 MIN_CYCLE_VALUE = 25
 X_FACTORS = (3, 7, 719, 6_911_089_648_497_401)
-ELL_FACTORS = (2, 3, 5, 359, 2677, 15137, 852763)
+ELL_FACTORIZATION = {2: 1, 3: 1, 5: 2, 359: 1, 2677: 1, 15137: 1, 852763: 1}
 TERMS = 180
 
 
@@ -37,9 +37,7 @@ def ln_bounds(z: Fraction) -> tuple[Fraction, Fraction]:
     """Rational enclosure of ln(z), scaling z into [1,2)."""
     if z <= 0:
         raise ValueError("log argument must be positive")
-    num_bits = z.numerator.bit_length()
-    den_bits = z.denominator.bit_length()
-    k = num_bits - den_bits
+    k = z.numerator.bit_length() - z.denominator.bit_length()
     scaled = z / (1 << k) if k >= 0 else z * (1 << (-k))
     while scaled < 1:
         scaled *= 2
@@ -88,14 +86,21 @@ def common_prefix(left: list[int], right: list[int]) -> list[int]:
 
 def verify_order() -> None:
     product = 1
-    for prime in X_FACTORS:
-        product *= prime
+    for factor in X_FACTORS:
+        product *= factor
     if product != X:
         raise AssertionError("factorization of X failed")
+
+    ell_product = 1
+    for prime, exponent in ELL_FACTORIZATION.items():
+        ell_product *= prime**exponent
+    if ell_product != ELL:
+        raise AssertionError("factorization of ELL failed")
+
     if pow(2, ELL, X) != 1:
         raise AssertionError("ELL is not an exponent of 2 modulo X")
-    for prime in ELL_FACTORS:
-        if ELL % prime == 0 and pow(2, ELL // prime, X) == 1:
+    for prime in ELL_FACTORIZATION:
+        if pow(2, ELL // prime, X) == 1:
             raise AssertionError("ELL is not the exact order")
 
 
@@ -118,8 +123,9 @@ def verify_barrier() -> dict[str, object]:
         raise AssertionError("log interval does not determine enough CF digits")
 
     hmax = harmonic_upper(P_MAX)
-    # Legendre condition for every p <= P_MAX:
-    # |q/p-beta| < H(p)/(p*ELL*X*ln2) < 1/(2p^2).
+    # For a p-cycle with A=ELL*q:
+    # 0 < q/p-beta < H(p)/(p*ELL*X*ln2).
+    # The following makes Legendre's theorem apply for every p <= P_MAX.
     if not 2 * P_MAX * hmax < ELL * X * ln2_lo:
         raise AssertionError("Legendre reduction failed at P_MAX")
 
@@ -129,14 +135,13 @@ def verify_barrier() -> dict[str, object]:
         if den > P_MAX:
             first_beyond = den
             break
-        # Only upper convergents can represent A/(ELL*p), because cycle
-        # correction makes A/p strictly larger than log2(X).
+        # Only upper convergents can occur because the cycle correction is positive.
         gap_lo = ELL * num * ln2_lo - den * lnx_hi
         if gap_lo <= 0:
             continue
-        # If q/p reduces to num/den, the actual logarithmic gap is a
-        # positive integer multiple of this base gap. Distinct cycle
-        # elements give total correction < hmax/X.
+        # If q/p reduces to num/den, its actual gap is a positive integer
+        # multiple of this base gap. Distinct cycle elements give total
+        # correction smaller than hmax/X.
         if not gap_lo > hmax / X:
             raise AssertionError("an upper convergent survives the correction bound")
         checked.append({"numerator": num, "denominator": den})
