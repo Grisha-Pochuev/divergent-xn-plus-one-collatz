@@ -39,7 +39,7 @@ is impossible except
 
 ### Local transition no-go
 
-The graph on the `2154` output classes modulo `2*15099` is complete. Every compatible finite exact-valuation word, including finite height layers, is realizable by infinitely many starts. Local forbidden-edge and forbidden-word enumeration cannot supply the missing proof.
+The graph on the `2154` output classes modulo `2*15099` is complete. Every compatible finite exact-valuation word, including arbitrary finite valuation layers, is realizable by infinitely many starts. Local forbidden-edge and forbidden-word enumeration cannot supply the missing proof.
 
 ### Global class constraints
 
@@ -51,6 +51,36 @@ sum t*c_t<=67p-1.
 ```
 
 Cycle closure also forces exact source/target flow balance.
+
+Writing every valuation as
+
+```text
+a=t+2154*q,
+```
+
+fewer than `11/359` of all cycle steps can have `q>=1`.
+
+### Exact transition progressions and finite truncation
+
+A transition with source class `s`, target label `t`, and layer `q` lies in one exact arithmetic progression modulo
+
+```text
+15099*2^(t+2154*q+1).
+```
+
+For every cycle length through the current sparse cap, all steps with exact valuation `a>=200` contribute less than
+
+```text
+10^(-19)
+```
+
+to `sum 1/n_i`. Therefore the non-negligible transition-circulation problem contains only
+
+```text
+2154*199 = 428646
+```
+
+oriented source-target cells. This is a finite exact reduction, not yet an elimination of the final two lengths.
 
 ### Full-modulus activation cost
 
@@ -107,6 +137,9 @@ docs/INDEX_EIGHT_SMALL_REPRESENTATIVE_SIEVE.md
 tools/verify_index_eight_small_sieve.py
 docs/THIRD_EXCEPTION_SUBGROUP_SIEVE.md
 tools/verify_third_exception_subgroup_sieve.py
+docs/HIGH_LAYER_RARITY_AND_EDGE_PROGRESSIONS.md
+docs/VALUATION_TAIL_TRUNCATION.md
+tools/verify_transition_tail_truncation.py
 docs/GLOBAL_TRANSITION_BALANCE_IDENTITIES.md
 tools/verify_global_transition_identities.py
 ```
@@ -120,7 +153,7 @@ tools/verify_global_transition_identities.py
 
 ## Exact next step
 
-Use the fixed total valuation of the two remaining lengths together with exact full-class activation prices or the global balance identities. Simply extending the subgroup sieve would require an unacceptably large finite scan and is not the preferred route.
+Use the fixed total valuation of the two remaining lengths together with exact full-class activation prices and the finite `428646`-cell transition circulation. Seek a rational dual potential that couples source-class balance, target valuation cost, and reciprocal contribution. Simply extending the subgroup sieve or enumerating local words is not the preferred route.
 
 ## Retraction
 
