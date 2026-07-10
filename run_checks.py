@@ -65,6 +65,12 @@ def main() -> None:
         test_two_parameter_mersenne_choice,
         test_two_parameter_small_cases,
     )
+    from test_valuation_word_codec import (
+        test_all_small_words_are_exactly_coded,
+        test_known_cycle_word_code,
+        test_positive_drift_words_grow_for_all_representatives,
+        test_prefix_codes_are_compatible,
+    )
 
     tests = [
         test_v2,
@@ -103,6 +109,10 @@ def main() -> None:
         test_two_parameter_large_case,
         test_two_parameter_mersenne_choice,
         test_two_parameter_closeness,
+        test_known_cycle_word_code,
+        test_all_small_words_are_exactly_coded,
+        test_positive_drift_words_grow_for_all_representatives,
+        test_prefix_codes_are_compatible,
     ]
     for test in tests:
         test()
@@ -117,6 +127,8 @@ def main() -> None:
     run("tools/generate_cycle_barrier.py", "--barrier", "1000000000000")
     run("tools/verify_ultra_candidate.py")
     run("tools/generate_two_parameter_barrier.py", "--length", "1000000000000", "--height", "1000000000")
+    run("tools/valuation_word_codec.py", "--X", "5", "--pattern", "1,1,5", "--representatives", "3")
+    run("tools/valuation_word_codec.py", "--X", "9", "--pattern", "3,3,3,3,3", "--representatives", "3")
     run("tools/trajectory_report.py", "--X", "5", "--n0", "7", "--steps", "1000")
     print(f"all checks passed ({len(tests)} direct tests)")
 
