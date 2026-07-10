@@ -1,22 +1,12 @@
 #!/usr/bin/env python3
-"""Audit the retracted continued-fraction cycle barrier.
-
-The previous verifier checked arithmetic downstream of the false premise
-2^A == 1 (mod X). This script verifies the elementary counterexample,
-reports the correct cycle congruence, and records the current retained valid
-contiguous barrier and sparse cap from independent certificates.
-"""
+"""Audit the retracted continued-fraction barrier and record the valid frontier."""
 from __future__ import annotations
 
 import json
 
-CURRENT_RETAINED_BARRIER = 177780727155637125184
+CURRENT_RETAINED_BARRIER = 177780727155637125192
 CURRENT_SPARSE_CAP = 355561454311274250377
 CURRENT_SPARSE_EXCEPTIONS = (
-    177780727155637125185,
-    177780727155637125187,
-    177780727155637125189,
-    177780727155637125191,
     177780727155637125193,
     177780727155637125195,
 )
