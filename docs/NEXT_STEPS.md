@@ -1,8 +1,8 @@
 # Prioritized next steps
 
-The strict prize problem remains open. This file separates proved frontiers from concrete next actions.
+The strict prize problem remains open.
 
-## Priority 1: eliminate the six exceptional lengths
+## Priority 1: eliminate the final two lengths in the first sparse window
 
 Current candidate:
 
@@ -14,7 +14,7 @@ n0 = 1.
 Current contiguous barrier:
 
 ```text
-p <= 177780727155637125184.
+p <= 177780727155637125192.
 ```
 
 Current sparse cap:
@@ -23,65 +23,39 @@ Current sparse cap:
 p <= 355561454311274250377.
 ```
 
-Within that larger range, only six odd lengths remain:
+Only two lengths remain in that larger range:
 
 ```text
-177780727155637125185
-177780727155637125187
-177780727155637125189
-177780727155637125191
 177780727155637125193
-177780727155637125195
+177780727155637125195.
 ```
 
-### What is rigorously closed
+### Closed routes
 
-Do not repeat any search for forbidden finite words using only:
+Do not repeat searches for forbidden finite words using residue labels, exact valuations, finite height layers, or bounded windows of them. Every compatible finite path is realizable by infinitely many positive starts.
 
-- the `2154` output class labels modulo `2M`;
-- exact valuation labels;
-- the layer `q=(a-t)/2154`;
-- any bounded finite window of those labels.
-
-The bare graph is complete, and every compatible augmented finite exact-valuation path is realized by infinitely many positive starts.
-
-Files:
+Do not merely enlarge the small subgroup sieve to billions of candidates. The last two exact interval thresholds are approximately
 
 ```text
-docs/RESIDUE_TRANSITION_NO_GO.md
-docs/AUGMENTED_TRANSITION_NO_GO.md
-tools/verify_residue_transition_no_go.py
-tools/verify_augmented_transition_no_go.py
+0.506785307
+0.099934207,
 ```
 
-### Retained quantitative tools
+so a qualitatively stronger coupling is needed.
 
-For a hypothetical cycle of length `p`, with class occupancies `c_t`,
+### Retained tools
+
+For a hypothetical cycle:
 
 ```text
-sum_t c_t = p,
-sum_t t*c_t <= 67p-1.
+sum c_t=p,
+sum t*c_t<=67p-1,
+A >= p + m*(m-1)/2,
 ```
 
-Cycle closure gives exact source/target flow balance. The large divisor
+where `m` is the number of active full output classes modulo `2X`.
 
-```text
-P = 6911089648497401
-```
-
-also makes each exact incoming valuation occupy one sparse progression modulo `2P`.
-
-The best current reciprocal envelope for the first exceptional length is approximately
-
-```text
-2.527289.
-```
-
-This was enough to eliminate the first of the original seven exceptions, but not the next six by the same inequality alone.
-
-### Immediate exact target
-
-For each remaining length `p`, the power-of-two interval fixes the total valuation `A` exactly. Combine that fixed value with the global identities
+Every cycle also satisfies
 
 ```text
 sum_i (2^a_(i-1)-X)*n_i = p,
@@ -94,117 +68,67 @@ sum_i (2^a_i-X)/n_i
  = sum_i 1/(n_i*n_(i+1)) > 0.
 ```
 
-Concrete tasks:
-
-1. Split valuations into `a<=66` and `a>=67`; use the fixed total `A` to constrain both counts and total excess.
-2. Couple a large valuation spike to its successor height through
+The exact group data are
 
 ```text
-n_(i+1) = (X*n_i+1)/2^a_i.
+ord_M(2)=2154,
+ord_P(2)=(P-1)/8,
+ord_X(2)=1860810887857924950.
 ```
 
-3. Derive a rational potential or charging scheme whose sum around a cycle contradicts one of the two global identities.
-4. Use exact progression costs modulo the full multiplier `X`, not only modulo `M` or `P`, when a finite set of relevant valuation residues can be isolated.
-5. Treat each of the six lengths separately if needed; eliminating the first remaining value immediately raises the contiguous barrier by two.
+### Immediate target A: exact activation-price certificate
 
-No long trajectory search is required.
-
-### Secondary Priority 1 target: repeat sparse windows
-
-The first interval crossing shows that difficult lengths occur only in narrow neighborhoods of near-powers of two. Generalize the exact phase argument:
-
-1. locate successive crossings of `p*log(X)` with integer multiples of `log(2)` using rational bounds;
-2. prove large safe intervals between crossings;
-3. bound the number and width of exceptional windows;
-4. seek a uniform argument eliminating every window.
-
-A sequence of sparse windows is not yet a proof of divergence, but it can convert almost all lengths into a structured Diophantine exceptional set.
-
-## Priority 2: combine cycle-height upper and lower bounds
-
-The logarithmic reduction gives
+For every genuine small full representative `n`, compute its exact minimum activation label `s` satisfying
 
 ```text
-minimum cycle element <= K_X*p^D_X.
+n == 2^(-s) (mod X).
 ```
 
-Needed:
-
-1. make `K_X,D_X` explicit;
-2. derive a modular lower bound growing with `p`;
-3. prove the lower bound eventually exceeds the polynomial upper bound;
-4. use finite exact certificates for the remaining lengths.
-
-A constant lower bound such as `25` cannot finish this route.
-
-## Priority 3: ordinary-integer regenerative chain
-
-For `X=2^m+1`, study
+Then solve or bound the weighted selection problem:
 
 ```text
-u -> odd_part(X^L*u-1).
+maximize sum 1/n
+subject to
+sum activation_cost <= A
+and at most p selected occurrences.
 ```
 
-The unresolved goal is one ordinary positive start supporting infinitely many net-positive complete bursts. Finite programs are already exactly realizable but do not stabilize to one start.
+Use a rational Lagrange-dual inequality, not a large combinatorial search. The exact order factorization is smooth enough for Pohlig-Hellman discrete logarithms.
 
-## Priority 4: stabilized low-average valuation code
+### Immediate target B: neighbour-height charging
 
-Construct an actual ordinary positive orbit satisfying
+Use the fixed total valuation and the two global transition identities to charge every `a>=67` step against neighbouring low-valuation steps. Seek a telescoping potential or signed inequality that bounds the reciprocal sum more sharply than independent full-class activation.
 
-```text
-limsup average(a_t) < log2(X).
-```
+### Secondary target: next sparse window
 
-Arbitrary infinite symbolic words are insufficient; eventual stabilization of coding representatives is necessary.
+Generalize the rational phase argument beyond the first crossing. Locate later narrow exceptional windows and prove safe intervals between them. This does not solve divergence but structures almost all lengths into sparse Diophantine windows.
 
-## Priority 5: digital invariant for `X=9, n0=1`
+## Other routes
 
-The exact transformed recurrence is
+### Cycle-height route
 
-```text
-S_0=1,
-S_(t+1)=9*S_t+2^v2(S_t),
-v2(S_t)=A_t.
-```
+Make the polynomial upper bound on the minimum cycle element explicit and combine it with a modular lower bound that grows with length.
 
-A proof of `v2(S_t)<=3t-1` for every `t>=1` would imply divergence. This route was not pursued in the present Priority 1 session.
+### Regenerative-chain route
 
-## Lightweight verification tasks
+For `X=2^m+1`, construct one ordinary positive start supporting infinitely many net-positive complete bursts.
 
-Safe inside a normal chat session:
+### Stabilized valuation-code route
 
-- exact modular arithmetic;
-- symbolic derivations;
-- short deterministic residue enumeration;
-- rational interval bounds;
-- regression checks on known cycles;
-- documentation consistency checks.
+Find one actual positive orbit with eventual average valuation below `log2(X)`.
 
-## Tasks requiring explicit user approval
+### `X=9` digital invariant
 
-Do not start automatically:
+A proof of `v2(S_t)<=3t-1` for the transformed `9n+1` recurrence would imply divergence. This route is outside the present Priority 1 session.
 
-- multi-hour trajectory scans;
-- large parameter searches;
-- large GitHub Actions matrices;
-- exhaustive high-memory searches;
-- repeated numerical work where a symbolic bound is available.
+## Restrictions
 
-## Acceptance checklist for a final proof
+No long trajectory scans, large parameter searches, or large Actions matrices without explicit approval. Exact modular checks and compact deterministic certificates are allowed.
 
-A claimed solution must provide:
+## Final-proof checklist
 
-1. explicit odd `X>=5` and odd positive `n0`;
-2. proof that the orbit cannot enter any positive cycle;
-3. proof that it cannot return to a previous value;
-4. the positive-integer dichotomy forcing `+infinity`;
-5. exact independently runnable verification of every finite certificate;
-6. no reliance on random-model assumptions or finite trajectory size.
+A valid prize solution must provide an explicit pair, exclude every positive cycle, exclude repetition, invoke the positive-orbit dichotomy, and supply independently runnable exact certificates.
 
 ## Recommended next session
 
-Continue Priority 1 with:
-
-> For the six listed odd lengths, can the fixed total valuation and the global height/reciprocal balance identities force a contradiction, perhaps after charging every `a>=67` spike against neighbouring low-valuation steps?
-
-Do not return to local forbidden-word enumeration.
+> Eliminate `177780727155637125193` and `177780727155637125195` using exact full-class activation prices or a global neighbour-height potential. Do not return to local transition words or brute-force cutoff growth.
