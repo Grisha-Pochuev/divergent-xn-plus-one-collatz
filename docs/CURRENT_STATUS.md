@@ -1,5 +1,20 @@
 # Current status
 
+## Project navigation
+
+Every new work session must begin with:
+
+```text
+START_HERE.md
+docs/CURRENT_STATUS.md
+docs/VALIDATED_RESULTS.md
+docs/RETRACTIONS.md
+docs/NEXT_STEPS.md
+run_checks.py
+```
+
+Use `docs/CHAT_HANDOFF_TEMPLATE.md` when moving the project to a new chat. GitHub is the durable source of truth; chat summaries are secondary.
+
 The strict target is to exhibit odd integers `X>=5` and `n0>=1` whose accelerated odd-only orbit tends to positive infinity.
 
 ## Main valid fixed candidate
@@ -68,9 +83,11 @@ for a cycle. The correct congruence is
 2^A * product_i(n_i) == 1 (mod X).
 ```
 
-The accelerated `5n+1` cycle `13 -> 33 -> 83 -> 13` is a direct counterexample to the invalid order condition. The regression checker preserves this audit.
+The accelerated `5n+1` cycle `13 -> 33 -> 83 -> 13` is a direct counterexample to the invalid order condition. The regression checker preserves this audit. Full details are in `docs/RETRACTIONS.md`.
 
 ## Other established results
+
+The authoritative registry is `docs/VALIDATED_RESULTS.md`. In summary:
 
 1. Exact accelerated map and iterate formula.
 2. Average-valuation criterion for exponential divergence.
@@ -94,9 +111,11 @@ The accelerated `5n+1` cycle `13 -> 33 -> 83 -> 13` is a direct counterexample t
 
 ## Current frontier
 
+The prioritized roadmap is `docs/NEXT_STEPS.md`.
+
 ### Route A: fixed candidate
 
-Find a global modular or descent obstruction that retains the factor `product_i(n_i)` in the correct cycle congruence and excludes cycles of every length.
+Find a global modular or descent obstruction that retains the factor `product_i(n_i)` in the correct cycle congruence and excludes cycles of every length. The immediate lightweight target is to exploit transition constraints among the `2154` allowed classes, rather than treating those classes independently.
 
 ### Route B: infinite regenerative chain
 
@@ -117,6 +136,14 @@ Construct an infinite exact valuation word with average below `log2(X)` whose co
 Make the logarithmic cycle-height constants explicit and combine the resulting polynomial upper bound with a modular lower bound that grows faster.
 
 Any route would finish the strict prize problem.
+
+## Working constraints
+
+- Do not launch long CPU computations inside ordinary chat sessions.
+- Prefer symbolic derivations, exact arithmetic, short residue enumeration, and compact certificates.
+- Any large external computation requires explicit user approval.
+- Before announcing a theorem, test it against known small cycles and add a regression check where practical.
+- After every major result or retraction, update `START_HERE.md`, this file, and the relevant registry.
 
 ## Reproducibility
 
