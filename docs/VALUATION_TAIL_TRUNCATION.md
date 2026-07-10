@@ -6,10 +6,10 @@ Fix the main candidate
 X = 104350542602662257699
 ```
 
-and suppose a hypothetical positive cycle has length `p` not exceeding
+and suppose a hypothetical positive cycle has length `p` not exceeding the current sparse cap
 
 ```text
-B = 176022359338834903228.
+B = 355561454311274250377.
 ```
 
 For a cycle element `n`, write
@@ -26,7 +26,7 @@ The exact step equation is
 X*n+1 = 2^a*n',
 ```
 
-where `n'` is a positive odd integer.  Hence `n'>=1` and
+where `n'` is a positive odd integer. Hence `n'>=1` and
 
 ```text
 n >= (2^a-1)/X.                                  (1)
@@ -40,7 +40,7 @@ Therefore
 
 ## 2. Large target labels
 
-Write `a=t+2154*q`, with `1<=t<=2154` and `q>=0`.  Every step with either
+Write `a=t+2154*q`, with `1<=t<=2154` and `q>=0`. Every step with either
 
 ```text
 t >= T and q=0,
@@ -52,7 +52,7 @@ or
 q >= 1
 ```
 
-has `a>=T`, provided `T<=2155`.  There are at most `p` cycle elements, so by (2) their total reciprocal contribution is at most
+has `a>=T`, provided `T<=2155`. There are at most `p` cycle elements, so by (2) their total reciprocal contribution is at most
 
 ```text
 p*X/(2^T-1).                                     (3)
@@ -84,7 +84,7 @@ In particular this includes:
 
 ## 3. Finite reduction
 
-For every cycle length through the current barrier, a transition-aware reciprocal optimization may treat all exact valuations `a>=200` as one rigorously bounded tail of size below `10^(-19)`.  The non-negligible part contains only
+For every cycle length through the current sparse cap, a transition-aware reciprocal optimization may treat all exact valuations `a>=200` as one rigorously bounded tail of size below `10^(-19)`. The non-negligible part contains only
 
 ```text
 a=t, 1<=t<=199,
@@ -98,4 +98,4 @@ and therefore at most
 
 oriented source-target cells before further reductions.
 
-This turns the exact circulation formulation from an infinite-layer problem into a finite certificate problem at the retained barrier.  It is still not a proof excluding every cycle length.
+This turns the exact circulation formulation from an infinite-layer problem into a finite certificate problem throughout the retained sparse window. It is still not a proof excluding every cycle length.
