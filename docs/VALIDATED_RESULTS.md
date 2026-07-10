@@ -2,7 +2,7 @@
 
 This file contains only retained results with a mathematical derivation and, where practical, an exact verifier.
 
-Last structural update: 2026-07-10.
+Last structural update: 2026-07-11.
 
 ## A. Fixed candidate frontier
 
@@ -132,7 +132,7 @@ docs/AUGMENTED_TRANSITION_NO_GO.md
 tools/verify_augmented_transition_no_go.py
 ```
 
-## J. Valuation budget, flow balance, and occupancy dual
+## J. Small-class valuation budget and flow balance
 
 For a hypothetical cycle with class occupancies `c_t`,
 
@@ -154,7 +154,7 @@ docs/BALANCED_OCCUPANCY_DUAL_BOUND.md
 tools/verify_balanced_occupancy_barrier.py
 ```
 
-## K. Large-divisor valuation split
+## K. Large-divisor split and valuation-tail truncation
 
 The factorization
 
@@ -162,65 +162,65 @@ The factorization
 X=15099*6911089648497401
 ```
 
-places an output entered with exact valuation `a` in one odd progression modulo twice the large divisor. Splitting low and high valuations yields exact reciprocal envelopes, including approximately `2.774599` at cutoff `400000`.
+places an output entered with exact valuation `a` in one odd progression modulo twice the large divisor. Splitting low and high valuations gives exact reciprocal envelopes. Through the current sparse cap, all steps with `a>=200` contribute less than `10^(-19)` to `sum 1/n_i`, reducing the non-negligible small-class transition problem to `428646` cells.
 
 Files:
 
 ```text
 docs/LARGE_DIVISOR_VALUATION_SPLIT.md
 tools/verify_large_divisor_split_barrier.py
+docs/VALUATION_TAIL_TRUNCATION.md
+tools/verify_transition_tail_truncation.py
 ```
 
-## L. Sharp logarithmic interval certificate
+## L. Sharp logarithmic interval and first sparse window
 
-Finite positive atanh-series sums give rigorous lower bounds for the gaps between `X^p` and adjacent powers of two. This raises the first contiguous obstruction to
+Finite positive atanh-series sums give rigorous gaps between `X^p` and adjacent powers of two. The first contiguous obstruction reaches
 
 ```text
 177780727155637125182.
 ```
+
+After the first crossing, every length through
+
+```text
+355561454311274250377
+```
+
+is excluded except seven isolated odd lengths.
 
 Files:
 
 ```text
 docs/SHARP_LOG_INTERVAL_BARRIER.md
 tools/verify_sharp_log_barrier.py
-```
-
-## M. First sparse cycle window
-
-After the first near-power-of-two crossing, the gap to the following power jumps back to almost `log(2)`. Exact endpoint inequalities exclude every length through
-
-```text
-355561454311274250377
-```
-
-except seven isolated odd lengths.
-
-Files:
-
-```text
 docs/FIRST_SPARSE_CYCLE_WINDOW.md
 tools/verify_first_sparse_cycle_window.py
 ```
 
-## N. First exceptional length eliminated
+## M. Five sparse-window exceptions eliminated
 
-A midpoint harmonic inequality and an exact valuation split with cutoff `5000000` give
+The seven original exceptions were reduced to two by exact certificates:
 
-```text
-sum 1/n_i < 2.527289
-```
-
-at `p=177780727155637125183`, contradicting the exact interval gap.
+- a midpoint harmonic inequality and valuation split eliminate `...183`;
+- the full-modulus activation bound eliminates `...185`;
+- the index-eight sieve below `10^6` eliminates `...187` and `...189`;
+- the index-eight sieve below `6*10^7` eliminates `...191`.
 
 Files:
 
 ```text
 docs/FIRST_EXCEPTION_ELIMINATION.md
 tools/verify_first_exception_elimination.py
+docs/FULL_MODULUS_ACTIVATION_BOUND.md
+tools/verify_full_modulus_activation_bound.py
+docs/INDEX_EIGHT_SMALL_REPRESENTATIVE_SIEVE.md
+tools/verify_index_eight_small_sieve.py
+docs/THIRD_EXCEPTION_SUBGROUP_SIEVE.md
+tools/verify_third_exception_subgroup_sieve.py
 ```
 
-## O. Global transition-balance identities
+## N. Global transition-balance identities
 
 Every positive accelerated cycle satisfies
 
@@ -242,76 +242,180 @@ docs/GLOBAL_TRANSITION_BALANCE_IDENTITIES.md
 tools/verify_global_transition_identities.py
 ```
 
-## P. Full-modulus activation bound
+## O. Permanent mod-3 predecessor sieve
 
-The checker proves
+Since `X==3 (mod 9)` and every accelerated output is coprime to `X`, an allowed refined residue is permanently unreachable when all its direct predecessors are divisible by `3`.
+
+Every one of the `2154` small output classes has three compatible lifts modulo `6M`. Exactly one lift is dead. Therefore the exact refined counts are
 
 ```text
-ord_X(2)=1860810887857924950.
+2154 dead classes,
+4308 surviving classes.
 ```
 
-If a cycle activates `m` different full output classes modulo `2X`, their distinct minimum valuation labels and the remaining steps imply
+The surviving mod-3 edge types also obey
 
 ```text
-A >= p + m*(m-1)/2.
+N_(1->2)=N_(2->1)
 ```
 
-This bounds `m` by about `1.53*10^11` in the first exceptional window. Combined with full-class spacing `2X`, it eliminates
+around every cycle.
+
+Files:
 
 ```text
-p=177780727155637125185.
+docs/PERMANENT_PREDECESSOR_MOD3_SIEVE.md
+tools/verify_permanent_predecessor_mod3_sieve.py
+```
+
+## P. Exact full-label occupancy budget
+
+Let
+
+```text
+O=ord_X(2)=1860810887857924950.
+```
+
+If `s_i` is the least positive full output label of the target `n_i`, then every incoming valuation has the unique form
+
+```text
+a_(i-1)=s_i+O*q_(i-1),
+1<=s_i<=O,
+q_(i-1)>=0.
+```
+
+Hence exactly
+
+```text
+A=sum_i s_i+O*sum_i q_i.
+```
+
+For either remaining sparse-window length,
+
+```text
+sum_i q_i<=6257.
+```
+
+Equivalently, almost every edge must use its least full-order layer. For any selected set of distinct possible cycle values, the correct incremental budget is
+
+```text
+sum [s(n)-1+O*d(n)] <= A-p,
+```
+
+where `d(n)` is any proved lower bound on its layer.
+
+Files:
+
+```text
+docs/FULL_LABEL_OCCUPANCY_BUDGET.md
+tools/verify_full_label_occupancy_budget.py
+```
+
+## Q. Full-modulus predecessor delay
+
+For a genuine full representative `n` with least label `s`, its possible predecessors satisfy
+
+```text
+m_q=(2^(s+qO)*n-1)/X,
+m_q == m_0+q*63726582940809041391 (mod X).
+```
+
+A predecessor belonging to a reached cycle must itself lie in the full output subgroup. Let `d_X(n)` be the first layer `q` for which this happens. Then every hypothetical cycle satisfies
+
+```text
+sum_i d_X(n_i)<=6257.
+```
+
+Below one million, among the `5824` representatives surviving the permanent sieve:
+
+```text
+only 133 have d_X=0,
+maximum d_X=347,
+sum of all listed delays=207287.
+```
+
+Through sixty million:
+
+```text
+358103 representatives survive the permanent sieve,
+9462 have d_X=0,
+maximum d_X=558,
+sum of listed delays=12752005.
 ```
 
 Files:
 
 ```text
-docs/FULL_MODULUS_ACTIVATION_BOUND.md
-tools/verify_full_modulus_activation_bound.py
+docs/FULL_PREDECESSOR_DELAY.md
+tools/verify_full_predecessor_delay.py
 ```
 
-## Q. Index-eight subgroup sieve
+## R. Full-predecessor reciprocal dual
 
-The large factor `P=6911089648497401` is prime and
+For the harder remaining length
 
 ```text
-ord_P(2)=(P-1)/8.
+p=177780727155637125195,
+A=11822418355849868825468,
 ```
 
-Hence genuine full output representatives form an index-eight subset modulo `P`. An exact sieve of `71318` small candidates below `10^6`, combined with the activation bound, eliminates
+the exact interval requires
 
 ```text
-177780727155637125187
-177780727155637125189.
+sum_i 1/n_i > 0.099934206.
 ```
+
+Using the incremental item cost `s-1+O*d_X` and an exact rational fractional-selection dual gives
+
+```text
+sum_(n_i<=1000000) 1/n_i < 0.087551912,
+sum_(n_i<=60000000) 1/n_i < 0.087618737.
+```
+
+Thus more than `0.012315` must come from distinct values above sixty million, requiring at least
+
+```text
+738929
+```
+
+such values.
 
 Files:
 
 ```text
-docs/INDEX_EIGHT_SMALL_REPRESENTATIVE_SIEVE.md
-tools/verify_index_eight_small_sieve.py
+docs/FULL_PREDECESSOR_RECIPROCAL_BOUND.md
+tools/verify_full_predecessor_reciprocal_bound.py
 ```
 
-## R. Third-exception subgroup sieve
+## S. Finite inverse-window charging
 
-An exact membership check of `4279760` modular candidates below `60000000` finds `536735` genuine full representatives. The resulting reciprocal bound is approximately
+Let `h_L(n)` be the minimum sum of full-order layers in an admissible inverse chain of `L` steps ending at `n`. Summing selected inverse windows around a cycle counts every actual layer at most `L` times, so
 
 ```text
-0.913331,
+sum h_L(n_i)<=L*sum q_i.
 ```
 
-below the exact required threshold `0.913636`. Therefore
+The exact scaled item cost is
 
 ```text
-p=177780727155637125191
+L*(s-1)+O*h_L.
 ```
 
-is impossible.
+Below one million the reciprocal bounds strictly improve with inverse depth:
+
+```text
+L=1: <0.087551912
+L=2: <0.085634587
+L=3: <0.085243521.
+```
+
+This proves that longer inverse information adds genuine strength, but the large zero-delay tail remains unexcluded.
 
 Files:
 
 ```text
-docs/THIRD_EXCEPTION_SUBGROUP_SIEVE.md
-tools/verify_third_exception_subgroup_sieve.py
+docs/FINITE_INVERSE_WINDOW_CHARGING.md
+tools/verify_finite_inverse_window_charging.py
 ```
 
 ## Verification policy
