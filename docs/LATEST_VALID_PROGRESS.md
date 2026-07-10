@@ -1,6 +1,6 @@
 # Latest valid progress
 
-The former `10^37` claim remains retracted. All results below preserve the correct cycle identity.
+The former `10^37` claim remains retracted. All current results preserve the correct cycle identity.
 
 For
 
@@ -9,69 +9,57 @@ X  = 104350542602662257699,
 n0 = 1,
 ```
 
-the orbit cannot return to `1`.
-
-## New Priority 1 frontier
-
-The current contiguous cycle barrier is
+the current contiguous cycle barrier is
 
 ```text
-177780727155637125184.
+177780727155637125192.
 ```
 
-More strongly, every length up to
+More strongly, every length through
 
 ```text
 355561454311274250377
 ```
 
-is impossible except six odd values:
+is impossible except
 
 ```text
-177780727155637125185
-177780727155637125187
-177780727155637125189
-177780727155637125191
 177780727155637125193
-177780727155637125195
+177780727155637125195.
 ```
 
-The previous retained barrier was
+## Progress in this Priority 1 attack
+
+The first sparse-window theorem originally left seven isolated odd lengths. They were reduced as follows:
+
+1. midpoint harmonic and large-divisor split: removed `...183`;
+2. full-modulus activation cost: removed `...185`;
+3. index-eight subgroup sieve below `10^6`: removed `...187` and `...189`;
+4. subgroup sieve below `6*10^7`: removed `...191`.
+
+Only two remain.
+
+Key new exact facts:
 
 ```text
-176022359338834903228.
+ord_X(2)=1860810887857924950,
+ord_P(2)=(P-1)/8,
+A >= p + m*(m-1)/2
 ```
 
-Thus the contiguous barrier increased by about `0.999%`. The sparse-window theorem covers roughly twice that range, leaving only six isolated lengths.
+for `m` active full output classes.
 
-## What produced the improvement
-
-1. The bare `2154`-class graph, and even every finite exact-valuation augmentation of it, has no forbidden compatible finite words.
-2. Global occupancy and valuation-cost constraints yield a rational dual reciprocal bound.
-3. The large divisor `6911089648497401` separates low exact valuations into very sparse output progressions.
-4. Sharp rational logarithm bounds expose the first near-power-of-two crossing and the large safe interval after it.
-5. A midpoint harmonic estimate with `K=5000000` eliminates the first of the original seven exceptional odd lengths.
-6. Two exact global transition-balance identities are now available for attacking the remaining six.
-
-Primary files:
+Primary latest files:
 
 ```text
-docs/BALANCED_OCCUPANCY_DUAL_BOUND.md
-tools/verify_balanced_occupancy_barrier.py
-docs/AUGMENTED_TRANSITION_NO_GO.md
-tools/verify_augmented_transition_no_go.py
-docs/LARGE_DIVISOR_VALUATION_SPLIT.md
-tools/verify_large_divisor_split_barrier.py
-docs/SHARP_LOG_INTERVAL_BARRIER.md
-tools/verify_sharp_log_barrier.py
-docs/FIRST_SPARSE_CYCLE_WINDOW.md
-tools/verify_first_sparse_cycle_window.py
-docs/FIRST_EXCEPTION_ELIMINATION.md
-tools/verify_first_exception_elimination.py
-docs/GLOBAL_TRANSITION_BALANCE_IDENTITIES.md
-tools/verify_global_transition_identities.py
+docs/FULL_MODULUS_ACTIVATION_BOUND.md
+tools/verify_full_modulus_activation_bound.py
+docs/INDEX_EIGHT_SMALL_REPRESENTATIVE_SIEVE.md
+tools/verify_index_eight_small_sieve.py
+docs/THIRD_EXCEPTION_SUBGROUP_SIEVE.md
+tools/verify_third_exception_subgroup_sieve.py
 ```
 
-No long trajectory computation was used. The longest new deterministic certificate enumerates five million inverse powers modulo one divisor of `X`; it is a short linear modular check rather than an orbit or parameter search.
+No Collatz trajectory scan was used. The largest recent certificate performs about `4.28` million subgroup-membership checks on small modular candidates.
 
-The strict prize problem remains open. The exact next task is to eliminate the six listed lengths using their fixed total valuation and the global transition-balance identities.
+The strict prize problem remains open. The next step is an exact activation-price or global neighbour-height certificate for the two displayed lengths.
