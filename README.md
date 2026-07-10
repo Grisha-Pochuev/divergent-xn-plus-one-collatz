@@ -2,25 +2,15 @@
 
 ## Divergent accelerated `Xn+1` orbit
 
-For an odd integer `X>=5`, define
+For odd `X>=5`, define
 
 ```text
-C_X(n) = (X*n + 1) / 2^v2(X*n + 1)
+C_X(n)=(X*n+1)/2^v2(X*n+1)
 ```
 
-on positive odd integers. The strict target is one explicit pair `(X,n0)` for which
-
-```text
-C_X^t(n0) -> +infinity.
-```
-
-A cycle avoiding `1`, a long finite trajectory, or an arbitrarily large finite cycle barrier is not a solution.
-
-This repository is part of **The Open Mathematics Project**: public AI-assisted mathematical research designed for reproducibility and independent verification.
+on positive odd integers. The strict target is one explicit pair `(X,n0)` whose orbit tends to positive infinity. A cycle, avoidance of `1`, a long finite trajectory, or a finite barrier is not a solution.
 
 ## Start here
-
-Read:
 
 ```text
 START_HERE.md
@@ -31,83 +21,66 @@ docs/NEXT_STEPS.md
 run_checks.py
 ```
 
-GitHub files, not chat history, are the durable source of truth.
+## Strongest current result
 
-## Current strongest retained result
-
-**The strict problem is not solved.** The strongest fixed candidate is
+The strict problem is not solved. For
 
 ```text
 X  = 104350542602662257699,
-n0 = 1.
+n0 = 1,
 ```
 
-The repository rigorously proves:
+the repository proves:
 
-1. the orbit leaves `1` and cannot return to `1`;
-2. every element of a nontrivial cycle reached by it is at least `25`;
-3. no nontrivial positive cycle has length
+- the orbit cannot return to `1`;
+- every element of a reached nontrivial cycle is at least `25`;
+- every cycle length
 
 ```text
-p <= 177780727155637125184;
+p <= 177780727155637125192
 ```
 
-4. up to
+is impossible;
+- every length through
 
 ```text
-p <= 355561454311274250377,
+355561454311274250377
 ```
 
-all cycle lengths are excluded except six odd values:
+is impossible except
 
 ```text
-177780727155637125185
-177780727155637125187
-177780727155637125189
-177780727155637125191
 177780727155637125193
-177780727155637125195
+177780727155637125195.
 ```
 
-Thus the fixed orbit either tends to positive infinity or enters a nontrivial positive cycle. If the cycle length is within the larger sparse range, it must be one of the six listed values.
+The first sparse-window argument originally left seven isolated values. Five have now been eliminated by exact modular and rational certificates.
 
-Primary certificates:
+## Main Priority 1 mechanisms
 
 ```text
-docs/SHARP_LOG_INTERVAL_BARRIER.md
-tools/verify_sharp_log_barrier.py
-docs/FIRST_SPARSE_CYCLE_WINDOW.md
-tools/verify_first_sparse_cycle_window.py
-docs/FIRST_EXCEPTION_ELIMINATION.md
-tools/verify_first_exception_elimination.py
+M=15099,
+ord_M(2)=2154,
+P=6911089648497401,
+ord_P(2)=(P-1)/8,
+ord_X(2)=1860810887857924950.
 ```
 
-## Priority 1 findings
+Retained results include:
 
-Use
+- completeness of the bare and finitely augmented local transition graphs;
+- global occupancy and flow-balance constraints;
+- balanced reciprocal envelopes;
+- exact-valuation progressions modulo the large divisor;
+- sharp logarithmic power-of-two intervals;
+- full-class activation cost
 
 ```text
-M = 15099,
-ord_M(2) = 2154,
-X = M * 6911089648497401.
+A >= p + m*(m-1)/2;
 ```
 
-The following are retained:
-
-- the graph on the `2154` allowed output classes is complete, including loops;
-- every compatible finite word remains realizable even when exact valuations and finite height layers are retained;
-- hypothetical cycle occupancies satisfy
-
-```text
-sum c_t=p,
-sum t*c_t<=67p-1;
-```
-
-- cycle closure gives exact source/target flow balance;
-- the large divisor of `X` places outputs with fixed incoming valuation in sparse progressions;
-- exact logarithm intervals cross the first near-power-of-two window;
-- the first of seven isolated exceptional lengths is eliminated;
-- every cycle satisfies
+- an exact index-eight subgroup sieve for small genuine full representatives;
+- the global cycle identities
 
 ```text
 sum_i (2^a_(i-1)-X)*n_i = p,
@@ -120,11 +93,24 @@ sum_i (2^a_i-X)/n_i
  = sum_i 1/(n_i*n_(i+1)) > 0.
 ```
 
-The exact next target is to use these global identities to eliminate the remaining six lengths.
+The next target is an exact activation-price or neighbour-height certificate for the final two first-window lengths.
+
+## Latest certificate files
+
+```text
+docs/FIRST_SPARSE_CYCLE_WINDOW.md
+tools/verify_first_sparse_cycle_window.py
+docs/FULL_MODULUS_ACTIVATION_BOUND.md
+tools/verify_full_modulus_activation_bound.py
+docs/INDEX_EIGHT_SMALL_REPRESENTATIVE_SIEVE.md
+tools/verify_index_eight_small_sieve.py
+docs/THIRD_EXCEPTION_SUBGROUP_SIEVE.md
+tools/verify_third_exception_subgroup_sieve.py
+```
 
 ## Important retraction
 
-A former claimed barrier `10^37` is retracted. It incorrectly assumed
+The former `10^37` barrier is retracted. It incorrectly assumed
 
 ```text
 2^A == 1 (mod X).
@@ -136,47 +122,25 @@ The correct congruence is
 2^A * product_i(n_i) == 1 (mod X).
 ```
 
-The accelerated `5n+1` cycle `13 -> 33 -> 83 -> 13` is the preserved regression counterexample.
+The accelerated `5n+1` cycle `13 -> 33 -> 83 -> 13` is the regression counterexample.
 
-## Other retained structures
+## Reproduction
 
-The repository also contains:
-
-- the exact accelerated iterate formula;
-- an average-valuation sufficient criterion for exponential divergence;
-- exact finite valuation-word coding;
-- a finite repetition bound for every exact valuation block;
-- Fermat-type growing macroblocks and finite macroblock programs;
-- a 2-adic regeneration isometry;
-- an effective polynomial upper bound on the minimum element of a hypothetical cycle;
-- the bare and augmented transition no-go theorems;
-- balanced occupancy, large-divisor, sharp-logarithm, and sparse-window certificates.
-
-See `docs/VALIDATED_RESULTS.md` for hypotheses and limitations.
-
-## Reproducibility
-
-No external Python packages are required for the retained checks.
-
-Run:
+No external Python packages are required.
 
 ```bash
 python run_checks.py
 ```
 
-Selected Priority 1 checks:
+Selected latest checks:
 
 ```bash
-python tools/verify_balanced_occupancy_barrier.py
-python tools/verify_augmented_transition_no_go.py
-python tools/verify_large_divisor_split_barrier.py
-python tools/verify_sharp_log_barrier.py
-python tools/verify_first_sparse_cycle_window.py
-python tools/verify_first_exception_elimination.py
-python tools/verify_global_transition_identities.py
+python tools/verify_full_modulus_activation_bound.py
+python tools/verify_index_eight_small_sieve.py
+python tools/verify_third_exception_subgroup_sieve.py
 ```
 
-The five-million-step certificate enumerates modular inverse powers, not a Collatz trajectory or a broad parameter search.
+The modular sieves are deterministic certificate checks, not Collatz trajectory searches.
 
 ## Repository layout
 
@@ -187,23 +151,6 @@ tools/          Exact verification scripts.
 tests/          Independent tests and regressions.
 results/        Exploratory outputs, never treated as proof.
 ```
-
-## Research principles
-
-1. Separate proofs from experiments.
-2. Never treat finite trajectory size as proof of divergence.
-3. Prefer independently checkable exact certificates.
-4. Preserve failed arguments and counterexamples.
-5. Keep verifiers simpler than exploratory searches.
-6. Do not launch long computations without explicit approval.
-
-## References
-
-- Ingo Althöfer, generalized Collatz prizes.
-- Richard E. Crandall, *On the 3x+1 Problem* (1978).
-- Zachary Franco and Carl Pomerance, *On a Conjecture of Crandall Concerning the qx+1 Problem* (1995).
-- Alex V. Kontorovich and Jeffrey C. Lagarias, *Stochastic Models for the 3x+1 and 5x+1 Problems*.
-- Jeffrey C. Lagarias, *The 3x+1 Problem: An Overview*.
 
 ## License
 
