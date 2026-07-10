@@ -75,6 +75,7 @@ def main() -> None:
     run("tools/verify_full_modulus_activation_bound.py")
     run("tools/verify_index_eight_small_sieve.py")
     run("tools/verify_third_exception_subgroup_sieve.py")
+    run("tools/verify_transition_tail_truncation.py")
     run("tools/check_project_consistency.py")
     run("tools/check_x9_digital_invariant.py", "--steps", "10000")
     run("tools/generate_two_parameter_barrier.py", "--length", "1000000000000", "--height", "1000000000")
