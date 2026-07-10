@@ -14,47 +14,113 @@ n0 = 1.
 Current valid barrier:
 
 ```text
-p <= 170000000000000000000.
+p <= 176022359338834903228.
 ```
 
-### Immediate symbolic target
+### What is now closed
 
-Use not only the set of allowed output classes modulo `2M`, but also the transition relation between consecutive classes.
+The unaugmented directed graph on the `2154` allowed output classes modulo `2M`, with `M=15099`, is complete. Every edge, loop, and finite class word is realizable by some positive start.
 
-For a step with valuation `a_i`,
+Therefore do **not** repeat either of these searches:
+
+1. forbidden one-step transitions among the bare `2154` labels;
+2. forbidden short words among those labels alone.
+
+Any finite-state refinement must retain more information than the output class modulo `2M`.
+
+Files:
 
 ```text
-2^a_i*n_(i+1) == 1 (mod M).
+docs/RESIDUE_TRANSITION_NO_GO.md
+tools/verify_residue_transition_no_go.py
 ```
 
-The present residue-crowding bound treats the allowed classes independently. A stronger argument should exploit that the class of `n_i`, the valuation `a_i`, and the class of `n_(i+1)` are linked by the exact step equation.
+### Retained global transition constraints
+
+For a hypothetical cycle of length `p`, with class occupancies `c_t`, the repository proves
+
+```text
+sum_t c_t = p,
+sum_t t*c_t <= 67p-1.
+```
+
+Cycle closure also gives exact source/target flow balance:
+
+```text
+#{current elements in class t}
+=
+#{outgoing steps whose successor enters class t}.
+```
+
+The source partition is sparse modulo `2M`, while the outgoing-target partition is sparse modulo `2^t`. These two descriptions use the same count vector.
+
+Files:
+
+```text
+docs/RESIDUE_VALUATION_BUDGET.md
+tools/verify_residue_valuation_budget.py
+docs/TRANSITION_BALANCED_RECIPROCAL_REDUCTION.md
+tools/verify_transition_balance.py
+```
+
+### Immediate lightweight target
+
+Convert the transition-balanced reciprocal reduction into an exact optimization certificate.
 
 Concrete tasks:
 
-1. Derive the exact finite transition graph modulo a small divisor of `X`, retaining all required information.
-2. Prove which transitions or short transition words are impossible.
-3. Convert those restrictions into a smaller upper bound for
+1. For a rational mixing parameter `lambda`, maximize the separable concave envelope
 
 ```text
-sum_i 1/n_i
+lambda*sum_t R_t(c_t)
++(1-lambda)*sum_t B_t(c_t)
 ```
 
-than the current independent-class envelope.
-4. Check whether the improved correction can cross more power-of-two intervals, not merely enlarge the first finite interval.
-
-No long trajectory search is needed for these steps.
-
-### Global completion target
-
-Find a modular or descent invariant that excludes every possible cycle while preserving the correct factor
+under
 
 ```text
-product_i(n_i)
+c_t >= 0 integer,
+sum_t c_t = p,
+sum_t t*c_t <= 67p-1.
 ```
 
-in the cycle congruence.
+2. Replace numerical optimization by rational tangent-line or Lagrange-dual inequalities that a short verifier can check.
+3. Determine the exact best reciprocal constant obtainable from the balanced reduction.
+4. Record the numerical limitation honestly: for the present multiplier, improving the reciprocal correction alone moves the current power-of-two interval barrier by only a few lengths.
+
+No trajectory search is required.
+
+### More important global target
+
+Because the present interval barrier is controlled mainly by the tiny gap between `X^2` and `2^133`, Priority 1 ultimately needs more than a slightly smaller reciprocal correction.
+
+Search for an augmented transition invariant retaining one or more of:
+
+1. exact valuation `a`, not only `a modulo 2154`;
+2. the quotient `q=(a-t)/2154` as a height cost;
+3. a binary residue of the source;
+4. a potential on source/target classes whose sum telescopes around a cycle;
+5. a global closure condition preserving the correct factor `product_i(n_i)`;
+6. a height-dependent descent rule capable of crossing infinitely many power-of-two intervals.
 
 A valid result must not assume `ord_X(2)|A`.
+
+### Current numerical certificate
+
+The transition-class cost budget gives
+
+```text
+p <= 176022359338834903228.
+```
+
+Files:
+
+```text
+docs/TRANSITION_BUDGET_CYCLE_BARRIER.md
+tools/verify_transition_budget_barrier.py
+```
+
+For fair comparison, the old independent-class envelope, saturated under the same rational bounds, reaches `176022359338834903224`; the strict gain from the class-cost information is `4` lengths. The increase from the previously retained round barrier `170000000000000000000` is about `3.54%`.
 
 ## Priority 2: combine cycle-height upper and lower bounds
 
@@ -177,8 +243,8 @@ A candidate final proof must provide:
 
 ## Recommended next session
 
-Start with Priority 1 and ask:
+Continue Priority 1 with:
 
-> Can the exact transition structure among the 2154 allowed classes force a stricter reciprocal-sum bound or exclude whole parity classes of hypothetical cycle lengths?
+> Can the exact source/target flow balance be certified by rational potentials or tangent inequalities, and can an augmented height-dependent transition state yield a global obstruction rather than only a slightly better finite reciprocal bound?
 
-This is the closest continuation of the current strongest valid result and does not require heavy CPU work. The `X=9` digital invariant is the best independent lightweight alternative if the fixed-candidate transition graph stalls.
+Do not return to forbidden-edge enumeration on the bare `2154` classes; that abstraction is now rigorously known to be complete.
