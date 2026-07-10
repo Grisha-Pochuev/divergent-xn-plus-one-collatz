@@ -180,7 +180,12 @@ The accelerated `5n+1` cycle `13 -> 33 -> 83 -> 13` is the regression counterexa
 - Separate theorems from evidence.
 - Test every theorem against known cycles.
 - Add an exact checker where practical.
-- Do not run long trajectory or parameter searches without explicit approval.
+- Multiple research directions may be explored within one chat. Literature search, alternative multipliers, symbolic attacks, and several independent short computations may proceed in parallel.
+- Keep one explicit primary proof node at a time, but do not forbid side investigations that may produce a better route.
+- For every parallel process, record its goal, current status, and result type: theorem, computational evidence, counterexample search, or literature lead.
+- Short independent checks may run in parallel. Long trajectory searches, large parameter scans, or heavy external jobs still require explicit approval and must not block the main reasoning thread.
+- Commit every rigorous result or decisive refutation separately, and update the durable status files so chat history is never the only record.
+- Before a final report, re-read the latest commits and current status to avoid chat/repository drift.
 - A finite or sparse barrier is not divergence.
 
 ## Reproduction
