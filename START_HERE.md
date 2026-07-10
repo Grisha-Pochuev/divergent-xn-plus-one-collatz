@@ -35,20 +35,21 @@ n0 = 1.
 Retained rigorous conclusions:
 
 - the orbit leaves `1` and cannot return to `1`;
-- every element of a nontrivial cycle reached by it is at least `25`;
-- no nontrivial positive cycle has accelerated length
+- every element of a reached nontrivial cycle is at least `25`;
+- every cycle length
 
 ```text
-p <= 177780727155637125192;
+p <= 177780727155637125192
 ```
 
-- more strongly, every length through
+is impossible;
+- every length through
 
 ```text
 355561454311274250377
 ```
 
-is impossible except the two odd values
+is impossible except
 
 ```text
 177780727155637125193
@@ -57,107 +58,153 @@ is impossible except the two odd values
 
 The strict problem remains open.
 
-## Priority 1 structure
+## Full-layer coordinates
 
 Use
 
 ```text
-M = 15099,
-H = ord_M(2)=2154,
-P = 6911089648497401,
-X=M*P,
-ord_P(2)=(P-1)/8,
-O = ord_X(2)=1860810887857924950.
+O=ord_X(2)=1860810887857924950.
 ```
 
-Proved facts:
-
-1. The graph on the `2154` output classes is complete, including loops. Every compatible finite word remains realizable even with exact finite valuation layers. Local forbidden-word searches cannot work.
-2. Hypothetical cycle occupancies satisfy
-
-```text
-sum c_t=p,
-sum t*c_t<=67p-1,
-```
-
-and cycle closure gives exact source/target flow balance.
-3. The full class label is paid by every occurrence, not merely when the class is first activated. Writing
+Every edge has the unique form
 
 ```text
 a_i=s_(i+1)+O*q_i,
 1<=s_i<=O,
-```
-
-gives exactly
-
-```text
-A=sum_i s_i+O*sum_i q_i.
+q_i>=0.
 ```
 
 For either remaining length,
 
 ```text
-sum_i q_i <= 6257.
+sum_i q_i<=6257.
 ```
-4. The permanent predecessor sieve modulo `9` removes exactly one third of the refined small-class lifts: `2154` dead and `4308` surviving classes modulo `6M`.
-5. Possible predecessors of a fixed full representative form the exact progression
+
+Thus almost every edge uses the least full-order layer. The full predecessor progression is
 
 ```text
 m_q == m_0+q*63726582940809041391 (mod X).
 ```
 
-A predecessor occurring in a reached cycle must itself lie in the full output subgroup.
-6. Below one million, the exact full predecessor delays range from `0` to `347`; only `133` of the `5824` permanent-sieve survivors have delay zero.
-7. Through sixty million, `358103` representatives survive the permanent sieve, only `9462` have full delay zero, and the maximum delay is `558`.
-8. For the harder remaining length `177780727155637125195`, exact fractional duals prove
+A reached predecessor must itself be a full output.
+
+## Exact transition-cost frontier
+
+Define
 
 ```text
-sum_(n_i<=60000000) 1/n_i < 0.087618737,
+c_i=(s_i-1)+(s_(i+1)-1)+2*O*q_i.
 ```
 
-while the cycle identity requires a total greater than `0.099934206`. Hence more than `0.012315` must come from values above sixty million, requiring at least `738929` such distinct values.
-9. Finite inverse-window charging strengthens the small-value bound further:
+Every hypothetical cycle satisfies exactly
 
 ```text
-depth 1: <0.087551912
-depth 2: <0.085634587
-depth 3: <0.085243521
+sum_i c_i=2*(A-p).
 ```
 
-below one million.
+This identity now drives Priority 1.
 
-## Current certificate chain
+### Cheap/high versus expensive/small
+
+With `K=5000`, at least `97.38%` of all edges satisfy
 
 ```text
-docs/FIRST_SPARSE_CYCLE_WINDOW.md
-tools/verify_first_sparse_cycle_window.py
-docs/FIRST_EXCEPTION_ELIMINATION.md
-tools/verify_first_exception_elimination.py
-docs/FULL_MODULUS_ACTIVATION_BOUND.md
-tools/verify_full_modulus_activation_bound.py
-docs/INDEX_EIGHT_SMALL_REPRESENTATIVE_SIEVE.md
-tools/verify_index_eight_small_sieve.py
-docs/THIRD_EXCEPTION_SUBGROUP_SIEVE.md
-tools/verify_third_exception_subgroup_sieve.py
-docs/PERMANENT_PREDECESSOR_MOD3_SIEVE.md
-tools/verify_permanent_predecessor_mod3_sieve.py
-docs/FULL_LABEL_OCCUPANCY_BUDGET.md
-tools/verify_full_label_occupancy_budget.py
-docs/FULL_PREDECESSOR_DELAY.md
-tools/verify_full_predecessor_delay.py
-docs/FULL_PREDECESSOR_RECIPROCAL_BOUND.md
-tools/verify_full_predecessor_reciprocal_bound.py
-docs/FINITE_INVERSE_WINDOW_CHARGING.md
-tools/verify_finite_inverse_window_charging.py
+q_i=0,
+s_i+s_(i+1)<=5001.
+```
+
+Every target of such an edge is at least
+
+```text
+781563824454394220933608138645145,
+```
+
+so the entire cheap majority contributes less than `2.216*10^(-13)` to `sum 1/n_i`.
+
+Therefore the required reciprocal correction is concentrated in expensive edges. One expensive target is forced below
+
+```text
+9190982840926584716   for p=...193,
+46609216582838682965  for p=...195.
+```
+
+Both are below `X`.
+
+### Repeated exact transition classes
+
+With `K=197`, one zero-layer label pair occurs at least
+
+```text
+3053943280435589
+```
+
+times in one odd class modulo `2*X^2`. This forces cycle diameter at least
+
+```text
+66508995066170702555770104858896894988802023536957800776.
+```
+
+The repeated occurrences also force a nonempty segment with
+
+```text
+length <=114286,
+total valuation <=7771435,
+```
+
+whose endpoints lie in the same class modulo `2*X^2`.
+
+### Higher-power repetition ladder
+
+```text
+2-edge word: >=3114290401257 repetitions modulo 2*X^3
+3-edge word: >=2918613523 repetitions modulo 2*X^4
+4-edge word: >=2251677 repetitions modulo 2*X^5
+5-edge word: >=1500 repetitions modulo 2*X^6.
+```
+
+The five-edge word forces a diameter above `3.87*10^123`.
+
+These are bounds on the maximum/diameter, not the minimum, so they do not yet contradict the logarithmic minimum-height ceiling.
+
+## Retained reciprocal information
+
+For `p=...195`, the cycle identity requires
+
+```text
+sum_i 1/n_i >0.099934206.
+```
+
+The strongest retained finite inverse-window bound below one million is
+
+```text
+<0.085243521
+```
+
+at depth three. The new symmetric depth-one edge cost gives `<0.087543786` and supplies the correct cost functional for future circulation duals.
+
+## Current certificate additions
+
+```text
+docs/MASSIVE_REPEATED_TRANSITION_CLASS.md
+tools/verify_massive_repeated_transition_class.py
+docs/CHEAP_TRANSITION_MASS_CONCENTRATION.md
+tools/verify_cheap_transition_mass_concentration.py
+docs/SHORT_FULL_CLASS_RETURN.md
+tools/verify_short_full_class_return.py
+docs/SYMMETRIC_EDGE_COST_DUAL.md
+tools/verify_symmetric_edge_cost_dual.py
+docs/MULTI_EDGE_REPETITION_LADDER.md
+tools/verify_multi_edge_repetition_ladder.py
 ```
 
 ## Exact next step
 
-Do not enlarge the cutoff blindly. The remaining obstruction is the large zero-delay tail. Seek one of:
+Do not enlarge trajectory or residue cutoffs blindly.
 
-1. a finite-state or rational dual potential proving a positive mean full-order layer cost for long inverse windows;
-2. a rigorous discrepancy bound for the initial full-class sequence `2^(-s) mod X` strong enough to control zero-delay representatives;
-3. a source/target circulation inequality coupling the full predecessor progression with the two global height/reciprocal identities.
+1. Attack the forced small expensive target using its full predecessor delay and neighbouring labels.
+2. Build a depth-two or multi-constraint rational dual using the symmetric edge cost.
+3. Use the short return modulo `2*X^2` only together with extra affine information; the endpoint labels alone are tautological.
+4. Seek a rigorous distribution bound for zero-layer pair classes modulo `X^2`.
 
 ## Critical retraction
 
@@ -180,12 +227,8 @@ The accelerated `5n+1` cycle `13 -> 33 -> 83 -> 13` is the regression counterexa
 - Separate theorems from evidence.
 - Test every theorem against known cycles.
 - Add an exact checker where practical.
-- Multiple research directions may be explored within one chat. Literature search, alternative multipliers, symbolic attacks, and several independent short computations may proceed in parallel.
-- Keep one explicit primary proof node at a time, but do not forbid side investigations that may produce a better route.
-- For every parallel process, record its goal, current status, and result type: theorem, computational evidence, counterexample search, or literature lead.
-- Short independent checks may run in parallel. Long trajectory searches, large parameter scans, or heavy external jobs still require explicit approval and must not block the main reasoning thread.
-- Commit every rigorous result or decisive refutation separately, and update the durable status files so chat history is never the only record.
-- Before a final report, re-read the latest commits and current status to avoid chat/repository drift.
+- Short symbolic and modular computations are allowed; large searches require explicit approval.
+- Commit every rigorous result separately.
 - A finite or sparse barrier is not divergence.
 
 ## Reproduction
