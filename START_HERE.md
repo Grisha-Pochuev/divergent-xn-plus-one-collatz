@@ -50,18 +50,38 @@ Retained rigorous conclusions:
 - no nontrivial positive cycle of accelerated length at most
 
 ```text
-176022359338834903228
+177780727155637125184
 ```
 
-can occur.
-
-Therefore this orbit either tends to positive infinity or enters a nontrivial cycle longer than the retained finite barrier. This is not yet a proof of divergence.
-
-Primary barrier certificate:
+can occur;
+- more strongly, every length at most
 
 ```text
-docs/TRANSITION_BUDGET_CYCLE_BARRIER.md
-tools/verify_transition_budget_barrier.py
+355561454311274250377
+```
+
+is impossible except the following six odd values:
+
+```text
+177780727155637125185
+177780727155637125187
+177780727155637125189
+177780727155637125191
+177780727155637125193
+177780727155637125195
+```
+
+Therefore the orbit either tends to positive infinity or enters a nontrivial cycle longer than the contiguous barrier. If its cycle length is at most the larger sparse cap, it must be one of the six displayed values. This is not yet a proof of divergence.
+
+Primary current certificates:
+
+```text
+docs/SHARP_LOG_INTERVAL_BARRIER.md
+tools/verify_sharp_log_barrier.py
+docs/FIRST_SPARSE_CYCLE_WINDOW.md
+tools/verify_first_sparse_cycle_window.py
+docs/FIRST_EXCEPTION_ELIMINATION.md
+tools/verify_first_exception_elimination.py
 ```
 
 ## Priority 1 transition results
@@ -70,34 +90,49 @@ Let
 
 ```text
 M = 15099,
-ord_M(2) = 2154.
+ord_M(2) = 2154,
+P = 6911089648497401,
+X = M*P.
 ```
 
-The following are now proved:
+The following are proved:
 
-1. The directed graph on the `2154` allowed output classes is complete, including loops. Every finite class word is realizable by some positive start. Therefore the bare class labels cannot yield forbidden edges or forbidden short words.
-2. If `c_t` is the number of cycle elements in class `t`, then every hypothetical cycle of length `p` satisfies
+1. The directed graph on the `2154` allowed output classes is complete, including loops. Every finite class word is realizable by infinitely many positive starts.
+2. This no-go theorem remains true after retaining any prescribed finite word of exact valuations, including the layer `q=(a-t)/2154`. Local forbidden-word searches cannot solve the problem.
+3. If `c_t` is the number of cycle elements in class `t`, then every hypothetical cycle of length `p` satisfies
 
 ```text
 sum_t c_t = p,
 sum_t t*c_t <= 67p-1.
 ```
 
-3. Cycle closure forces exact flow balance: the number of elements whose current class is `t` equals the number of outgoing steps whose target class is `t`.
-4. Combining the valuation-cost bound with residue crowding gives the retained barrier above.
+4. Cycle closure forces exact source/target flow balance.
+5. A balanced occupancy dual certificate reduces the reciprocal envelope from about `3.820166` to about `3.217731`.
+6. Splitting incoming exact valuations using the large divisor `P` reduces it further; the midpoint refinement used for the first exceptional length gives about `2.527289`.
+7. Exact global closure identities hold:
+
+```text
+sum_i (2^a_(i-1)-X)*n_i = p,
+
+sum_i (2^a_i-X)/n_i
+ = sum_i 1/(n_i*n_(i+1)) > 0.
+```
 
 Structural files:
 
 ```text
 docs/RESIDUE_TRANSITION_NO_GO.md
-tools/verify_residue_transition_no_go.py
+docs/AUGMENTED_TRANSITION_NO_GO.md
 docs/RESIDUE_VALUATION_BUDGET.md
-tools/verify_residue_valuation_budget.py
 docs/TRANSITION_BALANCED_RECIPROCAL_REDUCTION.md
-tools/verify_transition_balance.py
+docs/BALANCED_OCCUPANCY_DUAL_BOUND.md
+docs/LARGE_DIVISOR_VALUATION_SPLIT.md
+docs/GLOBAL_TRANSITION_BALANCE_IDENTITIES.md
 ```
 
-Fair numerical comparison: the old independent-class envelope, if saturated with the same rational bounds, reaches `176022359338834903224`; the transition budget adds exactly `4` further lengths. The larger approximately `3.54%` increase is relative to the previously recorded round barrier `170000000000000000000`.
+## Exact next mathematical step
+
+Attack the six remaining odd lengths directly. The preferred route is to combine their fixed total valuation with the two global transition-balance identities and full-`X` valuation costs. Do not return to local forbidden-edge or bounded-window enumeration: the augmented no-go theorem proves that every compatible finite word is realizable.
 
 ## Critical retraction
 
@@ -134,7 +169,7 @@ is a regression counterexample to the false condition. Never reintroduce the dis
    - update the project status files.
 5. Do not run long CPU searches in ChatGPT sessions. Use exact arithmetic, symbolic work, and short checks. Any large external computation requires explicit user approval.
 6. A long finite trajectory is evidence only, never a proof of divergence.
-7. A finite cycle barrier, however large, is not an infinite barrier.
+7. A finite or sparse cycle barrier, however large, is not an infinite barrier.
 
 ## Required end-of-session checkpoint
 
@@ -155,4 +190,4 @@ Run
 python run_checks.py
 ```
 
-to execute the retained certificates and regression audits. Individual lightweight certificates may also be run directly from `tools/`.
+to execute the retained certificates and regression audits. Individual certificates may also be run directly from `tools/`.
