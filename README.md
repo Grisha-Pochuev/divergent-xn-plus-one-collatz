@@ -57,20 +57,46 @@ For this pair the repository rigorously proves:
 3. no nontrivial positive cycle of accelerated length at most
 
 ```text
-170000000000000000000
+176022359338834903228
 ```
 
 can occur.
 
 Therefore the orbit either tends to positive infinity or enters a nontrivial positive cycle longer than this finite barrier.
 
-The current barrier uses `2154` allowed output residue classes modulo `2*15099`, distinctness of cycle elements, and exact rational interval bounds. It does not require a long trajectory simulation or heavy CPU search.
-
 Primary files:
 
 ```text
-docs/RESIDUE_CROWDING_CYCLE_BARRIER.md
-tools/verify_residue_crowding_barrier.py
+docs/TRANSITION_BUDGET_CYCLE_BARRIER.md
+tools/verify_transition_budget_barrier.py
+```
+
+The barrier uses `2154` allowed output classes modulo `2*15099`, distinctness of cycle elements, and a new global valuation-cost budget for class occupancies. It is checked with exact modular and rational arithmetic; no long trajectory simulation or heavy CPU search is used.
+
+For a fair comparison, the old independent-class envelope, saturated under the same rational bounds, reaches `176022359338834903224`. The transition-class cost adds exactly `4` further lengths. The approximately `3.54%` headline increase is relative to the previously recorded round barrier `170000000000000000000`.
+
+## Priority 1 transition findings
+
+The bare directed graph on the `2154` allowed classes is complete, including loops. More strongly, every finite word of class labels is realizable by infinitely many positive starts. Therefore no forbidden edges or forbidden short words exist at this level of abstraction.
+
+For a hypothetical cycle of length `p`, with class counts `c_t`, the repository proves
+
+```text
+sum_t c_t = p,
+sum_t t*c_t <= 67p-1.
+```
+
+Cycle closure also forces exact source/target flow balance: the number of current elements in class `t` equals the number of outgoing steps entering class `t`.
+
+Files:
+
+```text
+docs/RESIDUE_TRANSITION_NO_GO.md
+tools/verify_residue_transition_no_go.py
+docs/RESIDUE_VALUATION_BUDGET.md
+tools/verify_residue_valuation_budget.py
+docs/TRANSITION_BALANCED_RECIPROCAL_REDUCTION.md
+tools/verify_transition_balance.py
 ```
 
 ## Important retraction
@@ -101,7 +127,9 @@ The repository also contains:
 - complete growing macroblocks for `X=2^m+1`;
 - an arbitrary-core Fermat-burst reduction;
 - a 2-adic isometry and unique finite-precision regeneration targets;
-- an effective polynomial upper bound on the minimum element of a hypothetical cycle in terms of its length.
+- an effective polynomial upper bound on the minimum element of a hypothetical cycle in terms of its length;
+- the transition no-go theorem for the unaugmented `2154`-class graph;
+- global valuation-cost and flow-balance constraints for hypothetical cycles.
 
 The authoritative list, with limitations, is `docs/VALIDATED_RESULTS.md`.
 
@@ -144,14 +172,16 @@ Run:
 python run_checks.py
 ```
 
-The suite includes the current residue-crowding certificate and a regression audit preventing the invalid cycle-order condition from being reintroduced.
+The suite includes the transition no-go theorem, valuation budget, source/target balance audit, current exact cycle-barrier certificate, and a regression audit preventing the invalid cycle-order condition from being reintroduced.
 
 Selected lightweight checks:
 
 ```bash
-python tools/verify_residue_crowding_barrier.py
+python tools/verify_transition_budget_barrier.py
+python tools/verify_residue_transition_no_go.py
+python tools/verify_residue_valuation_budget.py
+python tools/verify_transition_balance.py
 python tools/verify_continued_fraction_barrier.py
-python tools/analyze_fermat_macroblock.py --m 3 --L 599 --k 0 --precision 17
 ```
 
 The file named `verify_continued_fraction_barrier.py` is now an audit of the retracted argument, not a verifier of the discarded `10^37` claim.
