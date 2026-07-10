@@ -67,40 +67,64 @@ H = ord_M(2)=2154,
 P = 6911089648497401,
 X=M*P,
 ord_P(2)=(P-1)/8,
-ord_X(2)=1860810887857924950.
+O = ord_X(2)=1860810887857924950.
 ```
 
 Proved facts:
 
-1. The graph on the `2154` output classes is complete, including loops.
-2. Every compatible finite word remains realizable even with exact valuations and finite layers `q=(a-t)/H`; local forbidden-word searches cannot work.
-3. Hypothetical cycle occupancies satisfy
+1. The graph on the `2154` output classes is complete, including loops. Every compatible finite word remains realizable even with exact finite valuation layers. Local forbidden-word searches cannot work.
+2. Hypothetical cycle occupancies satisfy
 
 ```text
 sum c_t=p,
-sum t*c_t<=67p-1.
+sum t*c_t<=67p-1,
 ```
 
-4. Cycle closure gives exact source/target flow balance.
-5. Full output classes modulo `2X` have distinct minimum activation costs. If `m` full classes occur, then
+and cycle closure gives exact source/target flow balance.
+3. The full class label is paid by every occurrence, not merely when the class is first activated. Writing
 
 ```text
-A >= p + m*(m-1)/2.
+a_i=s_(i+1)+O*q_i,
+1<=s_i<=O,
 ```
 
-6. Since powers of two form an index-eight subgroup modulo `P`, small genuine full representatives can be exactly sieved.
-7. Every cycle satisfies
+gives exactly
 
 ```text
-sum_i (2^a_(i-1)-X)*n_i = p,
+A=sum_i s_i+O*sum_i q_i.
 ```
 
-and
+For either remaining length,
 
 ```text
-sum_i (2^a_i-X)/n_i
- = sum_i 1/(n_i*n_(i+1)) > 0.
+sum_i q_i <= 6257.
 ```
+4. The permanent predecessor sieve modulo `9` removes exactly one third of the refined small-class lifts: `2154` dead and `4308` surviving classes modulo `6M`.
+5. Possible predecessors of a fixed full representative form the exact progression
+
+```text
+m_q == m_0+q*63726582940809041391 (mod X).
+```
+
+A predecessor occurring in a reached cycle must itself lie in the full output subgroup.
+6. Below one million, the exact full predecessor delays range from `0` to `347`; only `133` of the `5824` permanent-sieve survivors have delay zero.
+7. Through sixty million, `358103` representatives survive the permanent sieve, only `9462` have full delay zero, and the maximum delay is `558`.
+8. For the harder remaining length `177780727155637125195`, exact fractional duals prove
+
+```text
+sum_(n_i<=60000000) 1/n_i < 0.087618737,
+```
+
+while the cycle identity requires a total greater than `0.099934206`. Hence more than `0.012315` must come from values above sixty million, requiring at least `738929` such distinct values.
+9. Finite inverse-window charging strengthens the small-value bound further:
+
+```text
+depth 1: <0.087551912
+depth 2: <0.085634587
+depth 3: <0.085243521
+```
+
+below one million.
 
 ## Current certificate chain
 
@@ -115,11 +139,25 @@ docs/INDEX_EIGHT_SMALL_REPRESENTATIVE_SIEVE.md
 tools/verify_index_eight_small_sieve.py
 docs/THIRD_EXCEPTION_SUBGROUP_SIEVE.md
 tools/verify_third_exception_subgroup_sieve.py
+docs/PERMANENT_PREDECESSOR_MOD3_SIEVE.md
+tools/verify_permanent_predecessor_mod3_sieve.py
+docs/FULL_LABEL_OCCUPANCY_BUDGET.md
+tools/verify_full_label_occupancy_budget.py
+docs/FULL_PREDECESSOR_DELAY.md
+tools/verify_full_predecessor_delay.py
+docs/FULL_PREDECESSOR_RECIPROCAL_BOUND.md
+tools/verify_full_predecessor_reciprocal_bound.py
+docs/FINITE_INVERSE_WINDOW_CHARGING.md
+tools/verify_finite_inverse_window_charging.py
 ```
 
 ## Exact next step
 
-Attack the two remaining lengths separately. Their exact total valuation is fixed. The most promising route is to use exact full-class activation prices or the global height/reciprocal balance identities, rather than increasing the small-representative sieve to billions of tests.
+Do not enlarge the cutoff blindly. The remaining obstruction is the large zero-delay tail. Seek one of:
+
+1. a finite-state or rational dual potential proving a positive mean full-order layer cost for long inverse windows;
+2. a rigorous discrepancy bound for the initial full-class sequence `2^(-s) mod X` strong enough to control zero-delay representatives;
+3. a source/target circulation inequality coupling the full predecessor progression with the two global height/reciprocal identities.
 
 ## Critical retraction
 
