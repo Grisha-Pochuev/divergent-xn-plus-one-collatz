@@ -20,23 +20,27 @@ the repository retains the following conclusions:
 3. Every nontrivial positive cycle of accelerated length
 
 ```text
-p <= 170000000000000000000
+p <= 176022359338834903228
 ```
 
 is impossible.
 
-The proof uses:
+The current proof uses:
 
 - the divisor `M=15099` of `X`;
 - `ord_M(2)=2154`;
 - the resulting `2154` allowed odd output classes modulo `2M`;
+- the minimum exact-valuation cost of each class;
+- the global cycle budget `sum_t t*c_t <= 67p-1`;
 - distinctness of elements in a nontrivial cycle;
-- a logarithmic upper envelope for the reciprocal sum of possible cycle elements;
+- a logarithmic upper envelope for the reciprocal sum;
 - exact rational inequalities for even and odd cycle lengths.
 
 Files:
 
 ```text
+docs/TRANSITION_BUDGET_CYCLE_BARRIER.md
+tools/verify_transition_budget_barrier.py
 docs/RESIDUE_CROWDING_CYCLE_BARRIER.md
 tools/verify_residue_crowding_barrier.py
 docs/ULTRA_STRONG_CANDIDATE.md
@@ -50,6 +54,8 @@ the orbit tends to +infinity
 or
 it enters a nontrivial positive cycle longer than the finite barrier.
 ```
+
+Fair comparison: the old independent-class envelope, saturated with the same rational logarithm bounds, reaches `176022359338834903224`. The transition-class cost information adds exactly `4` further lengths. The increase relative to the previously retained round barrier `170000000000000000000` is about `3.54%`.
 
 ## B. Exact iterate and growth criterion
 
@@ -201,6 +207,55 @@ docs/LOGARITHMIC_CYCLE_REDUCTION.md
 A positive integer orbit that is bounded must eventually repeat and enter a cycle. Hence every positive orbit is either eventually periodic or tends to positive infinity.
 
 For the main candidate, proving that no positive cycle can ever be reached would therefore finish the strict prize problem.
+
+## J. Completeness of the bare 2154-class graph
+
+For the fixed candidate and `M=15099`, every directed transition between the `2154` allowed output classes is realizable, including loops. More strongly, every finite class word is realized by infinitely many positive starts.
+
+The proof combines exact finite valuation-word coding modulo a power of two with an arbitrary prescribed initial class modulo `2M` by the generalized Chinese remainder theorem.
+
+Consequences:
+
+- the bare class graph has no forbidden edges;
+- it has no forbidden finite words;
+- local transition enumeration in this unaugmented abstraction cannot strengthen the cycle obstruction.
+
+Files:
+
+```text
+docs/RESIDUE_TRANSITION_NO_GO.md
+tools/verify_residue_transition_no_go.py
+```
+
+## K. Valuation budget and transition balance
+
+For a hypothetical cycle of length `p`, let `c_t` be the number of elements in class `t`, with `1<=t<=2154`. Then
+
+```text
+sum_t c_t = p,
+sum_t t*c_t <= 67p-1.
+```
+
+Moreover, cycle closure gives exact flow balance:
+
+```text
+#{current elements in class t}
+=
+#{outgoing steps whose successor enters class t}.
+```
+
+The source-class partition lies in arithmetic progressions modulo `2M`; the outgoing-target partition lies in binary progressions modulo `2^t`. This yields two simultaneous reciprocal envelopes with the same occupancy vector and reduces the next transition-aware estimate to a finite separable concave optimization.
+
+Files:
+
+```text
+docs/RESIDUE_VALUATION_BUDGET.md
+tools/verify_residue_valuation_budget.py
+docs/TRANSITION_BALANCED_RECIPROCAL_REDUCTION.md
+tools/verify_transition_balance.py
+```
+
+The balance reduction is rigorous, but the full concave optimization has not yet been converted into a stronger exact certificate.
 
 ## Verification policy
 
