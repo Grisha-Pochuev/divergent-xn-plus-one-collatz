@@ -56,6 +56,7 @@ def main() -> None:
         test_ultra_candidate_cycle_inequalities,
         test_ultra_candidate_first_step,
         test_ultra_candidate_full_certificate,
+        test_ultra_candidate_output_residues,
         test_ultra_candidate_structure,
     )
 
@@ -88,6 +89,7 @@ def main() -> None:
         test_minimal_k_condition,
         test_constructed_multiplier_above_half_power,
         test_ultra_candidate_structure,
+        test_ultra_candidate_output_residues,
         test_ultra_candidate_first_step,
         test_ultra_candidate_cycle_inequalities,
         test_ultra_candidate_full_certificate,
