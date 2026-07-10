@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Exact 10^36 cycle-length barrier for the main fixed candidate.
+"""Exact 10^37 cycle-length barrier for the main fixed candidate.
 
 Only integer and Fraction arithmetic is used. Logarithms are enclosed by
 atanh-series rational intervals.
@@ -11,8 +11,10 @@ import json
 
 X = 104_350_542_602_662_257_699
 ELL = 1_860_810_887_857_924_950
-P_MAX = 10**36
+P_MAX = 10**37
 MIN_CYCLE_VALUE = 25
+OUTPUT_MODULUS = 15_099
+OUTPUT_ORDER = 2_154
 X_FACTORS = (3, 7, 719, 6_911_089_648_497_401)
 ELL_FACTORIZATION = {2: 1, 3: 1, 5: 2, 359: 1, 2677: 1, 15137: 1, 852763: 1}
 TERMS = 180
@@ -104,11 +106,38 @@ def verify_order() -> None:
             raise AssertionError("ELL is not the exact order")
 
 
+def allowed_bases() -> list[int]:
+    """Least nontrivial odd representatives of all output classes mod 15099."""
+    if pow(2, OUTPUT_ORDER, OUTPUT_MODULUS) != 1:
+        raise AssertionError("bad output period")
+    residues = {pow(2, -a, OUTPUT_MODULUS) for a in range(OUTPUT_ORDER)}
+    if len(residues) != OUTPUT_ORDER:
+        raise AssertionError("incomplete output subgroup")
+    bases: list[int] = []
+    for residue in residues:
+        value = residue if residue % 2 else residue + OUTPUT_MODULUS
+        if value == 1:
+            value += 2 * OUTPUT_MODULUS
+        bases.append(value)
+    if min(bases) != MIN_CYCLE_VALUE:
+        raise AssertionError("wrong minimum output")
+    return bases
+
+
 def harmonic_upper(p: int) -> Fraction:
-    """Upper bound for sum_{j=0}^{p-1} 1/(25+2j)."""
-    ratio = Fraction(2 * p + 23, 25)
-    _lo, hi = ln_bounds(ratio)
-    return Fraction(1, 25) + hi / 2
+    """Upper bound for reciprocal sum of p distinct allowed cycle values."""
+    bases = allowed_bases()
+    classes = len(bases)
+    levels = (p + classes - 1) // classes
+    base_sum = sum((Fraction(1, value) for value in bases), Fraction(0))
+    if levels <= 1:
+        return base_sum
+    # For each residue class, all further odd representatives are spaced by
+    # 2*OUTPUT_MODULUS. Replacing every base by the smallest possible base 25
+    # in the integral tail gives a rigorous common upper bound.
+    ratio = Fraction(MIN_CYCLE_VALUE + 2 * OUTPUT_MODULUS * (levels - 1), MIN_CYCLE_VALUE)
+    _lo, log_hi = ln_bounds(ratio)
+    return base_sum + Fraction(classes, 2 * OUTPUT_MODULUS) * log_hi
 
 
 def verify_barrier() -> dict[str, object]:
@@ -123,9 +152,6 @@ def verify_barrier() -> dict[str, object]:
         raise AssertionError("log interval does not determine enough CF digits")
 
     hmax = harmonic_upper(P_MAX)
-    # For a p-cycle with A=ELL*q:
-    # 0 < q/p-beta < H(p)/(p*ELL*X*ln2).
-    # The following makes Legendre's theorem apply for every p <= P_MAX.
     if not 2 * P_MAX * hmax < ELL * X * ln2_lo:
         raise AssertionError("Legendre reduction failed at P_MAX")
 
@@ -135,26 +161,23 @@ def verify_barrier() -> dict[str, object]:
         if den > P_MAX:
             first_beyond = den
             break
-        # Only upper convergents can occur because the cycle correction is positive.
         gap_lo = ELL * num * ln2_lo - den * lnx_hi
         if gap_lo <= 0:
             continue
-        # If q/p reduces to num/den, its actual gap is a positive integer
-        # multiple of this base gap. Distinct cycle elements give total
-        # correction smaller than hmax/X.
         if not gap_lo > hmax / X:
             raise AssertionError("an upper convergent survives the correction bound")
         checked.append({"numerator": num, "denominator": den})
 
     if first_beyond is None or first_beyond <= P_MAX:
         raise AssertionError("continued-fraction prefix does not pass P_MAX")
-    if len(checked) != 18:
-        raise AssertionError(f"expected 18 upper convergents, got {len(checked)}")
+    if len(checked) != 19:
+        raise AssertionError(f"expected 19 upper convergents, got {len(checked)}")
 
     return {
         "X": X,
         "n0": 1,
         "order_of_2_mod_X": ELL,
+        "output_residue_classes": OUTPUT_ORDER,
         "excluded_nontrivial_cycle_lengths_through": P_MAX,
         "upper_convergents_checked": len(checked),
         "largest_checked_upper_denominator": checked[-1]["denominator"],
