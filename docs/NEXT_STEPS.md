@@ -91,7 +91,7 @@ Concrete tasks:
 4. prove that at least one branch corresponds to an ordinary positive integer;
 5. establish a cumulative growth estimate that survives all exits.
 
-Finite chains are useful reconnaissance but are not a proof.
+Finite chains are useful reconnaissance but are not a proof. The finite-program realization theorem is recorded in `docs/FINITE_MACROBLOCK_PROGRAMS.md` and shows that any finite chain can be built exactly; the unresolved step is one fixed ordinary start for an infinite chain.
 
 ## Priority 4: stabilized low-average valuation code
 
@@ -104,6 +104,44 @@ limsup average(a_t) < log2(X)
 whose least coding representatives eventually stabilize at one positive integer.
 
 A key audit observation is that eventual stabilization is very restrictive: once the representative stabilizes, the infinite word is simply the actual valuation sequence of that fixed integer. Thus this route must discover structure in a real orbit, not manufacture an arbitrary infinite word independently.
+
+## Priority 5: digital invariant for `X=9, n0=1`
+
+For the accelerated `9n+1` orbit from `1`, define
+
+```text
+A_t = cumulative halving count,
+S_t = 2^A_t*n_t.
+```
+
+Then exactly
+
+```text
+S_0=1,
+S_(t+1)=9*S_t+2^v2(S_t),
+v2(S_t)=A_t.
+```
+
+A proof of
+
+```text
+v2(S_t) <= 3*t-1
+```
+
+for every `t>=1` would imply
+
+```text
+n_t >= 2*(9/8)^t -> +infinity.
+```
+
+The stronger bound `v2(S_t)<=3*t-2` holds on the first `10000` exact steps, but this is finite evidence only. The next symbolic task is to find a binary carry invariant or finite-state description preventing a trailing-zero run of length `3t`.
+
+Files:
+
+```text
+docs/X9_DIGITAL_INVARIANT_LEAD.md
+tools/check_x9_digital_invariant.py
+```
 
 ## Lightweight verification tasks
 
@@ -143,4 +181,4 @@ Start with Priority 1 and ask:
 
 > Can the exact transition structure among the 2154 allowed classes force a stricter reciprocal-sum bound or exclude whole parity classes of hypothetical cycle lengths?
 
-This is the closest continuation of the current strongest valid result and does not require heavy CPU work.
+This is the closest continuation of the current strongest valid result and does not require heavy CPU work. The `X=9` digital invariant is the best independent lightweight alternative if the fixed-candidate transition graph stalls.
