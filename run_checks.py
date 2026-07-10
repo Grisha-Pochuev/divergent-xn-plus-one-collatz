@@ -59,6 +59,12 @@ def main() -> None:
         test_ultra_candidate_output_residues,
         test_ultra_candidate_structure,
     )
+    from test_two_parameter_barrier import (
+        test_two_parameter_closeness,
+        test_two_parameter_large_case,
+        test_two_parameter_mersenne_choice,
+        test_two_parameter_small_cases,
+    )
 
     tests = [
         test_v2,
@@ -93,6 +99,10 @@ def main() -> None:
         test_ultra_candidate_first_step,
         test_ultra_candidate_cycle_inequalities,
         test_ultra_candidate_full_certificate,
+        test_two_parameter_small_cases,
+        test_two_parameter_large_case,
+        test_two_parameter_mersenne_choice,
+        test_two_parameter_closeness,
     ]
     for test in tests:
         test()
@@ -106,6 +116,7 @@ def main() -> None:
     run("tools/verify_strong_candidate.py")
     run("tools/generate_cycle_barrier.py", "--barrier", "1000000000000")
     run("tools/verify_ultra_candidate.py")
+    run("tools/generate_two_parameter_barrier.py", "--length", "1000000000000", "--height", "1000000000")
     run("tools/trajectory_report.py", "--X", "5", "--n0", "7", "--steps", "1000")
     print(f"all checks passed ({len(tests)} direct tests)")
 
