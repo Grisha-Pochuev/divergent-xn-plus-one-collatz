@@ -57,6 +57,36 @@ For every pair of prescribed positive integers `(B,H)`, the repository gives an 
 
 Thus a hypothetical exceptional cycle can be forced to be simultaneously arbitrarily long and arbitrarily high. Again, the multiplier changes with `(B,H)`, so this is an arbitrarily strong finite theorem rather than one infinite divergent example. See `TWO_PARAMETER_CYCLE_BARRIER.md` and `tools/generate_two_parameter_barrier.py`.
 
+## Exact valuation-word coding theorem
+
+For every finite exact valuation word
+
+```text
+a=(a_0,...,a_(N-1)),
+A=sum a_i,
+```
+
+there is exactly one residue class modulo `2^(A+1)` whose positive representatives follow that word. Writing
+
+```text
+B = sum_(j=0)^(N-1) X^(N-1-j) * 2^(a_0+...+a_(j-1)),
+```
+
+the class is
+
+```text
+r(a) == (2^A-B)*(X^N)^(-1)  (mod 2^(A+1)).
+```
+
+Consequences:
+
+1. every finite valuation word is realized by infinitely many positive odd starts;
+2. if `A/N<log2(X)`, every positive representative has net growth across the whole word;
+3. compatible coding classes of an infinite word define one 2-adic integer;
+4. they come from an ordinary nonnegative integer exactly when their least representatives eventually stabilize.
+
+Thus arbitrarily long finite growth is locally automatic. The genuinely global obstruction is to keep positive average drift while making the nested coding residues stabilize at one ordinary positive integer rather than converge only 2-adically. See `VALUATION_WORD_CODING.md` and `tools/valuation_word_codec.py`.
+
 ## Other established structural results
 
 1. Exact implementation of the accelerated map and exact iterate formula.
@@ -70,6 +100,7 @@ Thus a hypothetical exceptional cycle can be forced to be simultaneously arbitra
 9. Exact coordinate normal forms around `n=-1` for `X=2^m+1` and around `n=1` for `X=2^m-1`.
 10. The positive-integer orbit dichotomy: every orbit is either eventually periodic or tends to positive infinity.
 11. For `(X,n0)=(1093,1)`, the orbit never returns to `1`, reducing that candidate to nontrivial-cycle exclusion.
+12. Exact inverse coding of every finite valuation word and a precise ordinary-integer stabilization criterion for infinite words.
 
 ## Literature audit
 
@@ -88,10 +119,11 @@ although `9` is not a power of two. This is recorded in `LITERATURE_AUDIT_SANTOS
 - Cycles longer than the fixed `148,557,456,445,856,651,509` barrier have not been excluded for the main candidate.
 - An arbitrarily large finite barrier is not the same as an infinite barrier.
 - The finite 2-adic regeneration targets have not been converted into one ordinary positive integer supporting infinitely many regenerations.
+- No low-average infinite valuation word with an eventually stable positive coding residue has yet been constructed.
 
 ## Current frontier
 
-The project now has two precise routes rather than a blind trajectory search.
+The project now has three precise routes rather than a blind trajectory search.
 
 ### Route A: finish the explicit candidate
 
@@ -111,7 +143,11 @@ exclude every nontrivial positive cycle, not only cycles through the current fin
 
 For `X=2^m+1`, turn the exact macroblock and 2-adic regeneration formulas into one ordinary positive starting integer with an infinite aperiodic chain of net-positive blocks.
 
-Either route would finish the strict prize problem.
+### Route C: stabilized low-average code
+
+Construct an aperiodic infinite valuation word whose prefix averages stay below `log2(X)` and whose unique coding residues eventually stabilize at a positive integer. The new coding theorem gives an exact checker for every prefix and shows precisely where a proposed symbolic construction fails.
+
+Any of these routes would finish the strict prize problem.
 
 ## Reproducibility
 
