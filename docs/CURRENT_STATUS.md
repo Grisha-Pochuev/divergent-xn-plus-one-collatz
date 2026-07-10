@@ -43,6 +43,24 @@ This improves the original fixed barrier
 
 by almost seventeen orders of magnitude.
 
+## Global logarithmic cycle-height reduction
+
+For every fixed odd `X>=5`, any positive cycle of accelerated length `p` has a minimum element bounded above by an effectively computable polynomial in `p`.
+
+Indeed, if `m=min n_i` and `A` is the total halving count, the exact cycle identity gives
+
+```text
+0 < A*log(2)-p*log(X) <= p/(X*m).
+```
+
+Effective lower bounds for the nonzero linear form `A*log(2)-p*log(X)` then imply constants `K_X,D_X>0` such that
+
+```text
+m <= K_X*p^D_X.
+```
+
+This does not yet exclude all cycles, but it proves that a hypothetical cycle cannot be simultaneously arbitrarily long and arbitrarily high without obeying a computable polynomial ceiling. See `docs/LOGARITHMIC_CYCLE_REDUCTION.md`.
+
 ## General finite barrier theorems
 
 For every prescribed `B`, the repository constructs a multiplier `X_B` whose orbit from `1` never returns to `1` and cannot enter a nontrivial cycle of length at most `B`.
@@ -74,6 +92,7 @@ See `VALUATION_WORD_CODING.md` and `tools/valuation_word_codec.py`.
 11. For `(X,n0)=(1093,1)`, the orbit never returns to `1`.
 12. Exact inverse coding of every finite valuation word.
 13. Continued-fraction exclusion of every nontrivial cycle of length at most `10^37` for the main fixed candidate.
+14. Effective polynomial upper bound on the minimum element of any hypothetical cycle in terms of its length.
 
 ## Literature audit
 
@@ -93,6 +112,7 @@ although `9` is not a power of two. See `LITERATURE_AUDIT_SANTOS.md`.
 - An arbitrarily large finite barrier is not an infinite barrier.
 - No ordinary positive integer supporting infinitely many net-positive regenerative blocks has yet been constructed.
 - No low-average infinite valuation word with an eventually stable positive coding residue has yet been constructed.
+- The effective polynomial cycle-height ceiling has not yet been combined with a growing modular lower bound strong enough to force a contradiction.
 
 ## Current frontier
 
@@ -114,6 +134,10 @@ For `X=2^m+1`, turn the exact macroblock and 2-adic regeneration formulas into o
 ### Route C: stabilized low-average code
 
 Construct an infinite valuation word with average below `log2(X)` whose exact coding residues eventually stabilize at a positive integer.
+
+### Route D: combine height ceiling with growing lower bounds
+
+Make the constants in the logarithmic cycle-height theorem explicit for the main candidate, then prove a modular or descent lower bound for the minimum cycle element that eventually exceeds the polynomial ceiling.
 
 Any route would finish the strict prize problem.
 
