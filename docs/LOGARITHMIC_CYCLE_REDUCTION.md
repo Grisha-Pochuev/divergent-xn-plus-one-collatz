@@ -126,10 +126,10 @@ X = 104350542602662257699,
 n0 = 1,
 ```
 
-all nontrivial cycles up to length
+all nontrivial cycles up to accelerated length
 
 ```text
-148557456445856651509
+10^37
 ```
 
 are already excluded, and every possible nontrivial cycle element is at least `25`.
