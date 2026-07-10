@@ -23,7 +23,7 @@ Current sparse cap:
 p <= 355561454311274250377.
 ```
 
-Only two lengths remain in that larger range:
+Only two lengths remain:
 
 ```text
 177780727155637125193
@@ -37,156 +37,171 @@ Their exact reciprocal thresholds are approximately
 0.099934207.
 ```
 
-## Newly retained transition structure
+## New exact transition picture
 
-Let
-
-```text
-O=ord_X(2)=1860810887857924950.
-```
-
-For every cycle value, write its incoming valuation as
+Use
 
 ```text
-a=s+O*q,
-1<=s<=O.
-```
-
-Then
-
-```text
-A=sum s+O*sum q.
+O=ord_X(2)=1860810887857924950,
+a_i=s_(i+1)+O*q_i.
 ```
 
 For either remaining length,
 
 ```text
-sum q<=6257.
+sum q_i<=6257.
 ```
 
-Thus almost every cycle edge must lie in the least full-order layer.
-
-For a full representative `n`, its possible predecessors form the exact progression
+The exact symmetric edge cost
 
 ```text
-m_q == m_0+q*63726582940809041391 (mod X).
+c_i=(s_i-1)+(s_(i+1)-1)+2*O*q_i
 ```
 
-The predecessor must itself lie in the full output subgroup. The minimum admissible `q` is the full predecessor delay `d_X(n)`, and
+satisfies
 
 ```text
-sum d_X(n_i)<=6257.
+sum c_i=2*(A-p).
 ```
 
-Finite inverse windows give stronger necessary costs `h_L(n)` with
+With threshold `K=5000`, more than `97.38%` of all edges are zero-layer edges with adjacent-label sum at most `5001`. Every target in that cheap majority exceeds
 
 ```text
-sum h_L(n_i)<=L*6257.
+781563824454394220933608138645145,
 ```
 
-At the harder length, the exact full-predecessor dual proves
+and their entire reciprocal contribution is below `2.216*10^(-13)`.
+
+Thus the required correction is concentrated in the remaining expensive edges. At least one expensive target is at most
 
 ```text
-sum_(n_i<=60000000) 1/n_i < 0.087618737,
+9190982840926584716   for p=...193,
+46609216582838682965  for p=...195.
 ```
 
-so more than `0.012315` must come from at least `738929` distinct values above sixty million.
+Both are below `X`.
+
+A second threshold forces one exact transition pair to occur at least
+
+```text
+3053943280435589
+```
+
+times in one class modulo `2*X^2`. It yields a short exact return:
+
+```text
+length <=114286,
+total valuation <=7771435,
+endpoints equal modulo 2*X^2.
+```
+
+Repeated words also exist modulo higher powers:
+
+```text
+2 edges: >=3114290401257 repetitions modulo 2*X^3
+3 edges: >=2918613523 repetitions modulo 2*X^4
+4 edges: >=2251677 repetitions modulo 2*X^5
+5 edges: >=1500 repetitions modulo 2*X^6.
+```
 
 ## Closed or unproductive routes
 
 Do not repeat:
 
-- forbidden-edge or forbidden-finite-word searches on the `2154` small classes;
-- bounded exact-valuation-layer word searches;
-- blind enlargement of the small representative cutoff;
+- forbidden finite-word searches on the `2154` small classes;
+- bounded layer-word enumeration as if it were a global obstruction;
+- blind enlargement of trajectory or representative cutoffs;
 - the retracted assumption `ord_X(2)|A`;
-- treating a finite cycle barrier as divergence.
+- comparison of the new maximum-height lower bound with a theorem that only bounds the minimum cycle element.
 
-The local transition graph is complete, and every compatible finite word is realizable. The obstruction must be global.
+The local transition graph is complete. The obstruction must be global.
 
-## Immediate target A: zero-delay inverse-window potential
+## Immediate target A: expensive small transition
 
-The depth-one, depth-two, and depth-three exact reciprocal bounds below one million are
+The best concrete node is now the forced target below `X`.
+
+1. Parameterize all full predecessors of a target `n<X`:
 
 ```text
-0.087551912
+m_q=(2^(s+qO)*n-1)/X.
+```
+
+2. Combine the target bound with the permanent mod-3 sieve, exact full predecessor delay, and source label.
+3. Seek a universal lower cost for every admissible predecessor of such a small target.
+4. If that cost exceeds the available edge budget after reciprocal concentration, one of the two lengths is eliminated.
+
+This route should attack `...193` first because its required reciprocal threshold is five times larger.
+
+## Immediate target B: symmetric inverse-window dual
+
+The depth-one symmetric edge dual gives
+
+```text
+sum_(n_i<=1000000)1/n_i <0.087543786.
+```
+
+The former one-sided depth-two and depth-three bounds remain numerically stronger:
+
+```text
 0.085634587
 0.085243521.
 ```
 
-The strict improvement with depth suggests constructing a potential on inverse carry states.
+Needed:
 
-Concrete tasks:
+1. define the exact minimum sum of symmetric edge costs over a two- or three-edge inverse window;
+2. use both the symmetric budget and the endpoint-label budget as separate rational constraints rather than replacing one by the other;
+3. construct a two-multiplier fractional dual or a finite-state potential;
+4. retain the result only if it improves the depth-three number or directly reduces the large tail.
 
-1. Define a finite quotient retaining enough carry information for zero-layer predecessor transitions.
-2. Compute or prove a positive minimum mean full-order layer cost for every directed cycle in that quotient.
-3. Convert the potential into a rational inequality of the form
+A simple convex average of the old and new costs was checked and did not improve the depth-two bound. A genuinely two-constraint dual is required.
 
-```text
-h_L(n) >= L*delta + Phi(next)-Phi(current).
-```
+## Immediate target C: short affine return
 
-4. Sum around a hypothetical cycle. Any fixed `delta>0` would contradict `sum q<=6257` for lengths near `1.78*10^20`.
-
-A quotient is useful only if every real zero-layer transition projects correctly. A false deterministic reduction must not be inferred from the small class alone.
-
-## Immediate target B: distribution of initial full classes
-
-The cheap full labels correspond to the initial segment
+For the forced segment
 
 ```text
-2^(-s) mod X,
-1<=s<=about 1.53*10^11.
+1<=L<=114286,
+L<=S<=7771435,
+n_L==n_0 (mod 2*X^2),
 ```
 
-A sufficiently strong rigorous discrepancy estimate for this multiplicative orbit would bound the zero-delay representatives without enumerating them.
-
-Concrete tasks:
-
-1. Express the reciprocal selection dual as a weighted counting problem for an initial geometric progression modulo `P` and `X`.
-2. Determine whether an explicit incomplete exponential-sum or character-sum theorem is numerically strong at the actual parameters.
-3. Record the route only if all constants are explicit and the resulting inequality beats `0.099934207`.
-
-General asymptotic equidistribution without usable constants is not a certificate.
-
-## Immediate target C: full source/target circulation
-
-Combine:
+insert the exact affine iterate formula
 
 ```text
-sum_i (2^a_(i-1)-X)*n_i = p,
+2^S*n_L=X^L*n_0+B.
 ```
 
-and
+The terminal two labels alone reproduce a tautology modulo `X^2`; that is not progress. A successful use must retain at least one additional piece of information:
+
+- a third neighbouring label, giving modulus `X^3`;
+- a bound on the quotient `(n_L-n_0)/(2X^2)`;
+- a signed height/reciprocal potential along the segment;
+- or a divisor of `2^S-X^L` imposing a nonlocal condition on `B`.
+
+## Immediate target D: distribution of zero-layer pair classes
+
+Zero-layer pairs form exact classes modulo `2*X^2`. A rigorous counting or discrepancy theorem for their least positive representatives could bound the large zero-delay tail globally.
+
+Needed:
+
+1. express pair representatives as
 
 ```text
-sum_i (2^a_i-X)/n_i
- = sum_i 1/(n_i*n_(i+1)) > 0
+2^(-v)*(1+X*2^(-u)) (mod X^2);
 ```
 
-with the full predecessor progression and the mod-3 balance
+2. count representatives below a variable threshold with explicit error;
+3. combine that count with the exact edge-cost budget;
+4. beat `0.099934207` without enumerating billions of values.
 
-```text
-N_(1->2)=N_(2->1).
-```
+Asymptotic equidistribution without explicit constants is not a certificate.
 
-Seek a signed rational potential that charges the necessary large zero-delay tail against neighbouring high-valuation steps.
+## Secondary routes
 
-## Secondary target: the other remaining length
+### Explicit cycle-height route
 
-The length
-
-```text
-177780727155637125193
-```
-
-has a larger required threshold, about `0.506785307`. The same full-predecessor machinery applies, but the present finite cutoff bounds are not yet close enough. Work first on a global zero-delay theorem that can address both lengths.
-
-## Other routes
-
-### Cycle-height route
-
-Make the polynomial upper bound on the minimum cycle element explicit and combine it with a modular lower bound growing with a long zero-layer run.
+The repetition ladder forces enormous maxima and diameters, but the retained logarithmic theorem bounds minima. This route needs an explicit max/min comparison or an explicit upper bound on the maximum before the two estimates can interact.
 
 ### Regenerative-chain route
 
@@ -210,4 +225,4 @@ A valid prize solution must provide an explicit pair, exclude every positive cyc
 
 ## Recommended next session
 
-> Work only on the large zero-delay tail for the two remaining lengths. Try a rigorous inverse-window potential or a numerically explicit distribution theorem for the initial full-class orbit. Do not return to local words or blind cutoff growth.
+> Attack the forced expensive target below X. Couple its exact predecessor label and delay to the reciprocal concentration. In parallel, seek a true two-constraint inverse-window dual. Do not return to local forbidden words or blind cutoff growth.
