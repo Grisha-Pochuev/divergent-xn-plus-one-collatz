@@ -1,42 +1,31 @@
 # START HERE
 
-This file is the durable entry point for every new work session on this repository.
+This file is the durable entry point for every new work session.
 
 ## Strict target
 
-Find explicit positive odd integers
+Find explicit positive odd integers `X>=5` and `n0>=1` such that
 
 ```text
-X >= 5,
-n0 >= 1,
+C_X(n)=(X*n+1)/2^v2(X*n+1)
 ```
 
-such that the accelerated odd-only map
+satisfies `C_X^t(n0) -> +infinity`. A cycle, avoidance of `1`, or any finite barrier is not a solution.
+
+## Read first
 
 ```text
-C_X(n) = (X*n + 1) / 2^v2(X*n+1)
+START_HERE.md
+docs/CURRENT_STATUS.md
+docs/VALIDATED_RESULTS.md
+docs/RETRACTIONS.md
+docs/NEXT_STEPS.md
+run_checks.py
 ```
 
-satisfies
+GitHub files are the durable source of truth.
 
-```text
-C_X^t(n0) -> +infinity.
-```
-
-A nontrivial cycle or merely avoiding `1` does **not** solve the strict target.
-
-## Read these files first
-
-1. `START_HERE.md`
-2. `docs/CURRENT_STATUS.md`
-3. `docs/VALIDATED_RESULTS.md`
-4. `docs/RETRACTIONS.md`
-5. `docs/NEXT_STEPS.md`
-6. `run_checks.py`
-
-Do not rely on claims marked as retracted, superseded, heuristic, or unverified.
-
-## Current strongest fixed candidate
+## Main fixed candidate
 
 ```text
 X  = 104350542602662257699,
@@ -46,148 +35,118 @@ n0 = 1.
 Retained rigorous conclusions:
 
 - the orbit leaves `1` and cannot return to `1`;
-- any nontrivial cycle reached by it contains only values at least `25`;
-- no nontrivial positive cycle of accelerated length at most
+- every element of a nontrivial cycle reached by it is at least `25`;
+- no nontrivial positive cycle has accelerated length
 
 ```text
-177780727155637125184
+p <= 177780727155637125192;
 ```
 
-can occur;
-- more strongly, every length at most
+- more strongly, every length through
 
 ```text
 355561454311274250377
 ```
 
-is impossible except the following six odd values:
+is impossible except the two odd values
 
 ```text
-177780727155637125185
-177780727155637125187
-177780727155637125189
-177780727155637125191
 177780727155637125193
-177780727155637125195
+177780727155637125195.
 ```
 
-Therefore the orbit either tends to positive infinity or enters a nontrivial cycle longer than the contiguous barrier. If its cycle length is at most the larger sparse cap, it must be one of the six displayed values. This is not yet a proof of divergence.
+The strict problem remains open.
 
-Primary current certificates:
+## Priority 1 structure
 
-```text
-docs/SHARP_LOG_INTERVAL_BARRIER.md
-tools/verify_sharp_log_barrier.py
-docs/FIRST_SPARSE_CYCLE_WINDOW.md
-tools/verify_first_sparse_cycle_window.py
-docs/FIRST_EXCEPTION_ELIMINATION.md
-tools/verify_first_exception_elimination.py
-```
-
-## Priority 1 transition results
-
-Let
+Use
 
 ```text
 M = 15099,
-ord_M(2) = 2154,
+H = ord_M(2)=2154,
 P = 6911089648497401,
-X = M*P.
+X=M*P,
+ord_P(2)=(P-1)/8,
+ord_X(2)=1860810887857924950.
 ```
 
-The following are proved:
+Proved facts:
 
-1. The directed graph on the `2154` allowed output classes is complete, including loops. Every finite class word is realizable by infinitely many positive starts.
-2. This no-go theorem remains true after retaining any prescribed finite word of exact valuations, including the layer `q=(a-t)/2154`. Local forbidden-word searches cannot solve the problem.
-3. If `c_t` is the number of cycle elements in class `t`, then every hypothetical cycle of length `p` satisfies
+1. The graph on the `2154` output classes is complete, including loops.
+2. Every compatible finite word remains realizable even with exact valuations and finite layers `q=(a-t)/H`; local forbidden-word searches cannot work.
+3. Hypothetical cycle occupancies satisfy
 
 ```text
-sum_t c_t = p,
-sum_t t*c_t <= 67p-1.
+sum c_t=p,
+sum t*c_t<=67p-1.
 ```
 
-4. Cycle closure forces exact source/target flow balance.
-5. A balanced occupancy dual certificate reduces the reciprocal envelope from about `3.820166` to about `3.217731`.
-6. Splitting incoming exact valuations using the large divisor `P` reduces it further; the midpoint refinement used for the first exceptional length gives about `2.527289`.
-7. Exact global closure identities hold:
+4. Cycle closure gives exact source/target flow balance.
+5. Full output classes modulo `2X` have distinct minimum activation costs. If `m` full classes occur, then
+
+```text
+A >= p + m*(m-1)/2.
+```
+
+6. Since powers of two form an index-eight subgroup modulo `P`, small genuine full representatives can be exactly sieved.
+7. Every cycle satisfies
 
 ```text
 sum_i (2^a_(i-1)-X)*n_i = p,
+```
 
+and
+
+```text
 sum_i (2^a_i-X)/n_i
  = sum_i 1/(n_i*n_(i+1)) > 0.
 ```
 
-Structural files:
+## Current certificate chain
 
 ```text
-docs/RESIDUE_TRANSITION_NO_GO.md
-docs/AUGMENTED_TRANSITION_NO_GO.md
-docs/RESIDUE_VALUATION_BUDGET.md
-docs/TRANSITION_BALANCED_RECIPROCAL_REDUCTION.md
-docs/BALANCED_OCCUPANCY_DUAL_BOUND.md
-docs/LARGE_DIVISOR_VALUATION_SPLIT.md
-docs/GLOBAL_TRANSITION_BALANCE_IDENTITIES.md
+docs/FIRST_SPARSE_CYCLE_WINDOW.md
+tools/verify_first_sparse_cycle_window.py
+docs/FIRST_EXCEPTION_ELIMINATION.md
+tools/verify_first_exception_elimination.py
+docs/FULL_MODULUS_ACTIVATION_BOUND.md
+tools/verify_full_modulus_activation_bound.py
+docs/INDEX_EIGHT_SMALL_REPRESENTATIVE_SIEVE.md
+tools/verify_index_eight_small_sieve.py
+docs/THIRD_EXCEPTION_SUBGROUP_SIEVE.md
+tools/verify_third_exception_subgroup_sieve.py
 ```
 
-## Exact next mathematical step
+## Exact next step
 
-Attack the six remaining odd lengths directly. The preferred route is to combine their fixed total valuation with the two global transition-balance identities and full-`X` valuation costs. Do not return to local forbidden-edge or bounded-window enumeration: the augmented no-go theorem proves that every compatible finite word is realizable.
+Attack the two remaining lengths separately. Their exact total valuation is fixed. The most promising route is to use exact full-class activation prices or the global height/reciprocal balance identities, rather than increasing the small-representative sieve to billions of tests.
 
 ## Critical retraction
 
-The former claimed cycle barrier `10^37` is invalid and retracted. It used the false cycle condition
+The former `10^37` barrier is invalid. It used the false condition
 
 ```text
 2^A == 1 (mod X).
 ```
 
-The correct congruence is
+The correct relation is
 
 ```text
 2^A * product_i(n_i) == 1 (mod X).
 ```
 
-The accelerated `5n+1` cycle
-
-```text
-13 -> 33 -> 83 -> 13
-```
-
-is a regression counterexample to the false condition. Never reintroduce the discarded order argument.
+The accelerated `5n+1` cycle `13 -> 33 -> 83 -> 13` is the regression counterexample. Never reintroduce the discarded order argument.
 
 ## Working rules
 
-1. GitHub files, not chat history, are the source of durable project memory.
-2. Work on one major route per session.
-3. Separate proved statements from heuristics and computational observations.
-4. Before announcing a theorem:
-   - derive it independently a second time;
-   - test it against known small cycles;
-   - add an exact verifier or unit test where practical;
-   - run the retained checks;
-   - update the project status files.
-5. Do not run long CPU searches in ChatGPT sessions. Use exact arithmetic, symbolic work, and short checks. Any large external computation requires explicit user approval.
-6. A long finite trajectory is evidence only, never a proof of divergence.
-7. A finite or sparse cycle barrier, however large, is not an infinite barrier.
-
-## Required end-of-session checkpoint
-
-Before finishing a substantial work session, record:
-
-- what was rigorously proved;
-- what remains conjectural;
-- any failed or retracted approach;
-- files and commit SHAs changed;
-- the exact next mathematical step;
-- a conservative progress estimate, clearly labelled subjective.
+- Separate theorems from evidence.
+- Test every theorem against known cycles.
+- Add an exact checker where practical.
+- Do not run long trajectory or parameter searches without explicit approval.
+- A finite or sparse barrier is not divergence.
 
 ## Reproduction
-
-Run
 
 ```text
 python run_checks.py
 ```
-
-to execute the retained certificates and regression audits. Individual certificates may also be run directly from `tools/`.
