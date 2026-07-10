@@ -19,4 +19,4 @@ def test_correct_cycle_congruence() -> None:
     result = audit()
     assert result["product_cycle_mod_X"] == 2
     assert result["correct_relation_mod_X"] == 1
-    assert result["retained_fixed_barrier"] == 148557456445856651509
+    assert result["current_retained_fixed_barrier"] == 170000000000000000000
