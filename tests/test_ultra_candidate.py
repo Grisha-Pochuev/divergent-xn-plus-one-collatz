@@ -9,6 +9,8 @@ from verify_ultra_candidate import (
     COFACTOR,
     K,
     MINIMUM_NONTRIVIAL_OUTPUT,
+    OUTPUT_MODULUS,
+    OUTPUT_ORDER,
     X,
     Y_DEN,
     Y_NUM,
@@ -25,11 +27,14 @@ def test_ultra_candidate_structure() -> None:
     assert X == 21 * COFACTOR
     assert COFACTOR % 6 == 1
     assert X % 9 == 3
+    assert OUTPUT_MODULUS == 3 * 7 * 719
 
 
 def test_ultra_candidate_output_residues() -> None:
-    verify_output_residue_bound()
-    assert MINIMUM_NONTRIVIAL_OUTPUT == 11
+    report = verify_output_residue_bound()
+    assert MINIMUM_NONTRIVIAL_OUTPUT == 25
+    assert report["minimum_nontrivial_output"] == 25
+    assert report["order_of_2_mod_output_modulus"] == OUTPUT_ORDER == 2154
 
 
 def test_ultra_candidate_first_step() -> None:
@@ -42,7 +47,10 @@ def test_ultra_candidate_cycle_inequalities() -> None:
     assert (BARRIER // 2) * Y_NUM * EXPONENT_BOUND.denominator < (
         Y_DEN * EXPONENT_BOUND.numerator
     )
-    assert details["minimum_nontrivial_cycle_element"] == 11
+    assert not (BARRIER // 2 + 1) * Y_NUM * EXPONENT_BOUND.denominator < (
+        Y_DEN * EXPONENT_BOUND.numerator
+    )
+    assert details["minimum_nontrivial_cycle_element"] == 25
     assert K == 66
 
 
@@ -51,4 +59,4 @@ def test_ultra_candidate_full_certificate() -> None:
     assert report["X"] == X
     assert report["n0"] == 1
     assert report["excluded_nontrivial_cycle_lengths_through"] == BARRIER
-    assert BARRIER == 120_000_000_000_000_000_000
+    assert BARRIER == 148_557_456_445_856_651_509
