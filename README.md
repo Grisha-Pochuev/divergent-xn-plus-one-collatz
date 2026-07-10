@@ -2,25 +2,25 @@
 
 ## Divergent accelerated `Xn+1` orbit
 
-This repository is an open, reproducible research project about the following problem. For an odd integer `X >= 5`, define the accelerated odd-only map
+For an odd integer `X>=5`, define
 
 ```text
-C_X(n) = (X*n + 1) / 2^v2(X*n + 1),
+C_X(n) = (X*n + 1) / 2^v2(X*n + 1)
 ```
 
-where `n` is a positive odd integer. The strict target is to find at least one explicit pair `(X,n0)` for which
+on positive odd integers. The strict target is one explicit pair `(X,n0)` for which
 
 ```text
 C_X^t(n0) -> +infinity.
 ```
 
-A nontrivial cycle avoiding `1`, a long finite trajectory, or an arbitrarily large finite cycle barrier is not treated as a solution.
+A cycle avoiding `1`, a long finite trajectory, or an arbitrarily large finite cycle barrier is not a solution.
 
-This repository is part of **The Open Mathematics Project**: a public workflow for attacking open mathematical problems with human direction, AI-assisted reasoning, reproducible computation, and independent verification.
+This repository is part of **The Open Mathematics Project**: public AI-assisted mathematical research designed for reproducibility and independent verification.
 
 ## Start here
 
-Every new work session should read these files in order:
+Read:
 
 ```text
 START_HERE.md
@@ -31,77 +31,100 @@ docs/NEXT_STEPS.md
 run_checks.py
 ```
 
-A ready-to-copy new-chat prompt is stored in:
-
-```text
-docs/CHAT_HANDOFF_TEMPLATE.md
-```
-
-GitHub files, not chat history, are the durable source of project truth.
+GitHub files, not chat history, are the durable source of truth.
 
 ## Current strongest retained result
 
-**The strict problem is not solved.** No explicit positive orbit has yet been proved to tend to infinity.
-
-The strongest retained fixed candidate is
+**The strict problem is not solved.** The strongest fixed candidate is
 
 ```text
 X  = 104350542602662257699,
 n0 = 1.
 ```
 
-For this pair the repository rigorously proves:
+The repository rigorously proves:
 
 1. the orbit leaves `1` and cannot return to `1`;
-2. every element of any nontrivial cycle reached by the orbit is at least `25`;
-3. no nontrivial positive cycle of accelerated length at most
+2. every element of a nontrivial cycle reached by it is at least `25`;
+3. no nontrivial positive cycle has length
 
 ```text
-176022359338834903228
+p <= 177780727155637125184;
 ```
 
-can occur.
-
-Therefore the orbit either tends to positive infinity or enters a nontrivial positive cycle longer than this finite barrier.
-
-Primary files:
+4. up to
 
 ```text
-docs/TRANSITION_BUDGET_CYCLE_BARRIER.md
-tools/verify_transition_budget_barrier.py
+p <= 355561454311274250377,
 ```
 
-The barrier uses `2154` allowed output classes modulo `2*15099`, distinctness of cycle elements, and a new global valuation-cost budget for class occupancies. It is checked with exact modular and rational arithmetic; no long trajectory simulation or heavy CPU search is used.
-
-For a fair comparison, the old independent-class envelope, saturated under the same rational bounds, reaches `176022359338834903224`. The transition-class cost adds exactly `4` further lengths. The approximately `3.54%` headline increase is relative to the previously recorded round barrier `170000000000000000000`.
-
-## Priority 1 transition findings
-
-The bare directed graph on the `2154` allowed classes is complete, including loops. More strongly, every finite word of class labels is realizable by infinitely many positive starts. Therefore no forbidden edges or forbidden short words exist at this level of abstraction.
-
-For a hypothetical cycle of length `p`, with class counts `c_t`, the repository proves
+all cycle lengths are excluded except six odd values:
 
 ```text
-sum_t c_t = p,
-sum_t t*c_t <= 67p-1.
+177780727155637125185
+177780727155637125187
+177780727155637125189
+177780727155637125191
+177780727155637125193
+177780727155637125195
 ```
 
-Cycle closure also forces exact source/target flow balance: the number of current elements in class `t` equals the number of outgoing steps entering class `t`.
+Thus the fixed orbit either tends to positive infinity or enters a nontrivial positive cycle. If the cycle length is within the larger sparse range, it must be one of the six listed values.
 
-Files:
+Primary certificates:
 
 ```text
-docs/RESIDUE_TRANSITION_NO_GO.md
-tools/verify_residue_transition_no_go.py
-docs/RESIDUE_VALUATION_BUDGET.md
-tools/verify_residue_valuation_budget.py
-docs/TRANSITION_BALANCED_RECIPROCAL_REDUCTION.md
-tools/verify_transition_balance.py
+docs/SHARP_LOG_INTERVAL_BARRIER.md
+tools/verify_sharp_log_barrier.py
+docs/FIRST_SPARSE_CYCLE_WINDOW.md
+tools/verify_first_sparse_cycle_window.py
+docs/FIRST_EXCEPTION_ELIMINATION.md
+tools/verify_first_exception_elimination.py
 ```
+
+## Priority 1 findings
+
+Use
+
+```text
+M = 15099,
+ord_M(2) = 2154,
+X = M * 6911089648497401.
+```
+
+The following are retained:
+
+- the graph on the `2154` allowed output classes is complete, including loops;
+- every compatible finite word remains realizable even when exact valuations and finite height layers are retained;
+- hypothetical cycle occupancies satisfy
+
+```text
+sum c_t=p,
+sum t*c_t<=67p-1;
+```
+
+- cycle closure gives exact source/target flow balance;
+- the large divisor of `X` places outputs with fixed incoming valuation in sparse progressions;
+- exact logarithm intervals cross the first near-power-of-two window;
+- the first of seven isolated exceptional lengths is eliminated;
+- every cycle satisfies
+
+```text
+sum_i (2^a_(i-1)-X)*n_i = p,
+```
+
+and
+
+```text
+sum_i (2^a_i-X)/n_i
+ = sum_i 1/(n_i*n_(i+1)) > 0.
+```
+
+The exact next target is to use these global identities to eliminate the remaining six lengths.
 
 ## Important retraction
 
-A former claimed cycle barrier `10^37` is retracted. It incorrectly assumed that a cycle must satisfy
+A former claimed barrier `10^37` is retracted. It incorrectly assumed
 
 ```text
 2^A == 1 (mod X).
@@ -113,58 +136,27 @@ The correct congruence is
 2^A * product_i(n_i) == 1 (mod X).
 ```
 
-The accelerated `5n+1` cycle `13 -> 33 -> 83 -> 13` is a regression counterexample to the discarded condition. See `docs/RETRACTIONS.md` and `docs/AUDIT_INVALID_ORDER_CONDITION.md`.
+The accelerated `5n+1` cycle `13 -> 33 -> 83 -> 13` is the preserved regression counterexample.
 
-## Other retained structural results
+## Other retained structures
 
 The repository also contains:
 
 - the exact accelerated iterate formula;
 - an average-valuation sufficient criterion for exponential divergence;
+- exact finite valuation-word coding;
 - a finite repetition bound for every exact valuation block;
-- a proof that eventually periodic exact valuations force an eventual cycle;
-- exact coding of every finite valuation word;
-- complete growing macroblocks for `X=2^m+1`;
-- an arbitrary-core Fermat-burst reduction;
-- a 2-adic isometry and unique finite-precision regeneration targets;
-- an effective polynomial upper bound on the minimum element of a hypothetical cycle in terms of its length;
-- the transition no-go theorem for the unaugmented `2154`-class graph;
-- global valuation-cost and flow-balance constraints for hypothetical cycles.
+- Fermat-type growing macroblocks and finite macroblock programs;
+- a 2-adic regeneration isometry;
+- an effective polynomial upper bound on the minimum element of a hypothetical cycle;
+- the bare and augmented transition no-go theorems;
+- balanced occupancy, large-divisor, sharp-logarithm, and sparse-window certificates.
 
-The authoritative list, with limitations, is `docs/VALIDATED_RESULTS.md`.
-
-## Basic divergence criterion
-
-Let
-
-```text
-a_t = v2(X*n_t+1),
-A_N = a_0+...+a_(N-1).
-```
-
-Then
-
-```text
-n_N = [X^N*n_0 + sum_(j=0)^(N-1) X^(N-1-j)*2^(A_j)] / 2^(A_N),
-```
-
-and therefore
-
-```text
-n_N >= n_0 * X^N / 2^(A_N).
-```
-
-If, for some `epsilon>0` and all sufficiently large `N`,
-
-```text
-A_N/N <= log2(X)-epsilon,
-```
-
-then the orbit grows at least exponentially. The unresolved difficulty is proving such control for one explicit ordinary positive orbit.
+See `docs/VALIDATED_RESULTS.md` for hypotheses and limitations.
 
 ## Reproducibility
 
-No external Python packages are required for the retained core checks.
+No external Python packages are required for the retained checks.
 
 Run:
 
@@ -172,39 +164,38 @@ Run:
 python run_checks.py
 ```
 
-The suite includes the transition no-go theorem, valuation budget, source/target balance audit, current exact cycle-barrier certificate, and a regression audit preventing the invalid cycle-order condition from being reintroduced.
-
-Selected lightweight checks:
+Selected Priority 1 checks:
 
 ```bash
-python tools/verify_transition_budget_barrier.py
-python tools/verify_residue_transition_no_go.py
-python tools/verify_residue_valuation_budget.py
-python tools/verify_transition_balance.py
-python tools/verify_continued_fraction_barrier.py
+python tools/verify_balanced_occupancy_barrier.py
+python tools/verify_augmented_transition_no_go.py
+python tools/verify_large_divisor_split_barrier.py
+python tools/verify_sharp_log_barrier.py
+python tools/verify_first_sparse_cycle_window.py
+python tools/verify_first_exception_elimination.py
+python tools/verify_global_transition_identities.py
 ```
 
-The file named `verify_continued_fraction_barrier.py` is now an audit of the retracted argument, not a verifier of the discarded `10^37` claim.
+The five-million-step certificate enumerates modular inverse powers, not a Collatz trajectory or a broad parameter search.
 
 ## Repository layout
 
 ```text
-START_HERE.md   Durable entry point for every work session.
-docs/           Proof notes, status, audits, roadmap, and handoff material.
-tools/          Exact integer implementations and verification scripts.
-tests/          Independent tests and regression checks.
+START_HERE.md   Durable entry point.
+docs/           Proof notes, status, audits, and roadmap.
+tools/          Exact verification scripts.
+tests/          Independent tests and regressions.
 results/        Exploratory outputs, never treated as proof.
 ```
 
 ## Research principles
 
-1. Separate proved statements from experiments and conjectures.
-2. Never treat a long trajectory as proof of divergence.
-3. Prefer finite, independently checkable certificates.
-4. Record failed approaches and exact counterexamples.
-5. Keep the checker smaller and simpler than the search procedure.
-6. Do not launch long CPU searches without explicit approval.
-7. Update the durable status files after every major result or retraction.
+1. Separate proofs from experiments.
+2. Never treat finite trajectory size as proof of divergence.
+3. Prefer independently checkable exact certificates.
+4. Preserve failed arguments and counterexamples.
+5. Keep verifiers simpler than exploratory searches.
+6. Do not launch long computations without explicit approval.
 
 ## References
 
@@ -216,4 +207,4 @@ results/        Exploratory outputs, never treated as proof.
 
 ## License
 
-Code, notes, and reproducibility material are released under the MIT License.
+MIT.
