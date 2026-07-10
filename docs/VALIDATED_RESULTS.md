@@ -136,13 +136,45 @@ tools/verify_general_fermat_burst.py
 
 This does not yet construct one ordinary positive integer supporting infinitely many net-positive blocks.
 
-## F. 2-adic regeneration structure
+## F. Arbitrary finite programs of growing macroblocks
+
+For `X=2^m+1`, choose arbitrary finite boundary lengths
+
+```text
+L_0,...,L_R >= 1
+```
+
+and prescribed excess exit valuations
+
+```text
+r_0,...,r_(R-1) >= 1.
+```
+
+There exist infinitely many positive odd core tuples `q_0,...,q_R` for which the accelerated orbit follows exactly those complete macroblocks in sequence. If every block satisfies
+
+```text
+L_i*log2(1+2^(-m)) > r_i+1,
+```
+
+then every boundary value is strictly larger than the preceding boundary value.
+
+Thus any finite, including aperiodic, program of complete growing macroblocks can be realized exactly by positive odd integers. The theorem is finite: as the number of prescribed blocks grows, the required starting congruence generally changes, so it does not yet produce one fixed start supporting infinitely many blocks.
+
+Files:
+
+```text
+docs/FINITE_MACROBLOCK_PROGRAMS.md
+tools/build_macroblock_program.py
+tests/test_macroblock_program.py
+```
+
+## G. 2-adic regeneration structure
 
 For fixed Fermat-type macroblock parameters, the endpoint map on the odd core is a 2-adic isometry. At every finite precision there is one unique residue class regenerating a chosen target such as `-1`.
 
 The compatible target is generally a genuinely nonintegral 2-adic number. Thus arbitrary finite regeneration does not automatically produce an ordinary positive starting value.
 
-## G. Logarithmic cycle-height reduction
+## H. Logarithmic cycle-height reduction
 
 For every fixed odd `X>=5`, if a positive accelerated cycle has length `p` and minimum element `m`, then effective lower bounds for the nonzero linear form
 
@@ -164,7 +196,7 @@ File:
 docs/LOGARITHMIC_CYCLE_REDUCTION.md
 ```
 
-## H. General logical dichotomy
+## I. General logical dichotomy
 
 A positive integer orbit that is bounded must eventually repeat and enter a cycle. Hence every positive orbit is either eventually periodic or tends to positive infinity.
 
