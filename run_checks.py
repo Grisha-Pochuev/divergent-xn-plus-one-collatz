@@ -61,6 +61,7 @@ def main() -> None:
     run("tools/verify_ultra_candidate.py")
     run("tools/verify_continued_fraction_barrier.py")
     run("tools/verify_residue_crowding_barrier.py")
+    run("tools/check_project_consistency.py")
     run("tools/generate_two_parameter_barrier.py", "--length", "1000000000000", "--height", "1000000000")
     run("tools/valuation_word_codec.py", "--X", "5", "--pattern", "1,1,5", "--representatives", "3")
     run("tools/valuation_word_codec.py", "--X", "9", "--pattern", "3,3,3,3,3", "--representatives", "3")
