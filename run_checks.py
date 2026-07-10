@@ -28,6 +28,12 @@ def main() -> None:
         test_precision_transfer_congruence,
         test_unique_hensel_targets,
     )
+    from test_macroblock_program import (
+        test_aperiodic_ten_block_program,
+        test_general_complete_macroblock_formula,
+        test_terminal_class_has_infinite_odd_lifts,
+        test_three_complete_growing_blocks,
+    )
     from test_wieferich_1093 import (
         test_direct_predecessor_samples_divisible_by_q,
         test_full_wieferich_certificate,
@@ -84,6 +90,10 @@ def main() -> None:
         test_precision_transfer_congruence,
         test_endpoint_isometry,
         test_unique_hensel_targets,
+        test_general_complete_macroblock_formula,
+        test_three_complete_growing_blocks,
+        test_aperiodic_ten_block_program,
+        test_terminal_class_has_infinite_odd_lifts,
         test_order_and_wieferich_congruence,
         test_output_coprime_to_q,
         test_direct_predecessor_samples_divisible_by_q,
@@ -122,6 +132,13 @@ def main() -> None:
     run("tools/analyze_periodic_block.py", "--X", "33", "--pattern", "5", "--n", str((1 << 35) - 1), "--limit", "10")
     run("tools/analyze_fermat_macroblock.py", "--m", "3", "--L", "599", "--k", "0", "--precision", "17")
     run("tools/analyze_fermat_macroblock.py", "--m", "4", "--L", "78", "--k", "1", "--precision", "10")
+    run("tools/build_macroblock_program.py", "--m", "2", "--lengths", "7,7,7,7", "--exits", "1,1,1")
+    run(
+        "tools/build_macroblock_program.py",
+        "--m", "2",
+        "--lengths", "7,8,8,7,8,7,7,8,8,7,7",
+        "--exits", "1,1,1,1,1,1,1,1,1,1",
+    )
     run("tools/verify_wieferich_1093.py")
     run("tools/verify_strong_candidate.py")
     run("tools/generate_cycle_barrier.py", "--barrier", "1000000000000")
