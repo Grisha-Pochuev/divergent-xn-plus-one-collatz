@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+title: "Divergent accelerated Xn+1 orbit"
+message: "Please cite this repository if you use its code, notes, or certificates."
+type: software
+authors:
+  - family-names: Pochuev
+    given-names: Grisha
+repository-code: "https://github.com/Grisha-Pochuev/divergent-xn-plus-one-collatz"
+license: MIT
+year: 2026
