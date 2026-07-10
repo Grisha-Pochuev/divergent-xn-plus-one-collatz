@@ -30,32 +30,128 @@ Only two lengths remain in that larger range:
 177780727155637125195.
 ```
 
-### Closed routes
-
-Do not repeat searches for forbidden finite words using residue labels, exact valuations, finite height layers, or bounded windows of them. Every compatible finite path is realizable by infinitely many positive starts.
-
-Do not merely enlarge the small subgroup sieve to billions of candidates. The last two exact interval thresholds are approximately
+Their exact reciprocal thresholds are approximately
 
 ```text
 0.506785307
-0.099934207,
+0.099934207.
 ```
 
-so a qualitatively stronger coupling is needed.
+## Newly retained transition structure
 
-### Retained tools
-
-For a hypothetical cycle:
+Let
 
 ```text
-sum c_t=p,
-sum t*c_t<=67p-1,
-A >= p + m*(m-1)/2,
+O=ord_X(2)=1860810887857924950.
 ```
 
-where `m` is the number of active full output classes modulo `2X`.
+For every cycle value, write its incoming valuation as
 
-Every cycle also satisfies
+```text
+a=s+O*q,
+1<=s<=O.
+```
+
+Then
+
+```text
+A=sum s+O*sum q.
+```
+
+For either remaining length,
+
+```text
+sum q<=6257.
+```
+
+Thus almost every cycle edge must lie in the least full-order layer.
+
+For a full representative `n`, its possible predecessors form the exact progression
+
+```text
+m_q == m_0+q*63726582940809041391 (mod X).
+```
+
+The predecessor must itself lie in the full output subgroup. The minimum admissible `q` is the full predecessor delay `d_X(n)`, and
+
+```text
+sum d_X(n_i)<=6257.
+```
+
+Finite inverse windows give stronger necessary costs `h_L(n)` with
+
+```text
+sum h_L(n_i)<=L*6257.
+```
+
+At the harder length, the exact full-predecessor dual proves
+
+```text
+sum_(n_i<=60000000) 1/n_i < 0.087618737,
+```
+
+so more than `0.012315` must come from at least `738929` distinct values above sixty million.
+
+## Closed or unproductive routes
+
+Do not repeat:
+
+- forbidden-edge or forbidden-finite-word searches on the `2154` small classes;
+- bounded exact-valuation-layer word searches;
+- blind enlargement of the small representative cutoff;
+- the retracted assumption `ord_X(2)|A`;
+- treating a finite cycle barrier as divergence.
+
+The local transition graph is complete, and every compatible finite word is realizable. The obstruction must be global.
+
+## Immediate target A: zero-delay inverse-window potential
+
+The depth-one, depth-two, and depth-three exact reciprocal bounds below one million are
+
+```text
+0.087551912
+0.085634587
+0.085243521.
+```
+
+The strict improvement with depth suggests constructing a potential on inverse carry states.
+
+Concrete tasks:
+
+1. Define a finite quotient retaining enough carry information for zero-layer predecessor transitions.
+2. Compute or prove a positive minimum mean full-order layer cost for every directed cycle in that quotient.
+3. Convert the potential into a rational inequality of the form
+
+```text
+h_L(n) >= L*delta + Phi(next)-Phi(current).
+```
+
+4. Sum around a hypothetical cycle. Any fixed `delta>0` would contradict `sum q<=6257` for lengths near `1.78*10^20`.
+
+A quotient is useful only if every real zero-layer transition projects correctly. A false deterministic reduction must not be inferred from the small class alone.
+
+## Immediate target B: distribution of initial full classes
+
+The cheap full labels correspond to the initial segment
+
+```text
+2^(-s) mod X,
+1<=s<=about 1.53*10^11.
+```
+
+A sufficiently strong rigorous discrepancy estimate for this multiplicative orbit would bound the zero-delay representatives without enumerating them.
+
+Concrete tasks:
+
+1. Express the reciprocal selection dual as a weighted counting problem for an initial geometric progression modulo `P` and `X`.
+2. Determine whether an explicit incomplete exponential-sum or character-sum theorem is numerically strong at the actual parameters.
+3. Record the route only if all constants are explicit and the resulting inequality beats `0.099934207`.
+
+General asymptotic equidistribution without usable constants is not a certificate.
+
+## Immediate target C: full source/target circulation
+
+Combine:
 
 ```text
 sum_i (2^a_(i-1)-X)*n_i = p,
@@ -65,49 +161,32 @@ and
 
 ```text
 sum_i (2^a_i-X)/n_i
- = sum_i 1/(n_i*n_(i+1)) > 0.
+ = sum_i 1/(n_i*n_(i+1)) > 0
 ```
 
-The exact group data are
+with the full predecessor progression and the mod-3 balance
 
 ```text
-ord_M(2)=2154,
-ord_P(2)=(P-1)/8,
-ord_X(2)=1860810887857924950.
+N_(1->2)=N_(2->1).
 ```
 
-### Immediate target A: exact activation-price certificate
+Seek a signed rational potential that charges the necessary large zero-delay tail against neighbouring high-valuation steps.
 
-For every genuine small full representative `n`, compute its exact minimum activation label `s` satisfying
+## Secondary target: the other remaining length
+
+The length
 
 ```text
-n == 2^(-s) (mod X).
+177780727155637125193
 ```
 
-Then solve or bound the weighted selection problem:
-
-```text
-maximize sum 1/n
-subject to
-sum activation_cost <= A
-and at most p selected occurrences.
-```
-
-Use a rational Lagrange-dual inequality, not a large combinatorial search. The exact order factorization is smooth enough for Pohlig-Hellman discrete logarithms.
-
-### Immediate target B: neighbour-height charging
-
-Use the fixed total valuation and the two global transition identities to charge every `a>=67` step against neighbouring low-valuation steps. Seek a telescoping potential or signed inequality that bounds the reciprocal sum more sharply than independent full-class activation.
-
-### Secondary target: next sparse window
-
-Generalize the rational phase argument beyond the first crossing. Locate later narrow exceptional windows and prove safe intervals between them. This does not solve divergence but structures almost all lengths into sparse Diophantine windows.
+has a larger required threshold, about `0.506785307`. The same full-predecessor machinery applies, but the present finite cutoff bounds are not yet close enough. Work first on a global zero-delay theorem that can address both lengths.
 
 ## Other routes
 
 ### Cycle-height route
 
-Make the polynomial upper bound on the minimum cycle element explicit and combine it with a modular lower bound that grows with length.
+Make the polynomial upper bound on the minimum cycle element explicit and combine it with a modular lower bound growing with a long zero-layer run.
 
 ### Regenerative-chain route
 
@@ -123,7 +202,7 @@ A proof of `v2(S_t)<=3t-1` for the transformed `9n+1` recurrence would imply div
 
 ## Restrictions
 
-No long trajectory scans, large parameter searches, or large Actions matrices without explicit approval. Exact modular checks and compact deterministic certificates are allowed.
+No long trajectory scans, large parameter searches, or large Actions matrices without explicit approval. Exact modular checks, smooth-order discrete logarithms, and compact deterministic certificates are allowed.
 
 ## Final-proof checklist
 
@@ -131,4 +210,4 @@ A valid prize solution must provide an explicit pair, exclude every positive cyc
 
 ## Recommended next session
 
-> Eliminate `177780727155637125193` and `177780727155637125195` using exact full-class activation prices or a global neighbour-height potential. Do not return to local transition words or brute-force cutoff growth.
+> Work only on the large zero-delay tail for the two remaining lengths. Try a rigorous inverse-window potential or a numerically explicit distribution theorem for the initial full-class orbit. Do not return to local words or blind cutoff growth.
