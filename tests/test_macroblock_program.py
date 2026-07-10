@@ -25,8 +25,9 @@ def test_general_complete_macroblock_formula() -> None:
         n, valuation = odd_step(x, n)
         observed.append(valuation)
 
-    r = ((x**length) * q_value - 1 & -((x**length) * q_value - 1)).bit_length() - 1
-    expected = ((x**length) * q_value - 1) >> r
+    exit_numerator = (x**length) * q_value - 1
+    r = (exit_numerator & -exit_numerator).bit_length() - 1
+    expected = exit_numerator >> r
     assert observed == [m] * (length - 1) + [m + r]
     assert n == expected
 
