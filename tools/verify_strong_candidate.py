@@ -2,6 +2,7 @@
 """Verify the finite arithmetic certificate for Q=759250131."""
 from __future__ import annotations
 
+from fractions import Fraction
 import json
 import math
 
@@ -11,12 +12,15 @@ from xn1 import odd_step
 Q = 759_250_131
 ORDER = 6_762_420
 ORDER_PRIME_FACTORS = (2, 3, 5, 7, 1789)
-MAX_EXCLUDED_CYCLE_LENGTH = 35_000_000
+MAX_EXCLUDED_CYCLE_LENGTH = 41_500_000
 POWER_EXPONENT = 59
 
 # (Q+1/3)^2 = 2^59 * (1 + Y_NUM/Y_DEN)
 Y_NUM = 86_636_343_844
 Y_DEN = 5_188_146_770_730_811_392
+
+# A rational exponent just below log(2^30/(Q+1/3)).
+EXPONENT_BOUND = Fraction(6_931, 20_000)
 
 
 def verify_order() -> None:
@@ -49,27 +53,55 @@ def verify_near_half_power() -> None:
         raise AssertionError("exact y certificate failed")
 
 
-def verify_cycle_length_obstruction() -> dict[str, int]:
-    # Even p=2r <= 35,000,000.  The sufficient inequality is r*y < 1/2.
-    even_r = MAX_EXCLUDED_CYCLE_LENGTH // 2
-    if not 2 * even_r * Y_NUM < Y_DEN:
-        raise AssertionError("even cycle inequality failed")
+def exp_upper_bound(x: Fraction, terms_through: int = 8) -> Fraction:
+    """Rigorous upper bound for exp(x), for 0<=x<1.
 
-    # Odd p=2r+1 <= 35,000,000.  The sufficient inequality is
-    # r*y < 1-(Q+1/3)/2^30.
+    Sum through x^N/N!.  The remaining term ratios are at most
+    x/(N+2), so the tail is bounded by a geometric series.
+    """
+    if not 0 <= x < 1:
+        raise ValueError("require 0 <= x < 1")
+    term = Fraction(1)
+    total = term
+    for k in range(1, terms_through + 1):
+        term *= x / k
+        total += term
+    first_omitted = term * x / (terms_through + 1)
+    ratio_bound = x / (terms_through + 2)
+    return total + first_omitted / (1 - ratio_bound)
+
+
+def verify_cycle_length_obstruction() -> dict[str, int]:
+    even_r = MAX_EXCLUDED_CYCLE_LENGTH // 2
     odd_r = (MAX_EXCLUDED_CYCLE_LENGTH - 1) // 2
-    headroom_num = 3 * (1 << 30) - (3 * Q + 1)
-    headroom_den = 3 * (1 << 30)
-    if headroom_num <= 0:
-        raise AssertionError("Q is not below 2^30-1/3")
-    if not odd_r * Y_NUM * headroom_den < Y_DEN * headroom_num:
-        raise AssertionError("odd cycle inequality failed")
+
+    # For both parity cases, r*y is below the rational constant c.
+    if not even_r * Y_NUM * EXPONENT_BOUND.denominator < (
+        Y_DEN * EXPONENT_BOUND.numerator
+    ):
+        raise AssertionError("even r*y bound failed")
+    if not odd_r * Y_NUM * EXPONENT_BOUND.denominator < (
+        Y_DEN * EXPONENT_BOUND.numerator
+    ):
+        raise AssertionError("odd r*y bound failed")
+
+    # Prove exp(c) < H exactly, where H=2^30/(Q+1/3).
+    h = Fraction(3 * (1 << 30), 3 * Q + 1)
+    exp_upper = exp_upper_bound(EXPONENT_BOUND)
+    if not exp_upper < h:
+        raise AssertionError("rational exponential bound is not strong enough")
+    if not h < 2:
+        raise AssertionError("even-cycle headroom check failed")
 
     return {
         "maximum_even_r": even_r,
         "maximum_odd_r": odd_r,
-        "odd_headroom_numerator": headroom_num,
-        "odd_headroom_denominator": headroom_den,
+        "exponent_bound_numerator": EXPONENT_BOUND.numerator,
+        "exponent_bound_denominator": EXPONENT_BOUND.denominator,
+        "exp_upper_numerator": exp_upper.numerator,
+        "exp_upper_denominator": exp_upper.denominator,
+        "headroom_numerator": h.numerator,
+        "headroom_denominator": h.denominator,
     }
 
 
@@ -99,7 +131,7 @@ def verify_certificate() -> dict[str, object]:
         "obstruction_details": obstruction,
         "proved_dichotomy": (
             "the orbit tends to positive infinity or enters a nontrivial "
-            "positive cycle longer than 35,000,000 accelerated steps"
+            "positive cycle longer than 41,500,000 accelerated steps"
         ),
     }
 
