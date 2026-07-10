@@ -15,10 +15,18 @@ def main() -> None:
     run("-m", "compileall", "-q", "tools", "tests")
     sys.path.insert(0, str(ROOT / "tests"))
     from test_xn1 import test_finite_growth_identity, test_known_5n1_cycle, test_v2
+    from test_periodic_block import (
+        test_finite_positive_drift_repetition_bound,
+        test_known_5n1_cycle_block,
+    )
     test_v2()
     test_known_5n1_cycle()
     test_finite_growth_identity()
+    test_known_5n1_cycle_block()
+    test_finite_positive_drift_repetition_bound()
     run("tools/verify_finite_growth_block.py", "--m", "20", "--L", "50")
+    run("tools/analyze_periodic_block.py", "--X", "5", "--pattern", "1,1,5", "--n", "13", "--limit", "10")
+    run("tools/analyze_periodic_block.py", "--X", "33", "--pattern", "5", "--n", str((1 << 35) - 1), "--limit", "10")
     run("tools/trajectory_report.py", "--X", "5", "--n0", "7", "--steps", "1000")
     print("all checks passed")
 
