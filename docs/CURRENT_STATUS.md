@@ -14,11 +14,11 @@ n0 = 1.
 For this pair we have proved:
 
 1. the orbit leaves `1` and can never return to `1`;
-2. every possible element of a nontrivial cycle reached by the orbit is at least `11`;
+2. every possible element of a nontrivial cycle reached by the orbit is at least `25`;
 3. the orbit cannot enter a nontrivial positive cycle of accelerated odd length at most
 
 ```text
-120,000,000,000,000,000,000.
+148,557,456,445,856,651,509.
 ```
 
 Therefore the orbit satisfies the rigorous dichotomy
@@ -31,10 +31,10 @@ or
 
 ```text
 it enters a nontrivial positive cycle longer than
-120,000,000,000,000,000,000 accelerated steps.
+148,557,456,445,856,651,509 accelerated steps.
 ```
 
-The proof is a compact exact certificate, not a simulation of that many steps. See `ULTRA_STRONG_CANDIDATE.md` and `tools/verify_ultra_candidate.py`.
+The proof is a compact exact certificate, not a simulation of that many steps. It uses a complete enumeration of the `2154` powers-of-two residue classes modulo `15099=3*7*719`, exact integer inequalities, and a rational Taylor bound. See `ULTRA_STRONG_CANDIDATE.md` and `tools/verify_ultra_candidate.py`.
 
 ## General arbitrary-barrier theorem
 
@@ -46,6 +46,16 @@ For every prescribed positive integer `B`, the repository gives an explicit cons
 The construction chooses a multiple of `21` immediately above a half-integral power of two. Thus finite cycle barriers can be made arbitrarily large by proof, without long trajectory iteration.
 
 This theorem does not by itself solve the prize because the multiplier changes with `B`. See `ARBITRARY_CYCLE_BARRIER.md` and `tools/generate_cycle_barrier.py`.
+
+## Simultaneous length-and-height barriers
+
+For every pair of prescribed positive integers `(B,H)`, the repository gives an explicit multiplier `X_(B,H)` such that the orbit from `1`
+
+1. never returns to `1`;
+2. cannot enter a nontrivial cycle of length at most `B`;
+3. cannot enter a nontrivial cycle containing any value at most `H`.
+
+Thus a hypothetical exceptional cycle can be forced to be simultaneously arbitrarily long and arbitrarily high. Again, the multiplier changes with `(B,H)`, so this is an arbitrarily strong finite theorem rather than one infinite divergent example. See `TWO_PARAMETER_CYCLE_BARRIER.md` and `tools/generate_two_parameter_barrier.py`.
 
 ## Other established structural results
 
@@ -75,7 +85,7 @@ although `9` is not a power of two. This is recorded in `LITERATURE_AUDIT_SANTOS
 ## Not established
 
 - No explicit orbit has yet been proved to tend to infinity.
-- Cycles longer than the fixed 120-quintillion barrier have not been excluded for the main candidate.
+- Cycles longer than the fixed `148,557,456,445,856,651,509` barrier have not been excluded for the main candidate.
 - An arbitrarily large finite barrier is not the same as an infinite barrier.
 - The finite 2-adic regeneration targets have not been converted into one ordinary positive integer supporting infinitely many regenerations.
 
@@ -95,7 +105,7 @@ n0=1,
 exclude every nontrivial positive cycle, not only cycles through the current finite barrier. A useful next ingredient would be either
 
 1. a global upper bound on possible cycle length for this fixed multiplier that is smaller than the proved barrier; or
-2. a new modular/descent argument ruling out cycles of all lengths.
+2. a modular/descent argument ruling out cycles of all lengths.
 
 ### Route B: infinite regenerative chain
 
@@ -111,7 +121,7 @@ Run
 python run_checks.py
 ```
 
-to execute the direct tests and all principal finite certificates. The strongest fixed certificate is also checked separately by
+to execute all direct tests and principal finite certificates. The strongest fixed certificate is also checked separately by
 
 ```text
 python tools/verify_ultra_candidate.py
