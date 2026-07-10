@@ -2,12 +2,15 @@
 """Audit the retracted continued-fraction cycle barrier.
 
 The previous verifier checked arithmetic downstream of the false premise
-2^A == 1 (mod X). This script now verifies the elementary counterexample
-and reports the correct cycle congruence instead of claiming a barrier.
+2^A == 1 (mod X). This script verifies the elementary counterexample,
+reports the correct cycle congruence, and records the current retained valid
+finite barrier from the independent residue-crowding certificate.
 """
 from __future__ import annotations
 
 import json
+
+CURRENT_RETAINED_BARRIER = 170000000000000000000
 
 
 def audit() -> dict[str, object]:
@@ -36,7 +39,7 @@ def audit() -> dict[str, object]:
         "product_cycle_mod_X": product % x,
         "correct_relation_mod_X": correct_left,
         "correct_formula": "2^A * product(n_i) == 1 (mod X)",
-        "retained_fixed_barrier": 148557456445856651509,
+        "current_retained_fixed_barrier": CURRENT_RETAINED_BARRIER,
     }
 
 
