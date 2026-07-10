@@ -27,7 +27,7 @@ def test_legendre_condition_at_barrier() -> None:
 
 def test_full_continued_fraction_barrier() -> None:
     result = verify_barrier()
-    assert result["excluded_nontrivial_cycle_lengths_through"] == 10**36
-    assert result["upper_convergents_checked"] == 18
-    assert result["largest_checked_upper_denominator"] == 208191887234528835665081861753663977
-    assert result["first_certified_convergent_denominator_beyond_barrier"] == 7286014786354216885839578116495624057
+    assert result["excluded_nontrivial_cycle_lengths_through"] == 10**37
+    assert result["upper_convergents_checked"] == 19
+    assert result["largest_checked_upper_denominator"] == 7286014786354216885839578116495624057
+    assert result["first_certified_convergent_denominator_beyond_barrier"] == 61591102310422922843464723184177907160
