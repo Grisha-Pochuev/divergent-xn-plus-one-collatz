@@ -43,117 +43,188 @@ The graph on the `2154` output classes modulo `2*15099` is complete. Every compa
 
 ### Global class constraints
 
-For cycle occupancies `c_t`,
+For small-class occupancies `c_t`,
 
 ```text
 sum c_t=p,
 sum t*c_t<=67p-1.
 ```
 
-Cycle closure also forces exact source/target flow balance.
+Cycle closure forces exact source/target flow balance.
 
-Writing every valuation as
-
-```text
-a=t+2154*q,
-```
-
-fewer than `11/359` of all cycle steps can have `q>=1`.
-
-### Exact transition progressions and finite truncation
-
-A transition with source class `s`, target label `t`, and layer `q` lies in one exact arithmetic progression modulo
+For the full classes modulo `2X`, write every valuation as
 
 ```text
-15099*2^(t+2154*q+1).
+a_i=s_(i+1)+O*q_i,
+O=ord_X(2)=1860810887857924950.
 ```
 
-For every cycle length through the current sparse cap, all steps with exact valuation `a>=200` contribute less than
+Then exactly
 
 ```text
-10^(-19)
+A=sum_i s_i+O*sum_i q_i,
+1<=s_i<=O.
 ```
 
-to `sum 1/n_i`. Therefore the non-negligible transition-circulation problem contains only
+For either remaining length,
 
 ```text
-2154*199 = 428646
+sum_i q_i<=6257.
 ```
 
-oriented source-target cells. This is a finite exact reduction, not yet an elimination of the final two lengths.
+Thus all but at most `6257` cycle steps use the least full-order layer; larger layer numbers reduce that count further.
 
-### Full-modulus activation cost
+### Permanent predecessor sieve
+
+Because `X==3 (mod 9)`, one of the three compatible lifts of every small output class modulo `6M` has every predecessor divisible by `3`. Such a value cannot be an accelerated output from the fixed orbit.
+
+Exactly
+
+```text
+2154 refined classes are dead,
+4308 refined classes survive.
+```
+
+The surviving mod-3 transition types also obey the exact circulation balance
+
+```text
+N_(1->2)=N_(2->1).
+```
+
+### Full predecessor progression
+
+For a genuine full representative `n` with least label `s`, every possible predecessor is
+
+```text
+m_q=(2^(s+qO)*n-1)/X.
+```
+
+Modulo `X`, these states form the exact progression
+
+```text
+m_q == m_0+q*63726582940809041391 (mod X).
+```
+
+A predecessor in a reached cycle must itself belong to the full output subgroup. The first `q` for which this happens is the full predecessor delay `d_X(n)`, and every cycle satisfies
+
+```text
+sum_i d_X(n_i)<=6257.
+```
+
+Below one million:
+
+```text
+8727 genuine full representatives,
+2903 permanent-sieve rejections,
+5824 survivors,
+133 zero-delay survivors,
+maximum full delay 347.
+```
+
+Through sixty million:
+
+```text
+536735 genuine full representatives,
+178632 permanent-sieve rejections,
+358103 survivors,
+9462 zero-delay survivors,
+maximum full delay 558.
+```
+
+### Exact reciprocal bounds for the hardest length
 
 For
 
 ```text
-P=6911089648497401,
-ord_X(2)=1860810887857924950,
+p=177780727155637125195,
+A=11822418355849868825468,
+A-p=11644637628694231700273,
 ```
 
-each full output class modulo `2X` has a distinct minimum valuation label. If `m` full classes are active, the total valuation satisfies
+the exact cycle interval requires
 
 ```text
-A >= p + m*(m-1)/2.
+sum_i 1/n_i > 0.099934206.
 ```
 
-This sharply limits the number of active classes.
-
-### Index-eight subgroup sieve
-
-`P` is prime and
+Using full predecessor delays and a rational fractional-selection dual gives
 
 ```text
-ord_P(2)=(P-1)/8.
+sum_(n_i<=1000000) 1/n_i < 0.087551912,
+sum_(n_i<=60000000) 1/n_i < 0.087618737.
 ```
 
-Therefore genuine full output representatives are an index-eight subset of the numbers admitted by the `2154` small progressions. Exact sieves below `10^6` and `6*10^7`, combined with activation costs, eliminated four of the former sparse-window exceptions.
-
-### Global closure identities
-
-Every positive cycle satisfies
+Therefore a hypothetical cycle must obtain more than `0.012315` of its reciprocal sum from values above sixty million. At least
 
 ```text
-sum_i (2^a_(i-1)-X)*n_i = p,
+738929
 ```
 
-and
+such distinct values are necessary.
+
+### Finite inverse-window charging
+
+Let `h_L(n)` be the minimum sum of full-order layers in an admissible `L`-step inverse chain ending at `n`. For any selected cycle positions,
 
 ```text
-sum_i (2^a_i-X)/n_i
- = sum_i 1/(n_i*n_(i+1)) > 0.
+sum h_L(n_i)<=L*sum q_i.
 ```
+
+This gives the exact scaled item cost
+
+```text
+L*(s-1)+O*h_L.
+```
+
+Below one million the retained bounds improve with depth:
+
+```text
+L=1: reciprocal contribution <0.087551912
+L=2: reciprocal contribution <0.085634587
+L=3: reciprocal contribution <0.085243521
+```
+
+The improvement is strict but does not yet control the large zero-delay tail.
+
+### Other retained tools
+
+- exact transition progressions and finite truncation to `428646` non-negligible small-modulus cells;
+- index-eight subgroup sieve modulo `P=6911089648497401`;
+- global height and reciprocal closure identities;
+- exact sparse-window interval certificates.
 
 ## Main certificate files
 
 ```text
-docs/FIRST_SPARSE_CYCLE_WINDOW.md
-tools/verify_first_sparse_cycle_window.py
-docs/FIRST_EXCEPTION_ELIMINATION.md
-tools/verify_first_exception_elimination.py
-docs/FULL_MODULUS_ACTIVATION_BOUND.md
-tools/verify_full_modulus_activation_bound.py
-docs/INDEX_EIGHT_SMALL_REPRESENTATIVE_SIEVE.md
-tools/verify_index_eight_small_sieve.py
-docs/THIRD_EXCEPTION_SUBGROUP_SIEVE.md
-tools/verify_third_exception_subgroup_sieve.py
-docs/HIGH_LAYER_RARITY_AND_EDGE_PROGRESSIONS.md
-docs/VALUATION_TAIL_TRUNCATION.md
-tools/verify_transition_tail_truncation.py
-docs/GLOBAL_TRANSITION_BALANCE_IDENTITIES.md
-tools/verify_global_transition_identities.py
+docs/PERMANENT_PREDECESSOR_MOD3_SIEVE.md
+tools/verify_permanent_predecessor_mod3_sieve.py
+docs/FULL_LABEL_OCCUPANCY_BUDGET.md
+tools/verify_full_label_occupancy_budget.py
+docs/FULL_PREDECESSOR_DELAY.md
+tools/verify_full_predecessor_delay.py
+docs/FULL_PREDECESSOR_RECIPROCAL_BOUND.md
+tools/verify_full_predecessor_reciprocal_bound.py
+docs/FINITE_INVERSE_WINDOW_CHARGING.md
+tools/verify_finite_inverse_window_charging.py
 ```
+
+The earlier sparse-window and subgroup certificates remain part of `run_checks.py`.
 
 ## Not established
 
 - No explicit orbit is proved divergent.
 - The two displayed lengths are not excluded.
 - Cycles beyond the sparse cap remain possible.
+- The large zero-delay tail is not yet bounded sharply enough.
 - Finite certificates do not prove divergence.
 
 ## Exact next step
 
-Use the fixed total valuation of the two remaining lengths together with exact full-class activation prices and the finite `428646`-cell transition circulation. Seek a rational dual potential that couples source-class balance, target valuation cost, and reciprocal contribution. Simply extending the subgroup sieve or enumerating local words is not the preferred route.
+Do not extend the cutoff blindly. Seek a global certificate for the zero-delay tail:
+
+1. a rational potential or minimum-mean argument for long inverse windows;
+2. a rigorous distribution bound for the initial sequence of full classes `2^(-s) mod X`;
+3. a source/target circulation inequality coupling full predecessor states to the global height identities.
 
 ## Retraction
 
