@@ -13,13 +13,9 @@ docs/NEXT_STEPS.md
 run_checks.py
 ```
 
-Use `docs/CHAT_HANDOFF_TEMPLATE.md` when moving the project to a new chat. GitHub is the durable source of truth; chat summaries are secondary.
+GitHub is the durable source of truth. The strict target is an explicit positive odd orbit tending to positive infinity.
 
-The strict target is to exhibit odd integers `X>=5` and `n0>=1` whose accelerated odd-only orbit tends to positive infinity.
-
-## Main valid fixed candidate
-
-The strongest retained candidate is
+## Main fixed candidate
 
 ```text
 X  = 104350542602662257699,
@@ -28,183 +24,201 @@ n0 = 1.
 
 For this pair the repository proves:
 
-1. the orbit leaves `1` and can never return to `1`;
+1. the orbit leaves `1` and cannot return to `1`;
 2. every possible element of a nontrivial cycle reached by the orbit is at least `25`;
-3. every nontrivial positive cycle of accelerated length at most
+3. every nontrivial positive cycle of accelerated length
 
 ```text
-176022359338834903228
+p <= 177780727155637125184
 ```
 
-is impossible.
-
-Therefore the orbit either tends to positive infinity or enters a nontrivial positive cycle longer than this finite barrier.
-
-The current barrier is proved in
+is impossible;
+4. every length
 
 ```text
-docs/TRANSITION_BUDGET_CYCLE_BARRIER.md
-tools/verify_transition_budget_barrier.py
+p <= 355561454311274250377
 ```
 
-and uses exact modular and rational arithmetic only.
+is impossible except the six odd values
 
-## Priority 1 transition analysis
+```text
+177780727155637125185
+177780727155637125187
+177780727155637125189
+177780727155637125191
+177780727155637125193
+177780727155637125195
+```
 
-Let
+Thus the strict problem remains open. The fixed orbit either tends to positive infinity or enters a nontrivial cycle. Up to the sparse cap, only the six listed lengths remain possible.
+
+## Priority 1 results
+
+Use
 
 ```text
 M = 15099,
-ord_M(2) = 2154.
+H = ord_M(2) = 2154,
+P = 6911089648497401,
+X = M*P.
 ```
 
-### Complete local graph: a proved no-go result
+### 1. Complete local graph and augmented no-go theorem
 
-The graph whose vertices are the `2154` allowed odd output classes modulo `2M` is complete, including loops. More strongly, every finite word of these class labels is realized by infinitely many positive starts.
+The graph on the `2154` allowed odd output classes modulo `2M` is complete, including loops. Every finite class word is realized by infinitely many positive starts.
 
-Reason: an exact valuation word fixes one odd residue modulo a power of two, while the desired initial class fixes one odd residue modulo `2M`; the generalized Chinese remainder theorem combines them because `M` is odd.
+More strongly, every compatible finite word of exact valuations is realizable together with any prescribed initial class. Adding the exact valuation or the layer
 
-Consequences:
+```text
+q=(a-t)/H
+```
 
-- there are no forbidden one-step transitions at the level of the bare `2154` labels;
-- there are no forbidden finite class words at that level;
-- any stronger finite-state certificate must retain exact binary information, a height layer, or a global cycle-closure condition.
+therefore does not create forbidden finite words. A successful obstruction must use cycle closure, global height, or another nonlocal condition.
 
 Files:
 
 ```text
 docs/RESIDUE_TRANSITION_NO_GO.md
 tools/verify_residue_transition_no_go.py
+docs/AUGMENTED_TRANSITION_NO_GO.md
+tools/verify_augmented_transition_no_go.py
 ```
 
-### Global valuation-cost budget
+### 2. Occupancy and flow constraints
 
-If `c_t` is the number of cycle elements in class `t`, then entering class `t` requires an exact valuation congruent to `t modulo 2154`, hence at least `t`. For a cycle of length `p`, the exact cycle identity and `X+1<2^67` give
+For class occupancies `c_t` in a hypothetical cycle of length `p`,
 
 ```text
 sum_t c_t = p,
 sum_t t*c_t <= 67p-1.
 ```
 
-This couples the class occupancies and strictly improves the independent-class reciprocal envelope.
+Cycle closure also gives exact source/target flow balance. These conditions reduce the reciprocal problem to a finite concave allocation problem.
+
+A rational dual certificate yields the reciprocal upper bound approximately
+
+```text
+3.217731.
+```
 
 Files:
 
 ```text
 docs/RESIDUE_VALUATION_BUDGET.md
 tools/verify_residue_valuation_budget.py
+docs/TRANSITION_BALANCED_RECIPROCAL_REDUCTION.md
+tools/verify_transition_balance.py
+docs/BALANCED_OCCUPANCY_DUAL_BOUND.md
+tools/verify_balanced_occupancy_barrier.py
 ```
 
-### Exact flow balance
+### 3. Large-divisor exact-valuation split
 
-Cycle closure gives the stronger identity
+Because
 
 ```text
-#{cycle elements currently in class t}
-=
-#{cycle steps whose successor enters class t}.
+P = 6911089648497401
 ```
 
-Thus the same occupancy vector is constrained both by:
+divides `X`, an output entered with exact valuation `a` lies in one odd progression modulo `2P`.
 
-1. arithmetic progressions modulo `2M` for current classes;
-2. binary progressions modulo `2^t` for outgoing target classes.
+Splitting low and high incoming valuations gives progressively stronger reciprocal envelopes:
 
-This reduces the next reciprocal estimate to a finite separable concave optimization in `2154` count variables.
+- with `K=400000`: approximately `2.774599`;
+- with the midpoint progression inequality and `K=5000000`: approximately `2.527289` for the first exceptional length.
 
 Files:
 
 ```text
-docs/TRANSITION_BALANCED_RECIPROCAL_REDUCTION.md
-tools/verify_transition_balance.py
+docs/LARGE_DIVISOR_VALUATION_SPLIT.md
+tools/verify_large_divisor_split_barrier.py
+docs/FIRST_EXCEPTION_ELIMINATION.md
+tools/verify_first_exception_elimination.py
 ```
 
-## Numerical barrier comparison
+### 4. Sharp logarithmic intervals and sparse window
 
-The previously recorded project barrier was
+Exact positive atanh-series bounds replace the former coarse one-term logarithm estimate. This raises the first contiguous interval obstruction to
 
 ```text
-170000000000000000000.
+177780727155637125182.
 ```
 
-The current exact transition-budget barrier is
+After the first near-power-of-two crossing, the gap to the following power jumps back to almost `log(2)`. This excludes every length through
 
 ```text
-176022359338834903228.
+355561454311274250377
 ```
 
-This is about `3.54%` larger than the previously retained round value. For a fair structural comparison, the old independent-class envelope, if pushed to its own exact limit with the same rational logarithm bounds, reaches
+except seven isolated odd values. The midpoint large-divisor certificate eliminates the first of those seven, producing the current six-value list and contiguous barrier.
+
+Files:
 
 ```text
-176022359338834903224.
+docs/SHARP_LOG_INTERVAL_BARRIER.md
+tools/verify_sharp_log_barrier.py
+docs/FIRST_SPARSE_CYCLE_WINDOW.md
+tools/verify_first_sparse_cycle_window.py
+docs/FIRST_EXCEPTION_ELIMINATION.md
+tools/verify_first_exception_elimination.py
 ```
 
-Thus the new transition-class cost information adds exactly `4` lengths beyond the saturated old envelope. The reciprocal upper bound itself improves from about `4.44061` to about `3.82017`, but division by the enormous `X` makes its effect on this particular power-of-two interval barrier very small.
+### 5. Global transition-balance identities
 
-## Retraction of the invalid `10^37` claim
-
-The former continued-fraction claim through `10^37` is retracted. It incorrectly assumed
+Every positive accelerated cycle satisfies the exact identities
 
 ```text
-2^A == 1 (mod X)
+sum_i (2^a_(i-1)-X)*n_i = p,
 ```
 
-for a cycle. The correct congruence is
+and
+
+```text
+sum_i (2^a_i-X)/n_i
+ = sum_i 1/(n_i*n_(i+1)) > 0.
+```
+
+These are genuine cycle-closure constraints not imposed by arbitrary finite valuation coding.
+
+Files:
+
+```text
+docs/GLOBAL_TRANSITION_BALANCE_IDENTITIES.md
+tools/verify_global_transition_identities.py
+```
+
+## Not established
+
+- No explicit orbit has yet been proved to tend to infinity.
+- The six exceptional lengths have not yet been excluded.
+- Cycles beyond the sparse cap remain logically possible.
+- The finite barriers, though enormous, do not constitute a proof of divergence.
+
+## Exact next step
+
+Attack the six exceptional odd lengths directly. Their total valuation is fixed exactly. Combine that fact with:
+
+1. the two global transition-balance identities;
+2. exact incoming-valuation progression costs modulo the full multiplier or its large divisor;
+3. a height inequality coupling a valuation spike to neighbouring cycle values.
+
+Do not search again for forbidden finite words in any bounded augmentation of the class labels; the augmented no-go theorem closes that route.
+
+## Retraction audit
+
+The former `10^37` claim remains retracted. It incorrectly used
+
+```text
+2^A == 1 (mod X).
+```
+
+The correct relation is
 
 ```text
 2^A * product_i(n_i) == 1 (mod X).
 ```
 
-The accelerated `5n+1` cycle `13 -> 33 -> 83 -> 13` is a direct counterexample to the invalid order condition. The regression checker preserves this audit. Full details are in `docs/RETRACTIONS.md`.
-
-## Other established results
-
-The authoritative registry is `docs/VALIDATED_RESULTS.md`. In summary:
-
-1. Exact accelerated map and iterate formula.
-2. Average-valuation criterion for exponential divergence.
-3. Arbitrarily long rigorously increasing finite orbit segments.
-4. Finite repetition bound for every exact valuation block.
-5. Eventually periodic exact valuations force an eventually periodic orbit.
-6. Complete `X=2^m+1` macroblocks whose accumulated growth can survive the exit.
-7. A 2-adic isometry and a unique regeneration target at every finite precision.
-8. Exact inverse coding of every finite valuation word.
-9. General arbitrary-core burst reduction for `X=2^m+1`.
-10. Positive integer orbits are either eventually periodic or tend to positive infinity.
-11. For `(X,n0)=(1093,1)`, the orbit never returns to `1`.
-12. For every fixed odd `X>=5`, a hypothetical cycle minimum has an effectively computable polynomial upper bound in its length.
-13. The bare `2154`-class transition graph is complete, so local forbidden-word searches in that abstraction cannot work.
-14. Hypothetical cycle class counts satisfy a global valuation budget and exact source/target flow balance.
-
-## Not established
-
-- No explicit orbit has yet been proved to tend to infinity.
-- Cycles longer than `176022359338834903228` remain logically possible for the main candidate.
-- No ordinary positive integer supporting infinitely many net-positive regenerative bursts has yet been constructed.
-- No low-average infinite valuation word with an eventually stable positive coding residue has yet been constructed.
-- The transition-balanced concave optimization has not yet been converted into a stronger exact certificate.
-
-## Current frontier
-
-The prioritized roadmap is `docs/NEXT_STEPS.md`.
-
-### Route A: fixed candidate, Priority 1
-
-Do not search again for forbidden edges or short words in the unaugmented `2154`-class graph; that route is rigorously closed by completeness.
-
-The immediate next step is to solve or upper-bound the transition-balanced reciprocal optimization with exact rational tangent certificates. However, reciprocal improvements alone can move the present interval barrier by only a few lengths, so a useful breakthrough must also seek a stronger global closure invariant, a height-dependent transition state, or a descent argument that can cross infinitely many power-of-two intervals.
-
-### Other routes
-
-The regenerative-chain, stabilized-code, cycle-height, and `X=9` digital-invariant routes remain recorded in `docs/NEXT_STEPS.md`, but they were not worked on in the present Priority 1 session.
-
-## Working constraints
-
-- Do not launch long CPU computations inside ordinary chat sessions.
-- Prefer symbolic derivations, exact arithmetic, short residue enumeration, and compact certificates.
-- Any large external computation requires explicit user approval.
-- Before announcing a theorem, test it against known small cycles and add a regression check where practical.
-- After every major result or retraction, update `START_HERE.md`, this file, and the relevant registry.
+The `5n+1` cycle `13 -> 33 -> 83 -> 13` is the preserved regression counterexample.
 
 ## Reproducibility
 
@@ -214,4 +228,4 @@ Run
 python run_checks.py
 ```
 
-to execute the retained certificates, including the transition no-go theorem, valuation budget, flow-balance audit, exact cycle barrier, and the regression preventing reintroduction of the invalid order condition.
+to execute all retained certificates and regression checks. No long trajectory computation or large search is part of the Priority 1 proof chain.
