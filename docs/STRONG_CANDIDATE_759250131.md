@@ -107,11 +107,31 @@ Exactly,
 y = 86636343844 / 5188146770730811392.
 ```
 
-We use the elementary bound, valid for `0<=r*y<1`,
+We use
 
 ```text
-(1+y)^r <= exp(r*y) <= 1/(1-r*y).               (3)
+(1+y)^r <= exp(r*y).                             (3)
 ```
+
+Let
+
+```text
+c = 6931/20000 = 0.34655.
+```
+
+The verifier proves entirely with rational arithmetic that for every `p<=41500000`, with `r=floor(p/2)`,
+
+```text
+r*y < c,
+```
+
+and that
+
+```text
+exp(c) < 2^30/U < 2.                             (4)
+```
+
+The exponential inequality in (4) is certified by summing the rational Taylor series through degree eight and bounding its tail by a geometric series. No floating-point logarithm is trusted.
 
 ## 4. Even cycle lengths
 
@@ -127,20 +147,15 @@ Thus (2) would require
 A >= 59r+1.
 ```
 
-For every even `p<=35000000`, we have `r<=17500000`, and exact integer arithmetic verifies
-
-```text
-r*y < 1/2.
-```
-
-Using (3),
+But (3) and (4) give
 
 ```text
 U^p = 2^(59r)*(1+y)^r
-    < 2^(59r+1).
+    < 2^(59r)*2
+    = 2^(59r+1).
 ```
 
-So the lower end of (2) demands at least `2^(59r+1)`, while the upper end is strictly smaller than that same number. No cycle is possible.
+So the lower end of (2) demands at least `2^(59r+1)`, while the upper end is strictly smaller than that same number. No even-length cycle with `p<=41500000` is possible.
 
 ## 5. Odd cycle lengths
 
@@ -156,23 +171,12 @@ so an integer exponent would have to satisfy
 A >= 59r+30.
 ```
 
-For every odd `p<=35000000`, we have `r<=17499999`. Exact rational arithmetic verifies
-
-```text
-r*y < 1 - U/2^30.
-```
-
-Therefore, by (3),
-
-```text
-(1+y)^r < 2^30/U,
-```
-
-and hence
+On the other hand, (3) and (4) give
 
 ```text
 U^p = 2^(59r)*U*(1+y)^r
-    < 2^(59r+30).
+    < 2^(59r)*U*(2^30/U)
+    = 2^(59r+30).
 ```
 
 Again no integer power of two can satisfy (2).
@@ -188,11 +192,11 @@ Q=759250131, n0=1
 has the following proved dichotomy:
 
 1. it tends to positive infinity; or
-2. it enters a nontrivial positive cycle of accelerated odd length strictly greater than `35,000,000`.
+2. it enters a nontrivial positive cycle of accelerated odd length strictly greater than `41,500,000`.
 
 It cannot return to `1`, and every shorter nontrivial positive cycle has been excluded by exact inequalities, not by trajectory simulation.
 
-This is not yet the final prize solution: cycles longer than `35,000,000` have not been excluded. But it reduces the remaining obstruction for one explicit pair to an extraordinarily long cycle.
+This is not yet the final prize solution: cycles longer than `41,500,000` have not been excluded. But it reduces the remaining obstruction for one explicit pair to an extraordinarily long cycle.
 
 The complete finite arithmetic certificate is checked by
 
