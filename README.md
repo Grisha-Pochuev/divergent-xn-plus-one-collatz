@@ -54,59 +54,92 @@ is impossible except
 177780727155637125195.
 ```
 
-The first sparse-window argument originally left seven isolated values. Five have now been eliminated by exact modular and rational certificates.
+The first sparse-window argument originally left seven isolated values. Five have been eliminated by exact modular and rational certificates.
 
-## Main Priority 1 mechanisms
+## Latest Priority 1 structure
+
+Use
 
 ```text
 M=15099,
 ord_M(2)=2154,
 P=6911089648497401,
 ord_P(2)=(P-1)/8,
-ord_X(2)=1860810887857924950.
+O=ord_X(2)=1860810887857924950.
 ```
 
-Retained results include:
-
-- completeness of the bare and finitely augmented local transition graphs;
-- global occupancy and flow-balance constraints;
-- balanced reciprocal envelopes;
-- exact-valuation progressions modulo the large divisor;
-- sharp logarithmic power-of-two intervals;
-- full-class activation cost
+For every cycle valuation there is a unique decomposition
 
 ```text
-A >= p + m*(m-1)/2;
+a_i=s_(i+1)+O*q_i,
+1<=s_i<=O.
 ```
 
-- an exact index-eight subgroup sieve for small genuine full representatives;
-- the global cycle identities
+The full class label is paid by every occurrence, so
 
 ```text
-sum_i (2^a_(i-1)-X)*n_i = p,
+A=sum_i s_i+O*sum_i q_i.
 ```
 
-and
+At either remaining length this gives
 
 ```text
-sum_i (2^a_i-X)/n_i
- = sum_i 1/(n_i*n_(i+1)) > 0.
+sum_i q_i<=6257.
 ```
 
-The next target is an exact activation-price or neighbour-height certificate for the final two first-window lengths.
+Further exact results:
+
+- a permanent predecessor sieve removes exactly one third of the refined classes modulo `6*15099`;
+- possible predecessors of a fixed full representative form a linear progression modulo `X`;
+- the first layer in which that predecessor is itself a full output gives an exact transition cost;
+- below one million, those full predecessor delays range from `0` to `347`;
+- through sixty million they range from `0` to `558`;
+- for the harder remaining length,
+
+```text
+sum_(n_i<=60000000) 1/n_i < 0.087618737,
+```
+
+while the cycle identity requires a total greater than `0.099934206`;
+- hence at least `738929` distinct values above sixty million are still needed;
+- inverse windows of depths two and three strengthen the small-value bound further;
+- any hypothetical remaining cycle is either entirely least-layer, or contains at least `28413093679980362` consecutive least-layer steps;
+- if a positive layer occurs, one such block grows by more than
+
+```text
+2^1860810887857924884.
+```
+
+These are necessary structural constraints, not yet a proof of divergence.
 
 ## Latest certificate files
 
 ```text
-docs/FIRST_SPARSE_CYCLE_WINDOW.md
-tools/verify_first_sparse_cycle_window.py
-docs/FULL_MODULUS_ACTIVATION_BOUND.md
-tools/verify_full_modulus_activation_bound.py
-docs/INDEX_EIGHT_SMALL_REPRESENTATIVE_SIEVE.md
-tools/verify_index_eight_small_sieve.py
-docs/THIRD_EXCEPTION_SUBGROUP_SIEVE.md
-tools/verify_third_exception_subgroup_sieve.py
+docs/PERMANENT_PREDECESSOR_MOD3_SIEVE.md
+tools/verify_permanent_predecessor_mod3_sieve.py
+docs/FULL_LABEL_OCCUPANCY_BUDGET.md
+tools/verify_full_label_occupancy_budget.py
+docs/FULL_PREDECESSOR_DELAY.md
+tools/verify_full_predecessor_delay.py
+docs/FULL_PREDECESSOR_RECIPROCAL_BOUND.md
+tools/verify_full_predecessor_reciprocal_bound.py
+docs/FINITE_INVERSE_WINDOW_CHARGING.md
+tools/verify_finite_inverse_window_charging.py
+docs/GIANT_ZERO_LAYER_BLOCK.md
+tools/verify_giant_zero_layer_block.py
+docs/GIANT_COMPENSATING_GROWTH_BLOCK.md
+tools/verify_giant_compensating_growth_block.py
 ```
+
+The earlier sparse-window, activation, subgroup, transition-balance, and retraction certificates remain part of `run_checks.py`.
+
+## Exact next target
+
+Do not enlarge the cutoff blindly. The missing object is a global certificate for the large zero-delay tail, for example:
+
+1. a rational potential or minimum-mean inequality for long inverse windows;
+2. an explicit distribution bound for the initial full-class sequence `2^(-s) mod X`;
+3. a full source/target circulation inequality coupled to the global height identities.
 
 ## Important retraction
 
@@ -130,14 +163,6 @@ No external Python packages are required.
 
 ```bash
 python run_checks.py
-```
-
-Selected latest checks:
-
-```bash
-python tools/verify_full_modulus_activation_bound.py
-python tools/verify_index_eight_small_sieve.py
-python tools/verify_third_exception_subgroup_sieve.py
 ```
 
 The modular sieves are deterministic certificate checks, not Collatz trajectory searches.
