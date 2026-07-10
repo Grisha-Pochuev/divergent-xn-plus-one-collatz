@@ -103,7 +103,11 @@ sum_t k_t = 141246,
 S_budget(B) approximately 3.820165970485471.
 ```
 
-The former independent-class certificate used an upper bound approximately `4.440611033072398` at its retained barrier.
+The corresponding independent-class envelope is approximately
+
+```text
+4.440611033072398.
+```
 
 ## 3. Power-of-two interval test
 
@@ -173,7 +177,34 @@ python tools/verify_transition_budget_barrier.py
 
 for the exact certificate.
 
-## 5. Rigorous conclusion for the fixed orbit
+## 5. Fair comparison with the previous envelope
+
+The previously recorded project barrier was the round value
+
+```text
+170000000000000000000.
+```
+
+However, if the old independent-class envelope is pushed to its own exact limit with the same rational logarithm bounds, it reaches
+
+```text
+176022359338834903224.
+```
+
+The transition-budget envelope reaches
+
+```text
+176022359338834903228.
+```
+
+Therefore two comparisons must be kept separate:
+
+1. against the previously retained project barrier, the certified increase is about `3.54%`;
+2. against a fully saturated version of the old independent-class certificate, the new transition information adds exactly `4` further cycle lengths.
+
+The structural gain is real: the reciprocal upper bound drops from about `4.44061` to about `3.82017`. Its numerical effect on this particular barrier is small because the reciprocal correction is divided by the enormous multiplier `X`; the limiting term is the exceptionally small gap between `X^2` and `2^133`.
+
+## 6. Rigorous conclusion for the fixed orbit
 
 For
 
@@ -189,4 +220,4 @@ the orbit cannot return to `1`, and it cannot enter any nontrivial positive cycl
 
 Therefore it either tends to positive infinity or enters a nontrivial positive cycle longer than this finite barrier.
 
-This remains a finite obstruction, not a proof of divergence. The stronger transition-balance reduction in `docs/TRANSITION_BALANCED_RECIPROCAL_REDUCTION.md` is the next route for improving the reciprocal envelope further.
+This remains a finite obstruction, not a proof of divergence. The stronger transition-balance reduction in `docs/TRANSITION_BALANCED_RECIPROCAL_REDUCTION.md` is the next route for improving the reciprocal envelope further, although any improvement of the reciprocal correction alone can move this particular interval barrier by only a few additional lengths.
