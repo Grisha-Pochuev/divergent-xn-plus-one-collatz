@@ -27,7 +27,7 @@ def main() -> None:
     from test_ultra_candidate import test_ultra_candidate_cycle_inequalities, test_ultra_candidate_first_step, test_ultra_candidate_full_certificate, test_ultra_candidate_output_residues, test_ultra_candidate_structure
     from test_two_parameter_barrier import test_two_parameter_closeness, test_two_parameter_large_case, test_two_parameter_mersenne_choice, test_two_parameter_small_cases
     from test_valuation_word_codec import test_all_small_words_are_exactly_coded, test_known_cycle_word_code, test_positive_drift_words_grow_for_all_representatives, test_prefix_codes_are_compatible
-    from test_continued_fraction_barrier import test_exact_order_certificate, test_full_continued_fraction_barrier, test_legendre_condition_at_barrier
+    from test_continued_fraction_barrier import test_correct_cycle_congruence, test_invalid_order_condition_counterexample
 
     tests = [
         test_v2, test_known_5n1_cycle, test_finite_growth_identity,
@@ -42,7 +42,7 @@ def main() -> None:
         test_ultra_candidate_structure, test_ultra_candidate_output_residues, test_ultra_candidate_first_step, test_ultra_candidate_cycle_inequalities, test_ultra_candidate_full_certificate,
         test_two_parameter_small_cases, test_two_parameter_large_case, test_two_parameter_mersenne_choice, test_two_parameter_closeness,
         test_known_cycle_word_code, test_all_small_words_are_exactly_coded, test_positive_drift_words_grow_for_all_representatives, test_prefix_codes_are_compatible,
-        test_exact_order_certificate, test_legendre_condition_at_barrier, test_full_continued_fraction_barrier,
+        test_invalid_order_condition_counterexample, test_correct_cycle_congruence,
     ]
     for test in tests:
         test()
