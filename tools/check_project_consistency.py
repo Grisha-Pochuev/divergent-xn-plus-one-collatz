@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Check that durable project-memory files agree on the retained frontier.
 
-This is deliberately lightweight.  It does not prove the mathematics again;
+This is deliberately lightweight. It does not prove the mathematics again;
 it prevents stale status text from silently disagreeing with the exact
 certificate and the retraction audit.
 """
@@ -10,7 +10,7 @@ from __future__ import annotations
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-CURRENT_BARRIER = 170_000_000_000_000_000_000
+CURRENT_BARRIER = 176_022_359_338_834_903_228
 RETRACTED_BARRIER_TEXT = "10^37"
 
 BARRIER_FILES = (
@@ -20,7 +20,8 @@ BARRIER_FILES = (
     "docs/VALIDATED_RESULTS.md",
     "docs/NEXT_STEPS.md",
     "docs/LATEST_VALID_PROGRESS.md",
-    "tools/verify_residue_crowding_barrier.py",
+    "docs/TRANSITION_BUDGET_CYCLE_BARRIER.md",
+    "tools/verify_transition_budget_barrier.py",
     "tools/verify_continued_fraction_barrier.py",
 )
 
@@ -39,6 +40,17 @@ REQUIRED_MEMORY_FILES = (
     "docs/RETRACTIONS.md",
     "docs/NEXT_STEPS.md",
     "docs/CHAT_HANDOFF_TEMPLATE.md",
+    "docs/RESIDUE_TRANSITION_NO_GO.md",
+    "docs/RESIDUE_VALUATION_BUDGET.md",
+    "docs/TRANSITION_BALANCED_RECIPROCAL_REDUCTION.md",
+    "docs/TRANSITION_BUDGET_CYCLE_BARRIER.md",
+)
+
+REQUIRED_TRANSITION_TOOLS = (
+    "tools/verify_residue_transition_no_go.py",
+    "tools/verify_residue_valuation_budget.py",
+    "tools/verify_transition_balance.py",
+    "tools/verify_transition_budget_barrier.py",
 )
 
 
@@ -52,7 +64,7 @@ def read(relative: str) -> str:
 def check() -> None:
     barrier_plain = str(CURRENT_BARRIER)
 
-    for relative in REQUIRED_MEMORY_FILES:
+    for relative in REQUIRED_MEMORY_FILES + REQUIRED_TRANSITION_TOOLS:
         read(relative)
 
     for relative in BARRIER_FILES:
@@ -78,13 +90,18 @@ def check() -> None:
     if "CURRENT_RETAINED_BARRIER" not in audit_text:
         raise AssertionError("retraction audit does not expose the current barrier")
 
-    certificate_text = read("tools/verify_residue_crowding_barrier.py")
+    certificate_text = read("tools/verify_transition_budget_barrier.py")
     if f"BARRIER = {barrier_plain}" not in certificate_text:
-        raise AssertionError("residue-crowding verifier uses a different barrier")
+        raise AssertionError("transition-budget verifier uses a different barrier")
+
+    start_text = read("START_HERE.md")
+    if "complete, including loops" not in start_text:
+        raise AssertionError("START_HERE does not record transition-graph completeness")
 
     print("project-memory consistency verified")
     print(f"current retained barrier={CURRENT_BARRIER}")
     print(f"durable memory files={len(REQUIRED_MEMORY_FILES)}")
+    print(f"transition tools={len(REQUIRED_TRANSITION_TOOLS)}")
 
 
 if __name__ == "__main__":
