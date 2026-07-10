@@ -4,126 +4,80 @@ The strict target is to exhibit odd integers `X>=5` and `n0>=1` whose accelerate
 
 ## Main explicit candidate
 
-The strongest fixed candidate currently proved in this repository is
+The strongest fixed candidate is
 
 ```text
 X  = 104350542602662257699,
 n0 = 1.
 ```
 
-For this pair we have proved:
+For this pair the repository proves:
 
 1. the orbit leaves `1` and can never return to `1`;
-2. every possible element of a nontrivial cycle reached by the orbit is at least `25`;
-3. the orbit cannot enter a nontrivial positive cycle of accelerated odd length at most
+2. every possible nontrivial cycle element is at least `25`;
+3. every nontrivial positive cycle of accelerated length at most
 
 ```text
-10^36.
+10^37
 ```
 
-Therefore the orbit satisfies the rigorous dichotomy
+is impossible.
+
+Therefore the orbit either tends to positive infinity or enters a nontrivial cycle longer than `10^37` accelerated steps.
+
+The exact certificate uses
 
 ```text
-it tends to +infinity,
+ord_X(2)=1860810887857924950,
 ```
 
-or
-
-```text
-it enters a nontrivial positive cycle longer than 10^36 accelerated steps.
-```
-
-The new proof is a compact exact certificate, not a trajectory simulation. It uses:
-
-- the exact order
-
-```text
-ord_X(2)=1860810887857924950;
-```
-
-- distinctness of cycle elements, which makes the logarithmic correction grow only harmonically with the cycle length;
-- Legendre's continued-fraction theorem;
-- exact rational intervals for `ln(2)` and `ln(X)`;
-- elimination of all `18` possible upper convergents through denominator `10^36`.
+the `2154` allowed output residue classes modulo `15099`, distinctness of cycle elements, rational logarithm intervals, Legendre's theorem, and elimination of all `19` possible upper continued-fraction convergents through denominator `10^37`.
 
 See `CONTINUED_FRACTION_CYCLE_BARRIER.md` and `tools/verify_continued_fraction_barrier.py`.
 
-This improves the previous fixed barrier
+This improves the original fixed barrier
 
 ```text
 148557456445856651509
 ```
 
-by more than fifteen orders of magnitude.
+by almost seventeen orders of magnitude.
 
-## General arbitrary-barrier theorem
+## General finite barrier theorems
 
-For every prescribed positive integer `B`, the repository gives an explicit construction of an odd multiplier `X_B` such that the orbit from `1`
+For every prescribed `B`, the repository constructs a multiplier `X_B` whose orbit from `1` never returns to `1` and cannot enter a nontrivial cycle of length at most `B`.
 
-1. never returns to `1`; and
-2. cannot enter a nontrivial positive cycle of length at most `B`.
+For every pair `(B,H)`, it also constructs a multiplier whose hypothetical cycle must be both longer than `B` and contain no value at most `H`.
 
-The multiplier changes with `B`, so this theorem alone does not solve the prize.
+The multiplier changes with the requested bounds, so these theorems do not alone solve the prize.
 
-## Simultaneous length-and-height barriers
+## Exact valuation-word coding
 
-For every pair `(B,H)`, the repository gives an explicit multiplier `X_(B,H)` such that the orbit from `1`
+Every finite exact valuation word has exactly one coding class modulo `2^(A+1)`, and every positive representative of that class follows the word. Positive-drift finite words therefore always have infinitely many rigorously growing positive starts.
 
-1. never returns to `1`;
-2. cannot enter a nontrivial cycle of length at most `B`;
-3. cannot enter a nontrivial cycle containing a value at most `H`.
+Compatible prefixes of an infinite word define one 2-adic integer. They come from an ordinary nonnegative integer exactly when their least representatives eventually stabilize. This identifies the global obstruction in symbolic constructions.
 
-Again, the multiplier changes with `(B,H)`.
+See `VALUATION_WORD_CODING.md` and `tools/valuation_word_codec.py`.
 
-## Exact valuation-word coding theorem
+## Other established results
 
-For every finite exact valuation word
-
-```text
-a=(a_0,...,a_(N-1)),
-A=sum a_i,
-```
-
-there is exactly one residue class modulo `2^(A+1)` whose positive representatives follow that word. Writing
-
-```text
-B = sum_(j=0)^(N-1) X^(N-1-j) * 2^(a_0+...+a_(j-1)),
-```
-
-the class is
-
-```text
-r(a) == (2^A-B)*(X^N)^(-1)  (mod 2^(A+1)).
-```
-
-Consequences:
-
-1. every finite valuation word is realized by infinitely many positive odd starts;
-2. if `A/N<log2(X)`, every positive representative has net growth across the word;
-3. compatible coding classes of an infinite word define one 2-adic integer;
-4. they come from an ordinary nonnegative integer exactly when their least representatives eventually stabilize.
-
-Thus arbitrarily long finite growth is locally automatic. The global obstruction is stabilization at one ordinary integer while preserving positive average drift.
-
-## Other established structural results
-
-1. Exact implementation of the accelerated map and exact iterate formula.
-2. The sufficient average-valuation criterion for exponential divergence.
-3. Arbitrarily long rigorously increasing finite orbit segments for `X=2^m+1`.
-4. A finite repetition bound for every exact valuation block.
-5. An eventually periodic sequence of exact halving counts forces an eventually periodic integer orbit.
-6. The complete `X=2^m+1` macroblock formula, including the exceptional exit.
-7. Complete macroblocks whose net growth survives the exceptional exit.
-8. A 2-adic isometry theorem and a unique finite regeneration target at every precision.
-9. Exact coordinate normal forms around `n=-1` for `X=2^m+1` and around `n=1` for `X=2^m-1`.
-10. The positive-integer orbit dichotomy: every orbit is either eventually periodic or tends to positive infinity.
+1. Exact accelerated map and iterate formula.
+2. Average-valuation criterion for exponential divergence.
+3. Arbitrarily long rigorously increasing finite orbit segments.
+4. Finite repetition bound for every exact valuation block.
+5. Eventually periodic valuations force an eventually periodic orbit.
+6. Complete `X=2^m+1` macroblock formula including its exceptional exit.
+7. Complete macroblocks whose accumulated growth survives the exit.
+8. A 2-adic isometry and unique regeneration target at every finite precision.
+9. Exact coordinate normal forms around `n=-1` and `n=1` for Fermat- and Mersenne-type multipliers.
+10. Positive integer orbits are either eventually periodic or tend to positive infinity.
 11. For `(X,n0)=(1093,1)`, the orbit never returns to `1`.
 12. Exact inverse coding of every finite valuation word.
-13. A continued-fraction exclusion of every nontrivial cycle of length at most `10^36` for the main fixed candidate.
+13. Continued-fraction exclusion of every nontrivial cycle of length at most `10^37` for the main fixed candidate.
 
 ## Literature audit
 
-A published claim that Mersenne multipliers have only the trivial positive cycle cannot currently be used: a key lemma has the counterexample
+A published claim that Mersenne multipliers have only the trivial positive cycle cannot currently be used. A key lemma has the counterexample
 
 ```text
 m=3, q=7, k=9, c=2:
@@ -135,36 +89,33 @@ although `9` is not a power of two. See `LITERATURE_AUDIT_SANTOS.md`.
 ## Not established
 
 - No explicit orbit has yet been proved to tend to infinity.
-- Cycles longer than `10^36` have not been excluded for the main fixed candidate.
+- Cycles longer than `10^37` remain logically possible for the main candidate.
 - An arbitrarily large finite barrier is not an infinite barrier.
-- The finite 2-adic regeneration targets have not been converted into one ordinary positive integer supporting infinitely many regenerations.
+- No ordinary positive integer supporting infinitely many net-positive regenerative blocks has yet been constructed.
 - No low-average infinite valuation word with an eventually stable positive coding residue has yet been constructed.
 
 ## Current frontier
 
 ### Route A: finish the explicit candidate
 
-For
+Exclude cycles of every length for
 
 ```text
 X=104350542602662257699,
-n0=1,
+n0=1.
 ```
 
-exclude every nontrivial positive cycle, not only cycles through `10^36`. The current continued-fraction method reduces all shorter cycles to finitely many exact rational checks. A completion needs either:
-
-1. a global irrationality-measure estimate strong enough to dominate the harmonic cycle correction for every denominator; or
-2. a modular/descent argument excluding all remaining continued-fraction candidates.
+The current method reduces all cycles through `10^37` to finitely many exact rational checks. A completion needs either a global modular/descent obstruction or a sufficiently strong theorem for every remaining rational approximation.
 
 ### Route B: infinite regenerative chain
 
-For `X=2^m+1`, turn the exact macroblock and 2-adic regeneration formulas into one ordinary positive starting integer with an infinite aperiodic chain of net-positive blocks.
+For `X=2^m+1`, turn the exact macroblock and 2-adic regeneration formulas into one ordinary positive start with an infinite aperiodic sequence of net-positive blocks.
 
 ### Route C: stabilized low-average code
 
-Construct an aperiodic infinite valuation word whose prefix averages stay below `log2(X)` and whose coding residues eventually stabilize at a positive integer.
+Construct an infinite valuation word with average below `log2(X)` whose exact coding residues eventually stabilize at a positive integer.
 
-Any of these routes would finish the strict prize problem.
+Any route would finish the strict prize problem.
 
 ## Reproducibility
 
@@ -174,7 +125,7 @@ Run
 python run_checks.py
 ```
 
-to execute all direct tests and principal finite certificates. The strongest fixed certificate is also checked separately by
+or separately
 
 ```text
 python tools/verify_continued_fraction_barrier.py
