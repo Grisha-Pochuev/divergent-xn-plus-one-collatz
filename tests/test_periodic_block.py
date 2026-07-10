@@ -27,3 +27,9 @@ def test_finite_positive_drift_repetition_bound() -> None:
     assert (total, b, d) == (m, 1, 1)
     assert repetition_bound(x, n, pattern) == length - 1
     assert actual_repetitions(x, n, pattern, length + 2) == length - 1
+
+
+def test_zero_repeat_bound() -> None:
+    # For X=5 and n=1 the first exact valuation is 1, not 2.
+    assert repetition_bound(5, 1, (2,)) == 0
+    assert actual_repetitions(5, 1, (2,), 10) == 0
