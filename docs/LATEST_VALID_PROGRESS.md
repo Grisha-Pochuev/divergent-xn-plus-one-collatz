@@ -28,38 +28,73 @@ is impossible except
 177780727155637125195.
 ```
 
-## Progress in this Priority 1 attack
+## New transition progress
 
-The first sparse-window theorem originally left seven isolated odd lengths. They were reduced as follows:
-
-1. midpoint harmonic and large-divisor split: removed `...183`;
-2. full-modulus activation cost: removed `...185`;
-3. index-eight subgroup sieve below `10^6`: removed `...187` and `...189`;
-4. subgroup sieve below `6*10^7`: removed `...191`.
-
-Only two remain.
-
-Key new exact facts:
+Let
 
 ```text
-ord_X(2)=1860810887857924950,
-ord_P(2)=(P-1)/8,
-A >= p + m*(m-1)/2
+O=ord_X(2)=1860810887857924950.
 ```
 
-for `m` active full output classes.
-
-Primary latest files:
+Every incoming valuation has the unique form
 
 ```text
-docs/FULL_MODULUS_ACTIVATION_BOUND.md
-tools/verify_full_modulus_activation_bound.py
-docs/INDEX_EIGHT_SMALL_REPRESENTATIVE_SIEVE.md
-tools/verify_index_eight_small_sieve.py
-docs/THIRD_EXCEPTION_SUBGROUP_SIEVE.md
-tools/verify_third_exception_subgroup_sieve.py
+a_i=s_(i+1)+O*q_i,
+1<=s_i<=O.
 ```
 
-No Collatz trajectory scan was used. The largest recent certificate performs about `4.28` million subgroup-membership checks on small modular candidates.
+The exact occupancy identity is
 
-The strict prize problem remains open. The next step is an exact activation-price or global neighbour-height certificate for the two displayed lengths.
+```text
+A=sum_i s_i+O*sum_i q_i.
+```
+
+At either remaining length,
+
+```text
+sum_i q_i<=6257.
+```
+
+The following additional results are now retained:
+
+1. A permanent predecessor sieve removes exactly `2154` of the `6462` refined classes modulo `6*15099`.
+2. Possible predecessors of a full representative form an exact linear progression modulo `X`.
+3. Requiring the predecessor itself to be a full output gives a pointwise full-layer delay.
+4. Below `10^6`, only `133` of `5824` surviving representatives have zero delay; the maximum delay is `347`.
+5. Through `6*10^7`, only `9462` of `358103` surviving representatives have zero delay; the maximum is `558`.
+6. For the harder remaining length,
+
+```text
+sum_(n_i<=60000000) 1/n_i < 0.087618737,
+```
+
+while the exact cycle threshold is greater than `0.099934206`.
+7. Therefore more than `0.012315` of the reciprocal correction must come from at least `738929` distinct values above sixty million.
+8. Finite inverse-window bounds improve strictly at depths one, two, and three.
+9. Any hypothetical remaining cycle is either entirely least-layer, or contains at least `28413093679980362` consecutive least-layer steps.
+10. If a positive layer occurs, one least-layer block grows by more than
+
+```text
+2^1860810887857924884.
+```
+
+## Exact remaining obstruction
+
+The last unresolved object is the large zero-delay tail. Blindly enlarging the modular cutoff is not the preferred route. The next useful theorem must provide a global potential, a numerically explicit distribution bound for the initial full-class orbit, or a full transition-circulation inequality.
+
+Primary new files:
+
+```text
+docs/FULL_LABEL_OCCUPANCY_BUDGET.md
+tools/verify_full_label_occupancy_budget.py
+docs/FULL_PREDECESSOR_DELAY.md
+tools/verify_full_predecessor_delay.py
+docs/FULL_PREDECESSOR_RECIPROCAL_BOUND.md
+tools/verify_full_predecessor_reciprocal_bound.py
+docs/FINITE_INVERSE_WINDOW_CHARGING.md
+tools/verify_finite_inverse_window_charging.py
+docs/GIANT_COMPENSATING_GROWTH_BLOCK.md
+tools/verify_giant_compensating_growth_block.py
+```
+
+No Collatz trajectory scan or large Actions matrix was used. The strict prize problem remains open.
