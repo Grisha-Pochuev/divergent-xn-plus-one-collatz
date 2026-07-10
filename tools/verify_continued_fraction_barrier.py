@@ -4,13 +4,22 @@
 The previous verifier checked arithmetic downstream of the false premise
 2^A == 1 (mod X). This script verifies the elementary counterexample,
 reports the correct cycle congruence, and records the current retained valid
-finite barrier from the transition-budget certificate.
+contiguous barrier and sparse cap from independent certificates.
 """
 from __future__ import annotations
 
 import json
 
-CURRENT_RETAINED_BARRIER = 176022359338834903228
+CURRENT_RETAINED_BARRIER = 177780727155637125184
+CURRENT_SPARSE_CAP = 355561454311274250377
+CURRENT_SPARSE_EXCEPTIONS = (
+    177780727155637125185,
+    177780727155637125187,
+    177780727155637125189,
+    177780727155637125191,
+    177780727155637125193,
+    177780727155637125195,
+)
 
 
 def audit() -> dict[str, object]:
@@ -24,7 +33,6 @@ def audit() -> dict[str, object]:
 
     false_left = pow(2, total, x)
     correct_left = (false_left * (product % x)) % x
-
     assert false_left != 1
     assert correct_left == 1
 
@@ -40,6 +48,8 @@ def audit() -> dict[str, object]:
         "correct_relation_mod_X": correct_left,
         "correct_formula": "2^A * product(n_i) == 1 (mod X)",
         "current_retained_fixed_barrier": CURRENT_RETAINED_BARRIER,
+        "current_sparse_cap": CURRENT_SPARSE_CAP,
+        "sparse_exceptions": list(CURRENT_SPARSE_EXCEPTIONS),
     }
 
 
