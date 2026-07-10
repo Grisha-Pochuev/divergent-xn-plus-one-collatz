@@ -2,8 +2,8 @@
 """Verify the transition-budget cycle barrier with exact arithmetic.
 
 The certificate combines the residue-class reciprocal envelope with the strict
-cycle budget sum(t*c_t) <= 67*p-1.  It uses no trajectory search and no
-floating-point inequality in the proof.
+cycle budget sum(t*c_t) <= 67*p-1. It also audits the numerical gain against a
+fully saturated version of the previous independent-class envelope.
 """
 from __future__ import annotations
 
@@ -12,6 +12,8 @@ from fractions import Fraction
 X = 104350542602662257699
 M = 15099
 H = 2154
+RETAINED_OLD_BARRIER = 170000000000000000000
+OPTIMIZED_OLD_BARRIER = 176022359338834903224
 BARRIER = 176022359338834903228
 
 
@@ -37,8 +39,8 @@ def ceil_log2_ratio(numerator: int, denominator: int) -> int:
     return k
 
 
-def reciprocal_bound(length_cap: int, reps: list[int], s0: Fraction) -> tuple[Fraction, int]:
-    """Uniform reciprocal bound for every cycle length p<=length_cap."""
+def transition_reciprocal_bound(length_cap: int, reps: list[int], s0: Fraction) -> tuple[Fraction, int]:
+    """Uniform transition-budget bound for every cycle length p<=length_cap."""
     valuation_budget = 67 * length_cap - 1
     exponent_sum = 0
 
@@ -48,29 +50,29 @@ def reciprocal_bound(length_cap: int, reps: list[int], s0: Fraction) -> tuple[Fr
         count_cap = min(length_cap, valuation_budget // t)
         assert count_cap >= 1
 
-        # Distinct elements of this class lie in rho+2M*j.  The decreasing
-        # harmonic tail is bounded by its integral, and then
-        # log(1+z)<=k*log(2)<7k/10.
         numerator = rho + 2 * M * (count_cap - 1)
-        k = ceil_log2_ratio(numerator, rho)
-        exponent_sum += k
+        exponent_sum += ceil_log2_ratio(numerator, rho)
 
     bound = s0 + Fraction(7 * exponent_sum, 20 * M)
     return bound, exponent_sum
 
 
-def interval_margins(length_cap: int, reps: list[int], s0: Fraction) -> tuple[Fraction, Fraction, Fraction, int]:
-    reciprocal, exponent_sum = reciprocal_bound(length_cap, reps, s0)
+def independent_reciprocal_bound(length_cap: int, s0: Fraction) -> tuple[Fraction, int]:
+    """Previous envelope, saturated at the supplied length cap."""
+    numerator = 25 + 2 * M * (length_cap - 1)
+    k = ceil_log2_ratio(numerator, 25)
+    bound = s0 + Fraction(7 * H * k, 20 * M)
+    return bound, k
 
+
+def interval_margins(length_cap: int, reciprocal: Fraction) -> tuple[Fraction, Fraction]:
     epsilon = Fraction(X * X - (1 << 133), 1 << 133)
     assert epsilon > 0
 
-    # Every even p=2r<=length_cap satisfies r<=floor(length_cap/2).
     r_even = length_cap // 2
     even_lhs = r_even * epsilon + reciprocal / X
-    even_margin = Fraction(2, 3) - even_lhs  # log(2)>2/3
+    even_margin = Fraction(2, 3) - even_lhs
 
-    # Every odd p=2r+1<=length_cap satisfies r<=floor((length_cap-1)/2).
     r_odd = (length_cap - 1) // 2
     odd_lhs = r_odd * epsilon + reciprocal / X
     q_num = 1 << 67
@@ -78,7 +80,7 @@ def interval_margins(length_cap: int, reps: list[int], s0: Fraction) -> tuple[Fr
     odd_log_lower = Fraction(2 * (q_num - X), q_num + X)
     odd_margin = odd_log_lower - odd_lhs
 
-    return even_margin, odd_margin, reciprocal, exponent_sum
+    return even_margin, odd_margin
 
 
 def verify() -> None:
@@ -98,27 +100,45 @@ def verify() -> None:
     assert min(reps) == 25
     s0 = sum((Fraction(1, rho) for rho in reps), Fraction(0, 1))
 
-    even_margin, odd_margin, reciprocal, exponent_sum = interval_margins(BARRIER, reps, s0)
+    reciprocal, exponent_sum = transition_reciprocal_bound(BARRIER, reps, s0)
+    even_margin, odd_margin = interval_margins(BARRIER, reciprocal)
     assert even_margin > 0
     assert odd_margin > 0
 
-    # The next integer already fails the odd-length rational interval test.
-    # Since all terms in that test are nondecreasing with the length cap,
-    # BARRIER is maximal for this exact transition-budget certificate and
-    # these retained rational logarithm bounds.
-    next_even, next_odd, _, _ = interval_margins(BARRIER + 1, reps, s0)
+    next_reciprocal, _ = transition_reciprocal_bound(BARRIER + 1, reps, s0)
+    next_even, next_odd = interval_margins(BARRIER + 1, next_reciprocal)
     assert next_odd <= 0
     assert next_even > 0
+
+    # Fair comparison: saturate the previous independent-class envelope.
+    old_reciprocal, old_k = independent_reciprocal_bound(OPTIMIZED_OLD_BARRIER, s0)
+    old_even, old_odd = interval_margins(OPTIMIZED_OLD_BARRIER, old_reciprocal)
+    assert old_even > 0
+    assert old_odd > 0
+
+    old_next_reciprocal, _ = independent_reciprocal_bound(OPTIMIZED_OLD_BARRIER + 1, s0)
+    old_next_even, old_next_odd = interval_margins(OPTIMIZED_OLD_BARRIER + 1, old_next_reciprocal)
+    assert old_next_odd <= 0
+    assert old_next_even > 0
+
+    assert BARRIER - OPTIMIZED_OLD_BARRIER == 4
+    assert BARRIER > RETAINED_OLD_BARRIER
 
     print("transition-budget cycle barrier verified")
     print(f"X={X}")
     print(f"M={M}, order={H}, classes={len(reps)}")
-    print(f"barrier={BARRIER}")
-    print(f"log-envelope exponent sum={exponent_sum}")
-    print(f"reciprocal bound approximately {float(reciprocal):.15f}")
-    print(f"even margin approximately {float(even_margin):.15e}")
-    print(f"odd margin approximately {float(odd_margin):.15e}")
-    print(f"next odd margin approximately {float(next_odd):.15e}")
+    print(f"previous retained barrier={RETAINED_OLD_BARRIER}")
+    print(f"optimized old-envelope barrier={OPTIMIZED_OLD_BARRIER}")
+    print(f"transition-budget barrier={BARRIER}")
+    print(f"strict gain over optimized old envelope={BARRIER-OPTIMIZED_OLD_BARRIER}")
+    print(f"transition exponent sum={exponent_sum}")
+    print(f"old envelope exponent={old_k}")
+    print(f"transition reciprocal bound approximately {float(reciprocal):.15f}")
+    print(f"old reciprocal bound approximately {float(old_reciprocal):.15f}")
+    print(f"transition odd margin approximately {float(odd_margin):.15e}")
+    print(f"next transition odd margin approximately {float(next_odd):.15e}")
+    print(f"old odd margin approximately {float(old_odd):.15e}")
+    print(f"next old odd margin approximately {float(old_next_odd):.15e}")
 
 
 if __name__ == "__main__":
