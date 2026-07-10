@@ -4,13 +4,13 @@
 The previous verifier checked arithmetic downstream of the false premise
 2^A == 1 (mod X). This script verifies the elementary counterexample,
 reports the correct cycle congruence, and records the current retained valid
-finite barrier from the independent residue-crowding certificate.
+finite barrier from the transition-budget certificate.
 """
 from __future__ import annotations
 
 import json
 
-CURRENT_RETAINED_BARRIER = 170000000000000000000
+CURRENT_RETAINED_BARRIER = 176022359338834903228
 
 
 def audit() -> dict[str, object]:
