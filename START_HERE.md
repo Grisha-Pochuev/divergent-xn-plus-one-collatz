@@ -50,19 +50,54 @@ Retained rigorous conclusions:
 - no nontrivial positive cycle of accelerated length at most
 
 ```text
-170000000000000000000
+176022359338834903228
 ```
 
 can occur.
 
 Therefore this orbit either tends to positive infinity or enters a nontrivial cycle longer than the retained finite barrier. This is not yet a proof of divergence.
 
-Primary certificate:
+Primary barrier certificate:
 
 ```text
-docs/RESIDUE_CROWDING_CYCLE_BARRIER.md
-tools/verify_residue_crowding_barrier.py
+docs/TRANSITION_BUDGET_CYCLE_BARRIER.md
+tools/verify_transition_budget_barrier.py
 ```
+
+## Priority 1 transition results
+
+Let
+
+```text
+M = 15099,
+ord_M(2) = 2154.
+```
+
+The following are now proved:
+
+1. The directed graph on the `2154` allowed output classes is complete, including loops. Every finite class word is realizable by some positive start. Therefore the bare class labels cannot yield forbidden edges or forbidden short words.
+2. If `c_t` is the number of cycle elements in class `t`, then every hypothetical cycle of length `p` satisfies
+
+```text
+sum_t c_t = p,
+sum_t t*c_t <= 67p-1.
+```
+
+3. Cycle closure forces exact flow balance: the number of elements whose current class is `t` equals the number of outgoing steps whose target class is `t`.
+4. Combining the valuation-cost bound with residue crowding gives the retained barrier above.
+
+Structural files:
+
+```text
+docs/RESIDUE_TRANSITION_NO_GO.md
+tools/verify_residue_transition_no_go.py
+docs/RESIDUE_VALUATION_BUDGET.md
+tools/verify_residue_valuation_budget.py
+docs/TRANSITION_BALANCED_RECIPROCAL_REDUCTION.md
+tools/verify_transition_balance.py
+```
+
+Fair numerical comparison: the old independent-class envelope, if saturated with the same rational bounds, reaches `176022359338834903224`; the transition budget adds exactly `4` further lengths. The larger approximately `3.54%` increase is relative to the previously recorded round barrier `170000000000000000000`.
 
 ## Critical retraction
 
