@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 X = 104350542602662257699
-BARRIER = 176022359338834903228
+SPARSE_CAP = 355561454311274250377
 THRESHOLD = 200
 TAIL_DENOMINATOR = 10**19
 H = 2154
@@ -18,8 +18,8 @@ def verify() -> None:
 
     # For every step with exact valuation a>=T,
     # n >= (2^a-1)/X, hence 1/n <= X/(2^a-1).
-    # At most BARRIER cycle elements contribute.
-    lhs = BARRIER * X * TAIL_DENOMINATOR
+    # At most SPARSE_CAP cycle elements contribute.
+    lhs = SPARSE_CAP * X * TAIL_DENOMINATOR
     rhs = (1 << THRESHOLD) - 1
     assert lhs < rhs
 
@@ -28,7 +28,7 @@ def verify() -> None:
 
     print("transition tail truncation verified")
     print(f"X={X}")
-    print(f"barrier={BARRIER}")
+    print(f"sparse cap={SPARSE_CAP}")
     print(f"all a>={THRESHOLD} contribute less than 1/{TAIL_DENOMINATOR}")
     print(f"retained oriented cells={H*(THRESHOLD-1)}")
 
