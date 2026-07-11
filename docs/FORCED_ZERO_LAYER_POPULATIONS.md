@@ -29,13 +29,13 @@ distinct expensive targets lie in
 1000000 < n < X.
 ```
 
-At most `6257` of these can have `q>=1`.  Therefore at least
+At most `6257` of these can have `q>=1`. Therefore at least
 
 ```text
 355687-6257 = 349430
 ```
 
-are zero-layer targets.  Since they belong to the expensive part of the
+are zero-layer targets. Since they belong to the expensive part of the
 `K=5000` decomposition, each satisfies
 
 ```text
@@ -52,17 +52,17 @@ For
 p = 177780727155637125195,
 ```
 
-the split-range reciprocal certificate proves that at least
+the flow-balanced split-range certificate proves that at least
 
 ```text
-799470
+811320
 ```
 
-distinct cycle values exceed sixty million.  Again at most `6257` can have a
+distinct cycle values exceed sixty million. Again at most `6257` can have a
 positive layer, so at least
 
 ```text
-799470-6257 = 793213
+811320-6257 = 805063
 ```
 
 of these values are entered through a zero-layer edge:
@@ -75,12 +75,12 @@ n>60000000.                                      (2)
 ## 3. Significance
 
 The unresolved reciprocal tail is not merely large; almost all of its
-mandatory population lies in the least full-order layer.  Any final
-certificate may therefore target the distribution of zero-layer pair classes:
+mandatory population lies in the least full-order layer. Any final certificate
+may therefore target the distribution of zero-layer pair classes:
 
 - at least `349430` expensive zero-layer targets in the finite interval
   `(10^6,X)` for the first length;
-- at least `793213` zero-layer targets above `6*10^7` for the second.
+- at least `805063` zero-layer targets above `6*10^7` for the second.
 
 This is a direct arithmetic consequence of retained exact certificates and is
 not a probabilistic density claim.
