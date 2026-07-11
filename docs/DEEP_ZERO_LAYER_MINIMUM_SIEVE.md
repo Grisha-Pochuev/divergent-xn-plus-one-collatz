@@ -23,12 +23,13 @@ Use the retained minimum bound
 m <= 5106101578294348744.
 ```
 
-For outgoing valuations `a=38,...,49`, the exact counts are listed as
+For outgoing valuations `a=37,...,49`, the exact counts are listed as
 
 ```text
 (a, small-class candidates, full targets,
      survive 1 predecessor, survive 2, survive 3, survive 4)
 
+37: 2650031, 331524, 5946, 91, 1, 0
 38: 1325003, 165762, 2910, 58, 0, 0
 39:  662514,  83254, 1553, 32, 1, 0
 40:  331257,  41211,  750, 14, 0, 0
@@ -53,8 +54,8 @@ of `a=50,...,66`, every all-zero-layer cycle of length
 satisfies
 
 ```text
-a_out <= 37,
-n_next > X*m/2^37 > 759250124*m.                 (1)
+a_out <= 36,
+n_next > X*m/2^36 > 1518500249*m.                (1)
 ```
 
 ## 2. Second remaining length
@@ -99,7 +100,7 @@ for every all-zero-layer cycle of length
 ## 3. Significance
 
 The two all-zero-layer branches now have unconditional growth from their cycle
-minimum by factors above `7.59*10^8` and `1.89*10^8`.  The proof is a finite
+minimum by factors above `1.51*10^9` and `1.89*10^8`.  The proof is a finite
 inverse-class certificate, not a trajectory scan.  It still does not exclude
 later compensating contractions.
 
