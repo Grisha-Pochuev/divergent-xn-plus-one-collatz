@@ -97,6 +97,7 @@ def main() -> None:
     run("tools/verify_signed_label_potential_dual.py")
     run("tools/verify_signed_label_split_range_dual.py")
     run("tools/verify_integral_layer_budget_dual.py")
+    run("tools/verify_coupled_q_split_range_dual.py")
     run("tools/verify_both_lengths_split_range_tail.py")
     run("tools/verify_finite_state_zero_layer_no_go.py")
     run("tools/verify_expensive_zero_layer_tail.py")
