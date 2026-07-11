@@ -119,6 +119,7 @@ def main() -> None:
     run("tools/verify_x156_exceptional_q2_sieve.py")
     run("tools/verify_dual_wieferich_square_sieve_candidate.py")
     run("tools/verify_dual_wieferich_harmonic_packing.py")
+    run("tools/verify_mersenne_divisor_wieferich_family.py")
     run("tools/check_project_consistency.py")
     run("tools/check_x9_digital_invariant.py", "--steps", "10000")
     run("tools/generate_two_parameter_barrier.py", "--length", "1000000000000", "--height", "1000000000")
