@@ -1,216 +1,137 @@
 # Prioritized next steps
 
-The strict prize problem remains open.
+The strict prize problem remains open.  This file records the current research
+frontier; operational rules are in `docs/WORKING_PROTOCOL.md`.
 
-## Priority 1: eliminate the final two lengths
-
-Current candidate:
-
-```text
-X  = 104350542602662257699,
-n0 = 1.
-```
-
-Only two lengths remain through the current sparse cap:
+## Primary candidate
 
 ```text
-177780727155637125193
-177780727155637125195.
+X=2^156-9
+ =91343852333181432387730302044767688728495783927,
+n0=1.
 ```
 
-## Current exact picture
+Closed gates:
 
-Use
+- explicit pair;
+- the orbit leaves `1` and never returns;
+- the positive bounded-orbit dichotomy is available;
+- exact block formulas, checkers, and a large finite cycle barrier are retained.
+
+Open decisive gate:
+
+- exclude every nontrivial positive cycle.
+
+## Current exact obstruction
+
+Every hypothetical cycle has a canonical complete-block ledger.  If `p` is its
+length, `A` its total valuation, and
 
 ```text
-O=ord_X(2)=1860810887857924950,
-a_i=s_(i+1)+O*q_i,
-Q=sum q_i<=6257.
+D=156*p-A,
 ```
 
-The exact transition budget is
+then `D` lies in a narrow integer strip and is the exact sum of ordinary terminal
+deficits minus exceptional excess valuations.
+
+Two adjacent least labels restrict every cycle value to one of exactly `132496`
+classes modulo `1093^2`.  Every exceptional source also satisfies
 
 ```text
-sum_i[(s_i-1)+(s_(i+1)-1)+2*O*q_i]=2*(A-p).
+n>=(125*2^156+1)/9.
 ```
 
-More than `97.38%` of the cycle is forced into cheap zero-layer transitions,
-but their total reciprocal contribution is less than `2.216*10^(-13)`.
-
-The coupled integer-`Q` certificate proves
+The missing theorem is to prove that distinct values under these restrictions
+cannot supply the required exact correction
 
 ```text
-sum_(n_i<=60000000)1/n_i <0.086152495.
+sum kappa_j=p*log2(2^156/X)-D
 ```
 
-Mandatory populations:
+around a complete cycle.
+
+## Work package A: harmonic packing over permanent classes
+
+1. Enumerate the ordered permanent residue classes symbolically or by an exact
+   certificate.
+2. Derive an upper bound for the reciprocal contribution of distinct values in
+   those classes.
+3. Keep the bound dependent on the integer `D` or the block-credit data instead
+   of replacing them by a uniform worst case too early.
+4. Combine the result with the exact correction identity.
+5. Accept only a rational or interval-certified contradiction.
+
+Success means either excluding all cycle lengths or producing a strictly smaller
+explicit infinite frontier with a clear next obstruction.
+
+## Work package B: separate ordinary and exceptional sources
+
+1. Charge every exceptional block by its exact excess valuation and height loss.
+2. Use the exceptional-source floor and the permanent residue sieve together.
+3. Bound how many exceptional sources can occur at each height scale.
+4. Prove that ordinary blocks cannot compensate the resulting loss around a
+   complete cycle.
+
+A useful intermediate theorem may concern an infinite family of block patterns;
+it need not close the full problem immediately.
+
+## Work package C: value-dependent height credit
+
+Seek an unbounded potential depending on the actual integer height, for example
+a logarithmic or piecewise logarithmic credit, such that complete blocks satisfy
+an inequality of the form
 
 ```text
-p=...193:
-  values above 60000000 >=25237969,
-  zero-layer values there >=25231712,
-  expensive zero-layer values in (60000000,X) >=22537952;
-
-p=...195:
-  values above 60000000 >=826903,
-  zero-layer values there >=820646.
+block gain >= potential change + certified global charge.
 ```
 
-## New strict boundary for the first length
+The fixed finite-state positive-mean architecture is ruled out.  Value-dependent
+potentials and finite-state components used inside a larger proof remain allowed.
 
-The permanent mod-3 predecessor sieve leaves `4308` possible refined target
-classes modulo `90594`. Distinct targets below `X` have distinct full labels,
-and for fixed `Q` their cardinality is bounded by
+## Exploratory directions
 
-```text
-m*(m-1)/2<=B-O*Q.
-```
+At most two may run beside the primary target:
 
-A rigorous harmonic packing certificate excludes
+- test exact renewal mechanisms for the six-step map;
+- search for stronger congruence information modulo higher powers or an
+  additional prime;
+- transfer the block-credit method to `X=2^260-3`;
+- revisit the `X=15` or `X=9` branches if a new lemma materially improves them;
+- revisit the old `Q=6241` branch when a new global packing theorem applies.
 
-```text
-Q=6242,6243,...,6257
-```
+The old fixed candidate is a fallback branch, not a mandatory `Priority 1`.
 
-for
+## Computation policy
 
-```text
-p=177780727155637125193.
-```
+Short symbolic, modular, trajectory, finite-state, satisfiability, residue, and
+word experiments are allowed for hypothesis formation and exact sublemmas.
 
-Therefore the first remaining length now satisfies
+Before a large computation, specify:
 
-```text
-Q<=6241.
-```
+1. the mathematical question;
+2. success and failure outputs;
+3. the stopping rule;
+4. the relation to an infinite proof;
+5. the artifact to commit.
 
-The boundary is narrow:
+Do not run a large search merely to enlarge a record or cutoff.  Large work does
+not require a separate user confirmation when it is reproducible, resource-aware,
+and directly tied to a stated proof target; costly external runs should still be
+identified clearly.
 
-```text
-packing upper at Q=6241 >0.377086594,
-packing upper at Q=6242 <0.375630659,
-required finite zero-layer mass >0.375632520964.
-```
+## Proof discipline
 
-## Closed routes
-
-Do not repeat:
-
-- forbidden finite-word searches on the `2154` small classes;
-- bounded layer-word enumeration as a global obstruction;
-- blind enlargement of trajectory or representative cutoffs;
-- the retracted assumption `ord_X(2)|A`;
-- identification of the least-cost predecessor source with the actual source;
-- comparison of a maximum lower bound with a theorem that bounds only the
-  minimum;
-- a fixed finite-state positive-minimum-mean potential on all zero-layer
-  transitions.
-
-Arbitrarily long realizable all-label-one segments have exactly zero layer and
-transition cost, so the last route is impossible.
-
-## Immediate target A: couple packing to the exact Q-dependent dual
-
-The current high-`Q` exclusion uses a uniform finite-range upper bound. Replace
-it by the exact affine dual value at each integer `Q`.
-
-Tasks:
-
-1. expose the small-range and middle-range dual objectives as exact affine
-   functions of `Q`;
-2. add the mod-3 harmonic packing upper for the finite interval `(60000000,X)`;
-3. add the exact allowances for cheap targets, positive-layer positions, and
-   targets at least `X`;
-4. maximize the resulting total over `Q=0,...,6241`;
-5. retain only a contradiction proved with rational arithmetic.
-
-This is the most direct route to excluding more values of `Q` without new
-number theory.
-
-## Immediate target B: break the Q=6241 boundary
-
-At `Q=6241`, the crude packing relaxation exceeds the required mass only
-slightly. A very small rigorous density improvement may suffice.
-
-Possible sources:
-
-1. use the exact positions of the `4308` surviving residue classes modulo
-   `90594`, rather than replacing every block by its `4308` smallest points;
-2. impose the expensive-pair condition
-
-```text
-s_source+s_target>=5002;
-```
-
-3. impose the large-prime subgroup condition modulo
-
-```text
-P=6911089648497401;
-```
-
-4. exploit the exact zero-layer predecessor relation, not only target
-   admissibility.
-
-## Immediate target C: explicit subgroup or Fermat-quotient estimate
-
-The least-layer predecessor modulo the large prime is an affine expression in a
-Fermat quotient. Seek a theorem controlling the joint conditions
-
-```text
-target in <2>,
-zero-layer predecessor in <2>,
-target in a short ordinary interval.
-```
-
-Requirements:
-
-- all constants must be explicit;
-- threshold hypotheses must hold for the actual prime `P`;
-- the numerical conclusion must improve the `Q=6241` packing bound;
-- generic asymptotic equidistribution is not enough.
-
-Standard direct Pólya--Vinogradov estimates appear too weak. A useful result
-probably needs the special Fermat-quotient structure, a Burgess-type estimate
-with explicit constants, or a strong subgroup/interval double-sum bound.
-
-## Immediate target D: unbounded height-dependent potential
-
-The finite-state positive-mean route is closed, but an unbounded potential may
-still work. Seek
-
-```text
-cost(segment) >= endpoint_potential_change + global_charge
-```
-
-where the endpoint term grows with the actual integer height and can absorb
-arbitrarily long zero-cost all-label-one segments.
-
-Possible ingredients:
-
-- `log n` or a piecewise logarithmic potential;
-- the exact affine iterate on the short return segment;
-- the minimum-valley growth factors in the all-zero-layer branch;
-- the global reciprocal identities;
-- the giant zero-layer growth block forced when any positive layer occurs.
-
-A useful potential must convert a large maximum/minimum ratio into a
-contradiction, not merely prove an even larger maximum.
-
-## Restrictions
-
-No long trajectory scans, large parameter searches, or large Actions matrices
-without explicit approval. Exact modular checks, compact deterministic
-certificates, and short analytic calculations are allowed.
-
-## Final-proof checklist
-
-A valid prize solution must provide an explicit pair, exclude every positive
-cycle, exclude repetition, invoke the positive-orbit dichotomy, and supply
-independently runnable exact certificates.
+- A finite barrier is not divergence.
+- A long growing trajectory is evidence only.
+- Conclusions may move between branches only after hypotheses are checked.
+- Record decisive dead ends in `docs/RETRACTIONS.md` without banning nearby
+  methods more broadly than the no-go proof supports.
+- Commit each theorem, checker, refutation, and major strategy change as a
+  logical unit; batch minor maintenance.
 
 ## Recommended next session
 
-> First combine the exact `Q`-dependent reciprocal dual with the mod-3 harmonic
-> packing bound. Then attack the first surviving boundary `Q=6241` using exact
-> refined residue locations or an explicit subgroup/Fermat-quotient estimate.
-> Do not return to finite positive-mean automata or blind cutoff growth.
+> Start with work package A.  Build a `D`-dependent reciprocal packing bound over
+> the `132496` permanent classes, then test whether exceptional-source charging
+> closes the remaining correction gap.  Keep one height-credit experiment as a
+> parallel route.
