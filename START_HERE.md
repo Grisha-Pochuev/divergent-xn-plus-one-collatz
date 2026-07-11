@@ -4,16 +4,14 @@ Compact entry point for each research session.
 
 ## Strict target
 
-Find explicit positive odd integers `X>=5` and `n0>=1` such that
+Find explicit positive odd integers `X>=5,n0` such that
 
 ```text
 C_X(n)=(X*n+1)/2^v2(X*n+1)
 ```
 
-tends to positive infinity under iteration.
-
-A cycle, avoidance of `1`, a finite cycle barrier, arbitrarily long finite
-growth, heuristic drift, or a huge finite trajectory is not a solution.
+tends to positive infinity. A cycle, avoidance of `1`, a finite barrier, a huge
+finite trajectory, or heuristic drift is not a solution.
 
 ## Read first
 
@@ -22,12 +20,10 @@ START_HERE.md
 docs/WORKING_PROTOCOL.md
 docs/CURRENT_STATUS.md
 docs/RETRACTIONS.md
-docs/SESSION_CHECKPOINT_2026-07-12_NO_EXCEPTIONAL_BLOCK_FRONTIER.md
-docs/SESSION_CHECKPOINT_2026-07-12_ONE_EXCEPTION_TWO_BLOCK_NO_GO.md
+docs/SESSION_CHECKPOINT_2026-07-12_GLOBAL_BLOCK_COUNT_FRONTIER.md
 ```
 
-Read detailed theorem files only when the current argument needs them. GitHub
-commits and certificate scripts are the durable source of truth.
+GitHub commits and certificate scripts are the durable source of truth.
 
 ## Primary candidate
 
@@ -55,111 +51,90 @@ G5 final independent certificate: waits for G3.
 
 - `N|X` and `1093||X`;
 - the orbit leaves `1` and never returns;
-- exactly `16562000` combined permanent classes survive modulo
-  `(2^500-1)*1093^2`;
+- exactly `16562000` permanent classes survive modulo `(2^500-1)*1093^2`;
 - every cycle value is greater than `2^500-1`;
-- all cycle lengths through `floor(2*X/(3*d))` are impossible, with
+- every exceptional source has at least `1505` decimal digits;
+- every cycle length through a number between `10^1201` and `10^1202` is
+  impossible;
+- every hypothetical cycle satisfies the logarithmic harmonic window recorded
+  in `docs/MERSENNE_DIVISOR_WIEFERICH_FAMILY.md`.
+
+## New global block frontier
+
+Let
 
 ```text
-10^1201<floor(2*X/(3*d))<10^1202;
+J = number of ordinary complete blocks,
+R = number of exceptional complete blocks,
+E = sum ordinary deficits,
+F = sum exceptional excesses,
+D = E-F = 4501*p-A.
 ```
 
-- every exceptional source satisfies
+Exact signed block elimination proves:
 
 ```text
-n>=(u_min*2^4501+1)/(349*2^500-347),
+Every hypothetical nontrivial positive cycle has J>=245833.   (1)
 ```
 
-  where
+This holds for every number `R` of exceptional blocks and arbitrary block
+lengths. It is not a cycle-length cutoff.
+
+The proof uses:
+
+1. the continued-fraction gap for every `D<1106246945`;
+2. a signed closure identity in which ordinary blocks are positive terms and
+   exceptional blocks are negative terms;
+3. the consequences, when `J<=245832`,
 
 ```text
-u_min=
-141554173562669451979142234479211407387695161061947663158036275475013035570532072821977692485924548874811696146286209742307923384940182399969083204712328957713629782297601610389067903491331197096456313288013542743720638224927691460837892079910386115268969408753656537834465197519183303759432510875217219;
+every ordinary block length <=2J+6;
+every exceptional block length <=2J+5;
+R<=4500J-1;
 ```
 
-  the lower-bound source has `1505` decimal digits;
-- every hypothetical cycle satisfies the global harmonic window
+4. hence
 
 ```text
-0<p*delta-D
- <[C0+K*H_(ceil(p/K))/(2*M)]/(X*ln(2)),
-C0<10^(-147),
-K=16562000,
-M=(2^500-1)*1093^2.
+p<=544026748963771<10^15,
 ```
 
-## No-exceptional frontier
+contradicting the retained barrier `p>10^1201`.
 
-Suppose a hypothetical cycle has no exceptional complete block. Let `J` be its
-number of ordinary complete blocks and
+Main files:
 
 ```text
-D=4501*p-A=sum_(i=1)^J e_i,
-1<=e_i<=4500.
+docs/GLOBAL_ORDINARY_BLOCK_COUNT_FRONTIER.md
+tools/verify_global_ordinary_block_count_frontier.py
 ```
 
-Retained strict results:
+Earlier strict subresults remain valid:
 
-1. Repeated valuation-`4501` steps form an `X`-adic ladder:
+- no cycle with one or two ordinary blocks and no exceptional block;
+- no cycle with one exceptional block and one ordinary block;
+- the `X`-adic ladder and all `4500` exact terminal classes.
 
-```text
-d*F^j(n)==1 (mod X^j).
-```
+## Decisive missing theorem
 
-2. All `4500` terminal classes satisfy
+The small-block branches have been unified. Every remaining hypothetical cycle
+has at least `245833` ordinary blocks.
 
-```text
-rho_e>X/(3*e).
-```
+The next target is a genuine many-block population theorem using together:
 
-3. Hence every no-exceptional cycle obeys
+1. only `4500` possible ordinary terminal deficits;
+2. repeated boundary classes modulo `X` and `N=2^500-1`;
+3. the credit budget `F=E-D` for all exceptional blocks;
+4. the `X`-adic ladder inside long valuation-`4501` runs;
+5. a height-dependent argument, not a fixed finite-state positive-mean
+   potential.
 
-```text
-sum_i 1/n_i
- <3*D/X+[d+H_D/2]/(X-1),
-```
+A first unavoidable population fact is that at least one ordinary deficit occurs
+at least `55` times. This alone is not yet the missing contradiction; the task is
+to convert repeated deficit classes into a shorter positive-credit segment,
+height descent, or an impossible closure congruence.
 
-and
-
-```text
-0<p*delta-D
- <{3*D/X+[d+H_D/2]/(X-1)}/[X*ln(2)].
-```
-
-4. No ordinary one-block cycle exists for any deficit `1<=e<=4500` or any
-cycle length.
-
-5. No ordinary two-block cycle exists for any pair of deficits or lengths.
-
-6. Continued-fraction and longest-block charging prove
-
-```text
-Any no-exceptional positive cycle must have J>=245833.
-```
-
-This is a block-count frontier, not a cycle-length cutoff.
-
-## First one-exception frontier
-
-A cycle with exactly
-
-```text
-one exceptional block + one ordinary block
-```
-
-is impossible for every admissible excess, deficit, and pair of lengths.
-Therefore any cycle with exactly one exceptional block must contain at least
-
-```text
-two ordinary blocks.
-```
-
-Main new files:
-
-```text
-docs/ONE_EXCEPTION_ONE_ORDINARY_NO_GO.md
-tools/verify_one_exception_one_ordinary_no_go.py
-```
+Do not merely extend the continued-fraction denominator or enlarge the finite
+cycle barrier for a new record.
 
 ## Reusable family theorem
 
@@ -174,49 +149,19 @@ X=2^m-d,
 
 with `364` not dividing `k`, one can choose parity-correct `t<2*1093^2` with
 `1093||X`. This gives no return to `1`, an exponentially thin permanent sieve,
-and an arbitrarily large finite cycle barrier.
-
-Therefore increasing parameters merely to set a new record is not a priority.
-
-## Decisive remaining split
-
-Every still-possible cycle belongs to one of these branches:
-
-```text
-A. no exceptional blocks and at least 245833 ordinary blocks;
-B. exactly one exceptional block and at least two ordinary blocks;
-C. at least two exceptional blocks.
-```
-
-## Exact next work
-
-Primary target: branch B.
-
-1. Derive a general exact closure formula for one exceptional block followed by
-   `J>=2` ordinary blocks.
-2. Choose a longest ordinary block or a dual source coordinate that removes it
-   from every additive exponent.
-3. Use the exact 1505-digit exceptional-source floor.
-4. Apply the full `X`-adic ladder to the ordinary segment.
-5. Derive a lower bound depending on the exceptional excess valuation.
-
-For branch A, seek a many-block population theorem from repeated terminal
-deficits and their exact classes modulo `X`. Do not merely extend the continued-
-fraction denominator for a larger record.
+and an arbitrarily large finite cycle barrier. Increasing parameters alone is
+therefore not a priority.
 
 ## Independent fallback branches
 
 Retain independently:
 
-- `X=2^3803-4162203,n0=1`, with barrier above `10^1138`;
-- `X=2^156-9,n0=1`, with barrier
-  `7034970411803187993997906985047212163795395134`, first threshold
-  `7034970411803187993997906985047212163795395135`, and exceptional floor
-  `1268664615738631005385143083955106787895774776889`;
+- `X=2^3803-4162203,n0=1`;
+- `X=2^156-9,n0=1`;
 - `X=2^260-3,n0=1`;
 - `X=15,n0=3`;
 - `X=9,n0=1`;
-- the old fixed candidate with two surviving lengths and `Q<=6241`.
+- the old fixed candidate with two surviving cycle lengths.
 
 Methods may move between branches only after checking hypotheses.
 
@@ -235,15 +180,13 @@ The correct cycle congruence is
 ```
 
 Do not identify a least admissible predecessor source with the source actually
-used by a cycle. Do not present finite height, a finite barrier, or heuristic
-drift as divergence.
+used by a cycle. Do not present a finite computation as divergence.
 
 ## Verification discipline
 
-- Commit each theorem, checker, decisive refutation, and major strategy change
-  as a logical unit.
-- State exactly which checks ran.
-- Do not claim a complete repository run unless it completed.
+- commit each theorem, checker, decisive refutation, and major strategy change;
+- state exactly which checks ran;
+- do not claim a complete repository run unless it completed.
 
 ## Reproduction
 
