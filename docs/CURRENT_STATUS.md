@@ -2,270 +2,242 @@
 
 ## Strict target
 
-Find explicit odd positive `X>=5,n0` whose accelerated odd-only orbit tends to
-positive infinity. The strict problem is not solved.
-
-## Main candidate and finite frontier
+Find explicit positive odd `X>=5,n0` such that the accelerated odd-only orbit
 
 ```text
-X  = 104350542602662257699,
-n0 = 1.
+C_X(n)=(X*n+1)/2^v2(X*n+1)
 ```
 
-The repository proves:
+tends to positive infinity. The strict problem remains open.
+
+## Proof-gate status
+
+For the current structured candidate:
 
 ```text
-all cycle lengths p<=177780727155637125192 are impossible;
-all lengths through 355561454311274250377 are impossible except
-177780727155637125193 and 177780727155637125195.
+X=2^156-9
+ =91343852333181432387730302044767688728495783927,
+n0=1,
 ```
 
-The orbit cannot return to `1`, and every reached nontrivial cycle element is at
-least `25`.
-
-## Exact full-layer budget
-
-Write
+the repository has:
 
 ```text
-a_i=s_(i+1)+O*q_i,
-O=ord_X(2)=1860810887857924950,
-Q=sum_i q_i.
+explicit pair: closed;
+leaves 1 and never returns: closed;
+positive bounded-orbit dichotomy: available;
+all nontrivial cycles excluded: open;
+final end-to-end certificate: open.
 ```
 
-For either remaining length,
+The project no longer reports one precise completion percentage. See
+`docs/PROGRESS_METRICS.md`.
+
+## Structured hybrid candidate `X=2^156-9`
+
+### Wieferich no-return theorem
+
+For `q=1093`,
 
 ```text
-Q<=6257.
+ord_q(2)=364,
+2^364==1 (mod q^2),
+q divides X exactly once.
 ```
 
-The exact edge cost
+Any direct predecessor of `1` is divisible by `q`, while every accelerated
+output is coprime to `q`. Since the first step is `2^153-1`,
 
 ```text
-c_i=(s_i-1)+(s_(i+1)-1)+2*O*q_i
+C_X^t(1)!=1 for every t>=1.
 ```
 
-satisfies
+### Finite cycle barrier
+
+Every positive cycle length through
 
 ```text
-sum_i c_i=2*(A-p).
+6766211283939365362054096447760569535444132142
 ```
 
-## Cheap versus expensive transitions
+is impossible. Cycles above this finite barrier remain possible.
 
-With threshold `K=5000`, more than `97.38%` of all edges are zero-layer edges
-with adjacent-label sum at most `5001`. Every target in this cheap majority is
-at least
+### Exact initial program
+
+The first `48` accelerated steps have exact valuation word
 
 ```text
-781563824454394220933608138645145,
+(3,1,2,2,5,6)^8,
 ```
 
-and all cheap targets together contribute less than `2.216*10^(-13)` to
-`sum 1/n_i`.
-
-Thus the reciprocal correction is concentrated in expensive zero-layer
-transitions.
-
-## Signed-label and coupled-Q reciprocal bounds
-
-The exact modular classification through `60000000` contains
+with
 
 ```text
-4279760 small-class candidates,
-536735 genuine full representatives,
-178632 permanent predecessor rejections,
-358103 surviving targets.
+A_48=152,
+v2(n_48-1)=4,
+n_48>X^48/2^152.
 ```
 
-Across all survivors, target labels and least-source labels are separately
-distinct and the two sets are disjoint. This defines a valid telescoping
-signed-label potential on the actual cycle.
-
-Keeping `Q` as an integer and coupling the small and middle ranges through their
-common `Q` proves
+The exact six-step map is
 
 ```text
-sum_(n_i<=60000000)1/n_i <0.086152495.
+G(n)=C_X^6(n)
+ =[X^6*n+X^5+8*X^4+16*X^3+64*X^2+256*X+8192]/2^19.
 ```
 
-The finite-range certificate is maximized at
+For `n==1 (mod 2^20)` it has the displayed exact word. If
+`20<=L=v2(n-1)<156`, then
 
 ```text
-Q=5841.
+v2(G(n)-1)=L-19.
 ```
 
-Mandatory tails:
+### Adjacent-label sieve
+
+For values with two preceding transitions, two adjacent least valuation labels
+determine the full residue modulo `1093^2`. Exactly
 
 ```text
-p=177780727155637125193:
-  values above 60000000 >=25237969,
-  zero-layer values there >=25231712;
-
-p=177780727155637125195:
-  values above 60000000 >=826903,
-  zero-layer values there >=820646.
+132496
 ```
 
-For the first length, at least
+classes survive out of `397852` one-step output classes.
+
+### Missing theorem
+
+The initial repeated program ends after eight blocks. The leading target is a
+renewal or height-credit theorem that controls all later contractions. The
+permanent `1093^2` class sieve should be combined with distinct-value harmonic
+bounds for hypothetical cycles.
+
+Main files:
 
 ```text
-22537952
+docs/STRUCTURED_WIEFERICH_X156_CANDIDATE.md
+tools/verify_structured_wieferich_x156_candidate.py
+docs/WIEFERICH_ADJACENT_LABEL_COORDINATES.md
+tools/verify_wieferich_adjacent_label_coordinates.py
 ```
 
-distinct expensive zero-layer targets lie in
+## Larger-barrier hybrid candidate `X=2^260-3`
 
 ```text
-60000000<n<X.
+X=2^260-3,
+n0=1.
 ```
 
-## High-Q harmonic packing exclusion
+Retained facts:
 
-The permanent predecessor sieve leaves exactly `4308` refined target classes
-modulo
+- return to `1` is impossible;
+- every positive cycle length through
 
 ```text
-6M=90594.
+411705206177124250394919057808668116811626612144499783251404743139246683164216
 ```
 
-For fixed `Q`, the exact label budget is
+  is excluded;
+- the first `172` steps have exact word `(1,2)^86`;
+- `A_172=258`, `v2(n_172-1)=2`, and `n_172>X^172/2^258`;
+- a least seed entering a hypothetical cycle lies in a low near-power layer and
+  begins with a growing step.
+
+This candidate has the stronger finite barrier but a less compact renewal
+program.
+
+## Complete near-power structure
+
+For
 
 ```text
-sum_i(s_i-1)=B-O*Q.
+X=2^m-d,
+d*n-1=2^(m*k+s)*u,
+1<=s<=m-1,
 ```
 
-Distinct targets below `X` have distinct full labels. Therefore a set of `m`
-finite zero-layer targets satisfies
+the exact block endpoint is
 
 ```text
-m*(m-1)/2<=B-O*Q.
+C_X^(k+1)(n)=(X^(k+1)*u+2^(m-s))/d.
 ```
 
-Packing at most `4308` possible targets into every interval of length `90594`
-and applying a rigorous harmonic bound gives
+Multiple-of-`m` exceptional blocks are strictly contracting. Therefore the
+least seed entering a hypothetical cycle must satisfy
 
 ```text
-U(6241)>0.377086594,
-U(6242)<0.375630659.
+1<=v2(d*w-1)<m
 ```
 
-The required finite expensive zero-layer reciprocal mass for the first length
-is greater than
+and its first step grows.
+
+Files:
 
 ```text
-0.375632520964.
+docs/NEAR_POWER_COMPLETE_BLOCKS_AND_MINIMAL_BASIN.md
+tools/verify_near_power_complete_blocks.py
 ```
 
-Consequently
+## Mersenne branch `X=15,n0=3`
+
+The second complete block of a least hypothetical basin seed cannot be
+exceptional. A contracting second block must increase the terminal type.
+Remaining families:
 
 ```text
-Q=6242,6243,...,6257
+initial type 3: none;
+initial type 2: terminal type 3, 10<=k<=20;
+initial type 1: terminal type 2, 21<=k<=31,
+                or terminal type 3, 10<=k<=31.
 ```
 
-are impossible for
+Later contractions and return to `1` remain open.
+
+## Direct-growth branch `X=9,n0=1`
+
+The sufficient target remains
 
 ```text
-p=177780727155637125193,
+A_t<=3*t-1 for every t>=1.
 ```
 
-and every remaining cycle of that length satisfies
+Large valuations require an exact alternating base-8 suffix. No amortized proof
+for all times is known.
+
+## Previous fixed-candidate frontier
+
+For
 
 ```text
-Q<=6241.
+X=104350542602662257699,
+n0=1,
 ```
 
-This is the first strict exclusion of an interval of possible full-order layer
-totals.
-
-## Repetition and height structure
-
-One zero-layer transition pair occurs at least
+all lengths through `355561454311274250377` are excluded except two. At the
+first surviving length,
 
 ```text
-3053943280435589
+Q<=6241,
 ```
 
-times in one odd class modulo `2*X^2`. It forces an enormous diameter and a
-nonempty segment with
-
-```text
-length<=114286,
-total valuation<=7771435,
-endpoints equal modulo 2*X^2.
-```
-
-Repeated words are also forced modulo `2*X^3` through `2*X^6`.
-
-If every edge has `q=0`, the four-generation minimum sieve proves
-
-```text
-p=...193: a_out<=36 and n_next>1518500249*m,
-p=...195: a_out<=39 and n_next>189812531*m.
-```
-
-These remain height statements, not contradictions.
-
-## Finite-state no-go
-
-Arbitrarily long positive orbit segments exist with
-
-```text
-q=0,
-source label=target label=1,
-edge cost=0.
-```
-
-Therefore no fixed finite quotient can support a universal telescoping
-inequality with a positive constant mean cost on all zero-layer transitions.
-
-## Main current certificates
-
-```text
-docs/SIGNED_LABEL_SPLIT_RANGE_DUAL.md
-tools/verify_signed_label_split_range_dual.py
-
-docs/INTEGRAL_LAYER_BUDGET_DUAL.md
-tools/verify_integral_layer_budget_dual.py
-
-docs/COUPLED_Q_SPLIT_RANGE_DUAL.md
-tools/verify_coupled_q_split_range_dual.py
-
-docs/BOTH_LENGTHS_SPLIT_RANGE_TAIL.md
-tools/verify_both_lengths_split_range_tail.py
-
-docs/EXPENSIVE_ZERO_LAYER_TAIL.md
-tools/verify_expensive_zero_layer_tail.py
-
-docs/FIRST_LENGTH_FINITE_ZERO_LAYER_MASS.md
-tools/verify_first_length_finite_zero_layer_mass.py
-
-docs/HIGH_Q_MOD3_HARMONIC_EXCLUSION.md
-tools/verify_high_q_mod3_harmonic_exclusion.py
-
-docs/FINITE_STATE_ZERO_LAYER_POTENTIAL_NO_GO.md
-tools/verify_finite_state_zero_layer_no_go.py
-```
+so `6242` layer totals still remain. This branch is retained as an independent
+finite-cycle attack.
 
 ## Not established
 
-- No explicit orbit is proved divergent.
-- The two displayed cycle lengths are not excluded.
-- Cycles beyond the sparse cap remain possible.
-- The first length still permits `Q=0,...,6241`.
-- The forced expensive zero-layer populations have not yet been bounded by a
-  sufficiently strong global distribution theorem.
-- Finite certificates do not prove divergence.
+- No explicit positive orbit has been proved divergent.
+- No candidate has every nontrivial positive cycle excluded.
+- A finite cycle barrier, however large, is not divergence.
+- The exact initial macroblocks do not repeat indefinitely by a proved ordinary
+  integer renewal.
+- The adjacent-label sieve does not by itself make the surviving class set
+  finite.
 
 ## Exact next step
 
-1. Combine the `Q`-dependent finite-range dual with harmonic packing rather than
-   using uniform worst-case constants.
-2. Attack the boundary `Q=6241`; only a small improvement over the mod-3 packing
-   relaxation is needed.
-3. Seek an explicit large-prime subgroup or Fermat-quotient estimate with usable
-   constants.
-4. Alternatively use an unbounded value-dependent height potential.
-5. Do not enlarge raw trajectory or representative cutoffs blindly.
+1. Build a renewal or height-credit inequality for `X=2^156-9`.
+2. Combine distinct cycle values with the `132496` residue classes in a rigorous
+   logarithmic or harmonic interval bound.
+3. Keep the `2^260-3`, `X=15`, `X=9`, and old `Q=6241` branches independent.
+4. Report proof gates and exact frontiers instead of unsupported percentages.
 
 ## Reproduction
 
