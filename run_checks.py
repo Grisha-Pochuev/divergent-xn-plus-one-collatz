@@ -102,6 +102,7 @@ def main() -> None:
     run("tools/verify_finite_state_zero_layer_no_go.py")
     run("tools/verify_expensive_zero_layer_tail.py")
     run("tools/verify_first_length_finite_zero_layer_mass.py")
+    run("tools/verify_high_q_mod3_harmonic_exclusion.py")
     run("tools/check_project_consistency.py")
     run("tools/check_x9_digital_invariant.py", "--steps", "10000")
     run("tools/generate_two_parameter_barrier.py", "--length", "1000000000000", "--height", "1000000000")
