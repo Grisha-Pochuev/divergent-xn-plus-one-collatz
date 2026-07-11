@@ -13,13 +13,20 @@ OLD_SPARSE_EXCEPTIONS = (
     177_780_727_155_637_125_195,
 )
 
-PRIMARY_X156_BARRIER = (
+X156_BARRIER = (
     7_034_970_411_803_187_993_997_906_985_047_212_163_795_395_134
 )
-PRIMARY_THRESHOLD = PRIMARY_X156_BARRIER + 1
-PRIMARY_EXCEPTIONAL_FLOOR = (
+X156_THRESHOLD = X156_BARRIER + 1
+X156_EXCEPTIONAL_FLOOR = (
     1_268_664_615_738_631_005_385_143_083_955_106_787_895_774_776_889
 )
+
+DUAL_M = 3803
+DUAL_D = 4_162_203
+DUAL_CLASSES = 17_886_960
+DUAL_MODULUS = 14_726_582_775_529
+DUAL_EXCEPTIONAL_CORE = 19_567_017_189_655
+DUAL_BARRIER_TEXT = "10^1138"
 RETRACTED_BARRIER_TEXT = "10^37"
 
 OLD_FRONTIER_FILES = (
@@ -29,7 +36,7 @@ OLD_FRONTIER_FILES = (
     "docs/LATEST_VALID_PROGRESS.md",
 )
 
-PRIMARY_FRONTIER_FILES = (
+X156_FRONTIER_FILES = (
     "START_HERE.md",
     "docs/CURRENT_STATUS.md",
     "docs/PROGRESS_METRICS.md",
@@ -38,7 +45,7 @@ PRIMARY_FRONTIER_FILES = (
     "docs/NEAR_POWER_SHARP_BLOCK_SIGN.md",
 )
 
-PRIMARY_EXCEPTIONAL_FILES = (
+X156_EXCEPTIONAL_FILES = (
     "START_HERE.md",
     "docs/CURRENT_STATUS.md",
     "docs/PROGRESS_METRICS.md",
@@ -46,13 +53,34 @@ PRIMARY_EXCEPTIONAL_FILES = (
     "docs/X156_EXCEPTIONAL_Q2_SIEVE.md",
 )
 
-PRIMARY_STRUCTURE_FILES = (
+DUAL_PRIMARY_FILES = (
+    "START_HERE.md",
+    "docs/CURRENT_STATUS.md",
+    "docs/SESSION_CHECKPOINT_2026-07-12_DUAL_WIEFERICH_HARMONIC_FRONTIER.md",
+    "docs/DUAL_WIEFERICH_SQUARE_SIEVE_CANDIDATE.md",
+)
+
+DUAL_HARMONIC_FILES = (
+    "START_HERE.md",
+    "docs/CURRENT_STATUS.md",
+    "docs/SESSION_CHECKPOINT_2026-07-12_DUAL_WIEFERICH_HARMONIC_FRONTIER.md",
+    "docs/DUAL_WIEFERICH_HARMONIC_PACKING.md",
+)
+
+X156_STRUCTURE_FILES = (
     "docs/NEAR_POWER_SHARP_BLOCK_SIGN.md",
     "tools/verify_near_power_block_sign_threshold.py",
     "docs/NEAR_POWER_CYCLE_BLOCK_LEDGER.md",
     "tools/verify_near_power_cycle_block_ledger.py",
     "docs/X156_EXCEPTIONAL_Q2_SIEVE.md",
     "tools/verify_x156_exceptional_q2_sieve.py",
+)
+
+DUAL_STRUCTURE_FILES = (
+    "docs/DUAL_WIEFERICH_SQUARE_SIEVE_CANDIDATE.md",
+    "tools/verify_dual_wieferich_square_sieve_candidate.py",
+    "docs/DUAL_WIEFERICH_HARMONIC_PACKING.md",
+    "tools/verify_dual_wieferich_harmonic_packing.py",
 )
 
 RETRACTION_FILES = (
@@ -92,6 +120,8 @@ LATEST_TOOLS = (
     "verify_near_power_block_sign_threshold.py",
     "verify_near_power_cycle_block_ledger.py",
     "verify_x156_exceptional_q2_sieve.py",
+    "verify_dual_wieferich_square_sieve_candidate.py",
+    "verify_dual_wieferich_harmonic_packing.py",
 )
 
 
@@ -102,59 +132,57 @@ def read(relative: str) -> str:
     return path.read_text(encoding="utf-8")
 
 
+def require_text(relative: str, required: tuple[str, ...]) -> None:
+    text = read(relative)
+    for marker in required:
+        if marker not in text:
+            raise AssertionError(f"{relative} lacks required marker {marker}")
+
+
 def check() -> None:
     old_barrier_plain = str(OLD_CONTIGUOUS_BARRIER)
     old_cap_plain = str(OLD_SPARSE_CAP)
-    primary_barrier_plain = str(PRIMARY_X156_BARRIER)
-    primary_threshold_plain = str(PRIMARY_THRESHOLD)
-    exceptional_floor_plain = str(PRIMARY_EXCEPTIONAL_FLOOR)
+    x156_barrier_plain = str(X156_BARRIER)
+    x156_threshold_plain = str(X156_THRESHOLD)
+    x156_exceptional_plain = str(X156_EXCEPTIONAL_FLOOR)
 
-    for relative in REQUIRED_PRIORITY1_FILES + PRIMARY_STRUCTURE_FILES:
+    for relative in (
+        REQUIRED_PRIORITY1_FILES + X156_STRUCTURE_FILES + DUAL_STRUCTURE_FILES
+    ):
         read(relative)
 
     for relative in OLD_FRONTIER_FILES:
-        text = read(relative)
-        if old_barrier_plain not in text:
-            raise AssertionError(
-                f"{relative} does not contain old barrier {old_barrier_plain}"
-            )
-        if old_cap_plain not in text:
-            raise AssertionError(
-                f"{relative} does not contain old sparse cap {old_cap_plain}"
-            )
-        for exception in OLD_SPARSE_EXCEPTIONS:
-            if str(exception) not in text:
-                raise AssertionError(
-                    f"{relative} does not contain old exception {exception}"
-                )
+        require_text(
+            relative,
+            (old_barrier_plain, old_cap_plain)
+            + tuple(str(x) for x in OLD_SPARSE_EXCEPTIONS),
+        )
 
-    for relative in PRIMARY_FRONTIER_FILES:
-        text = read(relative)
-        if primary_barrier_plain not in text:
-            raise AssertionError(
-                f"{relative} does not contain X156 barrier "
-                f"{primary_barrier_plain}"
-            )
-        if primary_threshold_plain not in text:
-            raise AssertionError(
-                f"{relative} does not contain X156 threshold "
-                f"{primary_threshold_plain}"
-            )
+    for relative in X156_FRONTIER_FILES:
+        require_text(relative, (x156_barrier_plain, x156_threshold_plain))
 
-    for relative in PRIMARY_EXCEPTIONAL_FILES:
-        text = read(relative)
-        if exceptional_floor_plain not in text:
-            raise AssertionError(
-                f"{relative} does not contain exceptional floor "
-                f"{exceptional_floor_plain}"
-            )
+    for relative in X156_EXCEPTIONAL_FILES:
+        require_text(relative, (x156_exceptional_plain,))
+
+    dual_primary_markers = (
+        f"m={DUAL_M}",
+        f"d={DUAL_D}",
+        str(DUAL_CLASSES),
+        str(DUAL_MODULUS),
+        str(DUAL_EXCEPTIONAL_CORE),
+        DUAL_BARRIER_TEXT,
+    )
+    for relative in DUAL_PRIMARY_FILES:
+        require_text(relative, dual_primary_markers)
+
+    for relative in DUAL_HARMONIC_FILES:
+        require_text(relative, ("1/853", "ceil(p/K)", "p*delta-D"))
 
     for relative in RETRACTION_FILES:
         text = read(relative)
         if RETRACTED_BARRIER_TEXT not in text:
             raise AssertionError(
-                f"{relative} does not mention retracted "
-                f"{RETRACTED_BARRIER_TEXT}"
+                f"{relative} does not mention retracted {RETRACTED_BARRIER_TEXT}"
             )
         lowered = text.lower()
         if "retract" not in lowered and "отоз" not in lowered:
@@ -172,14 +200,19 @@ def check() -> None:
             raise AssertionError(f"run_checks.py does not include {tool}")
 
     print("project-memory consistency verified")
-    print(f"primary X156 barrier={PRIMARY_X156_BARRIER}")
-    print(f"primary X156 first threshold={PRIMARY_THRESHOLD}")
-    print(f"primary exceptional floor={PRIMARY_EXCEPTIONAL_FLOOR}")
+    print(
+        "primary dual-Wieferich candidate: "
+        f"m={DUAL_M}, d={DUAL_D}, classes={DUAL_CLASSES}/{DUAL_MODULUS}"
+    )
+    print(f"primary exceptional core floor={DUAL_EXCEPTIONAL_CORE}")
+    print(f"former-primary X156 barrier={X156_BARRIER}")
+    print(f"former-primary X156 first threshold={X156_THRESHOLD}")
+    print(f"former-primary X156 exceptional floor={X156_EXCEPTIONAL_FLOOR}")
     print(f"old contiguous barrier={OLD_CONTIGUOUS_BARRIER}")
     print(f"old sparse cap={OLD_SPARSE_CAP}")
     print(f"old sparse exceptions={OLD_SPARSE_EXCEPTIONS}")
-    print(f"priority-1 certificate files={len(REQUIRED_PRIORITY1_FILES)}")
-    print(f"primary structure files={len(PRIMARY_STRUCTURE_FILES)}")
+    print(f"legacy priority-1 certificate files={len(REQUIRED_PRIORITY1_FILES)}")
+    print(f"dual primary structure files={len(DUAL_STRUCTURE_FILES)}")
 
 
 if __name__ == "__main__":
