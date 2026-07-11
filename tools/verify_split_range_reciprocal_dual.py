@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify the split-range reciprocal bound through sixty million."""
+"""Verify the flow-balanced split-range bound through sixty million."""
 from __future__ import annotations
 
 from fractions import Fraction
@@ -34,26 +34,26 @@ BUDGET = 11644637628694231700273
 LAYER_BUDGET = 6257
 CUTOFF = 1_000_000
 LARGE_CUTOFF = 60_000_000
-SMALL_RANGE_UPPER = Fraction(85_239_095, 1_000_000_000)
+SMALL_RANGE_UPPER = Fraction(85_226_905, 1_000_000_000)
 EXPECTED_CANDIDATES = 4_279_760
 EXPECTED_GENUINE = 536_735
 EXPECTED_DEAD = 178_632
 EXPECTED_SURVIVORS = 358_103
 EXPECTED_MIDDLE = 352_279
-EXPECTED_FULL = 5_179
+EXPECTED_FULL = 3_350
 EXPECTED_BOUNDARY = (
-    1_021_885,
-    32_815_616_360_884_604_024,
-    1_502_499_629_181_248_314,
+    1_135_801,
+    30_963_450_586_533_289_068,
+    58_772_698_851_070_868,
     8,
-    1_540_142_525_975_756_512,
+    536_465_491_552_174_068,
 )
 
 
 def fractional_dual(
     items: list[tuple[int, int, int, int, int]],
 ) -> tuple[Fraction, int, tuple[int, int, int, int, int]]:
-    """Items are (n, symmetric_cost, target_label, delay, source_label)."""
+    """Items are (n, flow_cost, target_label, delay, source_label)."""
     budget = 2 * BUDGET
     ordered = sorted(items, key=lambda item: item[0] * item[1])
     spent = 0
@@ -109,6 +109,8 @@ def verify() -> None:
     dead_count = 0
     survivor_count = 0
     middle_items: list[tuple[int, int, int, int, int]] = []
+    all_target_labels: set[int] = set()
+    all_source_labels: set[int] = set()
 
     for t in range(1, H + 1):
         rho = class_rep(t)
@@ -137,9 +139,6 @@ def verify() -> None:
                 delay += 1
                 assert delay <= LAYER_BUDGET
 
-            if n <= CUTOFF:
-                continue
-
             source_small_label = small_labels[predecessor % M]
             source_label = full_label(
                 predecessor,
@@ -147,14 +146,20 @@ def verify() -> None:
                 tables,
                 coefficients,
             )
-            symmetric_cost = (
-                source_label - 1
-                + target_label - 1
-                + 2 * O * delay
-            )
+
+            assert target_label not in all_target_labels
+            assert source_label not in all_source_labels
+            all_target_labels.add(target_label)
+            all_source_labels.add(source_label)
+
+            if n <= CUTOFF:
+                continue
+
+            base = source_label + target_label - 2
+            flow_cost = 2 * base + 2 * O * delay
             middle_items.append((
                 n,
-                symmetric_cost,
+                flow_cost,
                 target_label,
                 delay,
                 source_label,
@@ -164,33 +169,36 @@ def verify() -> None:
     assert genuine_count == EXPECTED_GENUINE
     assert dead_count == EXPECTED_DEAD
     assert survivor_count == EXPECTED_SURVIVORS
+    assert len(all_target_labels) == survivor_count
+    assert len(all_source_labels) == survivor_count
+    assert all_target_labels.isdisjoint(all_source_labels)
     assert len(middle_items) == EXPECTED_MIDDLE
 
     middle_bound, full, boundary = fractional_dual(middle_items)
     assert full == EXPECTED_FULL
     assert boundary == EXPECTED_BOUNDARY
-    assert middle_bound < Fraction(137_062_462, 100_000_000_000)
+    assert middle_bound < Fraction(1_185_304, 1_000_000_000)
 
-    combined_upper = (
-        SMALL_RANGE_UPPER
-        + Fraction(137_062_462, 100_000_000_000)
+    combined_upper = SMALL_RANGE_UPPER + Fraction(
+        1_185_304, 1_000_000_000
     )
-    assert combined_upper < Fraction(86_609_720, 1_000_000_000)
+    assert combined_upper < Fraction(86_412_209, 1_000_000_000)
 
     log2_lower, _ = log_bounds(Fraction(2, 1), 40)
     energy = Fraction(X * X, 1 << 133)
     _, eta_upper = log_bounds(energy, 4)
     required = X * (log2_lower - TARGET * eta_upper) / 2
     residual = required - combined_upper
-    assert residual > Fraction(13_324_487, 1_000_000_000)
+    assert residual > Fraction(13_521_997, 1_000_000_000)
 
     minimum_large = (residual * LARGE_CUTOFF).numerator // (
         residual * LARGE_CUTOFF
     ).denominator + 1
-    assert minimum_large == 799_470
+    assert minimum_large == 811_320
 
-    print("split-range reciprocal dual verified")
+    print("flow-balanced split-range dual verified")
     print(f"middle-range survivors={len(middle_items)}")
+    print("all source and target label sets are disjoint")
     print(f"middle fractional boundary after {full} complete items")
     print(f"middle bound approximately {float(middle_bound):.15f}")
     print(f"combined bound approximately {float(combined_upper):.15f}")
