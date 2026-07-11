@@ -123,34 +123,49 @@ q=118 -> source label 188856312470187702.
 
 Thus one target does not determine one actual source endpoint.
 
-### Retracted numerical conclusions
+### Numerical status
 
-The following claimed improvements are invalid:
+The following conclusions remain invalid and retracted:
 
 ```text
-small reciprocal bound 0.085226905,
 combined bound through 60000000 equal to 0.086412209,
 811320 mandatory values above 60000000,
 805063 mandatory zero-layer values above 60000000.
 ```
 
-The last retained valid figures are
+The retained valid figures are
 
 ```text
-small reciprocal bound 0.085239095,
 combined bound through 60000000 equal to 0.086609720,
 799470 mandatory values above 60000000,
 793213 mandatory zero-layer values above 60000000.
 ```
 
-Audit files:
+The numerical small-value bound
+
+```text
+0.085226905
+```
+
+was originally claimed using the invalid endpoint-identification argument above, so that original proof remains retracted.  The same numerical value has since been independently re-established by a different argument: a signed potential on all full labels whose contribution telescopes around the actual cycle and whose modified edge costs remain nonnegative for every admissible layer.
+
+The recovered theorem is recorded separately in
+
+```text
+docs/SIGNED_LABEL_POTENTIAL_DUAL.md
+tools/verify_signed_label_potential_dual.py
+```
+
+This recovery does not rehabilitate the discarded premise and does not recover the stronger sixty-million figures.
+
+Audit files for the invalid argument:
 
 ```text
 docs/FLOW_BALANCED_TWO_CONSTRAINT_DUAL.md
 tools/verify_flow_balanced_two_constraint_dual.py
 ```
 
-A future valid circulation dual must keep every admissible layer as a separate edge choice, or otherwise prove a source-label statement that holds for the actual chosen layer.
+A future circulation dual must keep every admissible layer as a separate edge choice, or use a genuine potential whose sum telescopes for the actual chosen edges.
 
 ## 4. Claims that are evidence but not proofs
 
