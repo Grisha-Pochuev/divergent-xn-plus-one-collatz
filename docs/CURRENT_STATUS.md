@@ -29,13 +29,14 @@ Write
 
 ```text
 a_i=s_(i+1)+O*q_i,
-O=ord_X(2)=1860810887857924950.
+O=ord_X(2)=1860810887857924950,
+Q=sum_i q_i.
 ```
 
 For either remaining length,
 
 ```text
-Q=sum_i q_i<=6257.
+Q<=6257.
 ```
 
 The exact edge cost
@@ -66,7 +67,7 @@ and all cheap targets together contribute less than `2.216*10^(-13)` to
 Thus the reciprocal correction is concentrated in expensive zero-layer
 transitions.
 
-## Signed-label potential through sixty million
+## Signed-label and coupled-Q reciprocal bounds
 
 The exact modular classification through `60000000` contains
 
@@ -77,43 +78,24 @@ The exact modular classification through `60000000` contains
 358103 surviving targets.
 ```
 
-Across all survivors:
+Across all survivors, target labels and least-source labels are separately
+distinct and the two sets are disjoint. This defines a valid telescoping
+signed-label potential on the actual cycle.
 
-```text
-all target full labels are distinct,
-all least-source full labels are distinct,
-the two label sets are disjoint.
-```
-
-This defines a global signed-label potential. It telescopes on the actual cycle
-and proves a valid lower cost for every actual layer choice; it does not treat
-the least-cost source as the actual source.
-
-## Integral-Q and coupled-range reciprocal bounds
-
-Keeping `Q` as an integer separates the exact resources
-
-```text
-sum(s_i-1)=B-O*Q,
-sum h_3(n_i)<=3Q,
-sum signed_potential_cost<=2B.
-```
-
-Two rational duals cover all `Q=0,...,6257`. Coupling the small and middle
-ranges through their common `Q` gives the strongest retained finite-range
-bound:
+Keeping `Q` as an integer and coupling the small and middle ranges through their
+common `Q` proves
 
 ```text
 sum_(n_i<=60000000)1/n_i <0.086152495.
 ```
 
-The global maximum of the certificate occurs at
+The finite-range certificate is maximized at
 
 ```text
 Q=5841.
 ```
 
-The mandatory tails are therefore
+Mandatory tails:
 
 ```text
 p=177780727155637125193:
@@ -136,6 +118,64 @@ distinct expensive zero-layer targets lie in
 ```text
 60000000<n<X.
 ```
+
+## High-Q harmonic packing exclusion
+
+The permanent predecessor sieve leaves exactly `4308` refined target classes
+modulo
+
+```text
+6M=90594.
+```
+
+For fixed `Q`, the exact label budget is
+
+```text
+sum_i(s_i-1)=B-O*Q.
+```
+
+Distinct targets below `X` have distinct full labels. Therefore a set of `m`
+finite zero-layer targets satisfies
+
+```text
+m*(m-1)/2<=B-O*Q.
+```
+
+Packing at most `4308` possible targets into every interval of length `90594`
+and applying a rigorous harmonic bound gives
+
+```text
+U(6241)>0.377086594,
+U(6242)<0.375630659.
+```
+
+The required finite expensive zero-layer reciprocal mass for the first length
+is greater than
+
+```text
+0.375632520964.
+```
+
+Consequently
+
+```text
+Q=6242,6243,...,6257
+```
+
+are impossible for
+
+```text
+p=177780727155637125193,
+```
+
+and every remaining cycle of that length satisfies
+
+```text
+Q<=6241.
+```
+
+This is the first strict exclusion of an interval of possible full-order layer
+totals.
 
 ## Repetition and height structure
 
@@ -163,7 +203,7 @@ p=...193: a_out<=36 and n_next>1518500249*m,
 p=...195: a_out<=39 and n_next>189812531*m.
 ```
 
-These are not contradictions because later contractions remain possible.
+These remain height statements, not contradictions.
 
 ## Finite-state no-go
 
@@ -177,7 +217,6 @@ edge cost=0.
 
 Therefore no fixed finite quotient can support a universal telescoping
 inequality with a positive constant mean cost on all zero-layer transitions.
-The proposed finite-state minimum-mean route is closed.
 
 ## Main current certificates
 
@@ -200,36 +239,33 @@ tools/verify_expensive_zero_layer_tail.py
 docs/FIRST_LENGTH_FINITE_ZERO_LAYER_MASS.md
 tools/verify_first_length_finite_zero_layer_mass.py
 
+docs/HIGH_Q_MOD3_HARMONIC_EXCLUSION.md
+tools/verify_high_q_mod3_harmonic_exclusion.py
+
 docs/FINITE_STATE_ZERO_LAYER_POTENTIAL_NO_GO.md
 tools/verify_finite_state_zero_layer_no_go.py
 ```
-
-The earlier sparse-window, subgroup, predecessor-delay, inverse-window,
-transition-concentration, repetition, and audit certificates remain retained.
 
 ## Not established
 
 - No explicit orbit is proved divergent.
 - The two displayed cycle lengths are not excluded.
 - Cycles beyond the sparse cap remain possible.
+- The first length still permits `Q=0,...,6241`.
 - The forced expensive zero-layer populations have not yet been bounded by a
   sufficiently strong global distribution theorem.
-- The height ladder controls maxima, while the logarithmic theorem currently
-  controls minima.
 - Finite certificates do not prove divergence.
 
 ## Exact next step
 
-The remaining node is a global distribution/height problem:
-
-1. bound the count or harmonic sum of expensive zero-layer pair representatives
-   in `(60000000,X)`;
-2. exploit the exact Fermat-quotient predecessor formula with explicit usable
-   constants;
-3. or construct an unbounded value-dependent potential, not a fixed finite
-   positive-mean automaton.
-
-Do not enlarge raw trajectory or representative cutoffs blindly.
+1. Combine the `Q`-dependent finite-range dual with harmonic packing rather than
+   using uniform worst-case constants.
+2. Attack the boundary `Q=6241`; only a small improvement over the mod-3 packing
+   relaxation is needed.
+3. Seek an explicit large-prime subgroup or Fermat-quotient estimate with usable
+   constants.
+4. Alternatively use an unbounded value-dependent height potential.
+5. Do not enlarge raw trajectory or representative cutoffs blindly.
 
 ## Reproduction
 
