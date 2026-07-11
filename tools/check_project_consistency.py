@@ -24,7 +24,6 @@ RETRACTED_BARRIER_TEXT = "10^37"
 
 OLD_FRONTIER_FILES = (
     "README.md",
-    "docs/CURRENT_STATUS.md",
     "docs/VALIDATED_RESULTS.md",
     "docs/NEXT_STEPS.md",
     "docs/LATEST_VALID_PROGRESS.md",
