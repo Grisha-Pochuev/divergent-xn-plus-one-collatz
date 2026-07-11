@@ -27,8 +27,8 @@ docs/PROGRESS_METRICS.md
 docs/CURRENT_STATUS.md
 docs/VALIDATED_RESULTS.md
 docs/RETRACTIONS.md
+docs/SESSION_CHECKPOINT_2026-07-11_BLOCK_LEDGER_AND_EXCEPTIONAL_SIEVE.md
 docs/SESSION_CHECKPOINT_2026-07-11_SHARP_BLOCK_SIGN.md
-docs/SESSION_CHECKPOINT_2026-07-11_MEASURED_HYBRID_FRONTIER.md
 run_checks.py
 ```
 
@@ -36,20 +36,17 @@ GitHub files are the durable source of truth.
 
 ## Measurement rule
 
-Do not report one precise completion percentage as if research effort were a
-fraction of a proof.  Report:
+Do not turn closed preparatory gates into one precise proof percentage.  Report:
 
 1. strict proof gates;
 2. exact finite frontiers;
 3. reusable infinite-family structure.
 
-For the current structured candidate, the explicit-pair gate, no-return gate,
-and general positive-orbit dichotomy are available.  The decisive global gate,
-exclusion of every nontrivial positive cycle, remains open.
+For the primary candidate, the explicit-pair gate, no-return gate, and general
+positive-orbit dichotomy are available.  The decisive global gate, exclusion of
+every nontrivial positive cycle, remains open.
 
-## Branch A: structured hybrid candidate
-
-Current primary candidate:
+## Branch A: primary structured candidate
 
 ```text
 X=2^156-9
@@ -57,9 +54,9 @@ X=2^156-9
 n0=1.
 ```
 
-### Closed facts
+### Closed: no return to `1`
 
-Let `q=1093`.  Then
+For `q=1093`,
 
 ```text
 ord_q(2)=364,
@@ -73,22 +70,9 @@ The first step leaves `1`, and the Wieferich predecessor argument proves
 C_X^t(1)!=1 for every t>=1.
 ```
 
-Every positive cycle length through
+### Closed: exact initial program
 
-```text
-7034970411803187993997906985047212163795395134
-```
-
-is impossible.  This is the exact integral barrier coming from
-
-```text
-D=156*p-A>=1,
-D<p*log2(2^156/X).
-```
-
-It improves the previous convenient barrier by about `3.97%`.
-
-The first `48` accelerated steps have exact valuation word
+The first `48` accelerated steps have valuation word
 
 ```text
 (3,1,2,2,5,6)^8,
@@ -109,53 +93,52 @@ G(n)=C_X^6(n)
  =[X^6*n+X^5+8*X^4+16*X^3+64*X^2+256*X+8192]/2^19.
 ```
 
-For `n==1 (mod 2^20)`, its exact valuation word is
-`(3,1,2,2,5,6)`.  If `20<=L=v2(n-1)<156`, then
+For `n==1 (mod 2^20)`, its word is `(3,1,2,2,5,6)`.  If
+`20<=L=v2(n-1)<156`, then
 
 ```text
 v2(G(n)-1)=L-19.
 ```
 
-Files:
+### Closed: sharp signs of all ordinary complete blocks
 
-```text
-docs/STRUCTURED_WIEFERICH_X156_CANDIDATE.md
-tools/verify_structured_wieferich_x156_candidate.py
-```
-
-### Sharp complete-block sign theorem
-
-For a complete nonexceptional near-power block, write
+For
 
 ```text
 9*n-1=2^(156*k+s)*u,
 1<=s<=155,
 ell=k+1,
-e=156-s.
+e=156-s,
 ```
 
-Define
+define
 
 ```text
 L_e=floor(e/log2(2^156/X))+1.
 ```
 
-Exact rational logarithm bounds and modular certificates prove
+Exact rational logarithm bounds and modular certificates prove, for all `155`
+terminal deficits,
 
 ```text
 ell<L_e   => the complete block strictly grows,
 ell>=L_e  => the complete block strictly contracts.
 ```
 
-The sign is independent of the odd core `u`; the additive term never rescues a
-block after the multiplicative threshold.  In particular,
+The additive term never reverses this sign.  In particular,
 
 ```text
 L_1
- =7034970411803187993997906985047212163795395135,
-L_155
- =1090420413829494139069675582682317885388286245793.
+ =7034970411803187993997906985047212163795395135.
 ```
+
+Therefore every positive cycle length through
+
+```text
+7034970411803187993997906985047212163795395134
+```
+
+is impossible.  This is a finite barrier, not divergence.
 
 Files:
 
@@ -164,23 +147,64 @@ docs/NEAR_POWER_SHARP_BLOCK_SIGN.md
 tools/verify_near_power_block_sign_threshold.py
 ```
 
-### Permanent q-adic sieve
+### Closed: canonical cycle block ledger
 
-For every value with two preceding transitions,
+Every hypothetical cycle has a canonical partition into complete near-power
+blocks.  Give an ordinary block terminal credit `e=156-s>0` and an exceptional
+block ending at valuation `156+b` credit `-b`.
+
+If the cycle has length `p`, total valuation `A`, and
+
+```text
+D=156*p-A,
+```
+
+then exactly
+
+```text
+D=sum ordinary deficits-sum exceptional excesses.
+```
+
+Every exceptional block contracts by more than `b` binary height units.  A
+unified exact block-ratio formula gives
+
+```text
+sum kappa_j=p*delta-D,
+delta=log2(2^156/X),
+```
+
+and the uniform correction bound implies
+
+```text
+p*(delta-9/(2*X*ln(2)))<D<p*delta.
+```
+
+Thus the integer `D` must lie in roughly the upper half of the formerly allowed
+interval.
+
+Files:
+
+```text
+docs/NEAR_POWER_CYCLE_BLOCK_LEDGER.md
+tools/verify_near_power_cycle_block_ledger.py
+```
+
+### Closed: permanent `1093^2` adjacent-label sieve
+
+Every value with two preceding transitions satisfies
 
 ```text
 n_(i+1)
  ==2^(-s_i)*(1+1093*c*2^(-s_(i-1))) (mod 1093^2).
 ```
 
-Thus two adjacent least labels determine the full residue modulo `1093^2`.
-Exactly
+Two adjacent least labels determine the full residue modulo `1093^2`.  Exactly
 
 ```text
 364^2=132496
 ```
 
-classes survive, versus `364*1093=397852` one-step output classes.
+classes survive, versus `397852` one-step output classes.
 
 Files:
 
@@ -189,21 +213,62 @@ docs/WIEFERICH_ADJACENT_LABEL_COORDINATES.md
 tools/verify_wieferich_adjacent_label_coordinates.py
 ```
 
+### Closed: exceptional sources plus the `1093^2` sieve
+
+An exceptional source satisfies exactly
+
+```text
+v2(9*n-1)=156
+```
+
+and hence
+
+```text
+n=(17*2^156+1)/9+2^157*t.
+```
+
+Combining this progression with all `132496` permanent adjacent-label classes
+by the Chinese remainder theorem gives
+
+```text
+n>=(125*2^156+1)/9
+ =1268664615738631005385143083955106787895774776889
+```
+
+for every exceptional source in a hypothetical cycle.  The minimum is attained
+by label pair `(61,64)` and progression layer `t=6`.  It is about `7.35` times
+the raw exceptional-source floor.
+
+Files:
+
+```text
+docs/X156_EXCEPTIONAL_Q2_SIEVE.md
+tools/verify_x156_exceptional_q2_sieve.py
+```
+
 ### Missing theorem
 
-The exact initial program ends after eight blocks.  The sharp block theorem now
-classifies every later nonexceptional block as growing or contracting, but it
-does not yet pay for all contractions.
+The exact initial program ends after eight macroblocks.  All ordinary complete
+blocks now have exact signs, exceptional blocks have an exact credit cost and a
+large source-height floor, but no global contradiction has yet excluded every
+cycle.
 
-Prove one of:
+The next target is to prove that the required correction sum
 
-1. a renewal theorem recreating `n==1 (mod 2^20)` often enough;
-2. an unbounded height-credit inequality charging every exceptional contraction
-   and every nonexceptional block with `ell>=L_e` to earlier growth;
-3. a global harmonic contradiction using distinct cycle values and the
-   `132496` surviving classes.
+```text
+sum kappa_j=p*delta-D
+```
 
-No current result excludes every cycle above the finite barrier.
+cannot be achieved by distinct cycle values constrained to the `132496`
+permanent residue classes.
+
+Promising ingredients:
+
+1. the roughly half-width integer strip for `D`;
+2. more than `b` bits lost by each exceptional block;
+3. the exceptional-source floor above `1.268*10^48`;
+4. distinct-value harmonic packing;
+5. an unbounded height-dependent potential, not a fixed finite-state one.
 
 ## Branch B: larger-barrier hybrid candidate
 
@@ -212,7 +277,7 @@ X=2^260-3,
 n0=1.
 ```
 
-Closed facts:
+Retained facts:
 
 - return to `1` is impossible;
 - every positive cycle length through
@@ -222,22 +287,13 @@ Closed facts:
 ```
 
   is impossible;
-- the first `172` accelerated steps have exact word `(1,2)^86`;
+- the first `172` steps have exact word `(1,2)^86`;
 - `A_172=258`, `v2(n_172-1)=2`, and `n_172>X^172/2^258`;
-- a least seed entering a hypothetical cycle satisfies
-  `1<=v2(3*w-1)<=259` and begins with a growing step.
+- a least seed entering a hypothetical cycle starts in a low near-power layer
+  and first grows.
 
-Files:
-
-```text
-docs/HYBRID_WIEFERICH_NEAR_POWER_CANDIDATE.md
-tools/verify_hybrid_wieferich_near_power_candidate.py
-docs/HYBRID_INITIAL_ALTERNATING_MACROBLOCK.md
-tools/verify_hybrid_initial_alternating_macroblock.py
-```
-
-This candidate has the stronger finite barrier.  Branch A has the cleaner
-repeated macroblock and the new sharp block-sign theorem, so it remains primary.
+This candidate has the stronger finite barrier.  Branch A remains primary
+because it has the cleaner repeated macroblock and stronger block structure.
 
 ## General near-power theorem
 
@@ -246,7 +302,6 @@ For
 ```text
 B=2^m,
 X=B-d,
-d odd,
 d*n-1=2^(m*k+s)*u,
 1<=s<=m-1,
 ```
@@ -257,25 +312,16 @@ the exact complete endpoint is
 C_X^(k+1)(n)=(X^(k+1)*u+2^(m-s))/d.
 ```
 
-Multiple-of-`m` exceptional blocks are strictly contracting.  Hence a least
-positive seed entering a hypothetical nontrivial cycle must satisfy
+Multiple-of-`m` exceptional blocks strictly contract.  A least positive seed
+entering a hypothetical nontrivial cycle must satisfy
 
 ```text
 1<=v2(d*w-1)<m
 ```
 
-and its first step is strictly growing.
-
-Files:
-
-```text
-docs/NEAR_POWER_COMPLETE_BLOCKS_AND_MINIMAL_BASIN.md
-tools/verify_near_power_complete_blocks.py
-```
+and its first step grows.
 
 ## Branch C: Mersenne descent
-
-Candidate:
 
 ```text
 X=15,
@@ -284,14 +330,14 @@ n0=3.
 
 Retained structure:
 
-- complete Mersenne valuation blocks are classified;
-- every exceptional block has a strictly smaller ordinary seed with the
-  identical future tail;
-- a least seed entering a hypothetical cycle has `v2(w-1) in {1,2,3}`;
+- complete blocks are classified;
+- exceptional blocks have a strictly smaller ordinary seed with identical
+  future tail;
+- a least basin seed has `v2(w-1) in {1,2,3}`;
 - the second block cannot be exceptional;
-- if the second block contracts, its terminal type strictly increases.
+- a contracting second block strictly increases terminal type.
 
-Exact remaining contracting second-block families:
+Remaining contracting second-block families:
 
 ```text
 initial type 3: none;
@@ -300,33 +346,9 @@ initial type 1: terminal type 2, 21<=k<=31,
                 or terminal type 3, 10<=k<=31.
 ```
 
-Files:
-
-```text
-docs/MERSENNE_COMPLETE_VALUATION_BLOCKS.md
-tools/verify_mersenne_complete_valuation_blocks.py
-docs/MERSENNE_MINIMAL_BASIN_LEMMA.md
-docs/MERSENNE_SECOND_BLOCK_ESCALATION.md
-tools/verify_mersenne_second_block_escalation.py
-```
-
-The later-block height theorem and avoidance of `1` remain open.
+Later contractions and avoidance of `1` remain open.
 
 ## Branch D: `X=9,n0=1`
-
-Define
-
-```text
-A_t=sum_(j<t)v2(9*n_j+1),
-S_t=2^A_t*n_t.
-```
-
-Then
-
-```text
-S_(t+1)=9*S_t+2^v2(S_t),
-v2(S_t)=A_t.
-```
 
 A proof of
 
@@ -334,9 +356,8 @@ A proof of
 A_t<=3*t-1
 ```
 
-for every `t>=1` would imply divergence.  Large valuations require the exact
-alternating base-8 suffix `7,0,7,0,...`.  The missing step is an amortized suffix
-bound.
+for every `t>=1` would imply divergence.  Large valuations require an exact
+alternating base-8 suffix.  The missing step is an amortized suffix bound.
 
 ## Branch E: old fixed-candidate frontier
 
@@ -352,30 +373,8 @@ All cycle lengths through `355561454311274250377` are excluded except
 177780727155637125195.
 ```
 
-For the first remaining length,
-
-```text
-Q<=6241,
-```
-
-so `6242` integer layer totals remain.  This branch is retained, but a larger
-finite barrier is not counted as a fraction of the infinite proof.
-
-## Literature audits
-
-Do not use:
-
-- the Santos Mersenne-cycle proof; its divisibility lemma has an explicit
-  counterexample;
-- the Tremblay `5x+1` divergent-proportion claim; endpoint growth was confused
-  with finite stopping-time survival.
-
-Files:
-
-```text
-docs/LITERATURE_AUDIT_SANTOS.md
-docs/LITERATURE_AUDIT_TREMBLAY_5X1.md
-```
+For the first remaining length, `Q<=6241`, so `6242` layer totals remain.  This
+branch is retained independently.
 
 ## Critical retractions and closed routes
 
@@ -394,25 +393,24 @@ The correct cycle congruence is
 Also never:
 
 - identify the least admissible predecessor source with the actual cycle source;
-- treat finite trajectory height as divergence;
-- return to forbidden finite-word searches on the old `2154` classes;
+- treat finite trajectory height or a finite barrier as divergence;
+- return to finite-word searches on the old `2154` classes;
 - use a fixed finite-state positive-minimum-mean zero-layer potential;
 - treat arbitrary finite growing programs as an ordinary infinite orbit;
-- enlarge raw cutoffs without a theorem they are intended to test.
+- enlarge raw cutoffs without a theorem they test.
 
 ## Exact next work
 
-1. Build a cycle-wide height-credit ledger for `X=2^156-9` using the sharp
-   thresholds `L_e`.
-2. Classify exceptional complete blocks in the same credit units and seek a
-   telescoping quantity that is unbounded, not fixed-state.
-3. Combine that ledger with the adjacent-label `1093^2` sieve and distinct-value
-   harmonic bounds.
-4. Retain the `2^260-3`, `X=15`, `X=9`, and `Q=6241` branches as independent
-   fallbacks.
-5. Commit every theorem and decisive refutation separately.
-6. Continue to report proof gates and exact frontiers, not unsupported precise
-   percentages.
+1. Convert the block correction identity into a rigorous harmonic packing
+   inequality over the `132496` permanent classes.
+2. Separate ordinary and exceptional block sources and exploit the exceptional
+   floor `(125*2^156+1)/9`.
+3. Use the integer strip for `D` to restrict admissible cycle lengths and total
+   block credits.
+4. Seek an unbounded height-credit potential; fixed finite-state potentials are
+   ruled out.
+5. Keep the `2^260-3`, `X=15`, `X=9`, and old `Q=6241` branches independent.
+6. Commit every theorem and decisive refutation separately.
 
 ## Reproduction
 
