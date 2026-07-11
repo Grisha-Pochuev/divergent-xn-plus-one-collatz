@@ -1,6 +1,7 @@
-# Flow-balanced split-range reciprocal dual through sixty million
+# Split-range reciprocal dual through sixty million
 
-This note improves the finite reciprocal bound for the harder remaining length
+This note gives the retained finite reciprocal bound for the harder remaining
+length
 
 ```text
 p = 177780727155637125195.
@@ -17,13 +18,13 @@ For targets
 n <= 1000000,
 ```
 
-the retained flow-balanced depth-three certificate proves
+the retained valid two-constraint depth-three certificate proves
 
 ```text
-sum 1/n < 0.085226905.                            (1)
+sum 1/n < 0.085239095.                            (1)
 ```
 
-## 2. Middle range and flow completion
+## 2. Middle range
 
 For
 
@@ -31,15 +32,18 @@ For
 1000000 < n <= 60000000,
 ```
 
-write
+use the scalar symmetric lower cost
 
 ```text
-u(n) = source full label,
-s(n) = target full label,
-d(n) = least full predecessor layer.
+C_E(n)=u_min(n)-1+s(n)-1+2*O*d_X(n),
 ```
 
-The exact enumeration through sixty million contains
+where `d_X(n)` is the least full predecessor layer and `u_min(n)` its source
+label.  This is a valid scalar lower bound on the cost of any actual edge
+entering `n`: using a higher layer adds `2*O`, more than any possible reduction
+of the source-label term.
+
+The exact modular enumeration contains
 
 ```text
 4279760 small-class candidates,
@@ -48,52 +52,32 @@ The exact enumeration through sixty million contains
 358103 surviving targets.
 ```
 
-Across all `358103` survivors:
-
-```text
-all source labels are distinct,
-all target labels are distinct,
-the source-label and target-label sets are disjoint.
-```
-
-Therefore a selected set of middle-range edges cannot balance its own label
-flow.  In addition to paying its own edge cost, the rest of the cycle must pay
-one more copy of every selected endpoint label.  The valid flow-completed item
-cost is
-
-```text
-C_F(n)=2*(u(n)+s(n)-2)+2*O*d(n),
-sum C_F(n_i)<=2*(A-p).                            (2)
-```
-
 Restricting to the `352279` survivors above one million and applying the exact
-fractional dual to (2) gives a boundary after `3350` complete items:
+fractional dual gives a boundary after `5179` complete items:
 
 ```text
-n = 1135801,
-C_F = 30963450586533289068,
-target label = 58772698851070868,
+n = 1021885,
+C_E = 32815616360883804024,
+target label = 1502499629181248314,
 full delay = 8,
-source label = 536465491552174068.
+least-cost source label = 1540142525975756512.
 ```
 
 The resulting exact bound is
 
 ```text
 sum_(1000000<n_i<=60000000) 1/n_i
- < 0.001185304.                                   (3)
+ < 0.001370625.                                   (2)
 ```
-
-The former symmetric-edge value was `0.001370625`.
 
 ## 3. Combined bound and required large tail
 
-Adding (1) and (3), while generously granting each range its own full budget,
+Adding (1) and (2), while generously granting each range its own full budget,
 gives
 
 ```text
 sum_(n_i<=60000000) 1/n_i
- < 0.086412209.                                   (4)
+ < 0.086609720.                                   (3)
 ```
 
 The exact interval identity requires
@@ -105,26 +89,25 @@ sum_i 1/n_i > 0.099934206877...
 so values above sixty million must contribute more than
 
 ```text
-0.013521997.
+0.013324487.
 ```
 
 Every such distinct value contributes less than `1/60000000`.  Hence at least
 
 ```text
-811320
+799470
 ```
 
 distinct cycle values must exceed sixty million.
 
-The former unsplit certificate required `738929`; the total improvement is
-`72391` additional mandatory large values.
+## 4. Retraction boundary
 
-## 4. Status
-
-The result still leaves ample room in a cycle of length about `1.78*10^20`.
-Its significance is structural: exact flow balance improves both the deep small
-range and the shallower middle range.  Extending the same endpoint-disjoint
-charging beyond sixty million is now a concrete route.
+The least-cost source labels are useful only inside the scalar cost lower
+bound.  They are not necessarily the source labels chosen by the actual cycle,
+because a target can have several admissible full predecessor layers.  Hence
+they must not be used as actual circulation endpoints.  The attempted
+flow-completion improvement is retracted in
+`docs/FLOW_BALANCED_TWO_CONSTRAINT_DUAL.md`.
 
 Run
 
@@ -132,5 +115,4 @@ Run
 python tools/verify_split_range_reciprocal_dual.py
 ```
 
-for full reproduction.  The verifier performs deterministic modular
-classification, not a trajectory search.
+for full reproduction.
