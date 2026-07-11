@@ -10,8 +10,15 @@ Find explicit positive odd integers `X>=5` and `n0>=1` such that
 C_X(n)=(X*n+1)/2^v2(X*n+1)
 ```
 
-satisfies `C_X^t(n0)->+infinity`. A cycle, avoidance of `1`, a finite barrier,
-or a huge finite trajectory is not a solution.
+satisfies
+
+```text
+C_X^t(n0)->+infinity.
+```
+
+A cycle, avoidance of `1`, a finite cycle barrier, arbitrarily long finite
+growth, a positive-drift heuristic, or a huge finite trajectory is not a
+solution.
 
 ## Read first
 
@@ -21,23 +28,212 @@ docs/CURRENT_STATUS.md
 docs/VALIDATED_RESULTS.md
 docs/RETRACTIONS.md
 docs/NEXT_STEPS.md
-docs/SESSION_CHECKPOINT_2026-07-11_PRIORITY1_C.md
+docs/SESSION_CHECKPOINT_2026-07-11_BLOCK_DESCENT_2.md
 run_checks.py
 ```
 
 GitHub files are the durable source of truth.
 
-## Main fixed candidate
+## Current branch ranking
+
+The strict problem remains open.  Work is no longer restricted to the old
+Priority 1 branch.
+
+### Branch A: Mersenne descent, currently the cleanest direct alternative
+
+Main working candidate:
 
 ```text
-X  = 104350542602662257699,
-n0 = 1.
+X=15,
+n0=3.
+```
+
+No divergence or avoidance-of-`1` theorem is proved for this pair.
+
+For every Mersenne multiplier
+
+```text
+X=2^m-1,
+n-1=2^r*u,
+u odd,
+```
+
+the dynamics has an exact complete block decomposition.
+
+If
+
+```text
+r=m*k+s,
+1<=s<=m-1,
+```
+
+then the next `k+1` valuations are
+
+```text
+m,...,m,s
+```
+
+and
+
+```text
+C_X^(k+1)(n)=X^(k+1)*u+2^(m-s).
+```
+
+If instead
+
+```text
+r=m*k,
+k>=1,
+```
+
+put
+
+```text
+w=X^(k-1)*u.
+```
+
+Then
+
+```text
+C_X^k(n)=C_X(w),
+w<n.
+```
+
+Thus every exceptional Mersenne block has literally the same future tail as a
+strictly smaller ordinary integer.
+
+For `X=15`, the first possible contracting nonexceptional blocks occur only at
+
+```text
+r=43,86,129
+```
+
+for residue tails `s=3,2,1`, respectively.  Therefore every smaller
+nonexceptional block is strictly increasing, and the smallest possible input of
+an ordinary contracting block is at least
+
+```text
+2^43+1=8796093022209.
+```
+
+If a nontrivial Mersenne cycle exists and `w` is the least positive odd seed
+whose orbit enters it, then
+
+```text
+1<=v2(w-1)<m
+```
+
+and its first step is strictly increasing.  For `X=15`, only the three entrance
+types `v2(w-1)=1,2,3` remain at the well-founded bottom of a hypothetical
+basin.
+
+Files:
+
+```text
+docs/MERSENNE_COMPLETE_VALUATION_BLOCKS.md
+tools/verify_mersenne_complete_valuation_blocks.py
+docs/MERSENNE_MINIMAL_BASIN_LEMMA.md
+```
+
+### Branch B: digital invariant for `X=9,n0=1`
+
+Define
+
+```text
+A_t=sum_(j<t)v2(9*n_j+1),
+S_t=2^A_t*n_t.
+```
+
+Then exactly
+
+```text
+S_0=1,
+S_(t+1)=9*S_t+2^v2(S_t),
+v2(S_t)=A_t.
+```
+
+A proof of
+
+```text
+A_t<=3*t-1
+```
+
+for every `t>=1` would imply
+
+```text
+n_t>=2*(9/8)^t->+infinity.
+```
+
+Large valuations are now described exactly: a valuation at least `3k` requires
+the alternating low base-8 suffix
+
+```text
+7,0,7,0,...
+```
+
+of length `k`, read from the least significant digit.  The missing lemma is an
+amortized proof that the orbit cannot create these suffixes fast enough for the
+cumulative valuation to reach `3t`.
+
+Files:
+
+```text
+docs/X9_DIGITAL_INVARIANT_LEAD.md
+docs/FERMAT_SIGNED_DIGIT_DESCENT.md
+tools/check_x9_digital_invariant.py
+tools/verify_fermat_signed_digit_descent.py
+```
+
+### Branch C: near-power descent for `X=13`
+
+For
+
+```text
+3*n-1=2^(4*k+s)*u,
+u odd,
+s in {1,2,3},
+```
+
+the exact endpoint is
+
+```text
+C_13^(k+1)(n)=(13^(k+1)*u+2^(4-s))/3.
+```
+
+The first possible nonexceptional contractions occur at
+
+```text
+s=1: r=41,
+s=2: r=26,
+s=3: r=15.
+```
+
+Multiple-of-four tails reduce to the same `13n+1` rule on a strictly smaller
+auxiliary integer, but with a remaining division by `3`.  This makes the branch
+slightly less clean than the Mersenne branch.
+
+Files:
+
+```text
+docs/NEAR_POWER_EXCEPTIONAL_DESCENT.md
+tools/verify_near_power_exceptional_descent.py
+docs/X13_COMPLETE_VALUATION_BLOCKS.md
+tools/verify_x13_complete_valuation_blocks.py
+```
+
+### Branch D: strongest finite cycle barrier
+
+Fixed candidate:
+
+```text
+X=104350542602662257699,
+n0=1.
 ```
 
 Retained conclusions:
 
 - the orbit leaves `1` and cannot return to `1`;
-- every element of a reached nontrivial cycle is at least `25`;
+- every reached nontrivial cycle element is at least `25`;
 - every cycle length
 
 ```text
@@ -54,149 +250,26 @@ is impossible;
 is impossible except
 
 ```text
-177780727155637125193
+177780727155637125193,
 177780727155637125195.
 ```
-
-The strict problem remains open.
-
-## Exact full-layer coordinates
 
 Use
 
 ```text
 O=ord_X(2)=1860810887857924950,
 a_i=s_(i+1)+O*q_i,
-1<=s_i<=O,
-q_i>=0,
 Q=sum_i q_i.
 ```
 
-For either remaining length,
-
-```text
-Q<=6257.
-```
-
-The exact symmetric edge cost
-
-```text
-c_i=(s_i-1)+(s_(i+1)-1)+2*O*q_i
-```
-
-satisfies
-
-```text
-sum_i c_i=2*(A-p).
-```
-
-Possible predecessors of a full representative form an exact progression
-modulo `X`, and a reached predecessor must itself be a full output.
-
-## Transition concentration
-
-With threshold `K=5000`, more than `97.38%` of all edges satisfy
-
-```text
-q_i=0,
-s_i+s_(i+1)<=5001.
-```
-
-Every target in that cheap majority is at least
-
-```text
-781563824454394220933608138645145,
-```
-
-so all cheap targets together contribute less than `2.216*10^(-13)` to the
-reciprocal sum. The required correction is concentrated in expensive
-zero-layer transitions.
-
-## Strongest retained finite-range bound
-
-A signed-label potential is valid for all `358103` retained targets through
-sixty million. The potential telescopes on the actual cycle and does not assume
-that the least-cost source is the source chosen by the cycle.
-
-Keeping the integer layer total `Q` and coupling the small and middle ranges
-through the same `Q` gives
-
-```text
-sum_(n_i<=60000000) 1/n_i <0.086152495.
-```
-
-The exact maximizing integer of this finite-range certificate is
-
-```text
-Q=5841.
-```
-
-Therefore:
-
-```text
-p=177780727155637125193:
-  values above 60000000 >=25237969,
-  zero-layer values there >=25231712;
-
-p=177780727155637125195:
-  values above 60000000 >=826903,
-  zero-layer values there >=820646.
-```
-
-For the first length, at least
-
-```text
-22537952
-```
-
-distinct expensive zero-layer targets lie in the finite interval
-
-```text
-60000000<n<X.
-```
-
-## New high-Q exclusion for the first remaining length
-
-The permanent predecessor sieve modulo `3` leaves exactly `4308` refined target
-classes modulo
-
-```text
-6M=90594.
-```
-
-For fixed `Q`,
-
-```text
-sum_i(s_i-1)=B-O*Q.
-```
-
-Distinct targets below `X` have distinct full labels, so a set of `m` such
-targets must satisfy
-
-```text
-m*(m-1)/2<=B-O*Q.
-```
-
-Combining this cardinality cap with harmonic packing in the `4308` surviving
-classes proves
-
-```text
-Q=6242,6243,...,6257
-```
-
-impossible for
-
-```text
-p=177780727155637125193.
-```
-
-Hence every remaining cycle of this length satisfies
+For the first remaining length, harmonic packing in the `4308` surviving
+classes modulo `90594` proves
 
 ```text
 Q<=6241.
 ```
 
-At the exact threshold,
+The boundary is narrow:
 
 ```text
 packing upper at Q=6241 >0.377086594,
@@ -204,70 +277,100 @@ packing upper at Q=6242 <0.375630659,
 required finite zero-layer mass >0.375632520964.
 ```
 
-Certificate files:
+This remains the strongest finite cycle-exclusion branch, but it needs a global
+distribution theorem and is not a divergence proof.
+
+Files:
 
 ```text
 docs/HIGH_Q_MOD3_HARMONIC_EXCLUSION.md
 tools/verify_high_q_mod3_harmonic_exclusion.py
 ```
 
-## Other retained structure
+## Literature audits
 
-One exact zero-layer pair occurs at least
-
-```text
-3053943280435589
-```
-
-times in one class modulo `2*X^2`. This forces an enormous cycle diameter and a
-nonempty exact return segment with
+Do not use the published Mersenne-cycle theorem in Santos (2020).  Its proof
+contains a false divisibility lemma, with the recorded counterexample
 
 ```text
-length<=114286,
-total valuation<=7771435,
-endpoints equal modulo 2*X^2.
+m=3,
+q=7,
+k=9,
+c=2,
+7 | 9*2^2-1=35,
 ```
 
-Higher-power repeated words are retained through modulus `2*X^6`.
+although `9` is not a power of two.
 
-If every edge has `q=0`, the inverse minimum sieve gives
+Do not use the claimed `17%` divergent proportion for `5x+1` in Tremblay
+(2021).  Endpoint growth does not imply that all intermediate values stayed
+above the start.  The smallest counterexample is
 
 ```text
-p=...193: a_out<=36 and n_next>1518500249*m,
-p=...195: a_out<=39 and n_next>189812531*m.
+2 -> 1 -> 3 -> 8.
 ```
 
-These results control height or local valleys but do not yet exclude later
-compensating contractions.
+It has two odd steps among three, so `5^2>2^3` and the endpoint grows, but its
+stopping time is already `1`.
 
-## Closed finite-state route
-
-For every `L`, exact valuation-word coding and CRT realize `L` consecutive
-edges with
+Files:
 
 ```text
-q=0,
-source label=target label=1,
-edge cost=0.
+docs/LITERATURE_AUDIT_SANTOS.md
+docs/LITERATURE_AUDIT_TREMBLAY_5X1.md
+tools/verify_tremblay_5x1_audit.py
 ```
 
-Hence no fixed finite-state quotient can prove a universal positive mean
-zero-layer cost by a telescoping potential. Do not return to a finite
-positive-minimum-mean automaton.
+## Closed or invalid routes
 
-## Exact next step
+Do not repeat:
 
-The remaining Priority 1 node is global distribution, not local word
-exclusion.
+- the false condition `2^A==1 (mod X)`;
+- identifying the least-cost predecessor source with the actual cycle source;
+- finite trajectory height as evidence of divergence;
+- forbidden finite-word searches on the `2154` small classes;
+- a fixed finite-state positive-minimum-mean zero-layer potential;
+- arbitrary finite growing macroblock programs without an ordinary infinite
+  realization;
+- blind enlargement of trajectory or representative cutoffs.
 
-1. Combine the `Q`-dependent finite-range dual with harmonic packing instead of
-   using uniform worst-case constants.
-2. Attack the first still-open integer `Q=6241`; the mod-3 packing relaxation
-   misses contradiction only narrowly.
-3. Improve the packing density with an explicit large-prime subgroup or
-   Fermat-quotient estimate with usable constants.
-4. Alternatively construct an unbounded value-dependent height potential.
-5. Do not enlarge trajectory or representative cutoffs blindly.
+Arbitrarily long realizable zero-cost finite words show that the obstruction
+must be global or value-dependent.
+
+## Exact next work
+
+### First target: close the Mersenne basin descent
+
+For `X=15`, let `w` be the least seed entering a hypothetical nontrivial cycle.
+Only
+
+```text
+w=2*u+1,
+w=4*u+1,
+w=8*u+1
+```
+
+remain.  Use their exact first images and the identical-tail replacement to
+prove one of the following:
+
+1. a strictly smaller positive seed enters the same cycle; or
+2. the orbit is forced into a nonexceptional tail of depth at least `43`.
+
+Closing all three entrance types would substantially advance, and may close,
+the Mersenne cycle branch.
+
+### Second target: exclude return to `1`
+
+If nontrivial Mersenne cycles are excluded, prove that one explicit seed,
+preferably `(X,n0)=(15,3)`, never reaches the trivial fixed point.  Analyze the
+backward tree of `1`, whose first layer consists of base-16 repunits, together
+with the complete block descent.  Do not substitute a long forward scan.
+
+### Parallel targets
+
+- build an amortized signed-suffix potential for `X=9,n0=1`;
+- improve the exact `Q=6241` packing boundary for the huge fixed candidate;
+- seek an unbounded height-dependent potential, not a fixed finite-state one.
 
 ## Critical retractions
 
@@ -283,9 +386,8 @@ The correct cycle relation is
 2^A*product_i(n_i)==1 (mod X).
 ```
 
-Also never identify the least-cost predecessor source label with the actual
-cycle source. The old proof is invalid even though some numerical values were
-later recovered by a different signed-potential proof.
+Also never identify the least admissible predecessor source label with the
+source selected by the actual cycle.
 
 ## Working rules
 
