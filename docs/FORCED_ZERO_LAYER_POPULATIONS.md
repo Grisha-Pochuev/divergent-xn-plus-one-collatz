@@ -52,17 +52,17 @@ For
 p = 177780727155637125195,
 ```
 
-the flow-balanced split-range certificate proves that at least
+the retained scalar split-range certificate proves that at least
 
 ```text
-811320
+799470
 ```
 
 distinct cycle values exceed sixty million. Again at most `6257` can have a
 positive layer, so at least
 
 ```text
-811320-6257 = 805063
+799470-6257 = 793213
 ```
 
 of these values are entered through a zero-layer edge:
@@ -80,10 +80,11 @@ may therefore target the distribution of zero-layer pair classes:
 
 - at least `349430` expensive zero-layer targets in the finite interval
   `(10^6,X)` for the first length;
-- at least `805063` zero-layer targets above `6*10^7` for the second.
+- at least `793213` zero-layer targets above `6*10^7` for the second.
 
-This is a direct arithmetic consequence of retained exact certificates and is
-not a probabilistic density claim.
+The attempted larger count based on flow-completing least-cost source labels is
+retracted: a target can use a higher predecessor layer with a different actual
+source label.
 
 Run
 
