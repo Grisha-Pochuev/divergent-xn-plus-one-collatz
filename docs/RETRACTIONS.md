@@ -1,27 +1,27 @@
 # Retractions and audit registry
 
-This file records invalid, superseded, or currently unusable arguments so that later work does not silently reintroduce them.
+This file records invalid, superseded, or currently unusable arguments so that
+later work does not silently reintroduce them.
 
 ## 1. Retracted `10^37` cycle barrier
 
 ### Discarded claim
 
-A former argument claimed that a positive accelerated cycle with total halving count `A` must satisfy
+A former argument claimed that a positive accelerated cycle with total halving
+count `A` must satisfy
 
 ```text
-2^A == 1 (mod X),
+2^A==1 (mod X),
 ```
 
-and therefore that `ord_X(2)` divides `A`.
-
-This is false.
+and therefore that `ord_X(2)` divides `A`. This is false.
 
 ### Correct relation
 
 Multiplying the cycle equations gives
 
 ```text
-2^A * product_i(n_i) == 1 (mod X).
+2^A*product_i(n_i)==1 (mod X).
 ```
 
 The product of the cycle elements cannot be deleted.
@@ -34,28 +34,19 @@ For the accelerated `5n+1` cycle
 13 -> 33 -> 83 -> 13
 ```
 
-the exact valuations are
+with exact valuations `(1,1,5)`, one has `A=7` and
 
 ```text
-(1,1,5),
-A=7.
+2^7==3 (mod 5),
 ```
 
-But
-
-```text
-2^7 == 3 (mod 5),
-```
-
-not `1`. The correct congruence holds only after multiplying by
-
-```text
-13*33*83 == 2 (mod 5).
-```
+not `1`. The correct congruence holds only after multiplying by the cycle
+product.
 
 ### Consequence
 
-All continued-fraction conclusions that required `A=ord_X(2)*q`, including the former `10^37` barrier, are retracted.
+All conclusions requiring `A=ord_X(2)*q`, including the former `10^37`
+barrier, remain retracted.
 
 Audit files:
 
@@ -65,11 +56,12 @@ tools/verify_continued_fraction_barrier.py
 tests/test_continued_fraction_barrier.py
 ```
 
-The current valid finite barrier is independent of this discarded condition.
+The current finite barrier is independent of this discarded premise.
 
-## 2. Published Mersenne-cycle claim not accepted as a project theorem
+## 2. Published Mersenne-cycle claim not accepted
 
-A literature claim that certain Mersenne multipliers have only the trivial positive cycle is not currently usable. A key supporting lemma admits the counterexample
+A literature claim that certain Mersenne multipliers have only the trivial
+positive cycle is not currently usable. A supporting lemma admits
 
 ```text
 m=3, q=7, k=9, c=2:
@@ -78,7 +70,8 @@ m=3, q=7, k=9, c=2:
 
 although `9` is not a power of two.
 
-Until the external argument is repaired and independently checked, it may be used only as a source of ideas, not as a theorem in this project.
+Until the external proof is repaired and independently checked, it may be used
+only as a source of ideas.
 
 File:
 
@@ -86,21 +79,17 @@ File:
 docs/LITERATURE_AUDIT_SANTOS.md
 ```
 
-## 3. Retracted least-source flow-completion charge
+## 3. Retracted least-source endpoint identification
 
 ### Discarded claim
 
-For each possible target `n`, let `d_X(n)` be the least admissible full-order predecessor layer and let `u_min(n)` be the source label at that layer. A former argument used disjointness of the listed `u_min(n)` labels and target labels to charge an additional circulation-completion cost.
+For a target `n`, let `d_X(n)` be its least admissible full-order predecessor
+layer and `u_min(n)` the source label at that layer. A former argument treated
+`u_min(n)` as the source endpoint selected by the actual cycle and used the
+listed least-source labels directly in a circulation-balance argument.
 
-The scalar item cost
-
-```text
-u_min(n)-1+s(n)-1+2*O*d_X(n)
-```
-
-is a valid lower bound on the cost of an edge entering `n`: every higher layer adds `2*O`, more than any possible reduction of the source-label term.
-
-However, `u_min(n)` is not necessarily the source label of the actual cycle edge. A target may be entered through a higher admissible layer with a different source label. Therefore minimum-cost source labels cannot be treated as actual circulation endpoints.
+This is invalid. A target may be entered through a higher admissible layer with
+a different source label.
 
 ### Explicit regression example
 
@@ -123,70 +112,116 @@ q=118 -> source label 188856312470187702.
 
 Thus one target does not determine one actual source endpoint.
 
-### Numerical status
+### What remains valid
 
-The following conclusions remain invalid and retracted:
+The scalar least-layer cost
 
 ```text
+u_min(n)-1+s(n)-1+2*O*d_X(n)
+```
+
+is a valid lower bound on the ordinary symmetric cost: every higher layer adds
+`2O`, more than any possible reduction of the source-label term. What is not
+valid is using `u_min(n)` as an actual endpoint in a flow equation.
+
+### Numerical history and repair
+
+The invalid proof originally claimed
+
+```text
+small reciprocal bound 0.085226905,
 combined bound through 60000000 equal to 0.086412209,
 811320 mandatory values above 60000000,
 805063 mandatory zero-layer values above 60000000.
 ```
 
-The retained valid figures are
+Those conclusions were retracted when the endpoint error was found.
 
-```text
-combined bound through 60000000 equal to 0.086609720,
-799470 mandatory values above 60000000,
-793213 mandatory zero-layer values above 60000000.
-```
+Later, the same numerical values were independently re-established by a
+different proof: a signed-label potential is defined on all labels, telescopes
+around the **actual** cycle, and proves that the least admissible layer
+minimizes the modified scalar cost without identifying its source with the
+actual source.
 
-The numerical small-value bound
-
-```text
-0.085226905
-```
-
-was originally claimed using the invalid endpoint-identification argument above, so that original proof remains retracted.  The same numerical value has since been independently re-established by a different argument: a signed potential on all full labels whose contribution telescopes around the actual cycle and whose modified edge costs remain nonnegative for every admissible layer.
-
-The recovered theorem is recorded separately in
+Files:
 
 ```text
 docs/SIGNED_LABEL_POTENTIAL_DUAL.md
 tools/verify_signed_label_potential_dual.py
+docs/SIGNED_LABEL_SPLIT_RANGE_DUAL.md
+tools/verify_signed_label_split_range_dual.py
 ```
 
-This recovery does not rehabilitate the discarded premise and does not recover the stronger sixty-million figures.
-
-Audit files for the invalid argument:
+The recovered numbers are now superseded by stronger valid bounds:
 
 ```text
-docs/FLOW_BALANCED_TWO_CONSTRAINT_DUAL.md
-tools/verify_flow_balanced_two_constraint_dual.py
+sum_(n_i<=60000000)1/n_i <0.086152495,
+
+p=...193:
+  values above 60000000 >=25237969,
+  zero-layer >=25231712;
+
+p=...195:
+  values above 60000000 >=826903,
+  zero-layer >=820646.
 ```
 
-A future circulation dual must keep every admissible layer as a separate edge choice, or use a genuine potential whose sum telescopes for the actual chosen edges.
+The original endpoint-identification proof remains permanently invalid even
+though some of its numerical outputs were later recovered by a new theorem.
+Never cite the old proof as justification.
 
-## 4. Claims that are evidence but not proofs
+## 4. Finite-state positive-mean zero-layer route closed
+
+A proposed future route sought a fixed finite quotient and a telescoping
+inequality with a positive constant cost on every zero-layer transition.
+
+Exact valuation-word coding and CRT produce arbitrarily long positive orbit
+segments with
+
+```text
+q=0,
+source label=target label=1,
+transition cost=0
+```
+
+on every edge. Any fixed finite projection repeats a state on a sufficiently
+long such segment. Summing a positive-mean telescoping inequality between the
+repeated states would give `0>=delta*L`, a contradiction.
+
+Thus no fixed finite-state positive-minimum-mean certificate of this form can
+exist. This is a no-go theorem, not an error in a committed proof.
+
+Files:
+
+```text
+docs/FINITE_STATE_ZERO_LAYER_POTENTIAL_NO_GO.md
+tools/verify_finite_state_zero_layer_no_go.py
+```
+
+## 5. Claims that are evidence but not proofs
 
 The following must never be promoted to a proof of divergence:
 
 - a trajectory becoming extremely large after finitely many steps;
 - positive average drift in a random model;
-- a finite cycle barrier, regardless of its size;
+- a finite cycle barrier, regardless of size;
 - existence of arbitrarily long finite growing blocks;
-- existence of compatible 2-adic regeneration targets without an ordinary positive integer realization;
-- a cycle that avoids `1`.
+- existence of compatible 2-adic regeneration targets without an ordinary
+  positive integer realization;
+- a cycle that avoids `1`;
+- a large lower bound on the cycle maximum when the available upper theorem
+  controls only the minimum.
 
-## 5. Rules after an error is found
+## 6. Rules after an error is found
 
 When a mathematical error is discovered:
 
 1. identify the exact false premise;
 2. add a small explicit counterexample when possible;
 3. replace the old verifier by an audit or regression test;
-4. remove the invalid conclusion from `CURRENT_STATUS.md`, `VALIDATED_RESULTS.md`, and `START_HERE.md`;
+4. remove the invalid conclusion from durable status files;
 5. record the retraction here;
 6. rebuild only from the last retained valid statement.
 
-Do not delete the history of the error. Keeping a precise audit is part of reproducibility.
+Do not delete the history of an error. Precise audit history is part of
+reproducibility.
