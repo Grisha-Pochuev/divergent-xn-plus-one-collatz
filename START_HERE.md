@@ -17,115 +17,234 @@ C_X^t(n0)->+infinity.
 ```
 
 A cycle, avoidance of `1`, a finite cycle barrier, arbitrarily long finite
-growth, a positive-drift heuristic, or a huge finite trajectory is not a
-solution.
+growth, a heuristic drift, or a huge finite trajectory is not a solution.
 
 ## Read first
 
 ```text
 START_HERE.md
+docs/PROGRESS_METRICS.md
 docs/CURRENT_STATUS.md
 docs/VALIDATED_RESULTS.md
 docs/RETRACTIONS.md
-docs/NEXT_STEPS.md
-docs/SESSION_CHECKPOINT_2026-07-11_BLOCK_DESCENT_2.md
+docs/SESSION_CHECKPOINT_2026-07-11_MEASURED_HYBRID_FRONTIER.md
 run_checks.py
 ```
 
 GitHub files are the durable source of truth.
 
-## Current branch ranking
+## Measurement rule
 
-The strict problem remains open.  Work is no longer restricted to the old
-Priority 1 branch.
+Do not report one precise completion percentage. Report instead:
 
-### Branch A: Mersenne descent, currently the cleanest direct alternative
+1. strict proof gates;
+2. exact finite frontiers;
+3. reusable infinite-family structure.
 
-Main working candidate:
+For the current structured candidate, the explicit-pair gate, no-return gate,
+and general positive-orbit dichotomy are available. The decisive global gate,
+exclusion of every nontrivial positive cycle, remains open.
+
+## Branch A: structured hybrid candidate
+
+Current primary working candidate:
+
+```text
+X=2^156-9
+ =91343852333181432387730302044767688728495783927,
+n0=1.
+```
+
+### Closed facts
+
+Let `q=1093`. Then
+
+```text
+ord_q(2)=364,
+2^364==1 (mod q^2),
+q divides X exactly once.
+```
+
+The first step leaves `1`, and the Wieferich predecessor argument proves
+
+```text
+C_X^t(1)!=1 for every t>=1.
+```
+
+Every positive cycle length through
+
+```text
+6766211283939365362054096447760569535444132142
+```
+
+is impossible.
+
+The first `48` accelerated steps have the exact valuation word
+
+```text
+(3,1,2,2,5,6)^8,
+```
+
+with
+
+```text
+A_48=152,
+v2(n_48-1)=4,
+n_48>X^48/2^152.
+```
+
+The six-step map is exact:
+
+```text
+G(n)=C_X^6(n)
+ =[X^6*n+X^5+8*X^4+16*X^3+64*X^2+256*X+8192]/2^19.
+```
+
+For `n==1 (mod 2^20)`, its exact valuation word is
+`(3,1,2,2,5,6)`. If `20<=L=v2(n-1)<156`, then
+
+```text
+v2(G(n)-1)=L-19.
+```
+
+Files:
+
+```text
+docs/STRUCTURED_WIEFERICH_X156_CANDIDATE.md
+tools/verify_structured_wieferich_x156_candidate.py
+```
+
+### Permanent q-adic sieve
+
+For every value with two preceding transitions,
+
+```text
+n_(i+1)
+ ==2^(-s_i)*(1+1093*c*2^(-s_(i-1))) (mod 1093^2).
+```
+
+Thus two adjacent least labels determine the full residue modulo `1093^2`.
+Exactly
+
+```text
+364^2=132496
+```
+
+classes survive, versus `364*1093=397852` one-step output classes.
+
+Files:
+
+```text
+docs/WIEFERICH_ADJACENT_LABEL_COORDINATES.md
+tools/verify_wieferich_adjacent_label_coordinates.py
+```
+
+### Missing theorem
+
+The exact initial program ends after eight blocks. Prove either:
+
+1. a renewal theorem recreating `n==1 (mod 2^20)` often enough; or
+2. a height-credit inequality showing that all later contractions are paid for
+   by earlier proved growth; or
+3. a global harmonic contradiction using distinct cycle values and the
+   `132496` surviving classes.
+
+No current result excludes every cycle above the finite barrier.
+
+## Branch B: larger-barrier hybrid candidate
+
+```text
+X=2^260-3,
+n0=1.
+```
+
+Closed facts:
+
+- return to `1` is impossible;
+- every positive cycle length through
+
+```text
+411705206177124250394919057808668116811626612144499783251404743139246683164216
+```
+
+  is impossible;
+- the first `172` accelerated steps have exact word `(1,2)^86`;
+- `A_172=258`, `v2(n_172-1)=2`, and `n_172>X^172/2^258`;
+- a least seed entering a hypothetical cycle satisfies
+  `1<=v2(3*w-1)<=259` and begins with a growing step.
+
+Files:
+
+```text
+docs/HYBRID_WIEFERICH_NEAR_POWER_CANDIDATE.md
+tools/verify_hybrid_wieferich_near_power_candidate.py
+docs/HYBRID_INITIAL_ALTERNATING_MACROBLOCK.md
+tools/verify_hybrid_initial_alternating_macroblock.py
+```
+
+This candidate has the stronger finite barrier. Branch A has the cleaner
+repeated macroblock and is preferred for renewal work.
+
+## General near-power theorem
+
+For
+
+```text
+B=2^m,
+X=B-d,
+d odd,
+d*n-1=2^(m*k+s)*u,
+1<=s<=m-1,
+```
+
+the exact complete endpoint is
+
+```text
+C_X^(k+1)(n)=(X^(k+1)*u+2^(m-s))/d.
+```
+
+Multiple-of-`m` exceptional blocks are strictly contracting. Hence a least
+positive seed entering a hypothetical nontrivial cycle must satisfy
+
+```text
+1<=v2(d*w-1)<m
+```
+
+and its first step is strictly growing.
+
+Files:
+
+```text
+docs/NEAR_POWER_COMPLETE_BLOCKS_AND_MINIMAL_BASIN.md
+tools/verify_near_power_complete_blocks.py
+```
+
+## Branch C: Mersenne descent
+
+Candidate:
 
 ```text
 X=15,
 n0=3.
 ```
 
-No divergence or avoidance-of-`1` theorem is proved for this pair.
+Retained structure:
 
-For every Mersenne multiplier
+- complete Mersenne valuation blocks are classified;
+- every exceptional block has a strictly smaller ordinary seed with the
+  identical future tail;
+- a least seed entering a hypothetical cycle has `v2(w-1) in {1,2,3}`;
+- the second block cannot be exceptional;
+- if the second block contracts, its terminal type strictly increases.
 
-```text
-X=2^m-1,
-n-1=2^r*u,
-u odd,
-```
-
-the dynamics has an exact complete block decomposition.
-
-If
+Exact remaining contracting second-block families:
 
 ```text
-r=m*k+s,
-1<=s<=m-1,
+initial type 3: none;
+initial type 2: terminal type 3, 10<=k<=20;
+initial type 1: terminal type 2, 21<=k<=31,
+                or terminal type 3, 10<=k<=31.
 ```
-
-then the next `k+1` valuations are
-
-```text
-m,...,m,s
-```
-
-and
-
-```text
-C_X^(k+1)(n)=X^(k+1)*u+2^(m-s).
-```
-
-If instead
-
-```text
-r=m*k,
-k>=1,
-```
-
-put
-
-```text
-w=X^(k-1)*u.
-```
-
-Then
-
-```text
-C_X^k(n)=C_X(w),
-w<n.
-```
-
-Thus every exceptional Mersenne block has literally the same future tail as a
-strictly smaller ordinary integer.
-
-For `X=15`, the first possible contracting nonexceptional blocks occur only at
-
-```text
-r=43,86,129
-```
-
-for residue tails `s=3,2,1`, respectively.  Therefore every smaller
-nonexceptional block is strictly increasing, and the smallest possible input of
-an ordinary contracting block is at least
-
-```text
-2^43+1=8796093022209.
-```
-
-If a nontrivial Mersenne cycle exists and `w` is the least positive odd seed
-whose orbit enters it, then
-
-```text
-1<=v2(w-1)<m
-```
-
-and its first step is strictly increasing.  For `X=15`, only the three entrance
-types `v2(w-1)=1,2,3` remain at the well-founded bottom of a hypothetical
-basin.
 
 Files:
 
@@ -133,9 +252,13 @@ Files:
 docs/MERSENNE_COMPLETE_VALUATION_BLOCKS.md
 tools/verify_mersenne_complete_valuation_blocks.py
 docs/MERSENNE_MINIMAL_BASIN_LEMMA.md
+docs/MERSENNE_SECOND_BLOCK_ESCALATION.md
+tools/verify_mersenne_second_block_escalation.py
 ```
 
-### Branch B: digital invariant for `X=9,n0=1`
+The later-block height theorem and avoidance of `1` remain open.
+
+## Branch D: `X=9,n0=1`
 
 Define
 
@@ -144,10 +267,9 @@ A_t=sum_(j<t)v2(9*n_j+1),
 S_t=2^A_t*n_t.
 ```
 
-Then exactly
+Then
 
 ```text
-S_0=1,
 S_(t+1)=9*S_t+2^v2(S_t),
 v2(S_t)=A_t.
 ```
@@ -158,221 +280,50 @@ A proof of
 A_t<=3*t-1
 ```
 
-for every `t>=1` would imply
+for every `t>=1` would imply divergence. Large valuations require the exact
+alternating base-8 suffix `7,0,7,0,...`. The missing step is an amortized suffix
+bound.
 
-```text
-n_t>=2*(9/8)^t->+infinity.
-```
-
-Large valuations are now described exactly: a valuation at least `3k` requires
-the alternating low base-8 suffix
-
-```text
-7,0,7,0,...
-```
-
-of length `k`, read from the least significant digit.  The missing lemma is an
-amortized proof that the orbit cannot create these suffixes fast enough for the
-cumulative valuation to reach `3t`.
-
-Files:
-
-```text
-docs/X9_DIGITAL_INVARIANT_LEAD.md
-docs/FERMAT_SIGNED_DIGIT_DESCENT.md
-tools/check_x9_digital_invariant.py
-tools/verify_fermat_signed_digit_descent.py
-```
-
-### Branch C: near-power descent for `X=13`
-
-For
-
-```text
-3*n-1=2^(4*k+s)*u,
-u odd,
-s in {1,2,3},
-```
-
-the exact endpoint is
-
-```text
-C_13^(k+1)(n)=(13^(k+1)*u+2^(4-s))/3.
-```
-
-The first possible nonexceptional contractions occur at
-
-```text
-s=1: r=41,
-s=2: r=26,
-s=3: r=15.
-```
-
-Multiple-of-four tails reduce to the same `13n+1` rule on a strictly smaller
-auxiliary integer, but with a remaining division by `3`.  This makes the branch
-slightly less clean than the Mersenne branch.
-
-Files:
-
-```text
-docs/NEAR_POWER_EXCEPTIONAL_DESCENT.md
-tools/verify_near_power_exceptional_descent.py
-docs/X13_COMPLETE_VALUATION_BLOCKS.md
-tools/verify_x13_complete_valuation_blocks.py
-```
-
-### Branch D: strongest finite cycle barrier
-
-Fixed candidate:
+## Branch E: old fixed-candidate frontier
 
 ```text
 X=104350542602662257699,
 n0=1.
 ```
 
-Retained conclusions:
-
-- the orbit leaves `1` and cannot return to `1`;
-- every reached nontrivial cycle element is at least `25`;
-- every cycle length
-
-```text
-p<=177780727155637125192
-```
-
-is impossible;
-- every length through
-
-```text
-355561454311274250377
-```
-
-is impossible except
+All cycle lengths through `355561454311274250377` are excluded except
 
 ```text
 177780727155637125193,
 177780727155637125195.
 ```
 
-Use
+For the first remaining length,
 
 ```text
-O=ord_X(2)=1860810887857924950,
-a_i=s_(i+1)+O*q_i,
-Q=sum_i q_i.
+Q<=6241,
 ```
 
-For the first remaining length, harmonic packing in the `4308` surviving
-classes modulo `90594` proves
-
-```text
-Q<=6241.
-```
-
-The boundary is narrow:
-
-```text
-packing upper at Q=6241 >0.377086594,
-packing upper at Q=6242 <0.375630659,
-required finite zero-layer mass >0.375632520964.
-```
-
-This remains the strongest finite cycle-exclusion branch, but it needs a global
-distribution theorem and is not a divergence proof.
-
-Files:
-
-```text
-docs/HIGH_Q_MOD3_HARMONIC_EXCLUSION.md
-tools/verify_high_q_mod3_harmonic_exclusion.py
-```
+so `6242` integer layer totals still remain. This branch is retained, but a
+larger finite barrier is not counted as a fraction of the infinite proof.
 
 ## Literature audits
 
-Do not use the published Mersenne-cycle theorem in Santos (2020).  Its proof
-contains a false divisibility lemma, with the recorded counterexample
+Do not use:
 
-```text
-m=3,
-q=7,
-k=9,
-c=2,
-7 | 9*2^2-1=35,
-```
-
-although `9` is not a power of two.
-
-Do not use the claimed `17%` divergent proportion for `5x+1` in Tremblay
-(2021).  Endpoint growth does not imply that all intermediate values stayed
-above the start.  The smallest counterexample is
-
-```text
-2 -> 1 -> 3 -> 8.
-```
-
-It has two odd steps among three, so `5^2>2^3` and the endpoint grows, but its
-stopping time is already `1`.
+- the Santos Mersenne-cycle proof; its divisibility lemma has an explicit
+  counterexample;
+- the Tremblay `5x+1` divergent-proportion claim; endpoint growth was confused
+  with finite stopping-time survival.
 
 Files:
 
 ```text
 docs/LITERATURE_AUDIT_SANTOS.md
 docs/LITERATURE_AUDIT_TREMBLAY_5X1.md
-tools/verify_tremblay_5x1_audit.py
 ```
 
-## Closed or invalid routes
-
-Do not repeat:
-
-- the false condition `2^A==1 (mod X)`;
-- identifying the least-cost predecessor source with the actual cycle source;
-- finite trajectory height as evidence of divergence;
-- forbidden finite-word searches on the `2154` small classes;
-- a fixed finite-state positive-minimum-mean zero-layer potential;
-- arbitrary finite growing macroblock programs without an ordinary infinite
-  realization;
-- blind enlargement of trajectory or representative cutoffs.
-
-Arbitrarily long realizable zero-cost finite words show that the obstruction
-must be global or value-dependent.
-
-## Exact next work
-
-### First target: close the Mersenne basin descent
-
-For `X=15`, let `w` be the least seed entering a hypothetical nontrivial cycle.
-Only
-
-```text
-w=2*u+1,
-w=4*u+1,
-w=8*u+1
-```
-
-remain.  Use their exact first images and the identical-tail replacement to
-prove one of the following:
-
-1. a strictly smaller positive seed enters the same cycle; or
-2. the orbit is forced into a nonexceptional tail of depth at least `43`.
-
-Closing all three entrance types would substantially advance, and may close,
-the Mersenne cycle branch.
-
-### Second target: exclude return to `1`
-
-If nontrivial Mersenne cycles are excluded, prove that one explicit seed,
-preferably `(X,n0)=(15,3)`, never reaches the trivial fixed point.  Analyze the
-backward tree of `1`, whose first layer consists of base-16 repunits, together
-with the complete block descent.  Do not substitute a long forward scan.
-
-### Parallel targets
-
-- build an amortized signed-suffix potential for `X=9,n0=1`;
-- improve the exact `Q=6241` packing boundary for the huge fixed candidate;
-- seek an unbounded height-dependent potential, not a fixed finite-state one.
-
-## Critical retractions
+## Critical retractions and closed routes
 
 Never use
 
@@ -380,24 +331,31 @@ Never use
 2^A==1 (mod X).
 ```
 
-The correct cycle relation is
+The correct cycle congruence is
 
 ```text
 2^A*product_i(n_i)==1 (mod X).
 ```
 
-Also never identify the least admissible predecessor source label with the
-source selected by the actual cycle.
+Also never:
 
-## Working rules
+- identify the least admissible predecessor source with the actual cycle source;
+- treat finite trajectory height as divergence;
+- return to forbidden finite-word searches on the old `2154` classes;
+- use a fixed finite-state positive-minimum-mean zero-layer potential;
+- treat arbitrary finite growing programs as an ordinary infinite orbit;
+- enlarge raw cutoffs without a theorem they are intended to test.
 
-- Separate theorems from evidence.
-- Test every theorem against known cycles or an explicit regression example.
-- Add an exact checker where practical.
-- Short symbolic and modular computations are allowed; large searches require
-  explicit approval.
-- Commit every rigorous result or decisive refutation separately.
-- A finite or sparse barrier is not divergence.
+## Exact next work
+
+1. Work first on renewal or height credit for `X=2^156-9`.
+2. Combine the adjacent-label `1093^2` sieve with a distinct-value harmonic
+   cycle bound.
+3. Retain the `2^260-3`, `X=15`, `X=9`, and `Q=6241` branches as independent
+   fallbacks.
+4. Commit every theorem and decisive refutation separately.
+5. Continue to report proof gates and exact frontiers, not unsupported
+   percentages.
 
 ## Reproduction
 
