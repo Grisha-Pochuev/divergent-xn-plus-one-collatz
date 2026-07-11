@@ -35,38 +35,130 @@ is impossible except
 177780727155637125195.
 ```
 
-## Full-label structure for the last two lengths
+## Full-layer and transition budgets
 
 Put
 
 ```text
-O=ord_X(2)=1860810887857924950.
+O=ord_X(2)=1860810887857924950,
+a_i=s_(i+1)+O*q_i.
 ```
 
-For every cycle edge write
+For either remaining length,
 
 ```text
-a_i=s_(i+1)+O*q_i,
-1<=s_i<=O,
-q_i>=0.
-```
-
-Then exactly
-
-```text
-A=sum_i s_i+O*sum_i q_i,
 sum_i q_i<=6257.
 ```
 
-Thus all but at most `6257` edges use the least full-order layer. A permanent predecessor sieve modulo `9` leaves `4308` of the `6462` refined small classes. Possible predecessors of a full representative satisfy
+The exact symmetric edge cost
+
+```text
+c_i=(s_i-1)+(s_(i+1)-1)+2*O*q_i
+```
+
+satisfies
+
+```text
+sum_i c_i=2*(A-p).
+```
+
+Possible predecessors of a full representative satisfy
 
 ```text
 m_q == m_0+q*63726582940809041391 (mod X).
 ```
 
-Below one million there are `5824` survivors, only `133` with zero full delay and maximum delay `347`. Through sixty million there are `358103` survivors, only `9462` with zero delay and maximum delay `558`.
+A reached predecessor must itself lie in the full output subgroup.
 
-## Reciprocal bounds retained from inverse charging
+## Cheap-transition concentration
+
+With `K=5000`, more than `97.38%` of all cycle edges satisfy
+
+```text
+q_i=0,
+s_i+s_(i+1)<=5001.
+```
+
+Every target in this cheap majority is at least
+
+```text
+781563824454394220933608138645145,
+```
+
+and the whole cheap majority contributes less than `2.216*10^(-13)` to `sum 1/n_i`.
+
+The reciprocal correction is therefore forced into the expensive transitions. Exact consequences:
+
+```text
+p=...195: at least 5 distinct expensive targets below X,
+p=...193: at least 355687 distinct expensive targets in (10^6,X).
+```
+
+Since at most `6257` positions have positive layer,
+
+```text
+p=...193: at least 349430 zero-layer expensive targets in (10^6,X).
+```
+
+For `p=...195`, the retained split-range reciprocal bound requires at least
+
+```text
+799470
+```
+
+distinct values above sixty million, at least
+
+```text
+793213
+```
+
+of which are zero-layer targets.
+
+## Repeated transition classes and exact returns
+
+One zero-layer label pair occurs at least
+
+```text
+3053943280435589
+```
+
+times in a single odd class modulo `2*X^2`. Hence every remaining hypothetical cycle has diameter at least
+
+```text
+66508995066170702555770104858896894988802023536957800776.
+```
+
+There is also one nonempty segment with
+
+```text
+length <=114286,
+total valuation <=7771435,
+endpoints equal modulo 2*X^2.
+```
+
+The higher-power repetition ladder is
+
+```text
+2-edge word: >=3114290401257 repetitions modulo 2*X^3
+3-edge word: >=2918613523 repetitions modulo 2*X^4
+4-edge word: >=2251677 repetitions modulo 2*X^5
+5-edge word: >=1500 repetitions modulo 2*X^6.
+```
+
+These bounds control the cycle maximum or diameter, not its minimum.
+
+## All-zero-layer branch
+
+If every edge has `q=0`, the four-generation inverse sieve proves
+
+```text
+p=...193: a_out<=36 and n_next>1518500249*m,
+p=...195: a_out<=39 and n_next>189812531*m,
+```
+
+where `m` is the cycle minimum. This is a strong minimum valley, but later compensating contractions remain possible.
+
+## Reciprocal bounds
 
 For the harder remaining length
 
@@ -77,179 +169,70 @@ p=177780727155637125195
 the cycle identity requires
 
 ```text
-sum_i 1/n_i > 0.099934206.
+sum_i 1/n_i >0.099934206.
 ```
 
-The retained exact bounds are
+The strongest retained small-range certificate is the signed-label potential combined with depth-three inverse charging:
 
 ```text
-n<=1000000, depth 1: <0.087551912
-n<=1000000, depth 2: <0.085634587
-n<=1000000, depth 3: <0.085243521
-n<=60000000:          <0.087618737.
+sum_(n_i<=1000000) 1/n_i <0.085226905.
 ```
 
-Hence at least `738929` distinct values above sixty million are still required.
+The signed potential is defined on all full labels and telescopes around the actual cycle; it does not identify the least-cost predecessor with the actual source.
 
-## Exact symmetric edge budget
-
-Assign to edge `i` the nonnegative cost
+The strongest retained split-range certificate is
 
 ```text
-c_i=(s_i-1)+(s_(i+1)-1)+2*O*q_i.
+sum_(n_i<=60000000) 1/n_i <0.086609720,
 ```
 
-Cycle closure gives the exact identity
+which forces `799470` values above sixty million.
+
+Audit distinction:
+
+- the original endpoint-identification proof of `0.085226905` is invalid;
+- the value is now independently re-established by `SIGNED_LABEL_POTENTIAL_DUAL`;
+- `0.086412209`, `811320`, and `805063` remain retracted.
+
+## Main current certificate files
 
 ```text
-sum_i c_i=2*(A-p).                                (E)
+docs/EXPENSIVE_SMALL_TARGET_MASS.md
+tools/verify_expensive_small_target_mass.py
+
+docs/DEEP_ZERO_LAYER_MINIMUM_SIEVE.md
+tools/verify_deep_zero_layer_minimum_sieve.py
+
+docs/TWO_CONSTRAINT_INVERSE_DUAL.md
+tools/verify_two_constraint_inverse_dual.py
+
+docs/SPLIT_RANGE_RECIPROCAL_DUAL.md
+tools/verify_split_range_reciprocal_dual.py
+
+docs/FORCED_ZERO_LAYER_POPULATIONS.md
+tools/verify_forced_zero_layer_populations.py
+
+docs/SIGNED_LABEL_POTENTIAL_DUAL.md
+tools/verify_signed_label_potential_dual.py
 ```
 
-This is the correct transition-level cost: it pays both endpoint labels and two copies of every full-order layer.
-
-Using the least feasible full predecessor for every target below one million and an exact fractional dual gives
-
-```text
-sum_(n_i<=1000000) 1/n_i < 0.087543786.
-```
-
-This is a strict depth-one improvement over the former `0.087551912`, although the older depth-two and depth-three window bounds remain numerically stronger.
-
-## Cheap-transition mass concentration
-
-With threshold
-
-```text
-K=5000,
-```
-
-identity `(E)` proves that at most
-
-```text
-4657855051477692680
-```
-
-edges have `c_i>=5000`. Therefore more than `97.38%` of every remaining hypothetical cycle has
-
-```text
-q_i=0,
-s_i+s_(i+1)<=5001.
-```
-
-There are `12502500` such ordered label pairs. Exact enumeration proves that every corresponding target is at least
-
-```text
-781563824454394220933608138645145.
-```
-
-Consequently the whole cheap part contributes less than `2.216*10^(-13)` to `sum 1/n_i`.
-
-The required reciprocal correction must therefore be concentrated in the expensive transitions. At least one expensive transition has target at most
-
-```text
-9190982840926584716
-```
-
-for length `...193`, and at most
-
-```text
-46609216582838682965
-```
-
-for length `...195`. Both are strictly below `X`.
-
-## Massive repeated transition class
-
-Using the sharper threshold `K=197`, at least
-
-```text
-59561055798335280522
-```
-
-edges are zero-layer edges with adjacent-label sum at most `198`. Only `19503` ordered pairs are possible, so one exact pair occurs at least
-
-```text
-3053943280435589
-```
-
-times.
-
-A zero-layer pair determines one odd target class modulo `2*X^2`; distinct pairs determine distinct classes. Hence every remaining hypothetical cycle has diameter at least
-
-```text
-66508995066170702555770104858896894988802023536957800776.
-```
-
-## Short exact return
-
-The repeated occurrences divide the cycle into cyclic gaps. Averaging both gap length and total valuation proves that one nonempty segment satisfies
-
-```text
-length L <= 114286,
-total valuation S <= 7771435,
-```
-
-and its endpoints lie in the same odd class modulo `2*X^2`. Both endpoints are occurrences of the same cheap transition pair.
-
-This is now a bounded exact-return witness inside either enormous hypothetical cycle.
-
-## Multi-edge repetition ladder
-
-The exact edge budget also forces repeated all-cheap words:
-
-```text
-2-edge word: >=3114290401257 repetitions, same class mod 2*X^3
-3-edge word: >=2918613523 repetitions, same class mod 2*X^4
-4-edge word: >=2251677 repetitions, same class mod 2*X^5
-5-edge word: >=1500 repetitions, same class mod 2*X^6.
-```
-
-The five-edge result alone forces cycle diameter at least
-
-```text
-3870792567252275975939498201310492491155314740805796060324781763695205605253434152368864087556133785129469874414691399795398.
-```
-
-These are lower bounds on the maximum/diameter, not on the minimum. They therefore do not yet contradict the retained logarithmic theorem, which currently bounds the minimum cycle element.
-
-## Main new certificate files
-
-```text
-docs/MASSIVE_REPEATED_TRANSITION_CLASS.md
-tools/verify_massive_repeated_transition_class.py
-docs/CHEAP_TRANSITION_MASS_CONCENTRATION.md
-tools/verify_cheap_transition_mass_concentration.py
-docs/SHORT_FULL_CLASS_RETURN.md
-tools/verify_short_full_class_return.py
-docs/SYMMETRIC_EDGE_COST_DUAL.md
-tools/verify_symmetric_edge_cost_dual.py
-docs/MULTI_EDGE_REPETITION_LADDER.md
-tools/verify_multi_edge_repetition_ladder.py
-```
-
-The earlier sparse-window, predecessor-delay, inverse-window, zero-layer-block, and subgroup certificates remain part of `run_checks.py`.
+The earlier sparse-window, subgroup, predecessor-delay, inverse-window, transition-concentration, and repetition certificates remain retained and are registered in `run_checks.py`.
 
 ## Not established
 
 - No explicit orbit is proved divergent.
 - The two displayed cycle lengths are not excluded.
 - Cycles beyond the sparse cap remain possible.
-- The cheap/high mass and the expensive/small mass have not yet been coupled into a contradiction.
-- The modular height ladder bounds maxima, while the effective logarithmic ceiling currently bounds minima.
+- The mandatory zero-layer populations have not yet been converted into a global contradiction.
+- The height ladder bounds maxima, while the logarithmic theorem currently bounds minima.
 - Finite certificates do not prove divergence.
 
 ## Exact next step
 
-The best current target is the expensive/small part, not a larger raw cutoff.
-
-1. Use the exact symmetric edge cost on inverse windows of depth at least two, or a two-constraint rational dual combining endpoint and circulation costs.
-2. Couple the forced target below `X` to its exact full predecessor delay and the global height identities.
-3. Exploit the short return modulo `2*X^2` through the affine iterate formula; a useful result must add information beyond the terminal labels, which alone are tautological.
-4. Seek a rigorous distribution bound for zero-layer pair classes modulo `X^2`, rather than enumerating more trajectory values.
-
-## Retraction
-
-The former `10^37` claim remains retracted because it assumed `2^A==1 mod X`. The correct congruence retains `product(n_i)`.
+1. Extend the valid signed-label potential to a larger target range while keeping every admissible layer logically separate.
+2. Alternatively construct a finite-state potential on zero-layer predecessor carry states.
+3. Couple the mandatory zero-layer populations to the global reciprocal or height identities.
+4. Do not enlarge raw trajectory or representative cutoffs blindly.
 
 ## Reproduction
 
