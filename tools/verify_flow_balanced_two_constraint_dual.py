@@ -1,67 +1,25 @@
 #!/usr/bin/env python3
-"""Verify the flow-balanced depth-three reciprocal dual exactly."""
+"""Audit the retracted flow-completion endpoint identification."""
 from __future__ import annotations
 
-from fractions import Fraction
-from functools import lru_cache
+from verify_index_eight_small_sieve import M, ORDER_P, P, X
+from verify_two_generation_predecessor_cost import O, output_label_map
+from verify_two_generation_small_reciprocal import full_label, pohlig_hellman_data
 
-from verify_index_eight_small_sieve import (
-    CUTOFF,
-    D,
-    H,
-    M,
-    ORDER_P,
-    P,
-    X,
-    class_rep,
-    log_bounds,
-    verify_group_data,
+TARGET = 25
+EXPECTED_TARGET_LABEL = 1208196370322173126
+EXPECTED_PREDECESSORS = (
+    (50, 41063362403884138924, 1417145250304345366),
+    (58, 29123312917045181557, 1528337129047052390),
+    (72, 86491133267073699439, 1031609925039487316),
+    (114, 49893509111834737687, 246249236019459722),
+    (118, 96098755669746387853, 188856312470187702),
 )
-from verify_two_generation_predecessor_cost import (
-    O,
-    R,
-    initial_predecessor_state,
-    one_generation_admissible,
-    output_label_map,
-    state_distances,
-)
-from verify_two_generation_small_reciprocal import (
-    full_label,
-    pohlig_hellman_data,
-)
-
-TARGET = 177780727155637125195
-BUDGET = 11644637628694231700273
-LAYER_BUDGET = 6257
-INF = LAYER_BUDGET + 1
-EXPECTED_SURVIVORS = 5824
-EXPECTED_H3_MAX = 519
-EXPECTED_H3_SUM = 685875
-EXPECTED_FULL = 204
-EXPECTED_BOUNDARY = (
-    14771,
-    68673493425694210668547920,
-    882187649335005189,
-    1320942428550803069,
-    124,
-    158,
-    296654683229557157664,
-    465887360344537004112,
-)
-MIDDLE_UPPER = Fraction(137_062_462, 100_000_000_000)
 
 
 def verify() -> None:
-    verify_group_data()
-    assert BUDGET == (133 * TARGET + 1) // 2 - TARGET
-
     small_labels = output_label_map()
     allowed_mod_m = set(small_labels)
-    admissible = [
-        one_generation_admissible(state, small_labels)
-        for state in range(R)
-    ]
-    distances = state_distances(admissible)
     tables, coefficients = pohlig_hellman_data()
 
     def is_full(value: int) -> bool:
@@ -70,183 +28,49 @@ def verify() -> None:
             and pow(value % P, ORDER_P, P) == 1
         )
 
-    def label_of_output(value: int) -> int:
-        small = small_labels.get(value % M)
-        assert small is not None and pow(value % P, ORDER_P, P) == 1
-        return full_label(value % X, small, tables, coefficients)
+    target_label = full_label(
+        TARGET,
+        small_labels[TARGET % M],
+        tables,
+        coefficients,
+    )
+    assert target_label == EXPECTED_TARGET_LABEL
 
-    max_depth = 3
-    moduli = [1] + [X**power for power in range(1, max_depth + 2)]
-    multipliers: dict[int, int] = {}
-    increments: dict[int, int] = {}
-    for depth in range(1, max_depth + 1):
-        power = pow(2, O, moduli[depth + 1])
-        assert (power - 1) % X == 0
-        multipliers[depth] = power % moduli[depth]
-        increments[depth] = ((power - 1) // X) % moduli[depth]
+    modulus = X * X
+    numerator = (
+        pow(2, target_label, modulus) * TARGET - 1
+    ) % modulus
+    assert numerator % X == 0
+    predecessor = (numerator // X) % X
 
-    def base_predecessor(target: int, label: int, depth: int) -> int:
-        modulus = moduli[depth + 1]
-        numerator = (
-            pow(2, label, modulus) * (target % modulus) - 1
-        ) % modulus
-        assert numerator % X == 0
-        return (numerator // X) % moduli[depth]
+    power = pow(2, O, modulus)
+    assert (power - 1) % X == 0
+    step = ((power - 1) // X) % X
 
-    @lru_cache(maxsize=None)
-    def minimum_layer_sum(
-        target: int,
-        label: int,
-        depth: int,
-        limit: int,
-    ) -> int:
-        predecessor = base_predecessor(target, label, depth)
-        best = INF
-        for q in range(limit + 1):
-            if q >= best:
-                break
-            residue = predecessor % X
-            if is_full(residue):
-                if depth == 1:
-                    candidate = q
-                else:
-                    next_label = label_of_output(residue)
-                    remaining = limit - q
-                    sub = minimum_layer_sum(
-                        predecessor,
-                        next_label,
-                        depth - 1,
-                        remaining,
-                    )
-                    candidate = INF if sub > remaining else q + sub
-                if candidate < best:
-                    best = candidate
-                    if best == 0:
-                        break
-            predecessor = (
-                multipliers[depth] * predecessor + increments[depth]
-            ) % moduli[depth]
-        return best
+    found: list[tuple[int, int, int]] = []
+    for q in range(119):
+        if is_full(predecessor):
+            source_label = full_label(
+                predecessor,
+                small_labels[predecessor % M],
+                tables,
+                coefficients,
+            )
+            found.append((q, predecessor, source_label))
+        predecessor = (predecessor + step) % X
 
-    modulus_x2 = X * X
-    full_power = pow(2, O, modulus_x2)
-    full_step = ((full_power - 1) // X) % X
+    assert tuple(found[:5]) == EXPECTED_PREDECESSORS
+    assert len({source for _q, _pred, source in found[:5]}) == 5
 
-    items: list[tuple[int, int, int, int, int, int, int, int]] = []
-    target_labels: set[int] = set()
-    source_labels: set[int] = set()
-    genuine = 0
-    dead = 0
-    h3_sum = 0
-    h3_max = 0
-
-    for t in range(1, H + 1):
-        rho = class_rep(t)
-        for n in range(rho, CUTOFF + 1, D):
-            if pow(n, ORDER_P, P) != 1:
-                continue
-            genuine += 1
-            target_label = full_label(n, t, tables, coefficients)
-            state = initial_predecessor_state(n, target_label)
-            if distances[state] < 0:
-                dead += 1
-                continue
-
-            h3 = minimum_layer_sum(n, target_label, 3, LAYER_BUDGET)
-            assert h3 <= LAYER_BUDGET
-            h3_sum += h3
-            h3_max = max(h3_max, h3)
-            c3 = 3 * (target_label - 1) + O * h3
-
-            numerator = (
-                pow(2, target_label, modulus_x2) * n - 1
-            ) % modulus_x2
-            assert numerator % X == 0
-            predecessor = (numerator // X) % X
-            delay = 0
-            while not is_full(predecessor):
-                predecessor = (predecessor + full_step) % X
-                delay += 1
-                assert delay <= LAYER_BUDGET
-
-            source_label = label_of_output(predecessor)
-            base = source_label + target_label - 2
-            flow_cost = 2 * base + 2 * O * delay
-            combined = 176770 * c3 + 34845 * flow_cost
-
-            assert target_label not in target_labels
-            assert source_label not in source_labels
-            target_labels.add(target_label)
-            source_labels.add(source_label)
-
-            items.append((
-                n,
-                combined,
-                target_label,
-                source_label,
-                delay,
-                h3,
-                c3,
-                flow_cost,
-            ))
-
-    assert genuine == 8727
-    assert dead == 2903
-    assert len(items) == EXPECTED_SURVIVORS
-    assert len(target_labels) == len(items)
-    assert len(source_labels) == len(items)
-    assert target_labels.isdisjoint(source_labels)
-    assert h3_max == EXPECTED_H3_MAX
-    assert h3_sum == EXPECTED_H3_SUM
-
-    combined_budget = 600000 * BUDGET
-    ordered = sorted(items, key=lambda item: item[0] * item[1])
-    spent = 0
-    full = 0
-    boundary = None
-    for item in ordered:
-        if spent + item[1] <= combined_budget:
-            spent += item[1]
-            full += 1
-        else:
-            boundary = item
-            break
-    assert boundary is not None
-    assert full == EXPECTED_FULL
-    assert boundary == EXPECTED_BOUNDARY
-
-    denominator = boundary[0] * boundary[1]
-    reciprocal_bound = Fraction(combined_budget, denominator)
-    positive = 0
-    for item in items:
-        n, cost = item[0], item[1]
-        if n * cost < denominator:
-            reciprocal_bound += Fraction(1, n) - Fraction(cost, denominator)
-            positive += 1
-    assert positive == EXPECTED_FULL
-    assert reciprocal_bound < Fraction(85_226_905, 1_000_000_000)
-
-    combined_sixty = Fraction(85_226_905, 1_000_000_000) + MIDDLE_UPPER
-    assert combined_sixty < Fraction(86_597_530, 1_000_000_000)
-
-    log2_lower, _ = log_bounds(Fraction(2, 1), 40)
-    energy = Fraction(X * X, 1 << 133)
-    _, eta_upper = log_bounds(energy, 4)
-    required = X * (log2_lower - TARGET * eta_upper) / 2
-    residual = required - combined_sixty
-    assert residual > Fraction(13_336_677, 1_000_000_000)
-    necessary_large = (residual * 60_000_000).numerator // (
-        residual * 60_000_000
-    ).denominator + 1
-    assert necessary_large == 800_201
-
-    print("flow-balanced two-constraint dual verified")
-    print(f"survivors={len(items)}")
-    print("source and target label sets are disjoint")
-    print(f"fractional boundary after {full} complete items")
-    print(f"small reciprocal bound approximately {float(reciprocal_bound):.15f}")
-    print(f"combined sixty-million bound approximately {float(combined_sixty):.15f}")
-    print(f"necessary values above sixty million>={necessary_large}")
+    # These different source labels lead to the same target.  Therefore the
+    # least-cost source label is not necessarily the actual circulation
+    # endpoint, which invalidates the retracted flow-completion charge.
+    print("retracted flow-completion premise audited")
+    print(f"target={TARGET}, target label={target_label}")
+    for q, pred, source in found[:5]:
+        print(f"q={q}, predecessor={pred}, source label={source}")
+    print("retained small bound=0.085239095")
+    print("retained sixty-million count=799470")
 
 
 if __name__ == "__main__":
