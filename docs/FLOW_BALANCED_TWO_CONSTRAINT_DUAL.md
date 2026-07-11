@@ -1,140 +1,69 @@
-# Flow-balanced two-constraint reciprocal dual
+# RETRACTED: flow-balanced two-constraint reciprocal dual
 
-This note strengthens the small-value reciprocal certificate for
+The former claim in this file is invalid and must not be used.
 
-```text
-p = 177780727155637125195.
-```
+## False premise
 
-Put
+For each small target `n`, the certificate chose the **least-cost admissible
+full predecessor** and denoted its source label by `u_min(n)`.  The scalar edge
+cost based on this predecessor is a valid lower bound: using a higher full
+layer adds `2*O` and cannot reduce the total edge cost.
 
-```text
-B=A-p=11644637628694231700273.
-```
+The invalid step treated `u_min(n)` as if it were the source label of the
+**actual cycle edge**.  It then used disjointness of the selected
+`u_min(n)` labels and target labels to charge an additional flow-completion
+cost.
 
-## 1. Flow-completion cost for the 5824 small edges
+But a target can have several admissible full predecessor layers.  The actual
+cycle may use a higher layer with a different source label.  Thus minimum-cost
+source labels do not describe the actual circulation endpoints, and their
+apparent imbalance need not be balanced by the rest of the cycle.
 
-For every admissible target `n<=1000000`, let
+## Explicit regression example
 
-```text
-u(n) = source full label of its least-layer predecessor,
-s(n) = target full label,
-d(n) = least full predecessor layer.
-```
-
-The exact enumeration proves:
-
-```text
-all 5824 target labels s(n) are distinct,
-all 5824 source labels u(n) are distinct,
-{u(n)} and {s(n)} are disjoint.
-```
-
-For a selected set `S` of such cycle edges, no selected source-target imbalance
-can cancel inside `S`.  The rest of the cycle must provide one incoming endpoint
-for every selected source label and one outgoing endpoint for every selected
-target label.
-
-The selected edge itself costs
+For the valid full output
 
 ```text
-C_E(n)=u(n)-1+s(n)-1+2*O*d(n).
+n = 25,
+target label = 1208196370322173126,
 ```
 
-Any flow completion costs at least one additional copy of the endpoint-label
-sum.  Therefore every selected set satisfies the additive bound
+the first admissible predecessor layers include
 
 ```text
-sum_(n in S) C_F(n) <= 2*B,                       (1)
+q=50,  source label=1417145250304345366,
+q=58,  source label=1528337129047052390,
+q=72,  source label=1031609925039487316,
+q=114, source label=246249236019459722,
+q=118, source label=188856312470187702.
 ```
 
-where
+All lead to the same target but have different actual source labels.  This is a
+direct counterexample to the endpoint identification used by the retracted
+flow argument.
+
+## Consequences
+
+The following claimed improvements are retracted:
 
 ```text
-C_F(n)=2*(u(n)+s(n)-2)+2*O*d(n).
+small bound 0.085226905,
+combined sixty-million bound 0.086412209,
+811320 mandatory values above sixty million,
+805063 mandatory zero-layer values above sixty million.
 ```
 
-This is stronger than the former symmetric edge cost on this small set.
-
-## 2. Independent depth-three cost
-
-Let `h_3(n)` be the minimum total full-order layer in an admissible three-edge
-inverse window.  The retained exact bound is
+The last retained valid figures are
 
 ```text
-C_3(n)=3*(s(n)-1)+O*h_3(n),
-sum C_3(n_i)<=3*B.                                (2)
+small bound 0.085239095,
+combined sixty-million bound 0.086609720,
+799470 mandatory values above sixty million,
+793213 mandatory zero-layer values above sixty million.
 ```
 
-## 3. Exact combined dual
-
-Use the rational normalized multiplier
-
-```text
-theta = 88385/100000
-```
-
-on (2), and the complementary multiplier on (1).  Clearing denominators gives
-
-```text
-C(n)=176770*C_3(n)+34845*C_F(n),
-sum C(n_i)<=600000*B.                             (3)
-```
-
-The exact fractional-selection dual over all `5824` candidates has its boundary
-after `204` complete items.  The boundary item is
-
-```text
-n = 14771,
-target label = 882187649335005189,
-source label = 1320942428550803069,
-least layer = 124,
-h_3 = 158,
-C_3 = 296654683229557157664,
-C_F = 465887360344537004112,
-C = 68673493425694210668547920.
-```
-
-The resulting exact rational bound is
-
-```text
-sum_(cycle values n<=1000000) 1/n
- < 0.085226905.                                   (4)
-```
-
-This improves the previous two-constraint value `0.085239095` and the original
-depth-three value `0.085243521`.
-
-## 4. Updated split-range consequence
-
-The independent symmetric middle-range certificate gives
-
-```text
-sum_(1000000<n_i<=60000000)1/n_i <0.001370625.
-```
-
-Combining with (4),
-
-```text
-sum_(n_i<=60000000)1/n_i <0.086597530.
-```
-
-Since the exact cycle interval requires more than `0.099934206877`, values above
-sixty million must contribute more than `0.013336677`.  Distinctness therefore
-forces at least
-
-```text
-800201
-```
-
-cycle values above sixty million.
-
-## 5. Significance
-
-The gain comes from a genuinely global transition condition: small selected
-edges cannot balance their own label flow.  This validates the circulation-dual
-route and suggests extending endpoint-disjoint or low-overlap charging to the
-middle range and to short inverse windows.
+The scalar symmetric edge-cost bound and the earlier two-constraint dual remain
+valid; only the extra endpoint-flow completion charge is retracted.
 
 Run
 
@@ -142,4 +71,5 @@ Run
 python tools/verify_flow_balanced_two_constraint_dual.py
 ```
 
-for the exact certificate.
+for the regression audit preventing reintroduction of the false endpoint
+identification.
