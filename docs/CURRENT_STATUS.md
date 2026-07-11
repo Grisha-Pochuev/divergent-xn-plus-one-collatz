@@ -2,9 +2,10 @@
 
 ## Strict target
 
-Find explicit odd positive `X>=5,n0` whose accelerated odd-only orbit tends to positive infinity. The strict problem is not solved.
+Find explicit odd positive `X>=5,n0` whose accelerated odd-only orbit tends to
+positive infinity. The strict problem is not solved.
 
-## Main candidate
+## Main candidate and finite frontier
 
 ```text
 X  = 104350542602662257699,
@@ -13,44 +14,31 @@ n0 = 1.
 
 The repository proves:
 
-1. the orbit cannot return to `1`;
-2. every element of a reached nontrivial cycle is at least `25`;
-3. every cycle length
-
 ```text
-p <= 177780727155637125192
+all cycle lengths p<=177780727155637125192 are impossible;
+all lengths through 355561454311274250377 are impossible except
+177780727155637125193 and 177780727155637125195.
 ```
 
-is impossible;
-4. every length through
+The orbit cannot return to `1`, and every reached nontrivial cycle element is at
+least `25`.
+
+## Exact full-layer budget
+
+Write
 
 ```text
-355561454311274250377
-```
-
-is impossible except
-
-```text
-177780727155637125193
-177780727155637125195.
-```
-
-## Full-layer and transition budgets
-
-Put
-
-```text
-O=ord_X(2)=1860810887857924950,
-a_i=s_(i+1)+O*q_i.
+a_i=s_(i+1)+O*q_i,
+O=ord_X(2)=1860810887857924950.
 ```
 
 For either remaining length,
 
 ```text
-sum_i q_i<=6257.
+Q=sum_i q_i<=6257.
 ```
 
-The exact symmetric edge cost
+The exact edge cost
 
 ```text
 c_i=(s_i-1)+(s_(i+1)-1)+2*O*q_i
@@ -62,177 +50,186 @@ satisfies
 sum_i c_i=2*(A-p).
 ```
 
-Possible predecessors of a full representative satisfy
+## Cheap versus expensive transitions
 
-```text
-m_q == m_0+q*63726582940809041391 (mod X).
-```
-
-A reached predecessor must itself lie in the full output subgroup.
-
-## Cheap-transition concentration
-
-With `K=5000`, more than `97.38%` of all cycle edges satisfy
-
-```text
-q_i=0,
-s_i+s_(i+1)<=5001.
-```
-
-Every target in this cheap majority is at least
+With threshold `K=5000`, more than `97.38%` of all edges are zero-layer edges
+with adjacent-label sum at most `5001`. Every target in this cheap majority is
+at least
 
 ```text
 781563824454394220933608138645145,
 ```
 
-and the whole cheap majority contributes less than `2.216*10^(-13)` to `sum 1/n_i`.
+and all cheap targets together contribute less than `2.216*10^(-13)` to
+`sum 1/n_i`.
 
-The reciprocal correction is therefore forced into the expensive transitions. Exact consequences:
+Thus the reciprocal correction is concentrated in expensive zero-layer
+transitions.
 
-```text
-p=...195: at least 5 distinct expensive targets below X,
-p=...193: at least 355687 distinct expensive targets in (10^6,X).
-```
+## Signed-label potential through sixty million
 
-Since at most `6257` positions have positive layer,
-
-```text
-p=...193: at least 349430 zero-layer expensive targets in (10^6,X).
-```
-
-For `p=...195`, the retained split-range reciprocal bound requires at least
+The exact modular classification through `60000000` contains
 
 ```text
-799470
+4279760 small-class candidates,
+536735 genuine full representatives,
+178632 permanent predecessor rejections,
+358103 surviving targets.
 ```
 
-distinct values above sixty million, at least
+Across all survivors:
 
 ```text
-793213
+all target full labels are distinct,
+all least-source full labels are distinct,
+the two label sets are disjoint.
 ```
 
-of which are zero-layer targets.
+This defines a global signed-label potential. It telescopes on the actual cycle
+and proves a valid lower cost for every actual layer choice; it does not treat
+the least-cost source as the actual source.
 
-## Repeated transition classes and exact returns
+## Integral-Q and coupled-range reciprocal bounds
 
-One zero-layer label pair occurs at least
+Keeping `Q` as an integer separates the exact resources
+
+```text
+sum(s_i-1)=B-O*Q,
+sum h_3(n_i)<=3Q,
+sum signed_potential_cost<=2B.
+```
+
+Two rational duals cover all `Q=0,...,6257`. Coupling the small and middle
+ranges through their common `Q` gives the strongest retained finite-range
+bound:
+
+```text
+sum_(n_i<=60000000)1/n_i <0.086152495.
+```
+
+The global maximum of the certificate occurs at
+
+```text
+Q=5841.
+```
+
+The mandatory tails are therefore
+
+```text
+p=177780727155637125193:
+  values above 60000000 >=25237969,
+  zero-layer values there >=25231712;
+
+p=177780727155637125195:
+  values above 60000000 >=826903,
+  zero-layer values there >=820646.
+```
+
+For the first length, at least
+
+```text
+22537952
+```
+
+distinct expensive zero-layer targets lie in
+
+```text
+60000000<n<X.
+```
+
+## Repetition and height structure
+
+One zero-layer transition pair occurs at least
 
 ```text
 3053943280435589
 ```
 
-times in a single odd class modulo `2*X^2`. Hence every remaining hypothetical cycle has diameter at least
+times in one odd class modulo `2*X^2`. It forces an enormous diameter and a
+nonempty segment with
 
 ```text
-66508995066170702555770104858896894988802023536957800776.
-```
-
-There is also one nonempty segment with
-
-```text
-length <=114286,
-total valuation <=7771435,
+length<=114286,
+total valuation<=7771435,
 endpoints equal modulo 2*X^2.
 ```
 
-The higher-power repetition ladder is
+Repeated words are also forced modulo `2*X^3` through `2*X^6`.
 
-```text
-2-edge word: >=3114290401257 repetitions modulo 2*X^3
-3-edge word: >=2918613523 repetitions modulo 2*X^4
-4-edge word: >=2251677 repetitions modulo 2*X^5
-5-edge word: >=1500 repetitions modulo 2*X^6.
-```
-
-These bounds control the cycle maximum or diameter, not its minimum.
-
-## All-zero-layer branch
-
-If every edge has `q=0`, the four-generation inverse sieve proves
+If every edge has `q=0`, the four-generation minimum sieve proves
 
 ```text
 p=...193: a_out<=36 and n_next>1518500249*m,
-p=...195: a_out<=39 and n_next>189812531*m,
+p=...195: a_out<=39 and n_next>189812531*m.
 ```
 
-where `m` is the cycle minimum. This is a strong minimum valley, but later compensating contractions remain possible.
+These are not contradictions because later contractions remain possible.
 
-## Reciprocal bounds
+## Finite-state no-go
 
-For the harder remaining length
+Arbitrarily long positive orbit segments exist with
 
 ```text
-p=177780727155637125195
+q=0,
+source label=target label=1,
+edge cost=0.
 ```
 
-the cycle identity requires
+Therefore no fixed finite quotient can support a universal telescoping
+inequality with a positive constant mean cost on all zero-layer transitions.
+The proposed finite-state minimum-mean route is closed.
+
+## Main current certificates
 
 ```text
-sum_i 1/n_i >0.099934206.
+docs/SIGNED_LABEL_SPLIT_RANGE_DUAL.md
+tools/verify_signed_label_split_range_dual.py
+
+docs/INTEGRAL_LAYER_BUDGET_DUAL.md
+tools/verify_integral_layer_budget_dual.py
+
+docs/COUPLED_Q_SPLIT_RANGE_DUAL.md
+tools/verify_coupled_q_split_range_dual.py
+
+docs/BOTH_LENGTHS_SPLIT_RANGE_TAIL.md
+tools/verify_both_lengths_split_range_tail.py
+
+docs/EXPENSIVE_ZERO_LAYER_TAIL.md
+tools/verify_expensive_zero_layer_tail.py
+
+docs/FIRST_LENGTH_FINITE_ZERO_LAYER_MASS.md
+tools/verify_first_length_finite_zero_layer_mass.py
+
+docs/FINITE_STATE_ZERO_LAYER_POTENTIAL_NO_GO.md
+tools/verify_finite_state_zero_layer_no_go.py
 ```
 
-The strongest retained small-range certificate is the signed-label potential combined with depth-three inverse charging:
-
-```text
-sum_(n_i<=1000000) 1/n_i <0.085226905.
-```
-
-The signed potential is defined on all full labels and telescopes around the actual cycle; it does not identify the least-cost predecessor with the actual source.
-
-The strongest retained split-range certificate is
-
-```text
-sum_(n_i<=60000000) 1/n_i <0.086609720,
-```
-
-which forces `799470` values above sixty million.
-
-Audit distinction:
-
-- the original endpoint-identification proof of `0.085226905` is invalid;
-- the value is now independently re-established by `SIGNED_LABEL_POTENTIAL_DUAL`;
-- `0.086412209`, `811320`, and `805063` remain retracted.
-
-## Main current certificate files
-
-```text
-docs/EXPENSIVE_SMALL_TARGET_MASS.md
-tools/verify_expensive_small_target_mass.py
-
-docs/DEEP_ZERO_LAYER_MINIMUM_SIEVE.md
-tools/verify_deep_zero_layer_minimum_sieve.py
-
-docs/TWO_CONSTRAINT_INVERSE_DUAL.md
-tools/verify_two_constraint_inverse_dual.py
-
-docs/SPLIT_RANGE_RECIPROCAL_DUAL.md
-tools/verify_split_range_reciprocal_dual.py
-
-docs/FORCED_ZERO_LAYER_POPULATIONS.md
-tools/verify_forced_zero_layer_populations.py
-
-docs/SIGNED_LABEL_POTENTIAL_DUAL.md
-tools/verify_signed_label_potential_dual.py
-```
-
-The earlier sparse-window, subgroup, predecessor-delay, inverse-window, transition-concentration, and repetition certificates remain retained and are registered in `run_checks.py`.
+The earlier sparse-window, subgroup, predecessor-delay, inverse-window,
+transition-concentration, repetition, and audit certificates remain retained.
 
 ## Not established
 
 - No explicit orbit is proved divergent.
 - The two displayed cycle lengths are not excluded.
 - Cycles beyond the sparse cap remain possible.
-- The mandatory zero-layer populations have not yet been converted into a global contradiction.
-- The height ladder bounds maxima, while the logarithmic theorem currently bounds minima.
+- The forced expensive zero-layer populations have not yet been bounded by a
+  sufficiently strong global distribution theorem.
+- The height ladder controls maxima, while the logarithmic theorem currently
+  controls minima.
 - Finite certificates do not prove divergence.
 
 ## Exact next step
 
-1. Extend the valid signed-label potential to a larger target range while keeping every admissible layer logically separate.
-2. Alternatively construct a finite-state potential on zero-layer predecessor carry states.
-3. Couple the mandatory zero-layer populations to the global reciprocal or height identities.
-4. Do not enlarge raw trajectory or representative cutoffs blindly.
+The remaining node is a global distribution/height problem:
+
+1. bound the count or harmonic sum of expensive zero-layer pair representatives
+   in `(60000000,X)`;
+2. exploit the exact Fermat-quotient predecessor formula with explicit usable
+   constants;
+3. or construct an unbounded value-dependent potential, not a fixed finite
+   positive-mean automaton.
+
+Do not enlarge raw trajectory or representative cutoffs blindly.
 
 ## Reproduction
 
