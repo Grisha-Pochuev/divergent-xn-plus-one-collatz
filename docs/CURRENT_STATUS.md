@@ -10,7 +10,7 @@ C_X(n)=(X*n+1)/2^v2(X*n+1)
 
 tends to positive infinity. The strict problem remains open.
 
-## Proof gates for the primary candidate
+## Primary candidate and proof gates
 
 ```text
 k=500,
@@ -26,53 +26,44 @@ n0=1.
 G1 explicit pair: closed;
 G2 leaves 1 and never returns: closed;
 G3 every nontrivial positive cycle excluded: open;
-G4 positive bounded-orbit dichotomy: closed as a general lemma;
-G5 final independently checked certificate: partial, waiting for G3.
+G4 bounded positive orbit implies eventual cycle: closed;
+G5 final independent certificate: partial, waiting for G3.
 ```
 
-This candidate replaced `X=2^3803-4162203` on 2026-07-12. It has both a
-larger finite cycle barrier and exponentially smaller harmonic-packing
-constants, while keeping an exact exceptional-source certificate.
+## Permanent arithmetic structure
 
-## General Mersenne-divisor Wieferich family
-
-Let
-
-```text
-N=2^k-1,
-m==r (mod k),
-d=2^r+t*N,
-X=2^m-d.
-```
-
-If `d` is odd, `d<2^(m-1)`, `364` does not divide `k`, and `1093||X`, then:
+The following are proved exactly:
 
 - `N|X`;
+- `1093||X`;
 - the orbit from `1` leaves `1` and never returns;
-- every output lies in exactly `k` classes modulo `N`;
-- after combining with the `1093^2` adjacent-label coordinate, every cycle
-  value lies in exactly
+- every output lies in one of `500` classes modulo `N`;
+- combining them with the `1093^2` adjacent-label coordinate gives exactly
 
 ```text
-K=364*lcm(k,364)
+K=16562000
 ```
 
   classes modulo
 
 ```text
-M=N*1093^2;
+M=(2^500-1)*1093^2;
 ```
 
-- the retained density and harmonic coefficients decrease exponentially with
-  `k`;
-- the elementary finite barrier can be made arbitrarily large by increasing
-  `m-k`.
+- every hypothetical cycle value is greater than `N`;
+- the harmonic constants satisfy
 
-For every admissible `k,m,r`, a parity-correct `t<2*1093^2` with `1093||X`
-exists after avoiding at most one lift modulo `1093^2`.
+```text
+C0<10^(-147),
+K/(2*M)<10^(-149),
+```
 
-This is a reusable infinite-family theorem. It also proves that merely enlarging
-the modulus or finite barrier is not the missing final idea.
+  and every cycle obeys
+
+```text
+0<p*delta-D
+ <[C0+K*H_(ceil(p/K))/(2*M)]/(X*ln(2)).
+```
 
 Files:
 
@@ -81,162 +72,38 @@ docs/MERSENNE_DIVISOR_WIEFERICH_FAMILY.md
 tools/verify_mersenne_divisor_wieferich_family.py
 ```
 
-## Retained structure for the primary candidate
+## Exact finite cycle barrier
 
-### No return to `1`
-
-The inequalities
+For a hypothetical cycle,
 
 ```text
-2^4500<X+1<2^4501
+D=4501*p-A>=1.
 ```
 
-show that the first accelerated step leaves `1`. Every accelerated output is
-coprime to `1093`. If an output `y` mapped to `1`, then
+The product inequality gives
 
 ```text
-X*y+1=2^a.
+p>2*X/(3*d),
 ```
 
-The exact order `364` and the Wieferich congruence modulo `1093^2` force
-`1093^2|X*y`. Since `1093||X`, this would imply `1093|y`, a contradiction.
-
-### Exact one-label sieve
-
-Because
-
-```text
-N=2^500-1
-```
-
-divides `X`, every accelerated output satisfies
-
-```text
-n_(i+1)==2^(-a_i) (mod N).
-```
-
-The order of `2` modulo `N` is exactly `500`, so only the `500` classes
-
-```text
-1,2,4,...,2^499 (mod N)
-```
-
-can occur. Since cycle values are odd and cannot equal `1`, their least allowed
-representatives are
-
-```text
-1+2*N,
-N+2,
-N+4,
-...,
-N+2^499.
-```
-
-In particular every hypothetical cycle value satisfies
-
-```text
-n_i>N=2^500-1.
-```
-
-### Combined permanent sieve
-
-The current valuation labels modulo `500` and `364` must agree modulo
-
-```text
-gcd(500,364)=4.
-```
-
-Combining the one-label coordinate with the `1093^2` adjacent-label coordinate
-gives exactly
-
-```text
-K=16562000
-```
-
-permanent classes modulo
-
-```text
-M=(2^500-1)*1093^2.
-```
-
-Their density is between `10^143` and `10^144` times smaller than for the
-previous candidate `X=2^3803-4162203`.
-
-### Global harmonic packing
-
-The least allowed representatives of the `500` one-label classes satisfy
-
-```text
-S_500<500/N.
-```
-
-Let
-
-```text
-C0=(500/N)*(1+H_33124/2).
-```
-
-Exact rational arithmetic proves
-
-```text
-10^(-148)<C0<10^(-147),
-10^(-150)<K/(2*M)<10^(-149).
-```
-
-Every hypothetical positive cycle of length `p` therefore obeys
-
-```text
-sum_i 1/n_i
- <C0+K*H_(ceil(p/K))/(2*M).
-```
-
-With
-
-```text
-D=4501*p-A,
-delta=log2(2^4501/X),
-```
-
-the exact cycle product gives the infinite-family restriction
-
-```text
-0<p*delta-D
- <[C0+K*H_(ceil(p/K))/(2*M)]/(X*ln(2)).
-```
-
-### Finite cycle barrier
-
-The standard near-power product inequalities give
-
-```text
-D>=1,
-D<3*p*d/(2*X),
-```
-
-and hence
-
-```text
-p>2*X/(3*d).
-```
-
-For the primary candidate,
+with
 
 ```text
 10^1201<floor(2*X/(3*d))<10^1202.
 ```
 
-This remains a finite barrier, not a proof of divergence.
+This is a finite barrier, not a divergence proof.
 
-### Exact exceptional-source floor
+## Exact exceptional-source floor
 
-The exceptional condition
+Every exceptional source satisfies
 
 ```text
-v2(d*n-1)=4501
+v2(d*n-1)=4501.
 ```
 
-is one progression modulo `2^4502`. Combining it with both permanent
-coordinates proves that the first compatible layer has labels
+Combining its progression with both permanent coordinates gives the first
+compatible labels
 
 ```text
 N-label=495,
@@ -250,14 +117,13 @@ u_min=
 141554173562669451979142234479211407387695161061947663158036275475013035570532072821977692485924548874811696146286209742307923384940182399969083204712328957713629782297601610389067903491331197096456313288013542743720638224927691460837892079910386115268969408753656537834465197519183303759432510875217219.
 ```
 
-Therefore every exceptional cycle source satisfies
+Thus every exceptional source satisfies
 
 ```text
 n>=(u_min*2^4501+1)/(349*2^500-347).
 ```
 
-The right side has `1505` decimal digits. Minimality is certified using only the
-`500` one-label layers and `364^2` adjacent-label layers.
+The right side has `1505` decimal digits.
 
 File:
 
@@ -265,125 +131,240 @@ File:
 docs/MERSENNE_DIVISOR_EXCEPTIONAL_FLOOR.md
 ```
 
-## Decisive missing theorem
+## No-exceptional cycles: exact block ledger
 
-No theorem yet excludes every cycle above the finite barrier. The family theorem
-shows that raw sieve density and barrier size can be strengthened without limit,
-so further record construction is not a priority.
-
-The remaining target is to connect the dynamic block ledger
+Suppose every complete block is ordinary. Let `J` be the number of blocks and
+let their terminal deficits be `e_i`:
 
 ```text
-D=sum ordinary terminal deficits-sum exceptional excess valuations
+1<=e_i<=4500,
+D=4501*p-A=sum_(i=1)^J e_i,
+J<=D.
 ```
 
-with the harmonic upper window. The first exact split is:
+### Full X-adic ladder
+
+For a valuation-`4501` step,
 
 ```text
-no exceptional blocks;
-exactly one exceptional block;
-at least two exceptional blocks.
+F(n)=(X*n+1)/2^4501,
+F(n)-1/d=(X/2^4501)*(n-1/d).
 ```
 
-For each case the project needs a lower bound for `p*delta-D` that uses:
+After `j` consecutive such steps,
 
-1. the sequence of compatible `500`- and `364`-labels;
-2. the length and credit of every complete near-power block;
-3. the 1505-digit floor for exceptional sources;
-4. height dependence, not a fixed finite-state positive-mean potential.
+```text
+d*F^j(n)==1 (mod X^j).
+```
+
+All `4500` terminal classes satisfy
+
+```text
+rho_e>X/(3*e).
+```
+
+Therefore every no-exceptional cycle obeys
+
+```text
+sum_i 1/n_i
+ <3*D/X+[d+H_D/2]/(X-1),
+```
+
+and the stronger correction window
+
+```text
+0<p*delta-D
+ <{3*D/X+[d+H_D/2]/(X-1)}/[X*ln(2)].
+```
+
+Files:
+
+```text
+docs/NO_EXCEPTIONAL_X_ADIC_LADDER.md
+tools/verify_no_exceptional_x_adic_ladder.py
+```
+
+### One and two blocks are completely excluded
+
+For one block, exact closure is
+
+```text
+[2^(4501*p-e)-X^p]*u=2^e-1.
+```
+
+Exact rational logarithmic bounds prove that the first positive gap already
+exceeds the additive term for every
+
+```text
+1<=e<=4500.
+```
+
+Hence no ordinary one-block cycle exists for any length.
+
+For two blocks, choose one as the shorter block. The complete additive numerator
+is less than
+
+```text
+2*B^(floor(p/2)+1),
+```
+
+while the positive gap is strictly larger for every total deficit
+
+```text
+2<=D<=9000.
+```
+
+Hence no ordinary two-block cycle exists.
+
+Files:
+
+```text
+docs/NO_EXCEPTIONAL_ONE_BLOCK_ALL_CREDITS.md
+tools/verify_no_exceptional_one_block_all_credits.py
+
+docs/NO_EXCEPTIONAL_TWO_BLOCK_ALL_CREDITS.md
+tools/verify_no_exceptional_two_block_all_credits.py
+```
+
+### General block-count frontier
+
+For `J` blocks, choose a longest block `ell_1`. Exact core elimination gives
+
+```text
+Delta_D(p)*u_1=R,
+Delta_D(p)=2^(4501*p-D)-X^p,
+R<J*B^(p-ell_1+1).
+```
+
+Exact logarithmic intervals certify the continued-fraction tail of
+
+```text
+beta=ln(2)/ln(B/X)
+```
+
+as
+
+```text
+[1,1,145062,23,1,4,1,12,2].
+```
+
+The last relevant upper semiconvergent has denominator
+
+```text
+573867416,
+```
+
+and the next upper convergent denominator is
+
+```text
+1106246945.
+```
+
+The one-sided best-approximation theorem and the longest-block bound prove:
+
+```text
+Any no-exceptional positive cycle must contain at least 245833 blocks.
+```
+
+Block lengths are unrestricted. This is not a cycle-length cutoff.
+
+Files:
+
+```text
+docs/NO_EXCEPTIONAL_BLOCK_COUNT_FRONTIER.md
+tools/verify_no_exceptional_block_count_frontIER.py
+```
+
+The filename in the repository uses lower-case `frontier`:
+
+```text
+tools/verify_no_exceptional_block_count_frontier.py
+```
+
+## Decisive remaining split
+
+Every still-possible cycle belongs to one of three branches:
+
+```text
+A. no exceptional blocks and at least 245833 ordinary blocks;
+B. exactly one exceptional block;
+C. at least two exceptional blocks.
+```
+
+The primary next target is branch B. Write the cycle as one exceptional
+contraction followed by an ordinary segment, then combine:
+
+1. the 1505-digit exceptional-source floor;
+2. the exact exceptional descent coordinate;
+3. the full `X`-adic ladder on the ordinary segment;
+4. a block-core closure inequality depending on the exceptional excess.
+
+For branch A, the next useful theorem must use many-block populations and
+repeated terminal deficits. Merely extending the continued-fraction denominator
+is not a priority.
+
+## Reusable family theorem
+
+For
+
+```text
+N=2^k-1,
+m==r (mod k),
+d=2^r+t*N,
+X=2^m-d,
+```
+
+with `364` not dividing `k`, a parity-correct `t<2*1093^2` can be chosen so
+that `1093||X`. This yields an infinite family with no return to `1`, an
+exponentially thin permanent sieve, and arbitrarily large finite barriers.
 
 ## Independent fallback branches
 
-### Previous primary: `X=2^3803-4162203,n0=1`
+### `X=2^3803-4162203,n0=1`
 
-Retained strict results:
+- `17886960` permanent classes modulo `14726582775529`;
+- finite barrier above `10^1138`;
+- exceptional floor `(19567017189655*2^3803+1)/4162203`;
+- harmonic base constant `1/853`.
 
-```text
-m=3803,
-d=4162203,
-X=2^3803-4162203.
-```
+### `X=2^156-9,n0=1`
 
-- `3511^2|X` and `1093||X`;
-- the orbit leaves `1` and never returns;
-- exactly `17886960` permanent classes survive modulo
-  `14726582775529`;
-- every cycle length through a `1139`-digit barrier greater than `10^1138` is
-  impossible;
-- every exceptional source satisfies
-
-```text
-n>=(19567017189655*2^3803+1)/4162203;
-```
-
-- every cycle obeys the harmonic window with base constant `1/853`.
-
-### Former primary: `X=2^156-9,n0=1`
-
-Retained strict results:
-
-```text
-X=91343852333181432387730302044767688728495783927.
-```
-
-- `1093||X`, so the orbit leaves `1` and never returns;
-- the first `48` steps have word `(3,1,2,2,5,6)^8` and total valuation `152`;
-- all positive cycle lengths through
+- no return to `1`;
+- all cycle lengths through
 
 ```text
 7034970411803187993997906985047212163795395134
 ```
 
-  are impossible;
-- the first ordinary-block threshold is
+  are excluded;
+- first ordinary-block threshold
 
 ```text
 7034970411803187993997906985047212163795395135;
 ```
 
-- exactly `132496` permanent adjacent-label classes modulo `1093^2` survive;
-- every exceptional cycle source satisfies
+- exceptional floor
 
 ```text
-n>=1268664615738631005385143083955106787895774776889.
+1268664615738631005385143083955106787895774776889.
 ```
 
-### `X=2^260-3,n0=1`
-
-Return to `1` is impossible, all positive cycle lengths through approximately
-`4.117*10^77` are excluded, and the first `172` steps have exact word
-`(1,2)^86`.
-
-### `X=15,n0=3`
-
-Complete Mersenne blocks and the second-block escalation are classified. Later
-contractions and return to a nontrivial cycle remain open.
-
-### `X=9,n0=1`
-
-The sufficient target remains
+Other retained branches:
 
 ```text
-A_t<=3*t-1 for every t>=1.
+X=2^260-3,
+X=15,
+X=9,
+X=104350542602662257699.
 ```
 
-### Previous fixed candidate
-
-For
-
-```text
-X=104350542602662257699,
-n0=1,
-```
-
-all lengths through `355561454311274250377` are excluded except
+For the last fixed candidate, all lengths through `355561454311274250377` are
+excluded except
 
 ```text
 177780727155637125193,
 177780727155637125195.
 ```
-
-The first surviving length still allows `6242` integer layer totals.
 
 ## Retractions
 
@@ -400,18 +381,13 @@ is retracted. The correct cycle congruence is
 ```
 
 Do not identify a least admissible predecessor source with the source actually
-used by a cycle. See `docs/RETRACTIONS.md`.
+used by a cycle.
 
 ## Verification
 
-The following new standalone checkers passed in the chat environment and are
-included in `python run_checks.py`:
+The exact calculations underlying the new checkers were run in the chat Python
+environment. All new checkers are listed in `run_checks.py`.
 
-```text
-tools/verify_dual_wieferich_square_sieve_candidate.py
-tools/verify_dual_wieferich_harmonic_packing.py
-tools/verify_mersenne_divisor_wieferich_family.py
-```
-
-A complete repository-wide run was not executed in the chat container because
-a fresh GitHub checkout was unavailable there.
+A complete repository-wide run was not executed because the chat container had
+no fresh checkout and could not resolve GitHub. Do not report a full-suite pass
+until a checkout or GitHub Actions run completes.
