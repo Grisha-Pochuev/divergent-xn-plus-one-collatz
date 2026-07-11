@@ -129,6 +129,7 @@ def main() -> None:
     run("tools/verify_no_exceptional_block_count_frontier.py")
     run("tools/verify_one_exception_one_ordinary_no_go.py")
     run("tools/verify_one_exception_block_count_frontier.py")
+    run("tools/verify_global_ordinary_block_count_frontier.py")
     run("tools/check_project_consistency.py")
     run("tools/check_x9_digital_invariant.py", "--steps", "10000")
     run("tools/generate_two_parameter_barrier.py", "--length", "1000000000000", "--height", "1000000000")
