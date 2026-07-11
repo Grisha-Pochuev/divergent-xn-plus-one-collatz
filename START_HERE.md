@@ -27,6 +27,7 @@ docs/PROGRESS_METRICS.md
 docs/CURRENT_STATUS.md
 docs/VALIDATED_RESULTS.md
 docs/RETRACTIONS.md
+docs/SESSION_CHECKPOINT_2026-07-11_SHARP_BLOCK_SIGN.md
 docs/SESSION_CHECKPOINT_2026-07-11_MEASURED_HYBRID_FRONTIER.md
 run_checks.py
 ```
@@ -35,19 +36,20 @@ GitHub files are the durable source of truth.
 
 ## Measurement rule
 
-Do not report one precise completion percentage. Report instead:
+Do not report one precise completion percentage as if research effort were a
+fraction of a proof.  Report:
 
 1. strict proof gates;
 2. exact finite frontiers;
 3. reusable infinite-family structure.
 
 For the current structured candidate, the explicit-pair gate, no-return gate,
-and general positive-orbit dichotomy are available. The decisive global gate,
+and general positive-orbit dichotomy are available.  The decisive global gate,
 exclusion of every nontrivial positive cycle, remains open.
 
 ## Branch A: structured hybrid candidate
 
-Current primary working candidate:
+Current primary candidate:
 
 ```text
 X=2^156-9
@@ -57,7 +59,7 @@ n0=1.
 
 ### Closed facts
 
-Let `q=1093`. Then
+Let `q=1093`.  Then
 
 ```text
 ord_q(2)=364,
@@ -74,12 +76,19 @@ C_X^t(1)!=1 for every t>=1.
 Every positive cycle length through
 
 ```text
-6766211283939365362054096447760569535444132142
+7034970411803187993997906985047212163795395134
 ```
 
-is impossible.
+is impossible.  This is the exact integral barrier coming from
 
-The first `48` accelerated steps have the exact valuation word
+```text
+D=156*p-A>=1,
+D<p*log2(2^156/X).
+```
+
+It improves the previous convenient barrier by about `3.97%`.
+
+The first `48` accelerated steps have exact valuation word
 
 ```text
 (3,1,2,2,5,6)^8,
@@ -93,7 +102,7 @@ v2(n_48-1)=4,
 n_48>X^48/2^152.
 ```
 
-The six-step map is exact:
+The exact six-step map is
 
 ```text
 G(n)=C_X^6(n)
@@ -101,7 +110,7 @@ G(n)=C_X^6(n)
 ```
 
 For `n==1 (mod 2^20)`, its exact valuation word is
-`(3,1,2,2,5,6)`. If `20<=L=v2(n-1)<156`, then
+`(3,1,2,2,5,6)`.  If `20<=L=v2(n-1)<156`, then
 
 ```text
 v2(G(n)-1)=L-19.
@@ -112,6 +121,47 @@ Files:
 ```text
 docs/STRUCTURED_WIEFERICH_X156_CANDIDATE.md
 tools/verify_structured_wieferich_x156_candidate.py
+```
+
+### Sharp complete-block sign theorem
+
+For a complete nonexceptional near-power block, write
+
+```text
+9*n-1=2^(156*k+s)*u,
+1<=s<=155,
+ell=k+1,
+e=156-s.
+```
+
+Define
+
+```text
+L_e=floor(e/log2(2^156/X))+1.
+```
+
+Exact rational logarithm bounds and modular certificates prove
+
+```text
+ell<L_e   => the complete block strictly grows,
+ell>=L_e  => the complete block strictly contracts.
+```
+
+The sign is independent of the odd core `u`; the additive term never rescues a
+block after the multiplicative threshold.  In particular,
+
+```text
+L_1
+ =7034970411803187993997906985047212163795395135,
+L_155
+ =1090420413829494139069675582682317885388286245793.
+```
+
+Files:
+
+```text
+docs/NEAR_POWER_SHARP_BLOCK_SIGN.md
+tools/verify_near_power_block_sign_threshold.py
 ```
 
 ### Permanent q-adic sieve
@@ -141,11 +191,15 @@ tools/verify_wieferich_adjacent_label_coordinates.py
 
 ### Missing theorem
 
-The exact initial program ends after eight blocks. Prove either:
+The exact initial program ends after eight blocks.  The sharp block theorem now
+classifies every later nonexceptional block as growing or contracting, but it
+does not yet pay for all contractions.
 
-1. a renewal theorem recreating `n==1 (mod 2^20)` often enough; or
-2. a height-credit inequality showing that all later contractions are paid for
-   by earlier proved growth; or
+Prove one of:
+
+1. a renewal theorem recreating `n==1 (mod 2^20)` often enough;
+2. an unbounded height-credit inequality charging every exceptional contraction
+   and every nonexceptional block with `ell>=L_e` to earlier growth;
 3. a global harmonic contradiction using distinct cycle values and the
    `132496` surviving classes.
 
@@ -182,8 +236,8 @@ docs/HYBRID_INITIAL_ALTERNATING_MACROBLOCK.md
 tools/verify_hybrid_initial_alternating_macroblock.py
 ```
 
-This candidate has the stronger finite barrier. Branch A has the cleaner
-repeated macroblock and is preferred for renewal work.
+This candidate has the stronger finite barrier.  Branch A has the cleaner
+repeated macroblock and the new sharp block-sign theorem, so it remains primary.
 
 ## General near-power theorem
 
@@ -203,7 +257,7 @@ the exact complete endpoint is
 C_X^(k+1)(n)=(X^(k+1)*u+2^(m-s))/d.
 ```
 
-Multiple-of-`m` exceptional blocks are strictly contracting. Hence a least
+Multiple-of-`m` exceptional blocks are strictly contracting.  Hence a least
 positive seed entering a hypothetical nontrivial cycle must satisfy
 
 ```text
@@ -280,8 +334,8 @@ A proof of
 A_t<=3*t-1
 ```
 
-for every `t>=1` would imply divergence. Large valuations require the exact
-alternating base-8 suffix `7,0,7,0,...`. The missing step is an amortized suffix
+for every `t>=1` would imply divergence.  Large valuations require the exact
+alternating base-8 suffix `7,0,7,0,...`.  The missing step is an amortized suffix
 bound.
 
 ## Branch E: old fixed-candidate frontier
@@ -304,8 +358,8 @@ For the first remaining length,
 Q<=6241,
 ```
 
-so `6242` integer layer totals still remain. This branch is retained, but a
-larger finite barrier is not counted as a fraction of the infinite proof.
+so `6242` integer layer totals remain.  This branch is retained, but a larger
+finite barrier is not counted as a fraction of the infinite proof.
 
 ## Literature audits
 
@@ -348,13 +402,16 @@ Also never:
 
 ## Exact next work
 
-1. Work first on renewal or height credit for `X=2^156-9`.
-2. Combine the adjacent-label `1093^2` sieve with a distinct-value harmonic
-   cycle bound.
-3. Retain the `2^260-3`, `X=15`, `X=9`, and `Q=6241` branches as independent
+1. Build a cycle-wide height-credit ledger for `X=2^156-9` using the sharp
+   thresholds `L_e`.
+2. Classify exceptional complete blocks in the same credit units and seek a
+   telescoping quantity that is unbounded, not fixed-state.
+3. Combine that ledger with the adjacent-label `1093^2` sieve and distinct-value
+   harmonic bounds.
+4. Retain the `2^260-3`, `X=15`, `X=9`, and `Q=6241` branches as independent
    fallbacks.
-4. Commit every theorem and decisive refutation separately.
-5. Continue to report proof gates and exact frontiers, not unsupported
+5. Commit every theorem and decisive refutation separately.
+6. Continue to report proof gates and exact frontiers, not unsupported precise
    percentages.
 
 ## Reproduction
