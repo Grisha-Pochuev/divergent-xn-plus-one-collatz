@@ -106,6 +106,8 @@ def main() -> None:
     run("tools/verify_near_power_exceptional_descent.py")
     run("tools/verify_fermat_signed_digit_descent.py")
     run("tools/verify_x13_complete_valuation_blocks.py")
+    run("tools/verify_mersenne_complete_valuation_blocks.py")
+    run("tools/verify_tremblay_5x1_audit.py")
     run("tools/check_project_consistency.py")
     run("tools/check_x9_digital_invariant.py", "--steps", "10000")
     run("tools/generate_two_parameter_barrier.py", "--length", "1000000000000", "--height", "1000000000")
