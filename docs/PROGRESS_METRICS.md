@@ -1,19 +1,14 @@
 # Objective progress metrics
 
-This file replaces unsupported single-number progress estimates. A percentage
-of research effort is not the same thing as a percentage of a proof.
+A percentage of research effort is not the same thing as a percentage of a
+proof.  Future checkpoints report three separate things:
 
-## Reporting rule
+1. strict logical gates;
+2. exact finite frontiers;
+3. reusable infinite-family structure.
 
-Future checkpoints report three separate things:
-
-1. **strict proof gates**: which logically necessary gates are closed;
-2. **finite frontiers**: exact quantities that were reduced;
-3. **structural depth**: reusable infinite-family lemmas and independent checks.
-
-Do not combine these into one precise percentage. The last global theorem may
-contain most of the mathematical difficulty even when many preparatory gates are
-closed.
+The last global theorem may contain most of the difficulty even when many
+preparatory gates are closed.
 
 ## A. Strict prize gates
 
@@ -27,9 +22,9 @@ A complete solution needs the following for one explicit pair.
 | G4 | positive bounded-orbit dichotomy is applied correctly | closed as a general lemma |
 | G5 | exact independent verification covers the final proof | partial; final certificate waits for G3 |
 
-Thus three logical gates are available, but the decisive global cycle gate G3
-is still open. These gates are not equally difficult and must not be converted
-to `60% solved`.
+Three logical gates are available, but the decisive global cycle gate G3 is
+still open.  These gates are not equally difficult and must not be converted
+mechanically into `60% solved`.
 
 ## B. Structured hybrid candidate
 
@@ -43,14 +38,29 @@ n0=1.
 
 - `1093` divides `X` exactly once;
 - the Wieferich mechanism proves that the orbit never returns to `1`;
-- all positive cycles of length at most
+- every positive cycle length through
 
 ```text
-6766211283939365362054096447760569535444132142
+7034970411803187993997906985047212163795395134
 ```
 
-  are excluded;
+  is excluded;
 - every near-power valuation block is classified exactly;
+- every nonexceptional block now has a sharp sign threshold
+
+```text
+L_e=floor(e/log2(2^156/X))+1,
+1<=e<=155;
+ell<L_e   => strict growth;
+ell>=L_e  => strict contraction;
+```
+
+- the first threshold is
+
+```text
+L_1=7034970411803187993997906985047212163795395135;
+```
+
 - the first `48` accelerated steps have the exact word
 
 ```text
@@ -59,13 +69,31 @@ n0=1.
 
   and total valuation `152`;
 - after that program, `v2(n_48-1)=4` and
-  `n_48>X^48/2^152`.
+  `n_48>X^48/2^152`;
+- two adjacent least labels reduce all possible values modulo `1093^2` to
+  exactly `132496` classes.
+
+The exact finite cycle barrier increased from
+
+```text
+6766211283939365362054096447760569535444132142
+```
+
+to
+
+```text
+7034970411803187993997906985047212163795395134,
+```
+
+an increase of about `3.97%`.
 
 ### Open
 
 - cycles above the finite barrier remain infinite in number;
 - the exact repeated initial program ends after eight blocks;
-- no renewal or height-credit theorem yet forces another long program;
+- the sharp sign theorem classifies later nonexceptional blocks but does not yet
+  pay for all exceptional and long nonexceptional contractions;
+- no renewal or unbounded height-credit theorem is known;
 - therefore G3 remains one global theorem, not a finite list nearing zero.
 
 ## C. Larger-barrier hybrid candidate
@@ -81,11 +109,11 @@ Closed measurements:
 - all positive cycle lengths through approximately `4.117*10^77` are excluded;
 - the first `172` accelerated steps have the exact word `(1,2)^86` and total
   valuation `258`;
-- a least seed entering a hypothetical cycle must satisfy
+- a least seed entering a hypothetical cycle satisfies
   `1<=v2(3*w-1)<=259` and its first step grows.
 
-This candidate has the stronger finite barrier. The `2^156-9` candidate has the
-cleaner repeated six-step program and is currently preferred for renewal work.
+This candidate has the stronger finite barrier.  The `2^156-9` candidate has the
+cleaner repeated program and the sharper complete-block structure.
 
 ## D. `X=15,n0=3` Mersenne branch
 
@@ -109,7 +137,7 @@ initial type 1: terminal type 2, 21<=k<=31,
 
 The later-block height theorem and avoidance of `1` remain open.
 
-## E. Huge fixed-candidate frontier
+## E. Previous fixed-candidate frontier
 
 For
 
@@ -118,17 +146,10 @@ X=104350542602662257699,
 n0=1,
 ```
 
-all cycle lengths through `355561454311274250377` are excluded except two.
-For the first surviving length, the layer total originally allowed
-`Q=0,...,6257`; only `Q=6242,...,6257` have been removed. Therefore
+all cycle lengths through `355561454311274250377` are excluded except two.  At
+the first surviving length, `6242` layer totals remain.
 
-```text
-6242 possible Q values remain.
-```
-
-This was the clearest reason the old percentage began moving slowly: the latest
-strict local improvement removed `16` of `6258` layer totals, while lengths
-above the finite barrier remain unbounded.
+This branch is retained as an independent finite-cycle attack.
 
 ## F. `X=9,n0=1` direct-growth frontier
 
@@ -143,13 +164,12 @@ of an infinite theorem.
 
 ## G. Recommended status wording
 
-Use wording such as:
-
 ```text
 strict target: open;
 G1, G2 and the general dichotomy are closed for X=2^156-9;
 decisive remaining gate: exclusion of every nontrivial positive cycle;
-finite barrier: 6.766*10^45 steps;
+finite barrier: 7.034970411803187993997906985047212163795395134*10^45 steps;
 exact initial program: 48 steps in eight proved macroblocks;
-research maturity: high, but proof completion has no defensible percentage.
+all 155 nonexceptional terminal deficits have exact block-sign thresholds;
+research maturity: high, but proof completion has no defensible precise percentage.
 ```
