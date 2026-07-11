@@ -22,25 +22,11 @@ START_HERE.md
 docs/WORKING_PROTOCOL.md
 docs/CURRENT_STATUS.md
 docs/RETRACTIONS.md
-docs/SESSION_CHECKPOINT_2026-07-12_MERSENNE_DIVISOR_FAMILY_FRONTIER.md
+docs/SESSION_CHECKPOINT_2026-07-12_NO_EXCEPTIONAL_BLOCK_FRONTIER.md
 ```
 
-Read `docs/VALIDATED_RESULTS.md`, older checkpoints, and detailed theorem files
-only when the current argument needs them. GitHub commits and certificates are
-the durable source of truth.
-
-## Progress rule
-
-Do not report one precise proof percentage. Report separately:
-
-1. strict proof gates;
-2. exact finite frontiers;
-3. reusable infinite-family structure;
-4. the decisive missing theorem.
-
-For the primary candidate the explicit-pair, no-return, and positive
-bounded-orbit dichotomy gates are available. Exclusion of every nontrivial
-positive cycle remains open.
+Read detailed theorem files only when the current argument needs them. GitHub
+commits and certificate scripts are the durable source of truth.
 
 ## Primary candidate
 
@@ -54,16 +40,24 @@ X=B-d=2^4501-349*2^500+347,
 n0=1.
 ```
 
-Retained strict results:
+Proof gates:
 
-- `N|X`, so every output lies in only `500` one-label classes modulo `N`;
-- `1093` divides `X` exactly once, so the orbit leaves `1` and never returns;
+```text
+G1 explicit pair: closed;
+G2 leaves 1 and never returns: closed;
+G3 every nontrivial positive cycle excluded: open;
+G4 bounded positive orbit implies eventual cycle: closed;
+G5 final independent certificate: waits for G3.
+```
+
+## Main retained results
+
+- `N|X` and `1093||X`;
+- the orbit leaves `1` and never returns;
 - exactly `16562000` combined permanent classes survive modulo
   `(2^500-1)*1093^2`;
-- every hypothetical cycle value is greater than `2^500-1`;
-- the combined base reciprocal constant is below `10^(-147)` and the harmonic
-  tail coefficient is below `10^(-149)`;
-- all positive cycle lengths through `floor(2*X/(3*d))` are impossible, with
+- every cycle value is greater than `2^500-1`;
+- all cycle lengths through `floor(2*X/(3*d))` are impossible, with
 
 ```text
 10^1201<floor(2*X/(3*d))<10^1202;
@@ -83,25 +77,82 @@ u_min=
 ```
 
   the lower-bound source has `1505` decimal digits;
-- with
-
-```text
-D=4501*p-A,
-delta=log2(2^4501/X),
-K=16562000,
-M=(2^500-1)*1093^2,
-C0=(500/(2^500-1))*(1+H_33124/2),
-```
-
-  every hypothetical cycle satisfies
+- every hypothetical cycle satisfies the global harmonic window
 
 ```text
 0<p*delta-D
  <[C0+K*H_(ceil(p/K))/(2*M)]/(X*ln(2)),
-C0<10^(-147).
+C0<10^(-147),
+K=16562000,
+M=(2^500-1)*1093^2.
 ```
 
-Exact statements, proofs, and checkers are indexed in `docs/CURRENT_STATUS.md`.
+## New no-exceptional frontier
+
+Suppose a hypothetical cycle has no exceptional complete block. Let `J` be its
+number of ordinary complete blocks and
+
+```text
+D=4501*p-A=sum_(i=1)^J e_i,
+1<=e_i<=4500.
+```
+
+Retained strict results:
+
+1. Repeated valuation-`4501` steps form an `X`-adic ladder:
+
+```text
+d*F^j(n)==1 (mod X^j).
+```
+
+2. All `4500` terminal classes satisfy
+
+```text
+rho_e>X/(3*e).
+```
+
+3. Hence every no-exceptional cycle obeys
+
+```text
+sum_i 1/n_i
+ <3*D/X+[d+H_D/2]/(X-1),
+```
+
+and
+
+```text
+0<p*delta-D
+ <{3*D/X+[d+H_D/2]/(X-1)}/[X*ln(2)].
+```
+
+4. No ordinary one-block cycle exists for any deficit `1<=e<=4500` or any
+cycle length.
+
+5. No ordinary two-block cycle exists for any pair of deficits or lengths.
+
+6. Continued-fraction and longest-block charging prove
+
+```text
+Any no-exceptional positive cycle must have J>=245833.
+```
+
+This is a block-count frontier, not a cycle-length cutoff.
+
+Main files:
+
+```text
+docs/NO_EXCEPTIONAL_X_ADIC_LADDER.md
+tools/verify_no_exceptional_x_adic_ladder.py
+
+docs/NO_EXCEPTIONAL_ONE_BLOCK_ALL_CREDITS.md
+tools/verify_no_exceptional_one_block_all_credits.py
+
+docs/NO_EXCEPTIONAL_TWO_BLOCK_ALL_CREDITS.md
+tools/verify_no_exceptional_two_block_all_credits.py
+
+docs/NO_EXCEPTIONAL_BLOCK_COUNT_FRONTIER.md
+tools/verify_no_exceptional_block_count_frontier.py
+```
 
 ## Reusable family theorem
 
@@ -114,78 +165,52 @@ d=2^r+t*N,
 X=2^m-d,
 ```
 
-with `364` not dividing `k`, one can choose a parity-correct `t<2*1093^2`
-such that `1093||X`. For sufficiently large `m`, this gives:
+with `364` not dividing `k`, one can choose parity-correct `t<2*1093^2` with
+`1093||X`. This gives no return to `1`, an exponentially thin permanent sieve,
+and an arbitrarily large finite cycle barrier.
 
-- no return to `1` from `n0=1`;
-- exactly `k` one-label classes modulo `N`;
-- `364*lcm(k,364)` combined classes modulo `N*1093^2`;
-- exponentially shrinking harmonic constants;
-- an arbitrarily large finite cycle barrier.
+Therefore increasing parameters merely to set a new record is not a priority.
 
-Therefore increasing `k` or `m` merely to set a new finite record is not a
-priority. The missing theorem must use dynamic transition or height structure.
+## Decisive remaining split
 
-## Decisive missing theorem
-
-No theorem yet excludes every cycle above the finite barrier. The current target
-is to combine the logarithmic harmonic window with the exact near-power block
-ledger
+Every still-possible cycle belongs to one of these branches:
 
 ```text
-D=sum ordinary deficits-sum exceptional excesses.
+A. no exceptional blocks and at least 245833 ordinary blocks;
+B. exactly one exceptional block;
+C. at least two exceptional blocks.
 ```
-
-The first split is:
-
-```text
-no exceptional blocks;
-exactly one exceptional block;
-at least two exceptional blocks.
-```
-
-The desired contradiction must use together:
-
-1. compatible `500`- and `364`-label sequences;
-2. ordinary and exceptional block credits;
-3. the 1505-digit exceptional-source floor;
-4. distinct-value harmonic packing;
-5. a height-dependent lower bound for `p*delta-D`.
 
 ## Exact next work
 
-1. Derive the strongest correction lower bound when there are no exceptional
-   blocks.
-2. Treat exactly one exceptional block using its exact source floor and descent
-   coordinate.
-3. Treat two or more exceptional blocks using distinct sources and harmonic
-   packing.
-4. Compare each lower bound with the harmonic upper window.
-5. Use continued fractions only after the block-credit structure restricts
-   `(p,D)`.
+Primary target: branch B.
 
-Use one primary target and at most two exploratory directions. Full operational
-rules are in `docs/WORKING_PROTOCOL.md`.
+1. Write the cycle as one exceptional contraction followed by an ordinary
+   segment.
+2. Use the exact 1505-digit exceptional-source floor.
+3. Apply the `X`-adic ladder to the ordinary segment.
+4. Derive a closure inequality depending on the exceptional excess valuation.
+5. Only then use residue or continued-fraction refinement.
+
+For branch A, seek a many-block population theorem from repeated terminal
+deficits and their exact classes modulo `X`. Do not merely extend the continued-
+fraction denominator for a larger record.
 
 ## Independent fallback branches
 
 Retain independently:
 
-- `X=2^3803-4162203,n0=1`, with `17886960` classes modulo
-  `14726582775529`, barrier above `10^1138`, and exceptional floor
-  `(19567017189655*2^3803+1)/4162203`;
-- former primary `X=2^156-9,n0=1`, with barrier
-  `7034970411803187993997906985047212163795395134`, first block threshold
+- `X=2^3803-4162203,n0=1`, with barrier above `10^1138`;
+- `X=2^156-9,n0=1`, with barrier
+  `7034970411803187993997906985047212163795395134`, first threshold
   `7034970411803187993997906985047212163795395135`, and exceptional floor
   `1268664615738631005385143083955106787895774776889`;
 - `X=2^260-3,n0=1`;
 - `X=15,n0=3`;
 - `X=9,n0=1`;
-- the old fixed candidate with two surviving cycle lengths and `Q<=6241` for
-  the first one.
+- the old fixed candidate with two surviving lengths and `Q<=6241`.
 
-Methods and lemmas may move between branches after checking hypotheses.
-Conclusions may not.
+Methods may move between branches only after checking hypotheses.
 
 ## Non-negotiable corrections
 
@@ -201,24 +226,16 @@ The correct cycle congruence is
 2^A*product_i(n_i)==1 (mod X).
 ```
 
-Do not identify the least admissible predecessor source with the source actually
-used by a cycle. Do not present finite height, a finite barrier, a finite growing
-program, or probabilistic drift as divergence.
+Do not identify a least admissible predecessor source with the source actually
+used by a cycle. Do not present finite height, a finite barrier, or heuristic
+drift as divergence.
 
-The finite-state no-go theorem rules out only a fixed finite-state telescoping
-proof with universal positive mean on all zero-layer transitions. It does not
-ban finite-state, satisfiability, residue, or word-search methods as exploratory
-tools or as certificates for precise finite sublemmas.
-
-## Commit and verification
+## Verification discipline
 
 - Commit each theorem, checker, decisive refutation, and major strategy change
   as a logical unit.
-- Batch trivial maintenance edits.
 - State exactly which checks ran.
-- Do not claim a full repository run unless it completed.
-- Update this file only when the main branch, decisive obstruction, startup
-  sequence, or critical safety rule changes.
+- Do not claim a complete repository run unless it completed.
 
 ## Reproduction
 
