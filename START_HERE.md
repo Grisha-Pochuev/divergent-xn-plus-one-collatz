@@ -23,6 +23,7 @@ docs/WORKING_PROTOCOL.md
 docs/CURRENT_STATUS.md
 docs/RETRACTIONS.md
 docs/SESSION_CHECKPOINT_2026-07-12_NO_EXCEPTIONAL_BLOCK_FRONTIER.md
+docs/SESSION_CHECKPOINT_2026-07-12_ONE_EXCEPTION_TWO_BLOCK_NO_GO.md
 ```
 
 Read detailed theorem files only when the current argument needs them. GitHub
@@ -87,7 +88,7 @@ K=16562000,
 M=(2^500-1)*1093^2.
 ```
 
-## New no-exceptional frontier
+## No-exceptional frontier
 
 Suppose a hypothetical cycle has no exceptional complete block. Let `J` be its
 number of ordinary complete blocks and
@@ -138,20 +139,26 @@ Any no-exceptional positive cycle must have J>=245833.
 
 This is a block-count frontier, not a cycle-length cutoff.
 
-Main files:
+## First one-exception frontier
+
+A cycle with exactly
 
 ```text
-docs/NO_EXCEPTIONAL_X_ADIC_LADDER.md
-tools/verify_no_exceptional_x_adic_ladder.py
+one exceptional block + one ordinary block
+```
 
-docs/NO_EXCEPTIONAL_ONE_BLOCK_ALL_CREDITS.md
-tools/verify_no_exceptional_one_block_all_credits.py
+is impossible for every admissible excess, deficit, and pair of lengths.
+Therefore any cycle with exactly one exceptional block must contain at least
 
-docs/NO_EXCEPTIONAL_TWO_BLOCK_ALL_CREDITS.md
-tools/verify_no_exceptional_two_block_all_credits.py
+```text
+two ordinary blocks.
+```
 
-docs/NO_EXCEPTIONAL_BLOCK_COUNT_FRONTIER.md
-tools/verify_no_exceptional_block_count_frontier.py
+Main new files:
+
+```text
+docs/ONE_EXCEPTION_ONE_ORDINARY_NO_GO.md
+tools/verify_one_exception_one_ordinary_no_go.py
 ```
 
 ## Reusable family theorem
@@ -177,7 +184,7 @@ Every still-possible cycle belongs to one of these branches:
 
 ```text
 A. no exceptional blocks and at least 245833 ordinary blocks;
-B. exactly one exceptional block;
+B. exactly one exceptional block and at least two ordinary blocks;
 C. at least two exceptional blocks.
 ```
 
@@ -185,12 +192,13 @@ C. at least two exceptional blocks.
 
 Primary target: branch B.
 
-1. Write the cycle as one exceptional contraction followed by an ordinary
-   segment.
-2. Use the exact 1505-digit exceptional-source floor.
-3. Apply the `X`-adic ladder to the ordinary segment.
-4. Derive a closure inequality depending on the exceptional excess valuation.
-5. Only then use residue or continued-fraction refinement.
+1. Derive a general exact closure formula for one exceptional block followed by
+   `J>=2` ordinary blocks.
+2. Choose a longest ordinary block or a dual source coordinate that removes it
+   from every additive exponent.
+3. Use the exact 1505-digit exceptional-source floor.
+4. Apply the full `X`-adic ladder to the ordinary segment.
+5. Derive a lower bound depending on the exceptional excess valuation.
 
 For branch A, seek a many-block population theorem from repeated terminal
 deficits and their exact classes modulo `X`. Do not merely extend the continued-
