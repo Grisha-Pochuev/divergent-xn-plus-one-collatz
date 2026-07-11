@@ -112,6 +112,8 @@ def main() -> None:
     run("tools/verify_tremblay_5x1_audit.py")
     run("tools/verify_hybrid_wieferich_near_power_candidate.py")
     run("tools/verify_hybrid_initial_alternating_macroblock.py")
+    run("tools/verify_structured_wieferich_x156_candidate.py")
+    run("tools/verify_wieferich_adjacent_label_coordinates.py")
     run("tools/check_project_consistency.py")
     run("tools/check_x9_digital_invariant.py", "--steps", "10000")
     run("tools/generate_two_parameter_barrier.py", "--length", "1000000000000", "--height", "1000000000")
