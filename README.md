@@ -8,154 +8,179 @@ For odd `X>=5`, define
 C_X(n)=(X*n+1)/2^v2(X*n+1)
 ```
 
-on positive odd integers. The strict target is one explicit pair `(X,n0)` whose orbit tends to positive infinity. A cycle, avoidance of `1`, a long finite trajectory, or a finite barrier is not a solution.
+on positive odd integers. The strict target is one explicit pair `(X,n0)` whose
+orbit tends to positive infinity. A cycle, avoidance of `1`, a long finite
+trajectory, or a finite cycle barrier is not a solution.
 
 ## Start here
 
 ```text
 START_HERE.md
 docs/CURRENT_STATUS.md
-docs/VALIDATED_RESULTS.md
 docs/RETRACTIONS.md
-docs/NEXT_STEPS.md
+docs/SESSION_CHECKPOINT_2026-07-12_MERSENNE_DIVISOR_FAMILY_FRONTIER.md
 run_checks.py
 ```
 
-## Strongest current result
+## Strongest current branch
 
-The strict problem is not solved. For
-
-```text
-X  = 104350542602662257699,
-n0 = 1,
-```
-
-the repository proves:
-
-- the orbit cannot return to `1`;
-- every element of a reached nontrivial cycle is at least `25`;
-- every cycle length
+The strict problem is not solved. The primary candidate is
 
 ```text
-p <= 177780727155637125192
+X=2^4501-349*2^500+347,
+n0=1.
 ```
 
-is impossible;
-- every length through
+Put
+
+```text
+N=2^500-1,
+d=349*2^500-347.
+```
+
+The repository proves:
+
+- `N|X` and `1093||X`;
+- the orbit leaves `1` and never returns;
+- every hypothetical cycle value is greater than `N`;
+- every output lies in `500` one-label classes modulo `N`;
+- after combining with the `1093^2` adjacent-label coordinate, exactly
+  `16562000` permanent classes remain modulo `(2^500-1)*1093^2`;
+- every positive cycle length `p` must satisfy
+
+```text
+p>2*X/(3*d),
+10^1201<floor(2*X/(3*d))<10^1202;
+```
+
+- the combined harmonic base constant is below `10^(-147)` and the tail
+  coefficient is below `10^(-149)`;
+- every exceptional cycle source is at least
+
+```text
+(u_min*2^4501+1)/(349*2^500-347),
+```
+
+  where the exact `u_min` is recorded in
+  `docs/MERSENNE_DIVISOR_EXCEPTIONAL_FLOOR.md`; the lower-bound source has
+  `1505` decimal digits.
+
+These are necessary structural constraints, not yet a proof of divergence.
+
+## Reusable construction theorem
+
+For
+
+```text
+N=2^k-1,
+m==r (mod k),
+d=2^r+t*N,
+X=2^m-d,
+```
+
+one can choose suitable parity-correct `t` with `1093||X`. This produces an
+infinite family with:
+
+- no return to `1` from `n0=1`;
+- only `k` output classes modulo `N`;
+- exponentially thin combined residue density;
+- arbitrarily large finite cycle barriers.
+
+Therefore simply making the modulus or barrier larger is no longer the central
+research target. The missing theorem must couple valuation-label transitions,
+near-power block credits, and height-dependent correction bounds.
+
+Main files:
+
+```text
+docs/MERSENNE_DIVISOR_WIEFERICH_FAMILY.md
+tools/verify_mersenne_divisor_wieferich_family.py
+docs/MERSENNE_DIVISOR_EXCEPTIONAL_FLOOR.md
+```
+
+## Current exact target
+
+For a hypothetical cycle of length `p`, total valuation `A`, let
+
+```text
+D=4501*p-A,
+delta=log2(2^4501/X).
+```
+
+The project has an exact block ledger
+
+```text
+D=sum ordinary deficits-sum exceptional excesses
+```
+
+and a harmonic upper window
+
+```text
+0<p*delta-D
+ <[C0+K*H_(ceil(p/K))/(2*M)]/(X*ln(2)),
+C0<10^(-147).
+```
+
+The next proof step splits hypothetical cycles into zero, one, or multiple
+exceptional blocks and seeks a matching lower bound for `p*delta-D` in each
+case.
+
+## Independent fallback results
+
+The repository retains several separately verified branches, including:
+
+```text
+X=2^3803-4162203,
+X=2^156-9,
+X=2^260-3,
+X=15,
+X=9.
+```
+
+For the older fixed candidate
+
+```text
+X=104350542602662257699,
+n0=1,
+```
+
+all positive cycle lengths through
+
+```text
+177780727155637125192
+```
+
+are excluded, and all lengths through
 
 ```text
 355561454311274250377
 ```
 
-is impossible except
+are excluded except
 
 ```text
-177780727155637125193
+177780727155637125193,
 177780727155637125195.
 ```
 
-The first sparse-window argument originally left seven isolated values. Five have been eliminated by exact modular and rational certificates.
-
-## Latest Priority 1 structure
-
-Use
-
-```text
-M=15099,
-ord_M(2)=2154,
-P=6911089648497401,
-ord_P(2)=(P-1)/8,
-O=ord_X(2)=1860810887857924950.
-```
-
-For every cycle valuation there is a unique decomposition
-
-```text
-a_i=s_(i+1)+O*q_i,
-1<=s_i<=O.
-```
-
-The full class label is paid by every occurrence, so
-
-```text
-A=sum_i s_i+O*sum_i q_i.
-```
-
-At either remaining length this gives
-
-```text
-sum_i q_i<=6257.
-```
-
-Further exact results:
-
-- a permanent predecessor sieve removes exactly one third of the refined classes modulo `6*15099`;
-- possible predecessors of a fixed full representative form a linear progression modulo `X`;
-- the first layer in which that predecessor is itself a full output gives an exact transition cost;
-- below one million, those full predecessor delays range from `0` to `347`;
-- through sixty million they range from `0` to `558`;
-- for the harder remaining length,
-
-```text
-sum_(n_i<=60000000) 1/n_i < 0.087618737,
-```
-
-while the cycle identity requires a total greater than `0.099934206`;
-- hence at least `738929` distinct values above sixty million are still needed;
-- inverse windows of depths two and three strengthen the small-value bound further;
-- any hypothetical remaining cycle is either entirely least-layer, or contains at least `28413093679980362` consecutive least-layer steps;
-- if a positive layer occurs, one such block grows by more than
-
-```text
-2^1860810887857924884.
-```
-
-These are necessary structural constraints, not yet a proof of divergence.
-
-## Latest certificate files
-
-```text
-docs/PERMANENT_PREDECESSOR_MOD3_SIEVE.md
-tools/verify_permanent_predecessor_mod3_sieve.py
-docs/FULL_LABEL_OCCUPANCY_BUDGET.md
-tools/verify_full_label_occupancy_budget.py
-docs/FULL_PREDECESSOR_DELAY.md
-tools/verify_full_predecessor_delay.py
-docs/FULL_PREDECESSOR_RECIPROCAL_BOUND.md
-tools/verify_full_predecessor_reciprocal_bound.py
-docs/FINITE_INVERSE_WINDOW_CHARGING.md
-tools/verify_finite_inverse_window_charging.py
-docs/GIANT_ZERO_LAYER_BLOCK.md
-tools/verify_giant_zero_layer_block.py
-docs/GIANT_COMPENSATING_GROWTH_BLOCK.md
-tools/verify_giant_compensating_growth_block.py
-```
-
-The earlier sparse-window, activation, subgroup, transition-balance, and retraction certificates remain part of `run_checks.py`.
-
-## Exact next target
-
-Do not enlarge the cutoff blindly. The missing object is a global certificate for the large zero-delay tail, for example:
-
-1. a rational potential or minimum-mean inequality for long inverse windows;
-2. an explicit distribution bound for the initial full-class sequence `2^(-s) mod X`;
-3. a full source/target circulation inequality coupled to the global height identities.
+These older frontiers remain reproducible but are no longer the primary branch.
 
 ## Important retraction
 
 The former `10^37` barrier is retracted. It incorrectly assumed
 
 ```text
-2^A == 1 (mod X).
+2^A==1 (mod X).
 ```
 
 The correct congruence is
 
 ```text
-2^A * product_i(n_i) == 1 (mod X).
+2^A*product_i(n_i)==1 (mod X).
 ```
 
-The accelerated `5n+1` cycle `13 -> 33 -> 83 -> 13` is the regression counterexample.
+The accelerated `5n+1` cycle `13 -> 33 -> 83 -> 13` is the regression
+counterexample.
 
 ## Reproduction
 
@@ -165,7 +190,8 @@ No external Python packages are required.
 python run_checks.py
 ```
 
-The modular sieves are deterministic certificate checks, not Collatz trajectory searches.
+The modular sieves are deterministic certificate checks, not Collatz trajectory
+searches.
 
 ## Repository layout
 
