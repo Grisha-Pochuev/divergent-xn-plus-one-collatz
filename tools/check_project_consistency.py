@@ -1,20 +1,25 @@
 #!/usr/bin/env python3
-"""Check that durable project-memory files agree on the retained frontier."""
+"""Check that durable project-memory files agree on retained frontiers."""
 from __future__ import annotations
 
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-CURRENT_BARRIER = 177_780_727_155_637_125_192
-SPARSE_CAP = 355_561_454_311_274_250_377
-SPARSE_EXCEPTIONS = (
+
+OLD_CONTIGUOUS_BARRIER = 177_780_727_155_637_125_192
+OLD_SPARSE_CAP = 355_561_454_311_274_250_377
+OLD_SPARSE_EXCEPTIONS = (
     177_780_727_155_637_125_193,
     177_780_727_155_637_125_195,
 )
+
+PRIMARY_X156_BARRIER = (
+    7_034_970_411_803_187_993_997_906_985_047_212_163_795_395_134
+)
+PRIMARY_THRESHOLD = PRIMARY_X156_BARRIER + 1
 RETRACTED_BARRIER_TEXT = "10^37"
 
-MEMORY_FRONTIER_FILES = (
-    "START_HERE.md",
+OLD_FRONTIER_FILES = (
     "README.md",
     "docs/CURRENT_STATUS.md",
     "docs/VALIDATED_RESULTS.md",
@@ -22,8 +27,14 @@ MEMORY_FRONTIER_FILES = (
     "docs/LATEST_VALID_PROGRESS.md",
 )
 
-RETRACTION_FILES = (
+PRIMARY_FRONTIER_FILES = (
     "START_HERE.md",
+    "docs/CURRENT_STATUS.md",
+    "docs/SESSION_CHECKPOINT_2026-07-11_SHARP_BLOCK_SIGN.md",
+    "docs/NEAR_POWER_SHARP_BLOCK_SIGN.md",
+)
+
+RETRACTION_FILES = (
     "README.md",
     "docs/CURRENT_STATUS.md",
     "docs/RETRACTIONS.md",
@@ -57,6 +68,7 @@ LATEST_TOOLS = (
     "verify_full_modulus_activation_bound.py",
     "verify_index_eight_small_sieve.py",
     "verify_third_exception_subgroup_sieve.py",
+    "verify_near_power_block_sign_threshold.py",
 )
 
 
@@ -68,42 +80,58 @@ def read(relative: str) -> str:
 
 
 def check() -> None:
-    barrier_plain = str(CURRENT_BARRIER)
-    cap_plain = str(SPARSE_CAP)
+    old_barrier_plain = str(OLD_CONTIGUOUS_BARRIER)
+    old_cap_plain = str(OLD_SPARSE_CAP)
+    primary_barrier_plain = str(PRIMARY_X156_BARRIER)
+    primary_threshold_plain = str(PRIMARY_THRESHOLD)
 
     for relative in REQUIRED_PRIORITY1_FILES:
         read(relative)
 
-    for relative in MEMORY_FRONTIER_FILES:
+    for relative in OLD_FRONTIER_FILES:
         text = read(relative)
-        if barrier_plain not in text:
+        if old_barrier_plain not in text:
             raise AssertionError(
-                f"{relative} does not contain barrier {barrier_plain}"
+                f"{relative} does not contain old barrier {old_barrier_plain}"
             )
-        if cap_plain not in text:
+        if old_cap_plain not in text:
             raise AssertionError(
-                f"{relative} does not contain sparse cap {cap_plain}"
+                f"{relative} does not contain old sparse cap {old_cap_plain}"
             )
-        for exception in SPARSE_EXCEPTIONS:
+        for exception in OLD_SPARSE_EXCEPTIONS:
             if str(exception) not in text:
                 raise AssertionError(
-                    f"{relative} does not contain exception {exception}"
+                    f"{relative} does not contain old exception {exception}"
                 )
+
+    for relative in PRIMARY_FRONTIER_FILES:
+        text = read(relative)
+        if primary_barrier_plain not in text:
+            raise AssertionError(
+                f"{relative} does not contain X156 barrier "
+                f"{primary_barrier_plain}"
+            )
+        if primary_threshold_plain not in text:
+            raise AssertionError(
+                f"{relative} does not contain X156 threshold "
+                f"{primary_threshold_plain}"
+            )
 
     for relative in RETRACTION_FILES:
         text = read(relative)
         if RETRACTED_BARRIER_TEXT not in text:
             raise AssertionError(
-                f"{relative} does not mention retracted {RETRACTED_BARRIER_TEXT}"
+                f"{relative} does not mention retracted "
+                f"{RETRACTED_BARRIER_TEXT}"
             )
         lowered = text.lower()
         if "retract" not in lowered and "отоз" not in lowered:
             raise AssertionError(f"{relative} lacks a retraction marker")
 
     audit = read("tools/verify_continued_fraction_barrier.py")
-    if f"CURRENT_RETAINED_BARRIER = {barrier_plain}" not in audit:
-        raise AssertionError("retraction audit records a different barrier")
-    if f"CURRENT_SPARSE_CAP = {cap_plain}" not in audit:
+    if f"CURRENT_RETAINED_BARRIER = {old_barrier_plain}" not in audit:
+        raise AssertionError("retraction audit records a different old barrier")
+    if f"CURRENT_SPARSE_CAP = {old_cap_plain}" not in audit:
         raise AssertionError("retraction audit records a different sparse cap")
 
     checks = read("run_checks.py")
@@ -112,9 +140,11 @@ def check() -> None:
             raise AssertionError(f"run_checks.py does not include {tool}")
 
     print("project-memory consistency verified")
-    print(f"current contiguous barrier={CURRENT_BARRIER}")
-    print(f"current sparse cap={SPARSE_CAP}")
-    print(f"remaining sparse exceptions={SPARSE_EXCEPTIONS}")
+    print(f"primary X156 barrier={PRIMARY_X156_BARRIER}")
+    print(f"primary X156 first threshold={PRIMARY_THRESHOLD}")
+    print(f"old contiguous barrier={OLD_CONTIGUOUS_BARRIER}")
+    print(f"old sparse cap={OLD_SPARSE_CAP}")
+    print(f"old sparse exceptions={OLD_SPARSE_EXCEPTIONS}")
     print(f"priority-1 certificate files={len(REQUIRED_PRIORITY1_FILES)}")
 
 
