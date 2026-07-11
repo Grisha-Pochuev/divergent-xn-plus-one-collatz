@@ -27,6 +27,12 @@ ell<L_e   => strict growth,
 ell>=L_e  => strict contraction.
 ```
 
+The first threshold is
+
+```text
+L_1=7034970411803187993997906985047212163795395135.
+```
+
 The additive term never changes the sign after the multiplicative threshold.
 This also raises the exact finite cycle barrier to
 
