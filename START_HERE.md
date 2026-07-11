@@ -22,7 +22,7 @@ START_HERE.md
 docs/WORKING_PROTOCOL.md
 docs/CURRENT_STATUS.md
 docs/RETRACTIONS.md
-docs/SESSION_CHECKPOINT_2026-07-12_DUAL_WIEFERICH_HARMONIC_FRONTIER.md
+docs/SESSION_CHECKPOINT_2026-07-12_MERSENNE_DIVISOR_FAMILY_FRONTIER.md
 ```
 
 Read `docs/VALIDATED_RESULTS.md`, older checkpoints, and detailed theorem files
@@ -45,46 +45,86 @@ positive cycle remains open.
 ## Primary candidate
 
 ```text
-m=3803,
-B=2^3803,
-d=4162203,
-X=B-d,
+k=500,
+N=2^500-1,
+m=4501,
+B=2^4501,
+d=349*2^500-347=2+349*N,
+X=B-d=2^4501-349*2^500+347,
 n0=1.
 ```
 
 Retained strict results:
 
-- `3511^2` divides `X`, giving a one-label permanent sieve;
+- `N|X`, so every output lies in only `500` one-label classes modulo `N`;
 - `1093` divides `X` exactly once, so the orbit leaves `1` and never returns;
-- exactly `17886960` combined permanent classes survive modulo
-  `14726582775529`;
-- their density is between `91312` and `91313` times smaller than the former
-  primary `X=2^156-9` sieve density;
-- all positive cycle lengths through `floor(2*X/(3*d))` are impossible; this
-  exact barrier has `1139` digits and exceeds `10^1138`;
+- exactly `16562000` combined permanent classes survive modulo
+  `(2^500-1)*1093^2`;
+- every hypothetical cycle value is greater than `2^500-1`;
+- the combined base reciprocal constant is below `10^(-147)` and the harmonic
+  tail coefficient is below `10^(-149)`;
+- all positive cycle lengths through `floor(2*X/(3*d))` are impossible, with
+
+```text
+10^1201<floor(2*X/(3*d))<10^1202;
+```
+
 - every exceptional source satisfies
 
 ```text
-n>=(19567017189655*2^3803+1)/4162203;
+n>=(u_min*2^4501+1)/(349*2^500-347),
 ```
 
-- every hypothetical cycle of length `p`, with
+  where
 
 ```text
-D=3803*p-A,
-delta=log2(2^3803/X),
-K=17886960,
-M=14726582775529,
+u_min=
+141554173562669451979142234479211407387695161061947663158036275475013035570532072821977692485924548874811696146286209742307923384940182399969083204712328957713629782297601610389067903491331197096456313288013542743720638224927691460837892079910386115268969408753656537834465197519183303759432510875217219;
 ```
 
-  satisfies the global harmonic window
+  the lower-bound source has `1505` decimal digits;
+- with
+
+```text
+D=4501*p-A,
+delta=log2(2^4501/X),
+K=16562000,
+M=(2^500-1)*1093^2,
+C0=(500/(2^500-1))*(1+H_33124/2),
+```
+
+  every hypothetical cycle satisfies
 
 ```text
 0<p*delta-D
- <[1/853 + K*H_(ceil(p/K))/(2*M)]/(X*ln(2)).
+ <[C0+K*H_(ceil(p/K))/(2*M)]/(X*ln(2)),
+C0<10^(-147).
 ```
 
 Exact statements, proofs, and checkers are indexed in `docs/CURRENT_STATUS.md`.
+
+## Reusable family theorem
+
+For
+
+```text
+N=2^k-1,
+m==r (mod k),
+d=2^r+t*N,
+X=2^m-d,
+```
+
+with `364` not dividing `k`, one can choose a parity-correct `t<2*1093^2`
+such that `1093||X`. For sufficiently large `m`, this gives:
+
+- no return to `1` from `n0=1`;
+- exactly `k` one-label classes modulo `N`;
+- `364*lcm(k,364)` combined classes modulo `N*1093^2`;
+- exponentially shrinking harmonic constants;
+- an arbitrarily large finite cycle barrier.
+
+Therefore increasing `k` or `m` merely to set a new finite record is not a
+priority. The missing theorem must use dynamic transition or height structure.
 
 ## Decisive missing theorem
 
@@ -96,21 +136,33 @@ ledger
 D=sum ordinary deficits-sum exceptional excesses.
 ```
 
+The first split is:
+
+```text
+no exceptional blocks;
+exactly one exceptional block;
+at least two exceptional blocks.
+```
+
 The desired contradiction must use together:
 
-1. the permanent class density;
-2. the exceptional-source floor;
-3. distinct-value harmonic packing;
-4. ordinary and exceptional block credits;
-5. a height-dependent or Diophantine lower bound for `p*delta-D`.
+1. compatible `500`- and `364`-label sequences;
+2. ordinary and exceptional block credits;
+3. the 1505-digit exceptional-source floor;
+4. distinct-value harmonic packing;
+5. a height-dependent lower bound for `p*delta-D`.
 
 ## Exact next work
 
-1. Split hypothetical cycles by the number of exceptional blocks.
-2. Charge every exceptional contraction using its permanent source floor.
-3. Derive a block-credit-dependent lower bound for `p*delta-D`.
-4. Compare it with the harmonic upper window.
-5. Use continued fractions only after the credit structure restricts `(p,D)`.
+1. Derive the strongest correction lower bound when there are no exceptional
+   blocks.
+2. Treat exactly one exceptional block using its exact source floor and descent
+   coordinate.
+3. Treat two or more exceptional blocks using distinct sources and harmonic
+   packing.
+4. Compare each lower bound with the harmonic upper window.
+5. Use continued fractions only after the block-credit structure restricts
+   `(p,D)`.
 
 Use one primary target and at most two exploratory directions. Full operational
 rules are in `docs/WORKING_PROTOCOL.md`.
@@ -119,6 +171,9 @@ rules are in `docs/WORKING_PROTOCOL.md`.
 
 Retain independently:
 
+- `X=2^3803-4162203,n0=1`, with `17886960` classes modulo
+  `14726582775529`, barrier above `10^1138`, and exceptional floor
+  `(19567017189655*2^3803+1)/4162203`;
 - former primary `X=2^156-9,n0=1`, with barrier
   `7034970411803187993997906985047212163795395134`, first block threshold
   `7034970411803187993997906985047212163795395135`, and exceptional floor
