@@ -17,6 +17,9 @@ PRIMARY_X156_BARRIER = (
     7_034_970_411_803_187_993_997_906_985_047_212_163_795_395_134
 )
 PRIMARY_THRESHOLD = PRIMARY_X156_BARRIER + 1
+PRIMARY_EXCEPTIONAL_FLOOR = (
+    1_268_664_615_738_631_005_385_143_083_955_106_787_895_774_776_889
+)
 RETRACTED_BARRIER_TEXT = "10^37"
 
 OLD_FRONTIER_FILES = (
@@ -30,8 +33,27 @@ OLD_FRONTIER_FILES = (
 PRIMARY_FRONTIER_FILES = (
     "START_HERE.md",
     "docs/CURRENT_STATUS.md",
+    "docs/PROGRESS_METRICS.md",
     "docs/SESSION_CHECKPOINT_2026-07-11_SHARP_BLOCK_SIGN.md",
+    "docs/SESSION_CHECKPOINT_2026-07-11_BLOCK_LEDGER_AND_EXCEPTIONAL_SIEVE.md",
     "docs/NEAR_POWER_SHARP_BLOCK_SIGN.md",
+)
+
+PRIMARY_EXCEPTIONAL_FILES = (
+    "START_HERE.md",
+    "docs/CURRENT_STATUS.md",
+    "docs/PROGRESS_METRICS.md",
+    "docs/SESSION_CHECKPOINT_2026-07-11_BLOCK_LEDGER_AND_EXCEPTIONAL_SIEVE.md",
+    "docs/X156_EXCEPTIONAL_Q2_SIEVE.md",
+)
+
+PRIMARY_STRUCTURE_FILES = (
+    "docs/NEAR_POWER_SHARP_BLOCK_SIGN.md",
+    "tools/verify_near_power_block_sign_threshold.py",
+    "docs/NEAR_POWER_CYCLE_BLOCK_LEDGER.md",
+    "tools/verify_near_power_cycle_block_ledger.py",
+    "docs/X156_EXCEPTIONAL_Q2_SIEVE.md",
+    "tools/verify_x156_exceptional_q2_sieve.py",
 )
 
 RETRACTION_FILES = (
@@ -69,6 +91,8 @@ LATEST_TOOLS = (
     "verify_index_eight_small_sieve.py",
     "verify_third_exception_subgroup_sieve.py",
     "verify_near_power_block_sign_threshold.py",
+    "verify_near_power_cycle_block_ledger.py",
+    "verify_x156_exceptional_q2_sieve.py",
 )
 
 
@@ -84,8 +108,9 @@ def check() -> None:
     old_cap_plain = str(OLD_SPARSE_CAP)
     primary_barrier_plain = str(PRIMARY_X156_BARRIER)
     primary_threshold_plain = str(PRIMARY_THRESHOLD)
+    exceptional_floor_plain = str(PRIMARY_EXCEPTIONAL_FLOOR)
 
-    for relative in REQUIRED_PRIORITY1_FILES:
+    for relative in REQUIRED_PRIORITY1_FILES + PRIMARY_STRUCTURE_FILES:
         read(relative)
 
     for relative in OLD_FRONTIER_FILES:
@@ -117,6 +142,14 @@ def check() -> None:
                 f"{primary_threshold_plain}"
             )
 
+    for relative in PRIMARY_EXCEPTIONAL_FILES:
+        text = read(relative)
+        if exceptional_floor_plain not in text:
+            raise AssertionError(
+                f"{relative} does not contain exceptional floor "
+                f"{exceptional_floor_plain}"
+            )
+
     for relative in RETRACTION_FILES:
         text = read(relative)
         if RETRACTED_BARRIER_TEXT not in text:
@@ -142,10 +175,12 @@ def check() -> None:
     print("project-memory consistency verified")
     print(f"primary X156 barrier={PRIMARY_X156_BARRIER}")
     print(f"primary X156 first threshold={PRIMARY_THRESHOLD}")
+    print(f"primary exceptional floor={PRIMARY_EXCEPTIONAL_FLOOR}")
     print(f"old contiguous barrier={OLD_CONTIGUOUS_BARRIER}")
     print(f"old sparse cap={OLD_SPARSE_CAP}")
     print(f"old sparse exceptions={OLD_SPARSE_EXCEPTIONS}")
     print(f"priority-1 certificate files={len(REQUIRED_PRIORITY1_FILES)}")
+    print(f"primary structure files={len(PRIMARY_STRUCTURE_FILES)}")
 
 
 if __name__ == "__main__":
