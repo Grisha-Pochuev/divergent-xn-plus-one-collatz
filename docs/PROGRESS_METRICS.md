@@ -1,72 +1,115 @@
 # Objective progress metrics
 
-This file replaces unsupported single-number progress estimates.  A percentage
+This file replaces unsupported single-number progress estimates. A percentage
 of research effort is not the same thing as a percentage of a proof.
 
 ## Reporting rule
 
-Future checkpoints should report three separate things:
+Future checkpoints report three separate things:
 
 1. **strict proof gates**: which logically necessary gates are closed;
-2. **frontier counts**: concrete finite quantities that decreased;
-3. **research infrastructure**: reusable exact lemmas and checkers.
+2. **finite frontiers**: exact quantities that were reduced;
+3. **structural depth**: reusable infinite-family lemmas and independent checks.
 
-Do not turn these three measurements into one precise percentage unless a
-weighting rule has been stated in advance.
+Do not combine these into one precise percentage. The last global theorem may
+contain most of the mathematical difficulty even when many preparatory gates are
+closed.
 
 ## A. Strict prize gates
 
-A complete solution needs all of the following.
+A complete solution needs the following for one explicit pair.
 
-| Gate | Meaning | Status |
+| Gate | Meaning | Current structured candidate `X=2^156-9,n0=1` |
 |---|---|---|
-| G1 | explicit odd `X>=5` and odd positive `n0` | closed for several candidates |
-| G2 | orbit leaves the trivial fixed behavior and never returns to it | open for the current `X=15,n0=3` branch |
-| G3 | every possible nontrivial positive cycle is excluded | open |
-| G4 | bounded-orbit dichotomy is invoked correctly | closed as a general lemma |
-| G5 | exact certificates and independent verification cover the final argument | infrastructure ready; final certificate open |
+| G1 | explicit odd `X>=5` and positive odd `n0` | closed |
+| G2 | orbit leaves `1` and can never return to it | closed |
+| G3 | every nontrivial positive cycle is excluded | open |
+| G4 | positive bounded-orbit dichotomy is applied correctly | closed as a general lemma |
+| G5 | exact independent verification covers the final proof | partial; final certificate waits for G3 |
 
-The prize is not solved until G2, G3, and G5 are all closed for the same
-explicit pair.
+Thus three logical gates are available, but the decisive global cycle gate G3
+is still open. These gates are not equally difficult and must not be converted
+to `60% solved`.
 
-## B. Current `X=15,n0=3` branch
-
-### Closed structure
-
-- complete valuation blocks are classified;
-- every exceptional Mersenne block has a strictly smaller ordinary seed with
-  the identical future tail;
-- a least seed entering a hypothetical nontrivial cycle must have
-  `v2(w-1) in {1,2,3}`;
-- the second block cannot be exceptional;
-- if the second block contracts, its terminal type must strictly increase.
-
-### Remaining cycle subfrontier
-
-For a least basin seed with initial type `s`:
+## B. Structured hybrid candidate
 
 ```text
-s=3:
-  no contracting second block remains;
-
-s=2:
-  only terminal type 3 with 10<=k<=20 remains at the second block;
-
-s=1:
-  terminal type 2 with 21<=k<=31,
-  or terminal type 3 with 10<=k<=31,
-  remains at the second block.
+X=2^156-9
+ =91343852333181432387730302044767688728495783927,
+n0=1.
 ```
 
-This is a real reduction, but it does not control contractions after further
-net-growing blocks.  The central missing cycle lemma is now a record-height or
-height-credit argument that can be iterated indefinitely.
+### Closed
 
-### Other open gate
+- `1093` divides `X` exactly once;
+- the Wieferich mechanism proves that the orbit never returns to `1`;
+- all positive cycles of length at most
 
-The backward tree of `1` has not yet been excluded for the start `n0=3`.
+```text
+6766211283939365362054096447760569535444132142
+```
 
-## C. Huge fixed-candidate frontier
+  are excluded;
+- every near-power valuation block is classified exactly;
+- the first `48` accelerated steps have the exact word
+
+```text
+(3,1,2,2,5,6)^8
+```
+
+  and total valuation `152`;
+- after that program, `v2(n_48-1)=4` and
+  `n_48>X^48/2^152`.
+
+### Open
+
+- cycles above the finite barrier remain infinite in number;
+- the exact repeated initial program ends after eight blocks;
+- no renewal or height-credit theorem yet forces another long program;
+- therefore G3 remains one global theorem, not a finite list nearing zero.
+
+## C. Larger-barrier hybrid candidate
+
+```text
+X=2^260-3,
+n0=1.
+```
+
+Closed measurements:
+
+- return to `1` is impossible;
+- all positive cycle lengths through approximately `4.117*10^77` are excluded;
+- the first `172` accelerated steps have the exact word `(1,2)^86` and total
+  valuation `258`;
+- a least seed entering a hypothetical cycle must satisfy
+  `1<=v2(3*w-1)<=259` and its first step grows.
+
+This candidate has the stronger finite barrier. The `2^156-9` candidate has the
+cleaner repeated six-step program and is currently preferred for renewal work.
+
+## D. `X=15,n0=3` Mersenne branch
+
+Closed structure:
+
+- complete valuation blocks are classified;
+- exceptional blocks have a strictly smaller ordinary seed with the identical
+  future tail;
+- a least seed entering a hypothetical cycle has `v2(w-1) in {1,2,3}`;
+- the second block cannot be exceptional;
+- if the second block contracts, its terminal type strictly increases.
+
+Remaining contracting second-block families:
+
+```text
+initial type 3: none;
+initial type 2: terminal type 3, 10<=k<=20;
+initial type 1: terminal type 2, 21<=k<=31,
+                or terminal type 3, 10<=k<=31.
+```
+
+The later-block height theorem and avoidance of `1` remain open.
+
+## E. Huge fixed-candidate frontier
 
 For
 
@@ -75,66 +118,38 @@ X=104350542602662257699,
 n0=1,
 ```
 
-all cycle lengths through
+all cycle lengths through `355561454311274250377` are excluded except two.
+For the first surviving length, the layer total originally allowed
+`Q=0,...,6257`; only `Q=6242,...,6257` have been removed. Therefore
 
 ```text
-355561454311274250377
+6242 possible Q values remain.
 ```
 
-are excluded except two lengths.
+This was the clearest reason the old percentage began moving slowly: the latest
+strict local improvement removed `16` of `6258` layer totals, while lengths
+above the finite barrier remain unbounded.
 
-For the first remaining length, the layer total originally allowed
+## F. `X=9,n0=1` direct-growth frontier
 
-```text
-Q=0,...,6257.
-```
-
-The current theorem excludes only
-
-```text
-Q=6242,...,6257,
-```
-
-so the exact remaining count is
-
-```text
-6242 possible Q values.
-```
-
-This explains why the apparent progress slowed: a gigantic finite length
-barrier was obtained, but the latest local improvement removed `16` of `6258`
-possible layer totals at the first surviving length.  Moreover cycle lengths
-above the finite barrier remain infinite in number.
-
-## D. `X=9,n0=1` direct-growth frontier
-
-The exact sufficient target is
+The exact sufficient target remains
 
 ```text
 A_t<=3*t-1 for every t>=1.
 ```
 
-The stronger inequality
+Finite checked prefixes are evidence only and are never counted as a fraction
+of an infinite theorem.
 
-```text
-A_t<=3*t-2
-```
-
-has finite verification only.  Finite checked steps are evidence and must not
-be counted as a fraction of an infinite proof.
-
-## E. Recommended status wording
+## G. Recommended status wording
 
 Use wording such as:
 
 ```text
-strict prize gates closed: 2 of 5, with 3 still open;
-X=15 second-block contracting families: reduced from all types to 3 finite
-parameter families, but the later-block height lemma remains global;
-huge-candidate first-length Q frontier: 6242 values remain;
-strict problem: open.
+strict target: open;
+G1, G2 and the general dichotomy are closed for X=2^156-9;
+decisive remaining gate: exclusion of every nontrivial positive cycle;
+finite barrier: 6.766*10^45 steps;
+exact initial program: 48 steps in eight proved macroblocks;
+research maturity: high, but proof completion has no defensible percentage.
 ```
-
-A rough research-maturity estimate may still be given separately, but it must
-be labeled subjective.  It must not be presented as the probability that the
-proof is almost finished.
