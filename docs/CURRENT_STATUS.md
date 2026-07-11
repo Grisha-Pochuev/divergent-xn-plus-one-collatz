@@ -13,10 +13,12 @@ tends to positive infinity. The strict problem remains open.
 ## Proof gates for the primary candidate
 
 ```text
-m=3803,
-B=2^3803,
-d=4162203,
-X=B-d,
+k=500,
+N=2^500-1,
+m=4501,
+B=2^4501,
+d=349*2^500-347=2+349*N,
+X=B-d=2^4501-349*2^500+347,
 n0=1.
 ```
 
@@ -28,212 +30,293 @@ G4 positive bounded-orbit dichotomy: closed as a general lemma;
 G5 final independently checked certificate: partial, waiting for G3.
 ```
 
-This candidate replaced `X=2^156-9` on 2026-07-12 because its permanent
-residue density is more than `91312` times smaller and it supports a global
-harmonic-packing inequality. The former primary branch remains valid and is
-retained below.
+This candidate replaced `X=2^3803-4162203` on 2026-07-12. It has both a
+larger finite cycle barrier and exponentially smaller harmonic-packing
+constants, while keeping an exact exceptional-source certificate.
 
-## Retained structure for `X=2^3803-4162203`
+## General Mersenne-divisor Wieferich family
 
-### Complementary Wieferich divisors
-
-Exact modular arithmetic proves
+Let
 
 ```text
-ord_(3511^2)(2)=1755,
-v_3511(X)=2,
-
-ord_(1093^2)(2)=364,
-v_1093(X)=1.
+N=2^k-1,
+m==r (mod k),
+d=2^r+t*N,
+X=2^m-d.
 ```
 
-Thus `3511^2|X` supplies a one-label permanent coordinate, while `1093||X`
-supplies the no-return argument and an adjacent-label coordinate.
+If `d` is odd, `d<2^(m-1)`, `364` does not divide `k`, and `1093||X`, then:
+
+- `N|X`;
+- the orbit from `1` leaves `1` and never returns;
+- every output lies in exactly `k` classes modulo `N`;
+- after combining with the `1093^2` adjacent-label coordinate, every cycle
+  value lies in exactly
+
+```text
+K=364*lcm(k,364)
+```
+
+  classes modulo
+
+```text
+M=N*1093^2;
+```
+
+- the retained density and harmonic coefficients decrease exponentially with
+  `k`;
+- the elementary finite barrier can be made arbitrarily large by increasing
+  `m-k`.
+
+For every admissible `k,m,r`, a parity-correct `t<2*1093^2` with `1093||X`
+exists after avoiding at most one lift modulo `1093^2`.
+
+This is a reusable infinite-family theorem. It also proves that merely enlarging
+the modulus or finite barrier is not the missing final idea.
+
+Files:
+
+```text
+docs/MERSENNE_DIVISOR_WIEFERICH_FAMILY.md
+tools/verify_mersenne_divisor_wieferich_family.py
+```
+
+## Retained structure for the primary candidate
 
 ### No return to `1`
 
-The first accelerated step has valuation `1`, so the orbit leaves `1`.
-Every accelerated output is coprime to `1093`. If an output `y` mapped to `1`,
-then
+The inequalities
+
+```text
+2^4500<X+1<2^4501
+```
+
+show that the first accelerated step leaves `1`. Every accelerated output is
+coprime to `1093`. If an output `y` mapped to `1`, then
 
 ```text
 X*y+1=2^a.
 ```
 
-The exact order and Wieferich congruence force `1093^2|X*y`; because
-`1093||X`, this would give `1093|y`, a contradiction. Therefore
+The exact order `364` and the Wieferich congruence modulo `1093^2` force
+`1093^2|X*y`. Since `1093||X`, this would imply `1093|y`, a contradiction.
+
+### Exact one-label sieve
+
+Because
 
 ```text
-C_X^t(1) != 1 for every t>=1.
+N=2^500-1
 ```
 
-### One-label and combined permanent sieves
-
-Because `3511^2|X`, every accelerated output satisfies
+divides `X`, every accelerated output satisfies
 
 ```text
-n_(i+1)==2^(-a_i) (mod 3511^2).
+n_(i+1)==2^(-a_i) (mod N).
 ```
 
-There are exactly `1755` possible output classes modulo
+The order of `2` modulo `N` is exactly `500`, so only the `500` classes
 
 ```text
-3511^2=12327121.
+1,2,4,...,2^499 (mod N)
 ```
 
-Combining this coordinate with the `1093^2` adjacent-label coordinate and the
-compatibility of current valuation labels modulo
+can occur. Since cycle values are odd and cannot equal `1`, their least allowed
+representatives are
 
 ```text
-gcd(1755,364)=13
+1+2*N,
+N+2,
+N+4,
+...,
+N+2^499.
 ```
 
+In particular every hypothetical cycle value satisfies
+
+```text
+n_i>N=2^500-1.
+```
+
+### Combined permanent sieve
+
+The current valuation labels modulo `500` and `364` must agree modulo
+
+```text
+gcd(500,364)=4.
+```
+
+Combining the one-label coordinate with the `1093^2` adjacent-label coordinate
 gives exactly
 
 ```text
-K=17886960
+K=16562000
 ```
 
 permanent classes modulo
 
 ```text
-M=3511^2*1093^2=14726582775529.
+M=(2^500-1)*1093^2.
 ```
 
-Their density is approximately
-
-```text
-1.214603569*10^(-6),
-```
-
-between `91312` and `91313` times smaller than the former primary sieve density
-`132496/1093^2`.
-
-### Finite cycle barrier
-
-For a hypothetical positive cycle of length `p` and total valuation `A`, put
-
-```text
-D=3803*p-A.
-```
-
-The cycle product gives `D>=1` and
-
-```text
-D<3*p*d/(2*X).
-```
-
-Hence every positive cycle length through
-
-```text
-floor(2*X/(3*d))
-```
-
-is impossible. This exact barrier has `1139` decimal digits and is greater than
-
-```text
-10^1138.
-```
-
-It remains a finite barrier, not a proof of divergence.
-
-### Exceptional-source combined sieve
-
-The exact exceptional condition is
-
-```text
-v2(d*n-1)=3803.
-```
-
-It is one progression modulo `2^3804`. Combining that progression with both
-permanent residue coordinates and checking every smaller layer proves that the
-first compatible layer is
-
-```text
-T=2350560,
-3511-label=40,
-1093-label pair=(99,222).
-```
-
-Consequently every exceptional source in any hypothetical positive cycle
-satisfies
-
-```text
-n>=(19567017189655*2^3803+1)/4162203.
-```
-
-The raw exceptional odd-core coefficient is only `1422295`; the permanent sieve
-increases it by a factor greater than `13757000`.
+Their density is between `10^143` and `10^144` times smaller than for the
+previous candidate `X=2^3803-4162203`.
 
 ### Global harmonic packing
 
-For the `1755` square-sieve classes, exact rational summation of their least
-allowed positive odd representatives gives
+The least allowed representatives of the `500` one-label classes satisfy
 
 ```text
-sum 1/rho <1/2110.
-```
-
-A two-level residue-class packing argument proves that the least representatives
-of all `K` combined classes satisfy
-
-```text
-sum_(j=1)^K 1/sigma_j <1/853.
-```
-
-Therefore every hypothetical positive cycle of length `p` obeys
-
-```text
-sum_i 1/n_i
- <1/853 + K*H_(ceil(p/K))/(2*M).
+S_500<500/N.
 ```
 
 Let
 
 ```text
-delta=log2(2^3803/X).
+C0=(500/N)*(1+H_33124/2).
 ```
 
-The exact cycle product then gives the infinite-family restriction
+Exact rational arithmetic proves
+
+```text
+10^(-148)<C0<10^(-147),
+10^(-150)<K/(2*M)<10^(-149).
+```
+
+Every hypothetical positive cycle of length `p` therefore obeys
+
+```text
+sum_i 1/n_i
+ <C0+K*H_(ceil(p/K))/(2*M).
+```
+
+With
+
+```text
+D=4501*p-A,
+delta=log2(2^4501/X),
+```
+
+the exact cycle product gives the infinite-family restriction
 
 ```text
 0<p*delta-D
- <[1/853 + K*H_(ceil(p/K))/(2*M)]/(X*ln(2)).
+ <[C0+K*H_(ceil(p/K))/(2*M)]/(X*ln(2)).
 ```
 
-The right side grows only logarithmically with `p`, rather than linearly. This
-is the strongest global cycle restriction currently available in the project.
+### Finite cycle barrier
 
-Main files:
+The standard near-power product inequalities give
 
 ```text
-docs/DUAL_WIEFERICH_SQUARE_SIEVE_CANDIDATE.md
-tools/verify_dual_wieferich_square_sieve_candidate.py
+D>=1,
+D<3*p*d/(2*X),
+```
 
-docs/DUAL_WIEFERICH_HARMONIC_PACKING.md
-tools/verify_dual_wieferich_harmonic_packing.py
+and hence
+
+```text
+p>2*X/(3*d).
+```
+
+For the primary candidate,
+
+```text
+10^1201<floor(2*X/(3*d))<10^1202.
+```
+
+This remains a finite barrier, not a proof of divergence.
+
+### Exact exceptional-source floor
+
+The exceptional condition
+
+```text
+v2(d*n-1)=4501
+```
+
+is one progression modulo `2^4502`. Combining it with both permanent
+coordinates proves that the first compatible layer has labels
+
+```text
+N-label=495,
+1093-label pair=(161,311).
+```
+
+The exact odd-core coefficient is
+
+```text
+u_min=
+141554173562669451979142234479211407387695161061947663158036275475013035570532072821977692485924548874811696146286209742307923384940182399969083204712328957713629782297601610389067903491331197096456313288013542743720638224927691460837892079910386115268969408753656537834465197519183303759432510875217219.
+```
+
+Therefore every exceptional cycle source satisfies
+
+```text
+n>=(u_min*2^4501+1)/(349*2^500-347).
+```
+
+The right side has `1505` decimal digits. Minimality is certified using only the
+`500` one-label layers and `364^2` adjacent-label layers.
+
+File:
+
+```text
+docs/MERSENNE_DIVISOR_EXCEPTIONAL_FLOOR.md
 ```
 
 ## Decisive missing theorem
 
-No result yet excludes every cycle above the finite barrier. The remaining
-target is to combine the logarithmic harmonic window with the exact near-power
-block ledger
+No theorem yet excludes every cycle above the finite barrier. The family theorem
+shows that raw sieve density and barrier size can be strengthened without limit,
+so further record construction is not a priority.
+
+The remaining target is to connect the dynamic block ledger
 
 ```text
-D=sum ordinary terminal deficits-sum exceptional excess valuations.
+D=sum ordinary terminal deficits-sum exceptional excess valuations
 ```
 
-The intended attack is:
+with the harmonic upper window. The first exact split is:
 
-1. split by the number of exceptional blocks;
-2. use the exceptional-source floor to charge every exceptional contraction;
-3. derive a block-credit-dependent lower bound for `p*delta-D`;
-4. compare that lower bound with the harmonic upper window;
-5. use continued-fraction or exact rational windows only after the credit
-   patterns restrict the admissible integer pairs `(p,D)`.
+```text
+no exceptional blocks;
+exactly one exceptional block;
+at least two exceptional blocks.
+```
+
+For each case the project needs a lower bound for `p*delta-D` that uses:
+
+1. the sequence of compatible `500`- and `364`-labels;
+2. the length and credit of every complete near-power block;
+3. the 1505-digit floor for exceptional sources;
+4. height dependence, not a fixed finite-state positive-mean potential.
 
 ## Independent fallback branches
+
+### Previous primary: `X=2^3803-4162203,n0=1`
+
+Retained strict results:
+
+```text
+m=3803,
+d=4162203,
+X=2^3803-4162203.
+```
+
+- `3511^2|X` and `1093||X`;
+- the orbit leaves `1` and never returns;
+- exactly `17886960` permanent classes survive modulo
+  `14726582775529`;
+- every cycle length through a `1139`-digit barrier greater than `10^1138` is
+  impossible;
+- every exceptional source satisfies
+
+```text
+n>=(19567017189655*2^3803+1)/4162203;
+```
+
+- every cycle obeys the harmonic window with base constant `1/853`.
 
 ### Former primary: `X=2^156-9,n0=1`
 
@@ -243,7 +326,7 @@ Retained strict results:
 X=91343852333181432387730302044767688728495783927.
 ```
 
-- `1093` divides `X` exactly once, so the orbit leaves `1` and never returns;
+- `1093||X`, so the orbit leaves `1` and never returns;
 - the first `48` steps have word `(3,1,2,2,5,6)^8` and total valuation `152`;
 - all positive cycle lengths through
 
@@ -265,14 +348,11 @@ X=91343852333181432387730302044767688728495783927.
 n>=1268664615738631005385143083955106787895774776889.
 ```
 
-This branch has a much smaller block alphabet (`155` deficits) but a far denser
-permanent sieve.
-
 ### `X=2^260-3,n0=1`
 
-- return to `1` is impossible;
-- all positive cycle lengths through approximately `4.117*10^77` are excluded;
-- the first `172` steps have exact word `(1,2)^86`.
+Return to `1` is impossible, all positive cycle lengths through approximately
+`4.117*10^77` are excluded, and the first `172` steps have exact word
+`(1,2)^86`.
 
 ### `X=15,n0=3`
 
@@ -324,15 +404,14 @@ used by a cycle. See `docs/RETRACTIONS.md`.
 
 ## Verification
 
-The two new standalone checkers passed in the chat environment and are included
-in
+The following new standalone checkers passed in the chat environment and are
+included in `python run_checks.py`:
 
 ```text
-python run_checks.py
+tools/verify_dual_wieferich_square_sieve_candidate.py
+tools/verify_dual_wieferich_harmonic_packing.py
+tools/verify_mersenne_divisor_wieferich_family.py
 ```
-
-The exceptional-source checker exhaustively verifies all progression layers
-below `T=2350560`. The harmonic checker uses exact rational arithmetic.
 
 A complete repository-wide run was not executed in the chat container because
 a fresh GitHub checkout was unavailable there.
