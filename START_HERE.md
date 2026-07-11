@@ -10,7 +10,7 @@ Find explicit positive odd integers `X>=5` and `n0>=1` such that
 C_X(n)=(X*n+1)/2^v2(X*n+1)
 ```
 
-satisfies `C_X^t(n0) -> +infinity`. A cycle, avoidance of `1`, or any finite barrier is not a solution.
+satisfies `C_X^t(n0) -> +infinity`.  A cycle, avoidance of `1`, or any finite barrier is not a solution.
 
 ## Read first
 
@@ -20,6 +20,7 @@ docs/CURRENT_STATUS.md
 docs/VALIDATED_RESULTS.md
 docs/RETRACTIONS.md
 docs/NEXT_STEPS.md
+docs/SESSION_CHECKPOINT_2026-07-11.md
 run_checks.py
 ```
 
@@ -63,12 +64,7 @@ The strict problem remains open.
 Use
 
 ```text
-O=ord_X(2)=1860810887857924950.
-```
-
-Every edge has the unique form
-
-```text
+O=ord_X(2)=1860810887857924950,
 a_i=s_(i+1)+O*q_i,
 1<=s_i<=O,
 q_i>=0.
@@ -80,7 +76,21 @@ For either remaining length,
 sum_i q_i<=6257.
 ```
 
-Thus almost every edge uses the least full-order layer. The full predecessor progression is
+Thus almost every edge uses its least full-order layer.
+
+The exact symmetric edge cost
+
+```text
+c_i=(s_i-1)+(s_(i+1)-1)+2*O*q_i
+```
+
+satisfies
+
+```text
+sum_i c_i=2*(A-p).
+```
+
+Possible predecessors of a full representative form the exact progression
 
 ```text
 m_q == m_0+q*63726582940809041391 (mod X).
@@ -88,72 +98,62 @@ m_q == m_0+q*63726582940809041391 (mod X).
 
 A reached predecessor must itself be a full output.
 
-## Exact transition-cost frontier
+## Current retained transition picture
 
-Define
-
-```text
-c_i=(s_i-1)+(s_(i+1)-1)+2*O*q_i.
-```
-
-Every hypothetical cycle satisfies exactly
-
-```text
-sum_i c_i=2*(A-p).
-```
-
-This identity now drives Priority 1.
-
-### Cheap/high versus expensive/small
-
-With `K=5000`, at least `97.38%` of all edges satisfy
+With `K=5000`, more than `97.38%` of all edges satisfy
 
 ```text
 q_i=0,
 s_i+s_(i+1)<=5001.
 ```
 
-Every target of such an edge is at least
+Every target in that cheap majority is at least
 
 ```text
 781563824454394220933608138645145,
 ```
 
-so the entire cheap majority contributes less than `2.216*10^(-13)` to `sum 1/n_i`.
+so the whole cheap majority contributes less than `2.216*10^(-13)` to `sum 1/n_i`.
 
-Therefore the required reciprocal correction is concentrated in expensive edges. One expensive target is forced below
+The reciprocal correction is therefore forced into expensive transitions:
 
 ```text
-9190982840926584716   for p=...193,
-46609216582838682965  for p=...195.
+p=...193: at least 355687 expensive targets in (10^6,X),
+p=...195: at least 5 expensive targets below X.
 ```
 
-Both are below `X`.
+Since at most `6257` positions have positive layer,
 
-### Repeated exact transition classes
+```text
+p=...193: at least 349430 zero-layer expensive targets in (10^6,X),
+p=...195: at least 793213 zero-layer targets above 60000000.
+```
 
-With `K=197`, one zero-layer label pair occurs at least
+The second number uses the retained split-range requirement of at least `799470` values above sixty million.
+
+## Repetition and height structure
+
+One exact zero-layer transition pair occurs at least
 
 ```text
 3053943280435589
 ```
 
-times in one odd class modulo `2*X^2`. This forces cycle diameter at least
+times in one class modulo `2*X^2`.  This forces cycle diameter at least
 
 ```text
 66508995066170702555770104858896894988802023536957800776.
 ```
 
-The repeated occurrences also force a nonempty segment with
+It also forces a nonempty segment with
 
 ```text
 length <=114286,
 total valuation <=7771435,
+endpoints equal modulo 2*X^2.
 ```
 
-whose endpoints lie in the same class modulo `2*X^2`.
-
-### Higher-power repetition ladder
+Higher-power repetition:
 
 ```text
 2-edge word: >=3114290401257 repetitions modulo 2*X^3
@@ -162,11 +162,20 @@ whose endpoints lie in the same class modulo `2*X^2`.
 5-edge word: >=1500 repetitions modulo 2*X^6.
 ```
 
-The five-edge word forces a diameter above `3.87*10^123`.
+These are bounds on the maximum or diameter, not on the minimum, so they do not yet contradict the logarithmic minimum-height theorem.
 
-These are bounds on the maximum/diameter, not the minimum, so they do not yet contradict the logarithmic minimum-height ceiling.
+## All-zero-layer branch
 
-## Retained reciprocal information
+If every edge has `q=0`, the four-generation inverse sieve proves
+
+```text
+p=...193: a_out<=36 and n_next>1518500249*m,
+p=...195: a_out<=39 and n_next>189812531*m,
+```
+
+where `m` is the cycle minimum.  Later compensating contractions are not yet excluded.
+
+## Strongest retained reciprocal information
 
 For `p=...195`, the cycle identity requires
 
@@ -174,61 +183,80 @@ For `p=...195`, the cycle identity requires
 sum_i 1/n_i >0.099934206.
 ```
 
-The strongest retained finite inverse-window bound below one million is
+The valid signed-label potential combined with depth-three inverse charging gives
 
 ```text
-<0.085243521
+sum_(n_i<=1000000) 1/n_i <0.085226905.
 ```
 
-at depth three. The new symmetric depth-one edge cost gives `<0.087543786` and supplies the correct cost functional for future circulation duals.
-
-## Current certificate additions
+The strongest retained split-range bound is
 
 ```text
-docs/MASSIVE_REPEATED_TRANSITION_CLASS.md
-tools/verify_massive_repeated_transition_class.py
-docs/CHEAP_TRANSITION_MASS_CONCENTRATION.md
-tools/verify_cheap_transition_mass_concentration.py
-docs/SHORT_FULL_CLASS_RETURN.md
-tools/verify_short_full_class_return.py
-docs/SYMMETRIC_EDGE_COST_DUAL.md
-tools/verify_symmetric_edge_cost_dual.py
-docs/MULTI_EDGE_REPETITION_LADDER.md
-tools/verify_multi_edge_repetition_ladder.py
+sum_(n_i<=60000000) 1/n_i <0.086609720,
+```
+
+forcing at least `799470` values above sixty million and at least `793213` zero-layer values there.
+
+Important audit distinction:
+
+- the old endpoint-identification proof of `0.085226905` remains invalid;
+- the same numerical bound is now independently re-established by `SIGNED_LABEL_POTENTIAL_DUAL`;
+- `0.086412209`, `811320`, and `805063` remain retracted.
+
+## Main current certificates
+
+```text
+docs/EXPENSIVE_SMALL_TARGET_MASS.md
+tools/verify_expensive_small_target_mass.py
+
+docs/DEEP_ZERO_LAYER_MINIMUM_SIEVE.md
+tools/verify_deep_zero_layer_minimum_sieve.py
+
+docs/TWO_CONSTRAINT_INVERSE_DUAL.md
+tools/verify_two_constraint_inverse_dual.py
+
+docs/SPLIT_RANGE_RECIPROCAL_DUAL.md
+tools/verify_split_range_reciprocal_dual.py
+
+docs/FORCED_ZERO_LAYER_POPULATIONS.md
+tools/verify_forced_zero_layer_populations.py
+
+docs/SIGNED_LABEL_POTENTIAL_DUAL.md
+tools/verify_signed_label_potential_dual.py
 ```
 
 ## Exact next step
 
 Do not enlarge trajectory or residue cutoffs blindly.
 
-1. Attack the forced small expensive target using its full predecessor delay and neighbouring labels.
-2. Build a depth-two or multi-constraint rational dual using the symmetric edge cost.
-3. Use the short return modulo `2*X^2` only together with extra affine information; the endpoint labels alone are tautological.
-4. Seek a rigorous distribution bound for zero-layer pair classes modulo `X^2`.
+1. Extend the valid signed-label potential to a larger target range while keeping every admissible layer logically separate.
+2. Alternatively construct a finite-state potential on zero-layer predecessor carry states.
+3. Couple the mandatory zero-layer populations to the global reciprocal or height identities.
+4. Use the short return only with extra affine information; endpoint labels alone are tautological.
 
-## Critical retraction
+## Critical retractions
 
-The former `10^37` barrier is invalid. It used the false condition
+Never reintroduce
 
 ```text
 2^A == 1 (mod X).
 ```
 
-The correct relation is
+The correct cycle relation is
 
 ```text
 2^A * product_i(n_i) == 1 (mod X).
 ```
 
-The accelerated `5n+1` cycle `13 -> 33 -> 83 -> 13` is the regression counterexample. Never reintroduce the discarded order argument.
+Also never identify the least-cost predecessor source label with the source label chosen by the actual cycle.  A valid argument must keep layer choices separate or use a genuine telescoping potential.
 
 ## Working rules
 
 - Separate theorems from evidence.
-- Test every theorem against known cycles.
+- Test every theorem against known cycles or an explicit regression example.
 - Add an exact checker where practical.
 - Short symbolic and modular computations are allowed; large searches require explicit approval.
-- Commit every rigorous result separately.
+- Commit every rigorous result or decisive refutation separately.
 - A finite or sparse barrier is not divergence.
 
 ## Reproduction
