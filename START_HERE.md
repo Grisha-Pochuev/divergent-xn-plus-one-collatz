@@ -25,9 +25,9 @@ docs/RETRACTIONS.md
 docs/SESSION_CHECKPOINT_2026-07-11_BLOCK_LEDGER_AND_EXCEPTIONAL_SIEVE.md
 ```
 
-Read `VALIDATED_RESULTS.md`, older checkpoints, and detailed theorem files only
-when the current argument needs them. GitHub commits and certificates are the
-durable source of truth.
+Read `docs/VALIDATED_RESULTS.md`, older checkpoints, and detailed theorem files
+only when the current argument needs them. GitHub commits and certificates are
+the durable source of truth.
 
 ## Progress rule
 
