@@ -21,12 +21,18 @@ X156_EXCEPTIONAL_FLOOR = (
     1_268_664_615_738_631_005_385_143_083_955_106_787_895_774_776_889
 )
 
-DUAL_M = 3803
-DUAL_D = 4_162_203
-DUAL_CLASSES = 17_886_960
-DUAL_MODULUS = 14_726_582_775_529
-DUAL_EXCEPTIONAL_CORE = 19_567_017_189_655
-DUAL_BARRIER_TEXT = "10^1138"
+FAMILY_K = 500
+FAMILY_M = 4501
+FAMILY_CLASSES = 16_562_000
+FAMILY_X_TEXT = "2^4501-349*2^500+347"
+FAMILY_BARRIER_TEXT = "10^1201"
+FAMILY_EXCEPTIONAL_CORE = (
+    "141554173562669451979142234479211407387695161061947663158036"
+    "275475013035570532072821977692485924548874811696146286209742"
+    "307923384940182399969083204712328957713629782297601610389067"
+    "903491331197096456313288013542743720638224927691460837892079"
+    "910386115268969408753656537834465197519183303759432510875217219"
+)
 RETRACTED_BARRIER_TEXT = "10^37"
 
 OLD_FRONTIER_FILES = (
@@ -53,18 +59,29 @@ X156_EXCEPTIONAL_FILES = (
     "docs/X156_EXCEPTIONAL_Q2_SIEVE.md",
 )
 
-DUAL_PRIMARY_FILES = (
+FAMILY_MEMORY_FILES = (
     "START_HERE.md",
+    "README.md",
     "docs/CURRENT_STATUS.md",
-    "docs/SESSION_CHECKPOINT_2026-07-12_DUAL_WIEFERICH_HARMONIC_FRONTIER.md",
-    "docs/DUAL_WIEFERICH_SQUARE_SIEVE_CANDIDATE.md",
+    "docs/PROGRESS_METRICS.md",
+    "docs/SESSION_CHECKPOINT_2026-07-12_MERSENNE_DIVISOR_FAMILY_FRONTIER.md",
+    "docs/MERSENNE_DIVISOR_WIEFERICH_FAMILY.md",
 )
 
-DUAL_HARMONIC_FILES = (
+FAMILY_HARMONIC_FILES = (
     "START_HERE.md",
     "docs/CURRENT_STATUS.md",
-    "docs/SESSION_CHECKPOINT_2026-07-12_DUAL_WIEFERICH_HARMONIC_FRONTIER.md",
-    "docs/DUAL_WIEFERICH_HARMONIC_PACKING.md",
+    "docs/PROGRESS_METRICS.md",
+    "docs/SESSION_CHECKPOINT_2026-07-12_MERSENNE_DIVISOR_FAMILY_FRONTIER.md",
+    "docs/MERSENNE_DIVISOR_WIEFERICH_FAMILY.md",
+)
+
+FAMILY_EXCEPTIONAL_FILES = (
+    "START_HERE.md",
+    "docs/CURRENT_STATUS.md",
+    "docs/PROGRESS_METRICS.md",
+    "docs/SESSION_CHECKPOINT_2026-07-12_MERSENNE_DIVISOR_FAMILY_FRONTIER.md",
+    "docs/MERSENNE_DIVISOR_EXCEPTIONAL_FLOOR.md",
 )
 
 X156_STRUCTURE_FILES = (
@@ -83,6 +100,12 @@ DUAL_STRUCTURE_FILES = (
     "tools/verify_dual_wieferich_harmonic_packing.py",
 )
 
+FAMILY_STRUCTURE_FILES = (
+    "docs/MERSENNE_DIVISOR_WIEFERICH_FAMILY.md",
+    "docs/MERSENNE_DIVISOR_EXCEPTIONAL_FLOOR.md",
+    "tools/verify_mersenne_divisor_wieferich_family.py",
+)
+
 RETRACTION_FILES = (
     "README.md",
     "docs/CURRENT_STATUS.md",
@@ -90,7 +113,7 @@ RETRACTION_FILES = (
     "docs/LATEST_VALID_PROGRESS.md",
 )
 
-REQUIRED_PRIORITY1_FILES = (
+REQUIRED_LEGACY_FILES = (
     "docs/RESIDUE_TRANSITION_NO_GO.md",
     "tools/verify_residue_transition_no_go.py",
     "docs/AUGMENTED_TRANSITION_NO_GO.md",
@@ -114,14 +137,12 @@ REQUIRED_PRIORITY1_FILES = (
 )
 
 LATEST_TOOLS = (
-    "verify_full_modulus_activation_bound.py",
-    "verify_index_eight_small_sieve.py",
-    "verify_third_exception_subgroup_sieve.py",
     "verify_near_power_block_sign_threshold.py",
     "verify_near_power_cycle_block_ledger.py",
     "verify_x156_exceptional_q2_sieve.py",
     "verify_dual_wieferich_square_sieve_candidate.py",
     "verify_dual_wieferich_harmonic_packing.py",
+    "verify_mersenne_divisor_wieferich_family.py",
 )
 
 
@@ -147,7 +168,10 @@ def check() -> None:
     x156_exceptional_plain = str(X156_EXCEPTIONAL_FLOOR)
 
     for relative in (
-        REQUIRED_PRIORITY1_FILES + X156_STRUCTURE_FILES + DUAL_STRUCTURE_FILES
+        REQUIRED_LEGACY_FILES
+        + X156_STRUCTURE_FILES
+        + DUAL_STRUCTURE_FILES
+        + FAMILY_STRUCTURE_FILES
     ):
         read(relative)
 
@@ -164,19 +188,19 @@ def check() -> None:
     for relative in X156_EXCEPTIONAL_FILES:
         require_text(relative, (x156_exceptional_plain,))
 
-    dual_primary_markers = (
-        f"m={DUAL_M}",
-        f"d={DUAL_D}",
-        str(DUAL_CLASSES),
-        str(DUAL_MODULUS),
-        str(DUAL_EXCEPTIONAL_CORE),
-        DUAL_BARRIER_TEXT,
+    family_markers = (
+        FAMILY_X_TEXT,
+        str(FAMILY_CLASSES),
+        FAMILY_BARRIER_TEXT,
     )
-    for relative in DUAL_PRIMARY_FILES:
-        require_text(relative, dual_primary_markers)
+    for relative in FAMILY_MEMORY_FILES:
+        require_text(relative, family_markers)
 
-    for relative in DUAL_HARMONIC_FILES:
-        require_text(relative, ("1/853", "ceil(p/K)", "p*delta-D"))
+    for relative in FAMILY_HARMONIC_FILES:
+        require_text(relative, ("10^(-147)", "ceil(p/K)", "p*delta-D"))
+
+    for relative in FAMILY_EXCEPTIONAL_FILES:
+        require_text(relative, (FAMILY_EXCEPTIONAL_CORE, "1505"))
 
     for relative in RETRACTION_FILES:
         text = read(relative)
@@ -201,18 +225,18 @@ def check() -> None:
 
     print("project-memory consistency verified")
     print(
-        "primary dual-Wieferich candidate: "
-        f"m={DUAL_M}, d={DUAL_D}, classes={DUAL_CLASSES}/{DUAL_MODULUS}"
+        "primary Mersenne-divisor candidate: "
+        f"k={FAMILY_K}, m={FAMILY_M}, classes={FAMILY_CLASSES}"
     )
-    print(f"primary exceptional core floor={DUAL_EXCEPTIONAL_CORE}")
+    print(f"primary exceptional core digits={len(FAMILY_EXCEPTIONAL_CORE)}")
     print(f"former-primary X156 barrier={X156_BARRIER}")
     print(f"former-primary X156 first threshold={X156_THRESHOLD}")
     print(f"former-primary X156 exceptional floor={X156_EXCEPTIONAL_FLOOR}")
     print(f"old contiguous barrier={OLD_CONTIGUOUS_BARRIER}")
     print(f"old sparse cap={OLD_SPARSE_CAP}")
     print(f"old sparse exceptions={OLD_SPARSE_EXCEPTIONS}")
-    print(f"legacy priority-1 certificate files={len(REQUIRED_PRIORITY1_FILES)}")
-    print(f"dual primary structure files={len(DUAL_STRUCTURE_FILES)}")
+    print(f"legacy certificate files={len(REQUIRED_LEGACY_FILES)}")
+    print(f"primary structure files={len(FAMILY_STRUCTURE_FILES)}")
 
 
 if __name__ == "__main__":
