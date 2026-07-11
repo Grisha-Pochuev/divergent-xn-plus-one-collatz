@@ -33,6 +33,8 @@ FAMILY_EXCEPTIONAL_CORE = (
     "903491331197096456313288013542743720638224927691460837892079"
     "910386115268969408753656537834465197519183303759432510875217219"
 )
+NO_EXCEPTIONAL_MIN_BLOCKS = 245_833
+NO_EXCEPTIONAL_CF_DENOMINATOR = 1_106_246_945
 RETRACTED_BARRIER_TEXT = "10^37"
 
 OLD_FRONTIER_FILES = (
@@ -65,6 +67,7 @@ FAMILY_MEMORY_FILES = (
     "docs/CURRENT_STATUS.md",
     "docs/PROGRESS_METRICS.md",
     "docs/SESSION_CHECKPOINT_2026-07-12_MERSENNE_DIVISOR_FAMILY_FRONTIER.md",
+    "docs/SESSION_CHECKPOINT_2026-07-12_NO_EXCEPTIONAL_BLOCK_FRONTIER.md",
     "docs/MERSENNE_DIVISOR_WIEFERICH_FAMILY.md",
 )
 
@@ -73,6 +76,7 @@ FAMILY_HARMONIC_FILES = (
     "docs/CURRENT_STATUS.md",
     "docs/PROGRESS_METRICS.md",
     "docs/SESSION_CHECKPOINT_2026-07-12_MERSENNE_DIVISOR_FAMILY_FRONTIER.md",
+    "docs/SESSION_CHECKPOINT_2026-07-12_NO_EXCEPTIONAL_BLOCK_FRONTIER.md",
     "docs/MERSENNE_DIVISOR_WIEFERICH_FAMILY.md",
 )
 
@@ -81,7 +85,15 @@ FAMILY_EXCEPTIONAL_FILES = (
     "docs/CURRENT_STATUS.md",
     "docs/PROGRESS_METRICS.md",
     "docs/SESSION_CHECKPOINT_2026-07-12_MERSENNE_DIVISOR_FAMILY_FRONTIER.md",
+    "docs/SESSION_CHECKPOINT_2026-07-12_NO_EXCEPTIONAL_BLOCK_FRONTIER.md",
     "docs/MERSENNE_DIVISOR_EXCEPTIONAL_FLOOR.md",
+)
+
+NO_EXCEPTIONAL_MEMORY_FILES = (
+    "START_HERE.md",
+    "docs/CURRENT_STATUS.md",
+    "docs/SESSION_CHECKPOINT_2026-07-12_NO_EXCEPTIONAL_BLOCK_FRONTIER.md",
+    "docs/NO_EXCEPTIONAL_BLOCK_COUNT_FRONTIER.md",
 )
 
 X156_STRUCTURE_FILES = (
@@ -104,6 +116,23 @@ FAMILY_STRUCTURE_FILES = (
     "docs/MERSENNE_DIVISOR_WIEFERICH_FAMILY.md",
     "docs/MERSENNE_DIVISOR_EXCEPTIONAL_FLOOR.md",
     "tools/verify_mersenne_divisor_wieferich_family.py",
+)
+
+NO_EXCEPTIONAL_STRUCTURE_FILES = (
+    "docs/NO_EXCEPTIONAL_DEEP_CLASS_CONCENTRATION.md",
+    "tools/verify_no_exceptional_deep_class_concentration.py",
+    "docs/NO_EXCEPTIONAL_N_ADIC_LADDER.md",
+    "tools/verify_no_exceptional_n_adic_ladder.py",
+    "docs/NO_EXCEPTIONAL_ONE_BLOCK_SMALL_CREDIT.md",
+    "tools/verify_no_exceptional_one_block_small_credit.py",
+    "docs/NO_EXCEPTIONAL_ONE_BLOCK_ALL_CREDITS.md",
+    "tools/verify_no_exceptional_one_block_all_credits.py",
+    "docs/NO_EXCEPTIONAL_TWO_BLOCK_ALL_CREDITS.md",
+    "tools/verify_no_exceptional_two_block_all_credits.py",
+    "docs/NO_EXCEPTIONAL_X_ADIC_LADDER.md",
+    "tools/verify_no_exceptional_x_adic_ladder.py",
+    "docs/NO_EXCEPTIONAL_BLOCK_COUNT_FRONTIER.md",
+    "tools/verify_no_exceptional_block_count_frontier.py",
 )
 
 RETRACTION_FILES = (
@@ -143,6 +172,13 @@ LATEST_TOOLS = (
     "verify_dual_wieferich_square_sieve_candidate.py",
     "verify_dual_wieferich_harmonic_packing.py",
     "verify_mersenne_divisor_wieferich_family.py",
+    "verify_no_exceptional_deep_class_concentration.py",
+    "verify_no_exceptional_n_adic_ladder.py",
+    "verify_no_exceptional_one_block_small_credit.py",
+    "verify_no_exceptional_one_block_all_credits.py",
+    "verify_no_exceptional_two_block_all_credits.py",
+    "verify_no_exceptional_x_adic_ladder.py",
+    "verify_no_exceptional_block_count_frontier.py",
 )
 
 
@@ -172,6 +208,7 @@ def check() -> None:
         + X156_STRUCTURE_FILES
         + DUAL_STRUCTURE_FILES
         + FAMILY_STRUCTURE_FILES
+        + NO_EXCEPTIONAL_STRUCTURE_FILES
     ):
         read(relative)
 
@@ -202,6 +239,13 @@ def check() -> None:
     for relative in FAMILY_EXCEPTIONAL_FILES:
         require_text(relative, (FAMILY_EXCEPTIONAL_CORE, "1505"))
 
+    no_exceptional_markers = (
+        str(NO_EXCEPTIONAL_MIN_BLOCKS),
+        str(NO_EXCEPTIONAL_CF_DENOMINATOR),
+    )
+    for relative in NO_EXCEPTIONAL_MEMORY_FILES:
+        require_text(relative, no_exceptional_markers)
+
     for relative in RETRACTION_FILES:
         text = read(relative)
         if RETRACTED_BARRIER_TEXT not in text:
@@ -229,6 +273,8 @@ def check() -> None:
         f"k={FAMILY_K}, m={FAMILY_M}, classes={FAMILY_CLASSES}"
     )
     print(f"primary exceptional core digits={len(FAMILY_EXCEPTIONAL_CORE)}")
+    print(f"no-exceptional minimum block count={NO_EXCEPTIONAL_MIN_BLOCKS}")
+    print(f"no-exceptional CF denominator={NO_EXCEPTIONAL_CF_DENOMINATOR}")
     print(f"former-primary X156 barrier={X156_BARRIER}")
     print(f"former-primary X156 first threshold={X156_THRESHOLD}")
     print(f"former-primary X156 exceptional floor={X156_EXCEPTIONAL_FLOOR}")
@@ -237,6 +283,7 @@ def check() -> None:
     print(f"old sparse exceptions={OLD_SPARSE_EXCEPTIONS}")
     print(f"legacy certificate files={len(REQUIRED_LEGACY_FILES)}")
     print(f"primary structure files={len(FAMILY_STRUCTURE_FILES)}")
+    print(f"no-exceptional structure files={len(NO_EXCEPTIONAL_STRUCTURE_FILES)}")
 
 
 if __name__ == "__main__":
