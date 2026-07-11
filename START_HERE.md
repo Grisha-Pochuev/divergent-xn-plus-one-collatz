@@ -21,7 +21,7 @@ docs/CURRENT_STATUS.md
 docs/VALIDATED_RESULTS.md
 docs/RETRACTIONS.md
 docs/NEXT_STEPS.md
-docs/SESSION_CHECKPOINT_2026-07-11_PRIORITY1_B.md
+docs/SESSION_CHECKPOINT_2026-07-11_PRIORITY1_C.md
 run_checks.py
 ```
 
@@ -68,13 +68,14 @@ Use
 O=ord_X(2)=1860810887857924950,
 a_i=s_(i+1)+O*q_i,
 1<=s_i<=O,
-q_i>=0.
+q_i>=0,
+Q=sum_i q_i.
 ```
 
 For either remaining length,
 
 ```text
-Q=sum_i q_i<=6257.
+Q<=6257.
 ```
 
 The exact symmetric edge cost
@@ -124,7 +125,7 @@ through the same `Q` gives
 sum_(n_i<=60000000) 1/n_i <0.086152495.
 ```
 
-The exact maximizing integer is
+The exact maximizing integer of this finite-range certificate is
 
 ```text
 Q=5841.
@@ -152,6 +153,62 @@ distinct expensive zero-layer targets lie in the finite interval
 
 ```text
 60000000<n<X.
+```
+
+## New high-Q exclusion for the first remaining length
+
+The permanent predecessor sieve modulo `3` leaves exactly `4308` refined target
+classes modulo
+
+```text
+6M=90594.
+```
+
+For fixed `Q`,
+
+```text
+sum_i(s_i-1)=B-O*Q.
+```
+
+Distinct targets below `X` have distinct full labels, so a set of `m` such
+targets must satisfy
+
+```text
+m*(m-1)/2<=B-O*Q.
+```
+
+Combining this cardinality cap with harmonic packing in the `4308` surviving
+classes proves
+
+```text
+Q=6242,6243,...,6257
+```
+
+impossible for
+
+```text
+p=177780727155637125193.
+```
+
+Hence every remaining cycle of this length satisfies
+
+```text
+Q<=6241.
+```
+
+At the exact threshold,
+
+```text
+packing upper at Q=6241 >0.377086594,
+packing upper at Q=6242 <0.375630659,
+required finite zero-layer mass >0.375632520964.
+```
+
+Certificate files:
+
+```text
+docs/HIGH_Q_MOD3_HARMONIC_EXCLUSION.md
+tools/verify_high_q_mod3_harmonic_exclusion.py
 ```
 
 ## Other retained structure
@@ -195,27 +252,22 @@ edge cost=0.
 ```
 
 Hence no fixed finite-state quotient can prove a universal positive mean
-zero-layer cost by a telescoping potential. A sufficiently long zero-cost word
-repeats a projected state and contradicts any fixed `delta>0`.
-
-Do not return to a finite positive-minimum-mean automaton.
+zero-layer cost by a telescoping potential. Do not return to a finite
+positive-minimum-mean automaton.
 
 ## Exact next step
 
 The remaining Priority 1 node is global distribution, not local word
-exclusion. Seek one of:
+exclusion.
 
-1. a rigorous counting or harmonic-sum upper bound for expensive zero-layer
-   pair representatives in `(60000000,X)`;
-2. an explicit Fermat-quotient/subgroup distribution theorem with constants
-   strong enough at the actual prime divisor;
-3. an unbounded value-dependent potential whose endpoint term can absorb
-   arbitrarily long all-label-one zero-cost segments;
-4. a coupling of the forced finite zero-layer population to the global affine,
-   height, or reciprocal identities.
-
-Standard asymptotic equidistribution without usable constants is not a
-certificate. Do not enlarge trajectory or residue cutoffs blindly.
+1. Combine the `Q`-dependent finite-range dual with harmonic packing instead of
+   using uniform worst-case constants.
+2. Attack the first still-open integer `Q=6241`; the mod-3 packing relaxation
+   misses contradiction only narrowly.
+3. Improve the packing density with an explicit large-prime subgroup or
+   Fermat-quotient estimate with usable constants.
+4. Alternatively construct an unbounded value-dependent height potential.
+5. Do not enlarge trajectory or representative cutoffs blindly.
 
 ## Critical retractions
 
@@ -232,8 +284,8 @@ The correct cycle relation is
 ```
 
 Also never identify the least-cost predecessor source label with the actual
-cycle source. The old proof is invalid even though some of its numerical values
-were later recovered by a different signed-potential proof.
+cycle source. The old proof is invalid even though some numerical values were
+later recovered by a different signed-potential proof.
 
 ## Working rules
 
