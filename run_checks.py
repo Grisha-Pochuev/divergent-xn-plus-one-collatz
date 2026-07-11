@@ -24,7 +24,7 @@ def main() -> None:
     from test_power_coordinates import test_fermat_coordinate_cases, test_fermat_grouped_exits, test_mersenne_coordinate_cases_and_self_similarity
     from test_strong_candidate import test_rational_exponential_upper_bound, test_strong_candidate_cycle_bound_inequalities, test_strong_candidate_first_step, test_strong_candidate_full_certificate, test_strong_candidate_order_and_wieferich_data
     from test_cycle_barrier_generator import test_constructed_multiplier_above_half_power, test_large_symbolic_barrier, test_minimal_k_condition, test_small_barriers
-    from test_ultra_candidate import test_ultra_candidate_cycle_bound_inequalities, test_ultra_candidate_first_step, test_ultra_candidate_full_certificate, test_ultra_candidate_output_residues, test_ultra_candidate_structure
+    from test_ultra_candidate import test_ultra_candidate_cycle_inequalities, test_ultra_candidate_first_step, test_ultra_candidate_full_certificate, test_ultra_candidate_output_residues, test_ultra_candidate_structure
     from test_two_parameter_barrier import test_two_parameter_closeness, test_two_parameter_large_case, test_two_parameter_mersenne_choice, test_two_parameter_small_cases
     from test_valuation_word_codec import test_all_small_words_are_exactly_coded, test_known_cycle_word_code, test_positive_drift_words_grow_for_all_representatives, test_prefix_codes_are_compatible
     from test_continued_fraction_barrier import test_correct_cycle_congruence, test_invalid_order_condition_counterexample
@@ -39,7 +39,7 @@ def main() -> None:
         test_fermat_coordinate_cases, test_fermat_grouped_exits, test_mersenne_coordinate_cases_and_self_similarity,
         test_strong_candidate_order_and_wieferich_data, test_strong_candidate_first_step, test_strong_candidate_cycle_bound_inequalities, test_rational_exponential_upper_bound, test_strong_candidate_full_certificate,
         test_small_barriers, test_large_symbolic_barrier, test_minimal_k_condition, test_constructed_multiplier_above_half_power,
-        test_ultra_candidate_structure, test_ultra_candidate_output_residues, test_ultra_candidate_first_step, test_ultra_candidate_cycle_bound_inequalities, test_ultra_candidate_full_certificate,
+        test_ultra_candidate_structure, test_ultra_candidate_output_residues, test_ultra_candidate_first_step, test_ultra_candidate_cycle_inequalities, test_ultra_candidate_full_certificate,
         test_two_parameter_small_cases, test_two_parameter_large_case, test_two_parameter_mersenne_choice, test_two_parameter_closeness,
         test_known_cycle_word_code, test_all_small_words_are_exactly_coded, test_positive_drift_words_grow_for_all_representatives, test_prefix_codes_are_compatible,
         test_invalid_order_condition_counterexample, test_correct_cycle_congruence,
