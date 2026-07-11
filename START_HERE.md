@@ -22,7 +22,7 @@ START_HERE.md
 docs/WORKING_PROTOCOL.md
 docs/CURRENT_STATUS.md
 docs/RETRACTIONS.md
-docs/SESSION_CHECKPOINT_2026-07-11_BLOCK_LEDGER_AND_EXCEPTIONAL_SIEVE.md
+docs/SESSION_CHECKPOINT_2026-07-12_DUAL_WIEFERICH_HARMONIC_FRONTIER.md
 ```
 
 Read `docs/VALIDATED_RESULTS.md`, older checkpoints, and detailed theorem files
@@ -45,51 +45,72 @@ positive cycle remains open.
 ## Primary candidate
 
 ```text
-X=2^156-9
- =91343852333181432387730302044767688728495783927,
+m=3803,
+B=2^3803,
+d=4162203,
+X=B-d,
 n0=1.
 ```
 
 Retained strict results:
 
+- `3511^2` divides `X`, giving a one-label permanent sieve;
 - `1093` divides `X` exactly once, so the orbit leaves `1` and never returns;
-- the first `48` steps have exact word `(3,1,2,2,5,6)^8`, total valuation `152`,
-  and `n_48>X^48/2^152`;
-- every ordinary complete near-power block has an exact proved sign;
-- all positive cycle lengths through
-  `7034970411803187993997906985047212163795395134` are impossible;
-- every hypothetical cycle has a complete-block ledger with `D=156*p-A`
-  restricted to a narrow integer strip;
-- two adjacent least labels restrict every cycle value to one of `132496`
-  classes modulo `1093^2`;
-- every exceptional source satisfies `n>=(125*2^156+1)/9`.
+- exactly `17886960` combined permanent classes survive modulo
+  `14726582775529`;
+- their density is between `91312` and `91313` times smaller than the former
+  primary `X=2^156-9` sieve density;
+- all positive cycle lengths through `floor(2*X/(3*d))` are impossible; this
+  exact barrier has `1139` digits and exceeds `10^1138`;
+- every exceptional source satisfies
+
+```text
+n>=(19567017189655*2^3803+1)/4162203;
+```
+
+- every hypothetical cycle of length `p`, with
+
+```text
+D=3803*p-A,
+delta=log2(2^3803/X),
+K=17886960,
+M=14726582775529,
+```
+
+  satisfies the global harmonic window
+
+```text
+0<p*delta-D
+ <[1/853 + K*H_(ceil(p/K))/(2*M)]/(X*ln(2)).
+```
 
 Exact statements, proofs, and checkers are indexed in `docs/CURRENT_STATUS.md`.
 
 ## Decisive missing theorem
 
 No theorem yet excludes every cycle above the finite barrier. The current target
-is to prove that distinct cycle values in the `132496` permanent classes cannot
-supply the exact block correction
+is to combine the logarithmic harmonic window with the exact near-power block
+ledger
 
 ```text
-sum kappa_j=p*log2(2^156/X)-D.
+D=sum ordinary deficits-sum exceptional excesses.
 ```
 
-Use together:
+The desired contradiction must use together:
 
-1. the narrow integer strip for `D`;
-2. ordinary and exceptional block credits;
-3. the exceptional-source floor;
-4. distinct-value harmonic packing;
-5. an unbounded height-dependent potential.
+1. the permanent class density;
+2. the exceptional-source floor;
+3. distinct-value harmonic packing;
+4. ordinary and exceptional block credits;
+5. a height-dependent or Diophantine lower bound for `p*delta-D`.
 
 ## Exact next work
 
-1. Derive a harmonic packing inequality over the permanent classes.
-2. Separate ordinary and exceptional sources.
-3. Restrict admissible block-credit patterns using the integer strip for `D`.
-4. Test a value-dependent height-credit potential.
+1. Split hypothetical cycles by the number of exceptional blocks.
+2. Charge every exceptional contraction using its permanent source floor.
+3. Derive a block-credit-dependent lower bound for `p*delta-D`.
+4. Compare it with the harmonic upper window.
+5. Use continued fractions only after the credit structure restricts `(p,D)`.
 
 Use one primary target and at most two exploratory directions. Full operational
 rules are in `docs/WORKING_PROTOCOL.md`.
@@ -98,6 +119,10 @@ rules are in `docs/WORKING_PROTOCOL.md`.
 
 Retain independently:
 
+- former primary `X=2^156-9,n0=1`, with barrier
+  `7034970411803187993997906985047212163795395134`, first block threshold
+  `7034970411803187993997906985047212163795395135`, and exceptional floor
+  `1268664615738631005385143083955106787895774776889`;
 - `X=2^260-3,n0=1`;
 - `X=15,n0=3`;
 - `X=9,n0=1`;
