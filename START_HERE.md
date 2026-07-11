@@ -10,7 +10,8 @@ Find explicit positive odd integers `X>=5` and `n0>=1` such that
 C_X(n)=(X*n+1)/2^v2(X*n+1)
 ```
 
-satisfies `C_X^t(n0) -> +infinity`.  A cycle, avoidance of `1`, or any finite barrier is not a solution.
+satisfies `C_X^t(n0)->+infinity`. A cycle, avoidance of `1`, a finite barrier,
+or a huge finite trajectory is not a solution.
 
 ## Read first
 
@@ -20,7 +21,7 @@ docs/CURRENT_STATUS.md
 docs/VALIDATED_RESULTS.md
 docs/RETRACTIONS.md
 docs/NEXT_STEPS.md
-docs/SESSION_CHECKPOINT_2026-07-11.md
+docs/SESSION_CHECKPOINT_2026-07-11_PRIORITY1_B.md
 run_checks.py
 ```
 
@@ -33,14 +34,14 @@ X  = 104350542602662257699,
 n0 = 1.
 ```
 
-Retained rigorous conclusions:
+Retained conclusions:
 
 - the orbit leaves `1` and cannot return to `1`;
 - every element of a reached nontrivial cycle is at least `25`;
 - every cycle length
 
 ```text
-p <= 177780727155637125192
+p<=177780727155637125192
 ```
 
 is impossible;
@@ -59,7 +60,7 @@ is impossible except
 
 The strict problem remains open.
 
-## Full-layer coordinates
+## Exact full-layer coordinates
 
 Use
 
@@ -73,10 +74,8 @@ q_i>=0.
 For either remaining length,
 
 ```text
-sum_i q_i<=6257.
+Q=sum_i q_i<=6257.
 ```
-
-Thus almost every edge uses its least full-order layer.
 
 The exact symmetric edge cost
 
@@ -90,17 +89,12 @@ satisfies
 sum_i c_i=2*(A-p).
 ```
 
-Possible predecessors of a full representative form the exact progression
+Possible predecessors of a full representative form an exact progression
+modulo `X`, and a reached predecessor must itself be a full output.
 
-```text
-m_q == m_0+q*63726582940809041391 (mod X).
-```
+## Transition concentration
 
-A reached predecessor must itself be a full output.
-
-## Current retained transition picture
-
-With `K=5000`, more than `97.38%` of all edges satisfy
+With threshold `K=5000`, more than `97.38%` of all edges satisfy
 
 ```text
 q_i=0,
@@ -113,149 +107,141 @@ Every target in that cheap majority is at least
 781563824454394220933608138645145,
 ```
 
-so the whole cheap majority contributes less than `2.216*10^(-13)` to `sum 1/n_i`.
+so all cheap targets together contribute less than `2.216*10^(-13)` to the
+reciprocal sum. The required correction is concentrated in expensive
+zero-layer transitions.
 
-The reciprocal correction is therefore forced into expensive transitions:
+## Strongest retained finite-range bound
+
+A signed-label potential is valid for all `358103` retained targets through
+sixty million. The potential telescopes on the actual cycle and does not assume
+that the least-cost source is the source chosen by the cycle.
+
+Keeping the integer layer total `Q` and coupling the small and middle ranges
+through the same `Q` gives
 
 ```text
-p=...193: at least 355687 expensive targets in (10^6,X),
-p=...195: at least 5 expensive targets below X.
+sum_(n_i<=60000000) 1/n_i <0.086152495.
 ```
 
-Since at most `6257` positions have positive layer,
+The exact maximizing integer is
 
 ```text
-p=...193: at least 349430 zero-layer expensive targets in (10^6,X),
-p=...195: at least 793213 zero-layer targets above 60000000.
+Q=5841.
 ```
 
-The second number uses the retained split-range requirement of at least `799470` values above sixty million.
+Therefore:
 
-## Repetition and height structure
+```text
+p=177780727155637125193:
+  values above 60000000 >=25237969,
+  zero-layer values there >=25231712;
 
-One exact zero-layer transition pair occurs at least
+p=177780727155637125195:
+  values above 60000000 >=826903,
+  zero-layer values there >=820646.
+```
+
+For the first length, at least
+
+```text
+22537952
+```
+
+distinct expensive zero-layer targets lie in the finite interval
+
+```text
+60000000<n<X.
+```
+
+## Other retained structure
+
+One exact zero-layer pair occurs at least
 
 ```text
 3053943280435589
 ```
 
-times in one class modulo `2*X^2`.  This forces cycle diameter at least
+times in one class modulo `2*X^2`. This forces an enormous cycle diameter and a
+nonempty exact return segment with
 
 ```text
-66508995066170702555770104858896894988802023536957800776.
-```
-
-It also forces a nonempty segment with
-
-```text
-length <=114286,
-total valuation <=7771435,
+length<=114286,
+total valuation<=7771435,
 endpoints equal modulo 2*X^2.
 ```
 
-Higher-power repetition:
+Higher-power repeated words are retained through modulus `2*X^6`.
 
-```text
-2-edge word: >=3114290401257 repetitions modulo 2*X^3
-3-edge word: >=2918613523 repetitions modulo 2*X^4
-4-edge word: >=2251677 repetitions modulo 2*X^5
-5-edge word: >=1500 repetitions modulo 2*X^6.
-```
-
-These are bounds on the maximum or diameter, not on the minimum, so they do not yet contradict the logarithmic minimum-height theorem.
-
-## All-zero-layer branch
-
-If every edge has `q=0`, the four-generation inverse sieve proves
+If every edge has `q=0`, the inverse minimum sieve gives
 
 ```text
 p=...193: a_out<=36 and n_next>1518500249*m,
-p=...195: a_out<=39 and n_next>189812531*m,
+p=...195: a_out<=39 and n_next>189812531*m.
 ```
 
-where `m` is the cycle minimum.  Later compensating contractions are not yet excluded.
+These results control height or local valleys but do not yet exclude later
+compensating contractions.
 
-## Strongest retained reciprocal information
+## Closed finite-state route
 
-For `p=...195`, the cycle identity requires
+For every `L`, exact valuation-word coding and CRT realize `L` consecutive
+edges with
 
 ```text
-sum_i 1/n_i >0.099934206.
+q=0,
+source label=target label=1,
+edge cost=0.
 ```
 
-The valid signed-label potential combined with depth-three inverse charging gives
+Hence no fixed finite-state quotient can prove a universal positive mean
+zero-layer cost by a telescoping potential. A sufficiently long zero-cost word
+repeats a projected state and contradicts any fixed `delta>0`.
 
-```text
-sum_(n_i<=1000000) 1/n_i <0.085226905.
-```
-
-The strongest retained split-range bound is
-
-```text
-sum_(n_i<=60000000) 1/n_i <0.086609720,
-```
-
-forcing at least `799470` values above sixty million and at least `793213` zero-layer values there.
-
-Important audit distinction:
-
-- the old endpoint-identification proof of `0.085226905` remains invalid;
-- the same numerical bound is now independently re-established by `SIGNED_LABEL_POTENTIAL_DUAL`;
-- `0.086412209`, `811320`, and `805063` remain retracted.
-
-## Main current certificates
-
-```text
-docs/EXPENSIVE_SMALL_TARGET_MASS.md
-tools/verify_expensive_small_target_mass.py
-
-docs/DEEP_ZERO_LAYER_MINIMUM_SIEVE.md
-tools/verify_deep_zero_layer_minimum_sieve.py
-
-docs/TWO_CONSTRAINT_INVERSE_DUAL.md
-tools/verify_two_constraint_inverse_dual.py
-
-docs/SPLIT_RANGE_RECIPROCAL_DUAL.md
-tools/verify_split_range_reciprocal_dual.py
-
-docs/FORCED_ZERO_LAYER_POPULATIONS.md
-tools/verify_forced_zero_layer_populations.py
-
-docs/SIGNED_LABEL_POTENTIAL_DUAL.md
-tools/verify_signed_label_potential_dual.py
-```
+Do not return to a finite positive-minimum-mean automaton.
 
 ## Exact next step
 
-Do not enlarge trajectory or residue cutoffs blindly.
+The remaining Priority 1 node is global distribution, not local word
+exclusion. Seek one of:
 
-1. Extend the valid signed-label potential to a larger target range while keeping every admissible layer logically separate.
-2. Alternatively construct a finite-state potential on zero-layer predecessor carry states.
-3. Couple the mandatory zero-layer populations to the global reciprocal or height identities.
-4. Use the short return only with extra affine information; endpoint labels alone are tautological.
+1. a rigorous counting or harmonic-sum upper bound for expensive zero-layer
+   pair representatives in `(60000000,X)`;
+2. an explicit Fermat-quotient/subgroup distribution theorem with constants
+   strong enough at the actual prime divisor;
+3. an unbounded value-dependent potential whose endpoint term can absorb
+   arbitrarily long all-label-one zero-cost segments;
+4. a coupling of the forced finite zero-layer population to the global affine,
+   height, or reciprocal identities.
+
+Standard asymptotic equidistribution without usable constants is not a
+certificate. Do not enlarge trajectory or residue cutoffs blindly.
 
 ## Critical retractions
 
-Never reintroduce
+Never use
 
 ```text
-2^A == 1 (mod X).
+2^A==1 (mod X).
 ```
 
 The correct cycle relation is
 
 ```text
-2^A * product_i(n_i) == 1 (mod X).
+2^A*product_i(n_i)==1 (mod X).
 ```
 
-Also never identify the least-cost predecessor source label with the source label chosen by the actual cycle.  A valid argument must keep layer choices separate or use a genuine telescoping potential.
+Also never identify the least-cost predecessor source label with the actual
+cycle source. The old proof is invalid even though some of its numerical values
+were later recovered by a different signed-potential proof.
 
 ## Working rules
 
 - Separate theorems from evidence.
 - Test every theorem against known cycles or an explicit regression example.
 - Add an exact checker where practical.
-- Short symbolic and modular computations are allowed; large searches require explicit approval.
+- Short symbolic and modular computations are allowed; large searches require
+  explicit approval.
 - Commit every rigorous result or decisive refutation separately.
 - A finite or sparse barrier is not divergence.
 
