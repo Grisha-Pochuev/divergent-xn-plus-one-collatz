@@ -1,4 +1,4 @@
-# Split-range reciprocal dual through sixty million
+# Flow-balanced split-range reciprocal dual through sixty million
 
 This note improves the finite reciprocal bound for the harder remaining length
 
@@ -6,8 +6,8 @@ This note improves the finite reciprocal bound for the harder remaining length
 p = 177780727155637125195.
 ```
 
-The key point is that disjoint value ranges may each be given the entire global
-cost budget.  This overcounts the available budget and is therefore safe.
+Disjoint value ranges may each be granted the entire global cost budget.  This
+overcounts the available budget and is therefore safe.
 
 ## 1. Small range
 
@@ -17,13 +17,13 @@ For targets
 n <= 1000000,
 ```
 
-the retained two-constraint depth-three certificate proves
+the retained flow-balanced depth-three certificate proves
 
 ```text
-sum 1/n < 0.085239095.                            (1)
+sum 1/n < 0.085226905.                            (1)
 ```
 
-## 2. Middle range
+## 2. Middle range and flow completion
 
 For
 
@@ -31,20 +31,15 @@ For
 1000000 < n <= 60000000,
 ```
 
-use the exact symmetric edge cost
+write
 
 ```text
-C_E(n)=u(n)-1+s(n)-1+2*O*d_X(n),
+u(n) = source full label,
+s(n) = target full label,
+d(n) = least full predecessor layer.
 ```
 
-where `s(n)` is the target label, `d_X(n)` the least full predecessor layer,
-and `u(n)` the corresponding source label.  Every cycle satisfies
-
-```text
-sum C_E(n_i)<=2*(A-p).
-```
-
-The exact modular enumeration through sixty million contains
+The exact enumeration through sixty million contains
 
 ```text
 4279760 small-class candidates,
@@ -53,32 +48,52 @@ The exact modular enumeration through sixty million contains
 358103 surviving targets.
 ```
 
-Restricting to the `352279` survivors above one million and applying the exact
-fractional dual gives a boundary after `5179` complete items.  The boundary is
+Across all `358103` survivors:
 
 ```text
-n = 1021885,
-C_E = 32815616360883804024,
-target label = 1502499629181248314,
+all source labels are distinct,
+all target labels are distinct,
+the source-label and target-label sets are disjoint.
+```
+
+Therefore a selected set of middle-range edges cannot balance its own label
+flow.  In addition to paying its own edge cost, the rest of the cycle must pay
+one more copy of every selected endpoint label.  The valid flow-completed item
+cost is
+
+```text
+C_F(n)=2*(u(n)+s(n)-2)+2*O*d(n),
+sum C_F(n_i)<=2*(A-p).                            (2)
+```
+
+Restricting to the `352279` survivors above one million and applying the exact
+fractional dual to (2) gives a boundary after `3350` complete items:
+
+```text
+n = 1135801,
+C_F = 30963450586533289068,
+target label = 58772698851070868,
 full delay = 8,
-source label = 1540142525975756512.
+source label = 536465491552174068.
 ```
 
 The resulting exact bound is
 
 ```text
 sum_(1000000<n_i<=60000000) 1/n_i
- < 0.001370625.                                   (2)
+ < 0.001185304.                                   (3)
 ```
+
+The former symmetric-edge value was `0.001370625`.
 
 ## 3. Combined bound and required large tail
 
-Adding (1) and (2) is valid even though each part was granted its own full
-budget.  Therefore
+Adding (1) and (3), while generously granting each range its own full budget,
+gives
 
 ```text
 sum_(n_i<=60000000) 1/n_i
- < 0.086609720.                                   (3)
+ < 0.086412209.                                   (4)
 ```
 
 The exact interval identity requires
@@ -90,26 +105,26 @@ sum_i 1/n_i > 0.099934206877...
 so values above sixty million must contribute more than
 
 ```text
-0.013324487.
+0.013521997.
 ```
 
 Every such distinct value contributes less than `1/60000000`.  Hence at least
 
 ```text
-799470
+811320
 ```
 
 distinct cycle values must exceed sixty million.
 
-The former unsplit certificate required `738929`; the improvement is `60541`
-additional mandatory large values.
+The former unsplit certificate required `738929`; the total improvement is
+`72391` additional mandatory large values.
 
 ## 4. Status
 
 The result still leaves ample room in a cycle of length about `1.78*10^20`.
-Its importance is methodological: deep inverse information is most efficient
-on the smallest range, while the symmetric edge cost controls the middle range
-without diluting the stronger small-value constraint.
+Its significance is structural: exact flow balance improves both the deep small
+range and the shallower middle range.  Extending the same endpoint-disjoint
+charging beyond sixty million is now a concrete route.
 
 Run
 
@@ -117,5 +132,5 @@ Run
 python tools/verify_split_range_reciprocal_dual.py
 ```
 
-for full reproduction.  The verifier performs the retained deterministic
-modular enumeration, not a trajectory search.
+for full reproduction.  The verifier performs deterministic modular
+classification, not a trajectory search.
