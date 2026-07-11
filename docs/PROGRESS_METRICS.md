@@ -1,15 +1,21 @@
 # Objective progress metrics
 
-Research effort is not a linear fraction of a proof.  Checkpoints therefore
+Research effort is not a linear fraction of a proof. Checkpoints therefore
 report:
 
 1. strict logical gates;
 2. exact finite frontiers;
-3. reusable infinite-family structure.
+3. reusable infinite-family structure;
+4. the decisive missing theorem.
 
 ## A. Strict prize gates
 
-For the primary candidate `X=2^156-9,n0=1`:
+For the primary candidate
+
+```text
+X=2^4501-349*2^500+347,
+n0=1:
+```
 
 | Gate | Meaning | Status |
 |---|---|---|
@@ -20,17 +26,144 @@ For the primary candidate `X=2^156-9,n0=1`:
 | G5 | independent verification covers the final proof | partial; waits for G3 |
 
 G3 is the decisive global theorem and may contain most of the remaining
-difficulty.  The table must not be converted mechanically into `60% solved`.
+difficulty. The table must not be converted mechanically into a proof
+percentage.
 
 ## B. Primary candidate measurements
 
 ```text
-X=2^156-9
- =91343852333181432387730302044767688728495783927,
+k=500,
+N=2^500-1,
+m=4501,
+d=349*2^500-347,
+X=2^4501-349*2^500+347,
 n0=1.
 ```
 
 ### Exact finite frontiers
+
+- every positive cycle length `p` must satisfy
+
+```text
+p>2*X/(3*d),
+10^1201<floor(2*X/(3*d))<10^1202;
+```
+
+- every hypothetical cycle value satisfies
+
+```text
+n_i>2^500-1;
+```
+
+- every exceptional cycle source satisfies
+
+```text
+n>=(u_min*2^4501+1)/(349*2^500-347),
+```
+
+  where
+
+```text
+u_min=
+141554173562669451979142234479211407387695161061947663158036275475013035570532072821977692485924548874811696146286209742307923384940182399969083204712328957713629782297601610389067903491331197096456313288013542743720638224927691460837892079910386115268969408753656537834465197519183303759432510875217219;
+```
+
+- the exceptional-source lower bound has `1505` decimal digits.
+
+### Permanent residue structure
+
+- `N=2^500-1` divides `X`;
+- `1093` divides `X` exactly once;
+- every output belongs to exactly `500` classes modulo `N`;
+- the `1093^2` adjacent-label coordinate combines with them into exactly
+
+```text
+K=16562000
+```
+
+  classes modulo
+
+```text
+M=(2^500-1)*1093^2;
+```
+
+- the current labels modulo `500` and `364` agree modulo `4`.
+
+### Reusable infinite-family structure
+
+- the Wieferich mechanism forbids return to `1`;
+- the Mersenne-divisor family constructs such candidates for every `k` not
+  divisible by `364` after choosing a suitable `t`;
+- the combined permanent density decreases exponentially in `k`;
+- every near-power complete block has the general exact credit ledger
+
+```text
+D=m*p-A
+ =sum ordinary deficits-sum exceptional excesses;
+```
+
+- the primary harmonic constants satisfy
+
+```text
+10^(-148)<C0<10^(-147),
+10^(-150)<K/(2*M)<10^(-149),
+```
+
+  where
+
+```text
+C0=(500/(2^500-1))*(1+H_33124/2);
+```
+
+- every hypothetical cycle obeys
+
+```text
+0<p*delta-D
+ <[C0+K*H_(ceil(p/K))/(2*M)]/(X*ln(2)),
+delta=log2(2^4501/X).
+```
+
+### Still open
+
+- cycles above the finite barrier remain infinite in number;
+- an arbitrarily thin permanent sieve does not itself exclude all cycles;
+- no lower bound for `p*delta-D` yet matches the harmonic upper window;
+- the cases of zero, one, and multiple exceptional blocks remain to be closed.
+
+## C. Main conceptual advance
+
+The Mersenne-divisor family proves that both
+
+```text
+finite barrier size
+```
+
+and
+
+```text
+permanent residue density
+```
+
+can be improved without limit by changing the constructed candidate. Therefore
+new record parameters alone are no longer counted as meaningful progress.
+
+The decisive object is now a dynamic theorem coupling:
+
+1. compatible valuation-label sequences;
+2. block credits;
+3. source heights;
+4. the correction mass `p*delta-D`.
+
+## D. Independent fallback branches
+
+### `X=2^3803-4162203,n0=1`
+
+- `17886960` permanent classes modulo `14726582775529`;
+- cycle barrier greater than `10^1138`;
+- exceptional floor `(19567017189655*2^3803+1)/4162203`;
+- harmonic base constant `1/853`.
+
+### `X=2^156-9,n0=1`
 
 - all positive cycle lengths through
 
@@ -39,57 +172,19 @@ n0=1.
 ```
 
   are excluded;
-- the first `48` accelerated steps are exactly
+- the first ordinary-block threshold is
 
 ```text
-(3,1,2,2,5,6)^8;
+7034970411803187993997906985047212163795395135;
 ```
 
-- the permanent adjacent-label sieve leaves exactly
+- every exceptional source is at least
 
 ```text
-132496
+1268664615738631005385143083955106787895774776889;
 ```
 
-  classes modulo `1093^2`;
-- every exceptional source in a hypothetical cycle is at least
-
-```text
-1268664615738631005385143083955106787895774776889.
-```
-
-### Reusable infinite-family structure
-
-- the Wieferich mechanism forbids return to `1`;
-- every near-power complete block is classified exactly;
-- all `155` ordinary terminal deficits have sharp growth/contraction thresholds;
-- every hypothetical cycle has a canonical complete-block partition;
-- its exact credit balance is
-
-```text
-D=156*p-A
- =sum ordinary deficits-sum exceptional excesses;
-```
-
-- every exceptional block ending at `156+b` loses more than `b` binary height
-  units;
-- the exact block correction identity and its uniform bound force
-
-```text
-p*(delta-9/(2*X*ln(2)))<D<p*delta,
-delta=log2(2^156/X).
-```
-
-This restricts `D` to roughly the upper half of the old interval.
-
-### Still open
-
-- cycles above the finite barrier remain infinite in number;
-- the initial eight macroblocks do not have a proved infinite renewal;
-- no harmonic or height-credit contradiction yet excludes all cycles;
-- the exact correction mass `p*delta-D` has not yet been proved impossible.
-
-## C. Independent fallback branches
+- the first `48` steps have exact word `(3,1,2,2,5,6)^8`.
 
 ### `X=2^260-3,n0=1`
 
@@ -99,8 +194,8 @@ Return to `1` is impossible, all positive cycle lengths through approximately
 
 ### `X=15,n0=3`
 
-Complete Mersenne blocks and second-block escalation are classified.  The later
-height theorem and avoidance of `1` remain open.
+Complete Mersenne blocks and second-block escalation are classified. The later
+height theorem and avoidance of a nontrivial cycle remain open.
 
 ### `X=9,n0=1`
 
@@ -121,16 +216,19 @@ All cycle lengths through `355561454311274250377` are excluded except
 
 At the first surviving length, `6242` layer totals remain.
 
-## D. Honest approximate wording
+## E. Honest approximate wording
 
-A rough planning estimate may be stated only as a range:
+A subjective planning estimate may be stated only as a broad research-maturity
+range, never as a measured probability that the proof is nearly complete.
+
+Current honest wording:
 
 ```text
-research maturity: about 30-40%;
 strict target: open;
-decisive remaining gate: global exclusion of every nontrivial positive cycle.
+three of four mathematical proof gates available;
+decisive remaining gate: global exclusion of every nontrivial positive cycle;
+main uncertainty: whether the block-credit/harmonic coupling is strong enough.
 ```
 
-This range describes accumulated structure, not a measured probability of
-success.  A single global lemma could finish the proof, or could contain most
-of the remaining work.
+A single global lemma could finish the proof, or could contain most of the
+remaining work.
