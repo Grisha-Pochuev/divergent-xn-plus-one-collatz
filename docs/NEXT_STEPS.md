@@ -2,7 +2,7 @@
 
 The strict prize problem remains open.
 
-## Priority 1: eliminate the final two lengths in the first sparse window
+## Priority 1: eliminate the final two lengths
 
 Current candidate:
 
@@ -37,22 +37,17 @@ Their exact reciprocal thresholds are approximately
 0.099934207.
 ```
 
-## New exact transition picture
+## Current exact picture
 
 Use
 
 ```text
 O=ord_X(2)=1860810887857924950,
-a_i=s_(i+1)+O*q_i.
-```
-
-For either remaining length,
-
-```text
+a_i=s_(i+1)+O*q_i,
 sum q_i<=6257.
 ```
 
-The exact symmetric edge cost
+The exact edge cost
 
 ```text
 c_i=(s_i-1)+(s_(i+1)-1)+2*O*q_i
@@ -64,45 +59,104 @@ satisfies
 sum c_i=2*(A-p).
 ```
 
-With threshold `K=5000`, more than `97.38%` of all edges are zero-layer edges with adjacent-label sum at most `5001`. Every target in that cheap majority exceeds
+More than `97.38%` of every remaining hypothetical cycle is forced into zero-layer transitions with adjacent-label sum at most `5001`, and every target in this majority is at least
 
 ```text
-781563824454394220933608138645145,
+781563824454394220933608138645145.
 ```
 
-and their entire reciprocal contribution is below `2.216*10^(-13)`.
+Hence the reciprocal correction is concentrated in a comparatively small expensive part.
 
-Thus the required correction is concentrated in the remaining expensive edges. At least one expensive target is at most
+Mandatory populations:
 
 ```text
-9190982840926584716   for p=...193,
-46609216582838682965  for p=...195.
+p=...193:
+  at least 355687 expensive targets in (10^6,X),
+  at least 349430 of them zero-layer;
+
+p=...195:
+  at least 5 expensive targets below X,
+  at least 799470 targets above 60000000,
+  at least 793213 of those zero-layer.
 ```
 
-Both are below `X`.
-
-A second threshold forces one exact transition pair to occur at least
+The strongest retained small-value bound for `...195` is
 
 ```text
-3053943280435589
+sum_(n_i<=1000000)1/n_i <0.085226905,
 ```
 
-times in one class modulo `2*X^2`. It yields a short exact return:
+proved by the signed-label potential plus depth-three inverse charging.
+
+The strongest retained bound through sixty million remains
 
 ```text
-length <=114286,
-total valuation <=7771435,
-endpoints equal modulo 2*X^2.
+sum_(n_i<=60000000)1/n_i <0.086609720.
 ```
 
-Repeated words also exist modulo higher powers:
+Do not use the retracted figures `0.086412209`, `811320`, or `805063`.
+
+## Immediate target A: extend the signed-label potential
+
+The valid potential assigns extremal signed values to two disjoint full-label sets and telescopes around the actual cycle.  It avoids the invalid step of identifying a least-cost predecessor with the actual source.
+
+Next tasks:
+
+1. extend the target set beyond one million;
+2. for every included target, prove that its least admissible layer minimizes the potential-shifted cost among all admissible layers;
+3. maintain nonnegative modified edge costs globally;
+4. combine the resulting constraint with depth-three inverse charging in a rational dual;
+5. seek an improvement of the retained sixty-million bound `0.086609720`.
+
+A successful extension must treat label-set collisions explicitly.  If target and source sets cease to be disjoint, solve the resulting finite potential feasibility problem rather than silently assigning conflicting values.
+
+## Immediate target B: finite-state zero-layer potential
+
+At least hundreds of thousands of mandatory tail targets are zero-layer targets.  Build a finite quotient retaining enough carry information for the exact predecessor map.
+
+Seek a rational inequality
 
 ```text
-2 edges: >=3114290401257 repetitions modulo 2*X^3
-3 edges: >=2918613523 repetitions modulo 2*X^4
-4 edges: >=2251677 repetitions modulo 2*X^5
-5 edges: >=1500 repetitions modulo 2*X^6.
+cost(edge) >= delta + Phi(next)-Phi(current)
 ```
+
+with `delta>0` on every projected zero-layer cycle.  Summing around a real cycle would then conflict with the global layer or reciprocal budget.
+
+The quotient is valid only if every real zero-layer transition projects correctly.  Small-class labels alone are insufficient because the local transition graph is complete.
+
+## Immediate target C: use the all-zero-layer minimum valley
+
+The four-generation inverse sieve proves
+
+```text
+p=...193: a_out<=36 and n_next>1518500249*m,
+p=...195: a_out<=39 and n_next>189812531*m.
+```
+
+Needed:
+
+1. derive a forced compensating contraction after this initial jump;
+2. charge that contraction against a positive layer or an expensive full label;
+3. combine with `sum q_i<=6257` or the reciprocal identity;
+4. avoid merely proving a larger maximum, which is not contradictory by itself.
+
+## Immediate target D: short affine return
+
+One segment satisfies
+
+```text
+1<=L<=114286,
+L<=S<=7771435,
+n_L==n_0 (mod 2*X^2).
+```
+
+Insert the exact affine iterate formula
+
+```text
+2^S*n_L=X^L*n_0+B.
+```
+
+Endpoint labels alone reproduce a tautology.  A useful result must retain additional information such as a third neighbouring label, a quotient bound, or a signed potential along the segment.
 
 ## Closed or unproductive routes
 
@@ -112,108 +166,8 @@ Do not repeat:
 - bounded layer-word enumeration as if it were a global obstruction;
 - blind enlargement of trajectory or representative cutoffs;
 - the retracted assumption `ord_X(2)|A`;
-- comparison of the new maximum-height lower bound with a theorem that only bounds the minimum cycle element.
-
-The local transition graph is complete. The obstruction must be global.
-
-## Immediate target A: expensive small transition
-
-The best concrete node is now the forced target below `X`.
-
-1. Parameterize all full predecessors of a target `n<X`:
-
-```text
-m_q=(2^(s+qO)*n-1)/X.
-```
-
-2. Combine the target bound with the permanent mod-3 sieve, exact full predecessor delay, and source label.
-3. Seek a universal lower cost for every admissible predecessor of such a small target.
-4. If that cost exceeds the available edge budget after reciprocal concentration, one of the two lengths is eliminated.
-
-This route should attack `...193` first because its required reciprocal threshold is five times larger.
-
-## Immediate target B: symmetric inverse-window dual
-
-The depth-one symmetric edge dual gives
-
-```text
-sum_(n_i<=1000000)1/n_i <0.087543786.
-```
-
-The former one-sided depth-two and depth-three bounds remain numerically stronger:
-
-```text
-0.085634587
-0.085243521.
-```
-
-Needed:
-
-1. define the exact minimum sum of symmetric edge costs over a two- or three-edge inverse window;
-2. use both the symmetric budget and the endpoint-label budget as separate rational constraints rather than replacing one by the other;
-3. construct a two-multiplier fractional dual or a finite-state potential;
-4. retain the result only if it improves the depth-three number or directly reduces the large tail.
-
-A simple convex average of the old and new costs was checked and did not improve the depth-two bound. A genuinely two-constraint dual is required.
-
-## Immediate target C: short affine return
-
-For the forced segment
-
-```text
-1<=L<=114286,
-L<=S<=7771435,
-n_L==n_0 (mod 2*X^2),
-```
-
-insert the exact affine iterate formula
-
-```text
-2^S*n_L=X^L*n_0+B.
-```
-
-The terminal two labels alone reproduce a tautology modulo `X^2`; that is not progress. A successful use must retain at least one additional piece of information:
-
-- a third neighbouring label, giving modulus `X^3`;
-- a bound on the quotient `(n_L-n_0)/(2X^2)`;
-- a signed height/reciprocal potential along the segment;
-- or a divisor of `2^S-X^L` imposing a nonlocal condition on `B`.
-
-## Immediate target D: distribution of zero-layer pair classes
-
-Zero-layer pairs form exact classes modulo `2*X^2`. A rigorous counting or discrepancy theorem for their least positive representatives could bound the large zero-delay tail globally.
-
-Needed:
-
-1. express pair representatives as
-
-```text
-2^(-v)*(1+X*2^(-u)) (mod X^2);
-```
-
-2. count representatives below a variable threshold with explicit error;
-3. combine that count with the exact edge-cost budget;
-4. beat `0.099934207` without enumerating billions of values.
-
-Asymptotic equidistribution without explicit constants is not a certificate.
-
-## Secondary routes
-
-### Explicit cycle-height route
-
-The repetition ladder forces enormous maxima and diameters, but the retained logarithmic theorem bounds minima. This route needs an explicit max/min comparison or an explicit upper bound on the maximum before the two estimates can interact.
-
-### Regenerative-chain route
-
-For `X=2^m+1`, construct one ordinary positive start supporting infinitely many net-positive complete bursts.
-
-### Stabilized valuation-code route
-
-Find one actual positive orbit with eventual average valuation below `log2(X)`.
-
-### `X=9` digital invariant
-
-A proof of `v2(S_t)<=3t-1` for the transformed `9n+1` recurrence would imply divergence. This route is outside the present Priority 1 session.
+- identification of a least-cost predecessor source label with the actual cycle source;
+- comparison of a maximum-height lower bound with a theorem that only bounds the minimum.
 
 ## Restrictions
 
@@ -225,4 +179,4 @@ A valid prize solution must provide an explicit pair, exclude every positive cyc
 
 ## Recommended next session
 
-> Attack the forced expensive target below X. Couple its exact predecessor label and delay to the reciprocal concentration. In parallel, seek a true two-constraint inverse-window dual. Do not return to local forbidden words or blind cutoff growth.
+> Extend the signed-label potential beyond one million, treating all label collisions and all admissible layers rigorously. In parallel, search for a finite-state potential on the mandatory zero-layer tail. Do not return to local forbidden words or blind cutoff growth.
