@@ -17,13 +17,17 @@ ACTUAL_MAX_CREDIT = "4500"
 ACTUAL_MAX_EXCESS = "4499"
 ACTUAL_MAX_BLOCKS = "4500"
 GAP_MARKER = "2^-4023"
+POSITIVE_RETURN_FRONTIER = "2^3990"
+NONPOSITIVE_RETURN_FRONTIER = "2^(2^974)"
 RETRACTED_BARRIER = "10^37"
 
 CURRENT_MEMORY_FILES = (
     "START_HERE.md",
     "docs/CURRENT_STATUS.md",
-    "docs/SESSION_CHECKPOINT_2026-07-12_ACTUAL_MINIMUM_BOUNDARY_SEGMENT.md",
+    "docs/SESSION_CHECKPOINT_2026-07-12_NONPOSITIVE_RETURN_HARMONIC_BARRIER.md",
     "docs/MINIMUM_BOUNDARY_ACTUAL_EXPANDING_SEGMENT.md",
+    "docs/MINIMUM_BOUNDARY_RETURN_CREDIT_DICHOTOMY.md",
+    "docs/MINIMUM_BOUNDARY_NONPOSITIVE_RETURN_HARMONIC_BARRIER.md",
 )
 
 CURRENT_STRUCTURE_FILES = (
@@ -38,6 +42,10 @@ CURRENT_STRUCTURE_FILES = (
     "tools/verify_minimum_boundary_positive_circulation.py",
     "docs/MINIMUM_BOUNDARY_ACTUAL_EXPANDING_SEGMENT.md",
     "tools/verify_minimum_boundary_actual_expanding_segment.py",
+    "docs/MINIMUM_BOUNDARY_RETURN_CREDIT_DICHOTOMY.md",
+    "tools/verify_minimum_boundary_return_credit_dichotomy.py",
+    "docs/MINIMUM_BOUNDARY_NONPOSITIVE_RETURN_HARMONIC_BARRIER.md",
+    "tools/verify_minimum_boundary_nonpositive_return_harmonic_barrier.py",
 )
 
 RETRACTION_FILES = (
@@ -55,6 +63,8 @@ LATEST_TOOLS = (
     "verify_global_ordinary_block_count_frontier.py",
     "verify_minimum_boundary_positive_circulation.py",
     "verify_minimum_boundary_actual_expanding_segment.py",
+    "verify_minimum_boundary_return_credit_dichotomy.py",
+    "verify_minimum_boundary_nonpositive_return_harmonic_barrier.py",
 )
 
 
@@ -88,7 +98,11 @@ def check() -> None:
         CIRCULATION_MAX_BLOCKS,
         ACTUAL_MAX_EXCESS,
         GAP_MARKER,
+        POSITIVE_RETURN_FRONTIER,
+        NONPOSITIVE_RETURN_FRONTIER,
         "MINIMUM_BOUNDARY_ACTUAL_EXPANDING_SEGMENT.md",
+        "verify_minimum_boundary_actual_expanding_segment.py",
+        "MINIMUM_BOUNDARY_NONPOSITIVE_RETURN_HARMONIC_BARRIER.md",
     )
 
     require(
@@ -100,14 +114,18 @@ def check() -> None:
         CIRCULATION_MAX_BLOCKS,
         ACTUAL_MAX_EXCESS,
         GAP_MARKER,
+        POSITIVE_RETURN_FRONTIER,
+        NONPOSITIVE_RETURN_FRONTIER,
     )
 
     require(
-        "docs/SESSION_CHECKPOINT_2026-07-12_ACTUAL_MINIMUM_BOUNDARY_SEGMENT.md",
+        "docs/SESSION_CHECKPOINT_2026-07-12_NONPOSITIVE_RETURN_HARMONIC_BARRIER.md",
         GLOBAL_MIN_ORDINARY_BLOCKS,
         ACTUAL_MAX_CREDIT,
         ACTUAL_MAX_EXCESS,
         ACTUAL_MAX_BLOCKS,
+        POSITIVE_RETURN_FRONTIER,
+        NONPOSITIVE_RETURN_FRONTIER,
     )
 
     require(
@@ -117,6 +135,19 @@ def check() -> None:
         ACTUAL_MAX_BLOCKS,
         GAP_MARKER,
         "L*log2(B/X)<C",
+    )
+
+    require(
+        "docs/MINIMUM_BOUNDARY_RETURN_CREDIT_DICHOTOMY.md",
+        POSITIVE_RETURN_FRONTIER,
+        GAP_MARKER,
+    )
+
+    require(
+        "docs/MINIMUM_BOUNDARY_NONPOSITIVE_RETURN_HARMONIC_BARRIER.md",
+        NONPOSITIVE_RETURN_FRONTIER,
+        PRIMARY_CLASSES,
+        GAP_MARKER,
     )
 
     require(
@@ -152,6 +183,8 @@ def check() -> None:
     print(f"global ordinary-block minimum={GLOBAL_MIN_ORDINARY_BLOCKS}")
     print(f"formal circulation maximum blocks={CIRCULATION_MAX_BLOCKS}")
     print(f"actual expanding segment maximum blocks={ACTUAL_MAX_BLOCKS}")
+    print(f"positive-return frontier={POSITIVE_RETURN_FRONTIER}")
+    print(f"nonpositive-return frontier={NONPOSITIVE_RETURN_FRONTIER}")
 
 
 if __name__ == "__main__":
