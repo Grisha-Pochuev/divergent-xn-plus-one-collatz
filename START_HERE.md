@@ -20,7 +20,7 @@ START_HERE.md
 docs/WORKING_PROTOCOL.md
 docs/CURRENT_STATUS.md
 docs/RETRACTIONS.md
-docs/SESSION_CHECKPOINT_2026-07-12_COMPLETE_BLOCK_GCD_COMPRESSION_NO_GO.md
+docs/SESSION_CHECKPOINT_2026-07-13_GEOMETRIC_FACTOR_PERSISTENCE_NO_GO.md
 ```
 
 Fetch these files from the current default branch at the start of every session.
@@ -30,55 +30,24 @@ in-chat summary or an older checkpoint conflicts with current `main`, current
 
 ## One-chat research sprint
 
-A broad user request such as `continue solving` authorizes one substantial
-research sprint. Do not ask the user to choose among plausible technical routes;
-choose the route with the best apparent chance of advancing the strict target.
+A broad request such as `continue solving` authorizes one substantial research
+sprint. Choose the route with the best apparent chance of advancing the strict
+target. Literature, alternative candidates, symbolic algebra, exact arithmetic,
+SAT/SMT, theorem provers, residue graphs, and small or medium exact searches are
+allowed.
 
-Each sprint should aim for one main deliverable:
+Aim for one main deliverable:
 
-1. a proved lemma that advances a proof gate;
+1. a proved lemma advancing a proof gate;
 2. a decisive refutation of an approach;
 3. a verified computational certificate with mathematical meaning;
-4. a literature result that materially changes the strategy, after independent
-   checking of the part being used;
-5. a precise obstruction plus the next exact experiment when no theorem is
-   reached.
+4. a literature result that materially changes strategy after independent audit;
+5. a precise obstruction and next exact experiment when no theorem is reached.
 
-Within one sprint, multiple methods and short side investigations are allowed.
 Work until one deliverable is reached or the chosen route is rigorously shown to
-fail. Then verify it independently where possible, commit the result immediately,
-and report separately what was proved, what was only tested, and what remains
-open.
-
-Do not claim background work after the response ends. A new sprint begins with a
-new user request.
-
-## Research freedom and priorities
-
-The current return-obstruction target below is the primary target, not an
-exclusive restriction. It is explicitly allowed to:
-
-- search current and historical literature, including claimed proofs, surveys,
-  related generalized Collatz maps, Diophantine approximation, dynamical systems,
-  symbolic dynamics, and computer-assisted proof methods;
-- inspect alternative candidates `(X,n0)` and previously retained fallback
-  branches;
-- transfer methods between candidates after checking every hypothesis;
-- use symbolic algebra, exact arithmetic, SAT/SMT, theorem provers, finite-state
-  models, residue graphs, and small or medium exact searches;
-- derive and test new invariants, coordinate systems, block decompositions,
-  congruence sieves, height functions, and descent arguments;
-- temporarily leave the primary branch when another route has a credible chance
-  of closing `G3` faster or proving divergence directly.
-
-Literature search is never prohibited. Prefer primary sources. A claimed proof is
-an idea source, not a retained theorem, until the needed argument has been checked
-line by line or reduced to an independently verifiable certificate.
-
-A side branch should be committed only when it gives a reusable theorem, a
-verified obstruction, a materially better candidate, or a documented strategic
-change. Do not spend a sprint merely enlarging a numerical record with no new
-infinite argument.
+fail. Verify independently where practical, commit immediately, and distinguish
+theorem, finite certificate, evidence, and open target. Do not merely enlarge a
+finite trajectory or numerical barrier.
 
 ## Primary candidate
 
@@ -100,7 +69,7 @@ G4 bounded positive orbit implies eventual cycle: closed;
 G5 final independent certificate: waits for G3.
 ```
 
-## Main retained results
+## Main retained arithmetic structure
 
 - `N|X` and `1093||X`;
 - the orbit leaves `1` and never returns;
@@ -109,7 +78,7 @@ G5 final independent certificate: waits for G3.
 - every exceptional source has at least `1505` decimal digits;
 - every cycle length through a number between `10^1201` and `10^1202` is
   impossible;
-- the full harmonic and `X`-adic bounds remain available.
+- the harmonic and full `X`-adic bounds remain available.
 
 ## Global ordinary-block frontier
 
@@ -119,88 +88,63 @@ Every hypothetical nontrivial positive cycle has at least
 245833 ordinary complete blocks.
 ```
 
-This allows arbitrary exceptional-block populations and arbitrary block lengths.
-It is not a cycle-length cutoff.
+This allows arbitrary exceptional-block populations and block lengths. It is not
+a cycle-length cutoff. Under the contrary assumption of at most `245832`
+ordinary blocks, the exact signed closure argument gives
 
-Main files:
+```text
+p<=544026748963771<10^15,
+```
+
+contradicting the retained height barrier.
+
+Files:
 
 ```text
 docs/GLOBAL_ORDINARY_BLOCK_COUNT_FRONTIER.md
 tools/verify_global_ordinary_block_count_frontier.py
 ```
 
-## Bounded positive circulation
+## Minimum-boundary expanding segment and return dichotomy
 
-For each occurring ordinary terminal deficit `e`, choose the smallest cycle
-boundary value `x_e` of that type. The resulting finite functional graph contains
-a directed cycle whose selected disjoint orbit intervals satisfy
-
-```text
-q<=4500,
-1<=C<=20250000,
-T<=20254499,
-L*delta<C,
-delta=log2(B/X).
-```
-
-Their formal base multiplier is strictly expanding:
-
-```text
-2^C*(X/B)^L>1.
-```
-
-Files:
-
-```text
-docs/MINIMUM_BOUNDARY_POSITIVE_CIRCULATION.md
-tools/verify_minimum_boundary_positive_circulation.py
-```
-
-## Actual minimum-boundary expanding segment
-
-Choose the least cycle value immediately following an ordinary complete block,
-and follow the actual orbit to the next such value. This gives one consecutive
-orbit segment satisfying
+The minimum-boundary construction gives one actual consecutive expanding orbit
+segment with
 
 ```text
 1<=net credit C<=4500;
 exceptional excess sum <=4499;
 number of complete blocks <=4500;
-L*delta<C;
-endpoint > starting value.
+L*log2(B/X)<C;
+endpoint y>x.
 ```
 
-Thus the segment itself, without splicing, has expanding base multiplier
+A related bounded positive circulation has
 
 ```text
-2^C*(X/B)^L>1.
+q<=4500,
+1<=C<=20250000,
+T<=20254499.
 ```
 
-Files:
-
-```text
-docs/MINIMUM_BOUNDARY_ACTUAL_EXPANDING_SEGMENT.md
-tools/verify_minimum_boundary_actual_expanding_segment.py
-```
-
-## Actual return frontiers
-
-Let `R` and `Lr` be the net credit and accelerated length of the remaining actual
-orbit from the larger endpoint back to the least ordinary boundary. Two strict
-results are retained:
+For the remaining actual return from `y` to the least ordinary boundary `x`, let
+`R` be its net credit and `Lr` its accelerated length. Then
 
 ```text
 R>=1 => Lr>2^3990;
 R<=0 => Lr>2^(2^974).
 ```
 
-The second result combines the permanent `16562000`-class sieve, harmonic
-packing, the small correction on the expanding exit, and the one-sided
-continued-fraction gap. It is not a trajectory computation.
+The nonpositive result uses the permanent `16562000`-class sieve, harmonic
+packing, a correction bound below `2^-4023`, and a one-sided continued-fraction
+gap.
 
 Files:
 
 ```text
+docs/MINIMUM_BOUNDARY_POSITIVE_CIRCULATION.md
+tools/verify_minimum_boundary_positive_circulation.py
+docs/MINIMUM_BOUNDARY_ACTUAL_EXPANDING_SEGMENT.md
+tools/verify_minimum_boundary_actual_expanding_segment.py
 docs/MINIMUM_BOUNDARY_RETURN_CREDIT_DICHOTOMY.md
 tools/verify_minimum_boundary_return_credit_dichotomy.py
 docs/MINIMUM_BOUNDARY_NONPOSITIVE_RETURN_HARMONIC_BARRIER.md
@@ -209,19 +153,14 @@ tools/verify_minimum_boundary_nonpositive_return_harmonic_barrier.py
 
 ## Endpoint-congruence no-go results
 
-The fixed local theorem proves that any incoming ordinary or exceptional block
-can be followed by any prescribed finite outgoing valuation word at infinitely
-many positive odd boundaries.
+Every prescribed finite incoming word and every prescribed finite outgoing word
+are compatible at infinitely many positive odd boundaries by exact word coding
+and the Chinese remainder theorem. This remains true when incoming `X`-adic
+depth grows with the full finite return word.
 
-The stronger full-word theorem allows the entire incoming word `V`. It fixes one
-endpoint class modulo `X^len(V)`, while the outgoing word `W` fixes one odd class
-modulo `2^(sum(W)+1)`. The Chinese remainder theorem makes the two complete
-finite words compatible at infinitely many positive odd boundaries, even when
-the `X`-adic depth grows with the full finite return word.
-
-Therefore neither a fixed class modulo `X^2` nor the full finite incoming
-endpoint class modulo `X^len(V)` can by itself exclude a return. Exact source
-matching is the missing global condition.
+Therefore fixed endpoint classes, including the entire finite incoming endpoint
+class, cannot alone exclude a return. Exact source matching is the missing
+global condition.
 
 Files:
 
@@ -232,22 +171,22 @@ docs/FULL_FINITE_TWO_SIDED_WORD_GLUING_NO_GO.md
 tools/verify_full_finite_two_sided_word_gluing_no_go.py
 ```
 
-## Exact closure and cyclic-gcd target
+## Exact cyclic closure
 
-Let `U` be the complete cyclic valuation word, with length `p`, total valuation
-`A`, cyclic rotations `U_k`, and standard affine numerators `Q_k=Q(U_k)`. Put
+For a complete cyclic valuation word `U=(a_0,...,a_(p-1))`, total valuation `A`,
+cyclic rotations `U_k`, and affine numerators `Q_k`, put
 
 ```text
 Delta=2^A-X^p.
 ```
 
-The exact rotation recurrence is
+Exact algebra gives
 
 ```text
 2^a_k*Q_(k+1)=X*Q_k+Delta.
 ```
 
-A positive word closes to an actual accelerated cycle if and only if
+The word closes to an actual positive accelerated cycle if and only if
 
 ```text
 Delta>0 and Delta|Q_0.
@@ -259,21 +198,11 @@ Equivalently,
 gcd(Q_k,Q_(k+1))=Delta
 ```
 
-for one, hence every, adjacent pair. Also
+for one, hence every, truly adjacent cyclic pair. Also
 
 ```text
 gcd(Q_0,...,Q_(p-1))=gcd(Q_0,Delta).
 ```
-
-For a split `U=W followed by V`, this is exactly the previous closure equation
-
-```text
-[2^(A_W+A_V)-X^(t+r)]*x
-  =X^r*Q_W+2^A_W*Q_V.
-```
-
-The minimum-boundary inequalities become comparisons among the `Q_k`; in
-particular the next ordinary boundary has a strictly larger cyclic numerator.
 
 Files:
 
@@ -290,13 +219,13 @@ For a complete near-power block of length `ell`, put
 S_ell=(B^ell-X^ell)/d.
 ```
 
-If `n` and `n'` are its exact positive source and endpoint, then
+If `n` and `n'` are its exact source and endpoint, then
 
 ```text
 gcd(n,n')=gcd(n,S_ell).
 ```
 
-For cyclic numerators at the two block boundaries,
+For block-boundary cyclic numerators,
 
 ```text
 gcd(Q_i,Q_j)=gcd(Q_i,Delta*S_ell).
@@ -308,23 +237,15 @@ If the full word closes, this becomes
 gcd(Q_i,Q_j)=Delta*gcd(n_i,S_ell).
 ```
 
-The extra factor is not a technical artifact. Exact word coding and CRT produce
-infinitely many positive complete blocks with
-
-```text
-gcd(n,n')=S_ell,
-```
-
-and `S_ell>X^(ell-1)` for `ell>=2`. The explicit regression is
+Local word coding and CRT produce infinitely many exact positive complete blocks
+with the full extra factor. The regression is
 
 ```text
 X=5: 91 -> 57 -> 143, gcd(91,143)=13.
 ```
 
-Therefore naive compression of a complete block to one boundary edge loses the
-sharp adjacent coprimality. A successful gcd proof must keep an adjacent
-accelerated pair inside the block or prove a genuinely global condition such as
-`gcd(n_i,S_ell)=1` for the actual cycle source.
+Thus naive compression of a whole block to one boundary edge loses the sharp
+adjacent coprimality.
 
 Files:
 
@@ -333,29 +254,87 @@ docs/COMPLETE_BLOCK_GCD_COMPRESSION_NO_GO.md
 tools/verify_complete_block_gcd_compression_no_go.py
 ```
 
+## Geometric-factor strong divisibility and persistence no-go
+
+The geometric factors form a strong divisibility sequence:
+
+```text
+gcd(S_r,S_s)=S_gcd(r,s).
+```
+
+They also satisfy
+
+```text
+gcd(S_ell,B*X)=1,
+gcd(S_ell,d)=gcd(ell,d).
+```
+
+Hence primes common to several block-boundary defects are controlled by the gcd
+of the corresponding block lengths. In particular, block lengths with gcd `1`
+have no common defect prime.
+
+This does not give a local proof. For any finite prescribed list of complete
+blocks whose lengths have common divisor `h>=2`, any odd prime `q|S_h` can be
+forced by exact word coding and CRT to divide every block boundary. The explicit
+regression is
+
+```text
+X=5,
+lengths=(2,4,6),
+q=13,
+boundaries=
+2620090395 -> 4093891243 -> 1249356459 -> 297869793,
+boundary gcd defects=(13,13,39).
+```
+
+Thus repeated local block compression need not wash out the extra gcd, no matter
+how many finite blocks are prescribed.
+
+For the primary candidate,
+
+```text
+gcd(S_ell,N*1093^2)=1
+```
+
+for every `ell`. The geometric defect has no prime from the permanent-sieve
+modulus; any useful interaction with that sieve must use actual source classes,
+not direct factor overlap.
+
+Files:
+
+```text
+docs/GEOMETRIC_FACTOR_STRONG_DIVISIBILITY_PERSISTENCE_NO_GO.md
+tools/verify_geometric_factor_strong_divisibility.py
+```
+
 ## Decisive missing theorem
 
-A hypothetical cycle can now return only through one of two extreme branches:
+A hypothetical cycle can return only through one of two extreme branches:
 
 ```text
 positive return credit with Lr>2^3990;
 nonpositive return credit with Lr>2^(2^974).
 ```
 
-The fixed-depth, uncoupled full finite endpoint-congruence, and naive
-complete-block boundary-gcd routes are closed. The primary next target is a
-genuinely global obstruction proving one of:
+Fixed-depth endpoint congruences, full finite two-sided word gluing, naive
+complete-block gcd compression, and the claim that repeated local compression
+must remove defect primes are closed.
 
-1. for every admissible complete cyclic word, some truly adjacent accelerated
-   numerator gcd is strictly smaller than `Delta`, using the minimum-boundary,
-   permanent-sieve, or return constraints;
-2. the expanding exit regenerates as a repeatable growing segment;
-3. the doubly-exponential nonpositive branch is globally impossible;
-4. a direct divergence proof for this or a stronger candidate.
+The primary next target is genuinely global. Prove one of:
 
-Do not merely extend a continued-fraction denominator, a finite trajectory, a
-finite return-length barrier, or an endpoint residue modulo a higher power of
-`X` without new closure information.
+1. a strategically selected family of actual cycle block lengths has gcd `1`,
+   so no prime can persist in every corresponding geometric defect;
+2. the return word, minimum-boundary constraints, or permanent-sieve classes
+   exclude every prime divisor of `S_gcd(lengths)` at the actual boundaries;
+3. some truly adjacent accelerated cyclic numerator pair has gcd smaller than
+   `Delta`;
+4. the expanding exit regenerates as a repeatable growing segment;
+5. the doubly-exponential nonpositive branch is globally impossible;
+6. a different candidate or invariant gives a direct divergence proof.
+
+Do not merely extend a continued-fraction denominator, finite trajectory, finite
+return-length barrier, endpoint modulus, or locally concatenated block list
+without new closure information.
 
 ## Reusable family theorem
 
@@ -396,10 +375,19 @@ used by a cycle. Do not present a finite computation as divergence.
 - state exactly which checks ran;
 - do not claim a complete repository run unless it completed;
 - compare every proposed result with current `main` before calling it new;
-- preserve failed approaches when the failure prevents future repetition.
+- preserve failed approaches when their failure prevents repetition.
 
 ## Reproduction
 
+The general check entry point is
+
 ```text
 python run_checks.py
+```
+
+For the current frontier specifically run
+
+```text
+python tools/verify_geometric_factor_strong_divisibility.py
+python tools/check_project_consistency.py
 ```
