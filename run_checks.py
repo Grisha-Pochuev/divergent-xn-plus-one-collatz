@@ -138,6 +138,7 @@ def main() -> None:
     run("tools/verify_full_finite_two_sided_word_gluing_no_go.py")
     run("tools/verify_cyclic_rotation_closure_gcd.py")
     run("tools/verify_complete_block_gcd_compression_no_go.py")
+    run("tools/verify_geometric_factor_strong_divisibility.py")
     run("tools/check_project_consistency.py")
     run("tools/check_x9_digital_invariant.py", "--steps", "10000")
     run("tools/generate_two_parameter_barrier.py", "--length", "1000000000000", "--height", "1000000000")
