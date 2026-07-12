@@ -132,6 +132,8 @@ def main() -> None:
     run("tools/verify_global_ordinary_block_count_frontier.py")
     run("tools/verify_minimum_boundary_positive_circulation.py")
     run("tools/verify_minimum_boundary_actual_expanding_segment.py")
+    run("tools/verify_minimum_boundary_return_credit_dichotomy.py")
+    run("tools/verify_minimum_boundary_nonpositive_return_harmonic_barrier.py")
     run("tools/check_project_consistency.py")
     run("tools/check_x9_digital_invariant.py", "--steps", "10000")
     run("tools/generate_two_parameter_barrier.py", "--length", "1000000000000", "--height", "1000000000")
