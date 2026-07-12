@@ -34,106 +34,38 @@ G5 final certificate: waits for G3.
 
 - `N|X` and `1093||X`;
 - the orbit from `1` leaves `1` and never returns;
-- every output lies in `500` classes modulo `N`;
-- the combined `N` and `1093^2` sieve leaves exactly `16562000` classes;
+- the combined permanent sieve leaves `16562000` classes modulo `N*1093^2`;
 - every cycle value is greater than `N`;
 - every exceptional source has at least `1505` decimal digits;
 - every cycle length through a number between `10^1201` and `10^1202` is
   impossible;
-- every cycle obeys the harmonic correction window from
-  `MERSENNE_DIVISOR_WIEFERICH_FAMILY.md`.
-
-## X-adic structure
-
-For a valuation-`4501` step,
-
-```text
-F(n)=(X*n+1)/2^4501,
-F(n)-1/d=(X/2^4501)*(n-1/d).
-```
-
-Thus after `j` consecutive such steps,
-
-```text
-d*F^j(n)==1 (mod X^j).
-```
-
-All `4500` ordinary terminal classes satisfy
-
-```text
-rho_e>X/(3*e).
-```
-
-## Local infinite exclusions
-
-The following are completely excluded for all admissible lengths:
-
-- one ordinary block;
-- two ordinary blocks;
-- one exceptional block plus one ordinary block.
+- the harmonic and full `X`-adic bounds remain available.
 
 ## Global ordinary-block frontier
 
-Let
-
-```text
-J = number of ordinary complete blocks,
-R = number of exceptional complete blocks,
-E = sum ordinary deficits,
-F = sum exceptional excesses,
-D = E-F = 4501*p-A.
-```
-
-Exact signed elimination of all block cores gives
-
-```text
-2^E*Delta_D(p)*u_0=signed additive sum,
-Delta_D(p)=2^(4501*p-D)-X^p.
-```
-
-Ordinary blocks contribute positive terms and exceptional blocks contribute
-negative terms. Dropping all negative terms proves:
-
-```text
-selected ordinary length L:
-Delta_D(p)*u<J*B^(p-L+J+1);
-
-selected exceptional length k:
-Delta_D(p)*v<J*B^(p-k+J).
-```
-
-The exact continued-fraction certificate gives, for
-`0<D<1106246945`,
-
-```text
-Delta_D(p)>2^(4501*p-D-22206).
-```
-
-If `J<=245832`, then `D<=4500J-1`, so comparison forces
-
-```text
-every ordinary block length <=2J+6;
-every exceptional block length <=2J+5;
-R<=4500J-1.
-```
-
-Consequently
-
-```text
-p<=544026748963771<10^15,
-```
-
-contradicting the retained barrier `p>10^1201`.
-
-Therefore:
+Let `J` be the number of ordinary complete blocks in a hypothetical cycle.
+Signed elimination of all block cores gives upper bounds for the positive cycle
+gap after all exceptional terms are discarded. The exact continued-fraction
+gap then proves:
 
 ```text
 Every hypothetical nontrivial positive cycle contains at least
 245833 ordinary complete blocks.
 ```
 
-This allows arbitrary exceptional-block populations and arbitrary lengths. It
-is not a finite trajectory or cycle-length cutoff.
+This allows arbitrary exceptional-block populations and arbitrary block lengths.
+It is not a finite trajectory or cycle-length cutoff.
+
+If `J<=245832`, the proof forces
+
+```text
+every ordinary block length <=2J+6;
+every exceptional block length <=2J+5;
+number of exceptional blocks <=4500J-1;
+p<=544026748963771<10^15,
+```
+
+contradicting `p>10^1201`.
 
 Files:
 
@@ -142,20 +74,63 @@ docs/GLOBAL_ORDINARY_BLOCK_COUNT_FRONTIER.md
 tools/verify_global_ordinary_block_count_frontier.py
 ```
 
+## Minimum-boundary positive circulation
+
+For every occurring ordinary deficit type `e`, choose the smallest cycle
+boundary value `x_e` of that type. Follow the actual orbit to the next ordinary
+boundary of type `f(e)` and value `y_e`. Then
+
+```text
+y_e>=x_(f(e)).
+```
+
+The functional graph on at most `4500` types contains a directed cycle. The
+selected disjoint orbit intervals have actual height product at least `1`.
+Writing `C` for their total net credit, `L` for total accelerated length, and
+`T` for the number of selected complete blocks, exact estimates prove
+
+```text
+q<=4500,
+1<=C<=20250000,
+T<=20254499,
+L*delta<C,
+delta=log2(B/X).
+```
+
+Thus their formal base multiplier is strictly expanding:
+
+```text
+2^C*(X/B)^L>1.
+```
+
+The proof is global, not experimental. If `L*delta>C`, the one-sided
+continued-fraction theorem gives a natural-log gap greater than `2^-4023`, while
+the total selected additive correction is less than `2^-4023`, a contradiction.
+Equality is impossible because `X^L` is odd and cannot be a power of two.
+
+Files:
+
+```text
+docs/MINIMUM_BOUNDARY_POSITIVE_CIRCULATION.md
+tools/verify_minimum_boundary_positive_circulation.py
+```
+
 ## Decisive missing theorem
 
-There are only `4500` ordinary terminal deficits. Hence every surviving cycle
-contains one deficit at least `55` times.
+The selected intervals form an expanding circulation of boundary types, but
+need not be consecutive in the original orbit. An endpoint and the next selected
+start have the same ordinary boundary class modulo `X`, yet may be different
+integers and may lie in different two-adic word cylinders.
 
-The next target is a many-block population theorem using:
+The next target is a splicing or regeneration theorem proving one of:
 
-1. repeated boundary classes modulo `X` and `N`;
-2. the exceptional credit budget `F=E-D`;
-3. the full `X`-adic ladder;
-4. a short positive-credit segment, height descent, or impossible closure
-   congruence between repeated terminal types.
+1. the intervals concatenate into an admissible growing orbit segment;
+2. every nonzero mismatch forces strict height descent;
+3. the mismatch is impossible after lifting the boundary equation modulo `X^2`
+   or a higher power.
 
-Do not merely enlarge the continued-fraction denominator or finite barrier.
+Further finite barriers or longer continued-fraction prefixes are not the
+priority.
 
 ## Reusable family theorem
 
@@ -168,9 +143,9 @@ d=2^r+t*N,
 X=2^m-d,
 ```
 
-with `364` not dividing `k`, one can choose parity-correct
-`t<2*1093^2` with `1093||X`. This gives no return to `1`, an exponentially
-thin permanent sieve, and an arbitrarily large finite barrier.
+with `364` not dividing `k`, one can choose parity-correct `t<2*1093^2` with
+`1093||X`. This gives no return to `1`, an exponentially thin permanent sieve,
+and an arbitrarily large finite barrier.
 
 ## Retractions
 
