@@ -20,7 +20,7 @@ START_HERE.md
 docs/WORKING_PROTOCOL.md
 docs/CURRENT_STATUS.md
 docs/RETRACTIONS.md
-docs/SESSION_CHECKPOINT_2026-07-12_CYCLIC_ROTATION_CLOSURE_GCD.md
+docs/SESSION_CHECKPOINT_2026-07-12_COMPLETE_BLOCK_GCD_COMPRESSION_NO_GO.md
 ```
 
 Fetch these files from the current default branch at the start of every session.
@@ -282,6 +282,57 @@ docs/CYCLIC_ROTATION_CLOSURE_GCD.md
 tools/verify_cyclic_rotation_closure_gcd.py
 ```
 
+## Complete-block gcd compression no-go
+
+For a complete near-power block of length `ell`, put
+
+```text
+S_ell=(B^ell-X^ell)/d.
+```
+
+If `n` and `n'` are its exact positive source and endpoint, then
+
+```text
+gcd(n,n')=gcd(n,S_ell).
+```
+
+For cyclic numerators at the two block boundaries,
+
+```text
+gcd(Q_i,Q_j)=gcd(Q_i,Delta*S_ell).
+```
+
+If the full word closes, this becomes
+
+```text
+gcd(Q_i,Q_j)=Delta*gcd(n_i,S_ell).
+```
+
+The extra factor is not a technical artifact. Exact word coding and CRT produce
+infinitely many positive complete blocks with
+
+```text
+gcd(n,n')=S_ell,
+```
+
+and `S_ell>X^(ell-1)` for `ell>=2`. The explicit regression is
+
+```text
+X=5: 91 -> 57 -> 143, gcd(91,143)=13.
+```
+
+Therefore naive compression of a complete block to one boundary edge loses the
+sharp adjacent coprimality. A successful gcd proof must keep an adjacent
+accelerated pair inside the block or prove a genuinely global condition such as
+`gcd(n_i,S_ell)=1` for the actual cycle source.
+
+Files:
+
+```text
+docs/COMPLETE_BLOCK_GCD_COMPRESSION_NO_GO.md
+tools/verify_complete_block_gcd_compression_no_go.py
+```
+
 ## Decisive missing theorem
 
 A hypothetical cycle can now return only through one of two extreme branches:
@@ -291,11 +342,13 @@ positive return credit with Lr>2^3990;
 nonpositive return credit with Lr>2^(2^974).
 ```
 
-The fixed-depth and uncoupled full finite endpoint-congruence routes are closed.
-The primary next target is a genuinely global obstruction proving one of:
+The fixed-depth, uncoupled full finite endpoint-congruence, and naive
+complete-block boundary-gcd routes are closed. The primary next target is a
+genuinely global obstruction proving one of:
 
-1. for every admissible complete cyclic word, some adjacent numerator gcd is
-   strictly smaller than `Delta` under the minimum-boundary and credit constraints;
+1. for every admissible complete cyclic word, some truly adjacent accelerated
+   numerator gcd is strictly smaller than `Delta`, using the minimum-boundary,
+   permanent-sieve, or return constraints;
 2. the expanding exit regenerates as a repeatable growing segment;
 3. the doubly-exponential nonpositive branch is globally impossible;
 4. a direct divergence proof for this or a stronger candidate.
