@@ -11,14 +11,16 @@ PRIMARY_CLASSES = "16562000"
 PRIMARY_BARRIER = "10^1201"
 GLOBAL_MIN_ORDINARY_BLOCKS = "245833"
 GLOBAL_LENGTH_UPPER = "544026748963771"
-CF_DENOMINATOR = "1106246945"
+CIRCULATION_MAX_CREDIT = "20250000"
+CIRCULATION_MAX_BLOCKS = "20254499"
+CIRCULATION_GAP = "2^-4023"
 RETRACTED_BARRIER = "10^37"
 
 CURRENT_MEMORY_FILES = (
     "START_HERE.md",
     "docs/CURRENT_STATUS.md",
-    "docs/SESSION_CHECKPOINT_2026-07-12_GLOBAL_BLOCK_COUNT_FRONTIER.md",
-    "docs/GLOBAL_ORDINARY_BLOCK_COUNT_FRONTIER.md",
+    "docs/SESSION_CHECKPOINT_2026-07-12_POSITIVE_BOUNDARY_CIRCULATION.md",
+    "docs/MINIMUM_BOUNDARY_POSITIVE_CIRCULATION.md",
 )
 
 CURRENT_STRUCTURE_FILES = (
@@ -27,10 +29,10 @@ CURRENT_STRUCTURE_FILES = (
     "docs/MERSENNE_DIVISOR_EXCEPTIONAL_FLOOR.md",
     "docs/NO_EXCEPTIONAL_X_ADIC_LADDER.md",
     "tools/verify_no_exceptional_x_adic_ladder.py",
-    "docs/ONE_EXCEPTION_BLOCK_COUNT_FRONTIER.md",
-    "tools/verify_one_exception_block_count_frontier.py",
     "docs/GLOBAL_ORDINARY_BLOCK_COUNT_FRONTIER.md",
     "tools/verify_global_ordinary_block_count_frontier.py",
+    "docs/MINIMUM_BOUNDARY_POSITIVE_CIRCULATION.md",
+    "tools/verify_minimum_boundary_positive_circulation.py",
 )
 
 RETRACTION_FILES = (
@@ -46,6 +48,7 @@ LATEST_TOOLS = (
     "verify_one_exception_one_ordinary_no_go.py",
     "verify_one_exception_block_count_frontier.py",
     "verify_global_ordinary_block_count_frontier.py",
+    "verify_minimum_boundary_positive_circulation.py",
 )
 
 
@@ -68,39 +71,48 @@ def check() -> None:
         read(relative)
 
     for relative in CURRENT_MEMORY_FILES:
-        require(
-            relative,
-            PRIMARY_X,
-            GLOBAL_MIN_ORDINARY_BLOCKS,
-        )
+        require(relative, PRIMARY_X)
 
     require(
         "START_HERE.md",
         PRIMARY_CLASSES,
         PRIMARY_BARRIER,
-        "GLOBAL_ORDINARY_BLOCK_COUNT_FRONTIER.md",
+        GLOBAL_MIN_ORDINARY_BLOCKS,
+        CIRCULATION_MAX_CREDIT,
+        CIRCULATION_MAX_BLOCKS,
+        CIRCULATION_GAP,
+        "MINIMUM_BOUNDARY_POSITIVE_CIRCULATION.md",
     )
 
     require(
         "docs/CURRENT_STATUS.md",
         PRIMARY_CLASSES,
         PRIMARY_BARRIER,
-        CF_DENOMINATOR,
-        GLOBAL_LENGTH_UPPER,
+        GLOBAL_MIN_ORDINARY_BLOCKS,
+        CIRCULATION_MAX_CREDIT,
+        CIRCULATION_MAX_BLOCKS,
+        CIRCULATION_GAP,
     )
 
     require(
-        "docs/SESSION_CHECKPOINT_2026-07-12_GLOBAL_BLOCK_COUNT_FRONTIER.md",
-        CF_DENOMINATOR,
-        GLOBAL_LENGTH_UPPER,
+        "docs/SESSION_CHECKPOINT_2026-07-12_POSITIVE_BOUNDARY_CIRCULATION.md",
+        GLOBAL_MIN_ORDINARY_BLOCKS,
+        CIRCULATION_MAX_CREDIT,
+        CIRCULATION_MAX_BLOCKS,
+    )
+
+    require(
+        "docs/MINIMUM_BOUNDARY_POSITIVE_CIRCULATION.md",
+        CIRCULATION_MAX_CREDIT,
+        CIRCULATION_MAX_BLOCKS,
+        CIRCULATION_GAP,
+        "L*delta<C",
     )
 
     require(
         "docs/GLOBAL_ORDINARY_BLOCK_COUNT_FRONTIER.md",
-        CF_DENOMINATOR,
+        GLOBAL_MIN_ORDINARY_BLOCKS,
         GLOBAL_LENGTH_UPPER,
-        "ordinary blocks",
-        "exceptional blocks",
     )
 
     for relative in RETRACTION_FILES:
@@ -122,8 +134,8 @@ def check() -> None:
     print(f"primary candidate={PRIMARY_X}")
     print(f"permanent classes={PRIMARY_CLASSES}")
     print(f"global ordinary-block minimum={GLOBAL_MIN_ORDINARY_BLOCKS}")
-    print(f"continued-fraction denominator={CF_DENOMINATOR}")
-    print(f"excluded-range cycle-length upper={GLOBAL_LENGTH_UPPER}")
+    print(f"circulation maximum credit={CIRCULATION_MAX_CREDIT}")
+    print(f"circulation maximum selected blocks={CIRCULATION_MAX_BLOCKS}")
 
 
 if __name__ == "__main__":
