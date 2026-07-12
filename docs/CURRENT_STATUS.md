@@ -43,20 +43,17 @@ G5 final certificate: waits for G3.
 
 ## Global ordinary-block frontier
 
-Let `J` be the number of ordinary complete blocks in a hypothetical cycle.
-Signed elimination of all block cores gives upper bounds for the positive cycle
-gap after all exceptional terms are discarded. The exact continued-fraction
-gap then proves:
+Every hypothetical nontrivial positive cycle contains at least
 
 ```text
-Every hypothetical nontrivial positive cycle contains at least
 245833 ordinary complete blocks.
 ```
 
-This allows arbitrary exceptional-block populations and arbitrary block lengths.
-It is not a finite trajectory or cycle-length cutoff.
+This permits arbitrary exceptional-block populations and arbitrary block
+lengths. It is not a trajectory or cycle-length cutoff.
 
-If `J<=245832`, the proof forces
+The exact signed closure proof shows that if the ordinary-block count were at
+most `245832`, then
 
 ```text
 every ordinary block length <=2J+6;
@@ -74,20 +71,11 @@ docs/GLOBAL_ORDINARY_BLOCK_COUNT_FRONTIER.md
 tools/verify_global_ordinary_block_count_frontier.py
 ```
 
-## Minimum-boundary positive circulation
+## Bounded positive circulation
 
-For every occurring ordinary deficit type `e`, choose the smallest cycle
-boundary value `x_e` of that type. Follow the actual orbit to the next ordinary
-boundary of type `f(e)` and value `y_e`. Then
-
-```text
-y_e>=x_(f(e)).
-```
-
-The functional graph on at most `4500` types contains a directed cycle. The
-selected disjoint orbit intervals have actual height product at least `1`.
-Writing `C` for their total net credit, `L` for total accelerated length, and
-`T` for the number of selected complete blocks, exact estimates prove
+Choosing the smallest cycle boundary in every occurring ordinary deficit type
+produces a functional graph on at most `4500` types. One directed cycle in that
+graph gives disjoint orbit intervals satisfying
 
 ```text
 q<=4500,
@@ -97,16 +85,11 @@ L*delta<C,
 delta=log2(B/X).
 ```
 
-Thus their formal base multiplier is strictly expanding:
+Their formal base multiplier is strictly expanding:
 
 ```text
 2^C*(X/B)^L>1.
 ```
-
-The proof is global, not experimental. If `L*delta>C`, the one-sided
-continued-fraction theorem gives a natural-log gap greater than `2^-4023`, while
-the total selected additive correction is less than `2^-4023`, a contradiction.
-Equality is impossible because `X^L` is odd and cannot be a power of two.
 
 Files:
 
@@ -115,21 +98,52 @@ docs/MINIMUM_BOUNDARY_POSITIVE_CIRCULATION.md
 tools/verify_minimum_boundary_positive_circulation.py
 ```
 
+## Actual minimum-boundary expanding segment
+
+Choose the least cycle value immediately following an ordinary complete block
+and follow the actual orbit to the next such value. If the segment has total
+credit `C`, length `L`, and exceptional excess sum `F`, then exact minimum-height
+comparison gives
+
+```text
+1<=C<=4500,
+F<=4499,
+number of complete blocks <=4500.
+```
+
+If its base multiplier were nonexpanding, the exact continued-fraction gap would
+be greater than `2^-4023`, while the sum of every additive block correction is
+less than `2^-4023`. Therefore
+
+```text
+L*delta<C,
+2^C*(X/B)^L>1,
+endpoint > starting value.
+```
+
+This is an actual consecutive orbit segment, not a formal splice.
+
+Files:
+
+```text
+docs/MINIMUM_BOUNDARY_ACTUAL_EXPANDING_SEGMENT.md
+tools/verify_minimum_boundary_actual_expanding_segment.py
+```
+
 ## Decisive missing theorem
 
-The selected intervals form an expanding circulation of boundary types, but
-need not be consecutive in the original orbit. An endpoint and the next selected
-start have the same ordinary boundary class modulo `X`, yet may be different
-integers and may lie in different two-adic word cylinders.
+The remaining part of a hypothetical cycle must return from the larger endpoint
+of this short expanding segment to the least ordinary boundary.
 
-The next target is a splicing or regeneration theorem proving one of:
+The primary target is a return obstruction based on one of:
 
-1. the intervals concatenate into an admissible growing orbit segment;
-2. every nonzero mismatch forces strict height descent;
-3. the mismatch is impossible after lifting the boundary equation modulo `X^2`
-   or a higher power.
+1. inverse `X`-adic descent through the return word;
+2. the endpoint classes modulo `X`, `1093^2`, or `X^2`;
+3. a mandatory exceptional-credit lower bound incompatible with the harmonic
+   correction window;
+4. regeneration of the expanding word into a repeatable growing segment.
 
-Further finite barriers or longer continued-fraction prefixes are not the
+Further numerical barriers or longer continued-fraction prefixes are not the
 priority.
 
 ## Reusable family theorem
