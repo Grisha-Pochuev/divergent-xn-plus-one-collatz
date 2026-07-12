@@ -118,7 +118,7 @@ less than `2^-4023`. Therefore
 ```text
 L*delta<C,
 2^C*(X/B)^L>1,
-endpoint > starting value.
+endpoint y > starting value x.
 ```
 
 This is an actual consecutive orbit segment, not a formal splice.
@@ -130,18 +130,90 @@ docs/MINIMUM_BOUNDARY_ACTUAL_EXPANDING_SEGMENT.md
 tools/verify_minimum_boundary_actual_expanding_segment.py
 ```
 
+## Return-credit dichotomy
+
+Follow the remaining actual orbit from `y` back to `x`. Let
+
+```text
+R = ordinary-deficit sum - exceptional-excess sum,
+Lr = accelerated return length.
+```
+
+The exact return ratio and
+
+```text
+log2(B/X)<2^-3990
+```
+
+prove
+
+```text
+R>=1 => Lr>2^3990;
+Lr<=2^3990 => R<=0.
+```
+
+Files:
+
+```text
+docs/MINIMUM_BOUNDARY_RETURN_CREDIT_DICHOTOMY.md
+tools/verify_minimum_boundary_return_credit_dichotomy.py
+```
+
+## Nonpositive-return harmonic barrier
+
+If `R<=0`, then the total cycle credit is
+
+```text
+1<=D=C+R<=4500.
+```
+
+The one-sided continued-fraction certificate forces the full natural-logarithmic
+cycle gap to exceed `2^-4023`. On the other hand, the permanent `16562000`-class
+sieve and harmonic packing of the distinct return values show that every return
+with
+
+```text
+Lr<=2^(2^974)
+```
+
+has return correction below `2^-4024`. The independent correction bound for the
+short expanding exit is also below `2^-4024`. Their sum is below `2^-4023`, a
+contradiction. Therefore
+
+```text
+R<=0 => Lr>2^(2^974).
+```
+
+The exact checker obtains
+
+```text
+correction upper * 2^4023 = 0.433233945702880...,
+gap lower        * 2^4023 = 1.718676385119249....
+```
+
+Files:
+
+```text
+docs/MINIMUM_BOUNDARY_NONPOSITIVE_RETURN_HARMONIC_BARRIER.md
+tools/verify_minimum_boundary_nonpositive_return_harmonic_barrier.py
+```
+
 ## Decisive missing theorem
 
-The remaining part of a hypothetical cycle must return from the larger endpoint
-of this short expanding segment to the least ordinary boundary.
+A hypothetical cycle can now survive only through one of the following actual
+return branches:
 
-The primary target is a return obstruction based on one of:
+```text
+positive credit with Lr>2^3990;
+nonpositive credit with Lr>2^(2^974).
+```
 
-1. inverse `X`-adic descent through the return word;
-2. the endpoint classes modulo `X`, `1093^2`, or `X^2`;
-3. a mandatory exceptional-credit lower bound incompatible with the harmonic
-   correction window;
-4. regeneration of the expanding word into a repeatable growing segment.
+The primary target is a length-independent return obstruction based on one of:
+
+1. inverse `X`-adic descent through a positive-credit return word;
+2. endpoint incompatibility modulo `X^2` or a higher power;
+3. regeneration of the expanding exit into a repeatable growing segment;
+4. a global exclusion of the doubly-exponential nonpositive branch.
 
 Further numerical barriers or longer continued-fraction prefixes are not the
 priority.
@@ -180,5 +252,11 @@ used by a cycle.
 
 ## Verification
 
-The new standalone checkers passed in the chat environment and are included in
+The standalone checker
+
+```text
+python tools/verify_minimum_boundary_nonpositive_return_harmonic_barrier.py
+```
+
+passed in the chat environment. Both return checkers are included in
 `run_checks.py`. A complete repository-wide run was not executed.
