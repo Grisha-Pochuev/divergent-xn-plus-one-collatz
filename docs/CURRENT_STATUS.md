@@ -130,7 +130,7 @@ docs/MINIMUM_BOUNDARY_ACTUAL_EXPANDING_SEGMENT.md
 tools/verify_minimum_boundary_actual_expanding_segment.py
 ```
 
-## Return-credit dichotomy
+## Actual return frontiers
 
 Follow the remaining actual orbit from `y` back to `x`. Let
 
@@ -139,46 +139,16 @@ R = ordinary-deficit sum - exceptional-excess sum,
 Lr = accelerated return length.
 ```
 
-The exact return ratio and
+The exact return ratio proves
 
 ```text
-log2(B/X)<2^-3990
+R>=1 => Lr>2^3990.
 ```
 
-prove
-
-```text
-R>=1 => Lr>2^3990;
-Lr<=2^3990 => R<=0.
-```
-
-Files:
-
-```text
-docs/MINIMUM_BOUNDARY_RETURN_CREDIT_DICHOTOMY.md
-tools/verify_minimum_boundary_return_credit_dichotomy.py
-```
-
-## Nonpositive-return harmonic barrier
-
-If `R<=0`, then the total cycle credit is
-
-```text
-1<=D=C+R<=4500.
-```
-
-The one-sided continued-fraction certificate forces the full natural-logarithmic
-cycle gap to exceed `2^-4023`. On the other hand, the permanent `16562000`-class
-sieve and harmonic packing of the distinct return values show that every return
-with
-
-```text
-Lr<=2^(2^974)
-```
-
-has return correction below `2^-4024`. The independent correction bound for the
-short expanding exit is also below `2^-4024`. Their sum is below `2^-4023`, a
-contradiction. Therefore
+If `R<=0`, then total cycle credit satisfies `1<=D<=4500`. The one-sided
+continued-fraction certificate forces a gap greater than `2^-4023`, while the
+permanent `16562000`-class sieve and harmonic packing make the total correction
+too small through a double-exponential frontier. Hence
 
 ```text
 R<=0 => Lr>2^(2^974).
@@ -194,36 +164,77 @@ gap lower        * 2^4023 = 1.718676385119249....
 Files:
 
 ```text
+docs/MINIMUM_BOUNDARY_RETURN_CREDIT_DICHOTOMY.md
+tools/verify_minimum_boundary_return_credit_dichotomy.py
 docs/MINIMUM_BOUNDARY_NONPOSITIVE_RETURN_HARMONIC_BARRIER.md
 tools/verify_minimum_boundary_nonpositive_return_harmonic_barrier.py
 ```
 
-## Fixed local endpoint congruence route closed
+## Endpoint-congruence routes closed
 
-For every fixed incoming ordinary or exceptional complete block and every fixed
-finite outgoing valuation word, the Chinese remainder theorem constructs
-infinitely many positive odd common boundary values realizing both pieces
-exactly. The incoming block prescribes a class modulo `X^ell`; the outgoing word
-prescribes an independent class modulo a power of two.
+The fixed local theorem shows that every prescribed incoming ordinary or
+exceptional complete block is compatible with every prescribed finite outgoing
+valuation word at infinitely many positive odd boundaries.
 
-Consequently a comparison using only finitely many incoming and outgoing labels
-at the common endpoint modulo `X^2` or any other fixed `X^h` cannot itself exclude
-a return. This does not rule out an argument using the entire return word, a
-depth growing with its length, exact cycle closure, or global minimum data.
+The stronger theorem now allows an arbitrary entire finite incoming word `V`.
+Its endpoint condition is one class modulo
+
+```text
+X^len(V),
+```
+
+whereas an arbitrary finite outgoing word `W` fixes one odd class modulo
+
+```text
+2^(sum(W)+1).
+```
+
+The moduli are coprime, so the Chinese remainder theorem constructs infinitely
+many positive odd boundaries realizing both words exactly. This remains true
+when the incoming `X`-adic depth grows with the complete finite return word and
+after any fixed finite lower height bound.
+
+Therefore neither fixed-depth endpoint data nor the full finite incoming
+endpoint residue can itself exclude a return. The new checker verifies `1536`
+small exact gluings, six gluings for the primary multiplier, and the known
+accelerated `5n+1` cycle `13 -> 33 -> 83 -> 13`.
 
 Files:
 
 ```text
 docs/FIXED_LOCAL_ENDPOINT_CONGRUENCE_NO_GO.md
 tools/verify_fixed_local_endpoint_congruence_no_go.py
+docs/FULL_FINITE_TWO_SIDED_WORD_GLUING_NO_GO.md
+tools/verify_full_finite_two_sided_word_gluing_no_go.py
 ```
 
-The standalone checker constructs `1984` small exact examples and five examples
-for the primary candidate.
+## Exact closure target
+
+Let `W` be the expanding exit word from `x` to `y`, and let `V` be the remaining
+return word from `y` to `x`. Define their exact affine constants by
+
+```text
+2^A_W*y=X^t*x+Q_W,
+2^A_V*x=X^r*y+Q_V.
+```
+
+Eliminating `y` gives
+
+```text
+[2^(A_W+A_V)-X^(t+r)]*x
+  =X^r*Q_W+2^A_W*Q_V.
+```
+
+The two finite words are automatically locally compatible by CRT. Exact cycle
+closure is the additional requirement that the left coefficient divide the
+explicit right numerator and produce the actual minimum boundary. A successful
+whole-return argument must extract new divisibility or size information from
+this equation; increasing the endpoint modulus alone repeats a consequence of
+the same equation.
 
 ## Decisive missing theorem
 
-A hypothetical cycle can now survive only through one of the following actual
+A hypothetical cycle can survive only through one of the following actual
 return branches:
 
 ```text
@@ -231,17 +242,18 @@ positive credit with Lr>2^3990;
 nonpositive credit with Lr>2^(2^974).
 ```
 
-A fixed local endpoint comparison is insufficient. The primary target must use
-one of the remaining genuinely nonlocal mechanisms:
+The primary remaining routes are:
 
-1. inverse `X`-adic descent whose depth grows with the positive-credit return
-   word, coupled to exact cycle closure;
-2. regeneration of the expanding exit into a repeatable growing segment;
-3. a global exclusion of the doubly-exponential nonpositive branch;
-4. a different candidate or invariant giving a direct divergence proof.
+1. prove that the exact closure coefficient cannot divide its numerator under
+   the positive-return, minimum-boundary, and credit constraints;
+2. prove regeneration of the expanding exit into a repeatable growing segment;
+3. globally exclude the nonpositive branch beyond its double-exponential
+   frontier;
+4. find a different candidate or invariant giving a direct divergence proof.
 
-Further numerical barriers, longer continued-fraction prefixes, or fixed-depth
-local endpoint classes are not the priority.
+Further numerical barriers, longer continued-fraction prefixes, and endpoint
+classes modulo higher powers of `X` without new closure information are not the
+priority.
 
 ## Reusable family theorem
 
@@ -280,8 +292,8 @@ used by a cycle.
 The standalone checker
 
 ```text
-python tools/verify_fixed_local_endpoint_congruence_no_go.py
+python tools/verify_full_finite_two_sided_word_gluing_no_go.py
 ```
 
-passed in the chat environment. It is included in `run_checks.py`. A complete
+passed in the chat environment and is included in `run_checks.py`. A complete
 repository-wide run was not executed.
