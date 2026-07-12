@@ -20,7 +20,7 @@ START_HERE.md
 docs/WORKING_PROTOCOL.md
 docs/CURRENT_STATUS.md
 docs/RETRACTIONS.md
-docs/SESSION_CHECKPOINT_2026-07-12_POSITIVE_BOUNDARY_CIRCULATION.md
+docs/SESSION_CHECKPOINT_2026-07-12_ACTUAL_MINIMUM_BOUNDARY_SEGMENT.md
 ```
 
 Fetch these files from the current default branch at the start of every session.
@@ -55,7 +55,7 @@ new user request.
 
 ## Research freedom and priorities
 
-The current splicing/regeneration target below is the primary target, not an
+The current return-obstruction target below is the primary target, not an
 exclusive restriction. It is explicitly allowed to:
 
 - search current and historical literature, including claimed proofs, surveys,
@@ -113,11 +113,10 @@ G5 final independent certificate: waits for G3.
 
 ## Global ordinary-block frontier
 
-For a hypothetical cycle let `J` be its number of ordinary complete blocks.
-Exact signed elimination, continued fractions, and the finite cycle barrier prove
+Every hypothetical nontrivial positive cycle has at least
 
 ```text
-Every hypothetical nontrivial positive cycle has J>=245833.
+245833 ordinary complete blocks.
 ```
 
 This allows arbitrary exceptional-block populations and arbitrary block lengths.
@@ -130,18 +129,11 @@ docs/GLOBAL_ORDINARY_BLOCK_COUNT_FRONTIER.md
 tools/verify_global_ordinary_block_count_frontier.py
 ```
 
-## New bounded positive circulation
+## Bounded positive circulation
 
 For each occurring ordinary terminal deficit `e`, choose the smallest cycle
-boundary value `x_e` of that type. Follow its actual orbit to the next ordinary
-boundary of type `f(e)` and value `y_e`. Minimality gives
-
-```text
-y_e>=x_(f(e)).
-```
-
-The functional graph on at most `4500` types contains a directed cycle. The
-selected disjoint orbit intervals satisfy
+boundary value `x_e` of that type. The resulting finite functional graph contains
+a directed cycle whose selected disjoint orbit intervals satisfy
 
 ```text
 q<=4500,
@@ -151,39 +143,60 @@ L*delta<C,
 delta=log2(B/X).
 ```
 
-Here `q` is the number of selected ordinary intervals, `C` their total net
-credit, `T` the total number of selected complete blocks, and `L` their total
-accelerated length. Therefore their formal base multiplier is strictly expanding:
+Their formal base multiplier is strictly expanding:
 
 ```text
 2^C*(X/B)^L>1.
 ```
 
-The last inequality is strict. If it failed, the exact continued-fraction gap
-would exceed `2^-4023`, while all selected additive corrections together are
-strictly below `2^-4023`.
-
-Main files:
+Files:
 
 ```text
 docs/MINIMUM_BOUNDARY_POSITIVE_CIRCULATION.md
 tools/verify_minimum_boundary_positive_circulation.py
 ```
 
+## Actual minimum-boundary expanding segment
+
+Choose the least cycle value immediately following an ordinary complete block,
+and follow the actual orbit to the next such value. This gives one consecutive
+orbit segment satisfying
+
+```text
+1<=net credit C<=4500;
+exceptional excess sum <=4499;
+number of complete blocks <=4500;
+L*delta<C;
+endpoint > starting value.
+```
+
+Thus the segment itself, without splicing, has expanding base multiplier
+
+```text
+2^C*(X/B)^L>1.
+```
+
+Files:
+
+```text
+docs/MINIMUM_BOUNDARY_ACTUAL_EXPANDING_SEGMENT.md
+tools/verify_minimum_boundary_actual_expanding_segment.py
+```
+
 ## Decisive missing theorem
 
-The selected intervals form an expanding circulation of boundary types, but they
-need not be consecutive in the original orbit. Their endpoints and the next
-selected starts share the same class modulo `X`, yet may be different integers
-and may belong to different two-adic word cylinders.
+The rest of a hypothetical cycle would have to return from the larger endpoint
+of this short expanding segment to the least ordinary boundary.
 
-The primary next target is a splicing or regeneration theorem proving one of:
+The primary next target is a return obstruction proving one of:
 
-1. the selected intervals can be concatenated into an admissible growing orbit
-   segment;
-2. every nonzero mismatch creates a strict height descent;
-3. the mismatch is impossible after lifting the boundary equation modulo `X^2`
-   or a higher power.
+1. inverse `X`-adic descent through the return word;
+2. incompatibility of the exit and final return block modulo `X^2` or a higher
+   power;
+3. a lower bound on exceptional return credit that contradicts the global
+   harmonic window;
+4. regeneration of the expanding word into a genuinely repeatable growing
+   segment.
 
 This is a priority, not a ban on other routes. A sprint may instead pursue a
 direct divergence proof, a stronger candidate, a literature-derived lemma, or a
