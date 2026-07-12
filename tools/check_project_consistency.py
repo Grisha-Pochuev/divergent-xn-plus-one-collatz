@@ -25,11 +25,14 @@ CYCLIC_GCD_THEOREM = "CYCLIC_ROTATION_CLOSURE_GCD"
 CYCLIC_GCD_MARKER = "gcd(Q_k,Q_(k+1))=Delta"
 BLOCK_GCD_NO_GO = "COMPLETE_BLOCK_GCD_COMPRESSION_NO_GO"
 BLOCK_GCD_MARKER = "gcd(n,n')=gcd(n,S_ell)"
+GEOMETRIC_FACTOR_NO_GO = "GEOMETRIC_FACTOR_STRONG_DIVISIBILITY_PERSISTENCE_NO_GO"
+GEOMETRIC_FACTOR_MARKER = "gcd(S_r,S_s)=S_gcd(r,s)"
+PERSISTENCE_MARKER = "2620090395"
 RETRACTED_BARRIER = "10^37"
 
 CURRENT_CHECKPOINT = (
-    "docs/SESSION_CHECKPOINT_2026-07-12_"
-    "COMPLETE_BLOCK_GCD_COMPRESSION_NO_GO.md"
+    "docs/SESSION_CHECKPOINT_2026-07-13_"
+    "GEOMETRIC_FACTOR_PERSISTENCE_NO_GO.md"
 )
 
 CURRENT_MEMORY_FILES = (
@@ -62,6 +65,8 @@ CURRENT_STRUCTURE_FILES = (
     "tools/verify_cyclic_rotation_closure_gcd.py",
     "docs/COMPLETE_BLOCK_GCD_COMPRESSION_NO_GO.md",
     "tools/verify_complete_block_gcd_compression_no_go.py",
+    "docs/GEOMETRIC_FACTOR_STRONG_DIVISIBILITY_PERSISTENCE_NO_GO.md",
+    "tools/verify_geometric_factor_strong_divisibility.py",
 )
 
 RETRACTION_FILES = (
@@ -84,6 +89,7 @@ LATEST_TOOLS = (
     "verify_full_finite_two_sided_word_gluing_no_go.py",
     "verify_cyclic_rotation_closure_gcd.py",
     "verify_complete_block_gcd_compression_no_go.py",
+    "verify_geometric_factor_strong_divisibility.py",
 )
 
 
@@ -124,6 +130,8 @@ def check() -> None:
         CYCLIC_GCD_MARKER,
         BLOCK_GCD_NO_GO,
         BLOCK_GCD_MARKER,
+        GEOMETRIC_FACTOR_NO_GO,
+        GEOMETRIC_FACTOR_MARKER,
         CURRENT_CHECKPOINT,
     )
 
@@ -144,23 +152,29 @@ def check() -> None:
         CYCLIC_GCD_MARKER,
         BLOCK_GCD_NO_GO,
         BLOCK_GCD_MARKER,
+        GEOMETRIC_FACTOR_NO_GO,
+        GEOMETRIC_FACTOR_MARKER,
+        PERSISTENCE_MARKER,
         "1536",
         "6820",
         "13212",
         "3303",
         "7056",
+        "71136",
+        "1990",
+        "116",
     )
 
     require(
         CURRENT_CHECKPOINT,
         POSITIVE_RETURN_FRONTIER,
         NONPOSITIVE_RETURN_FRONTIER,
-        CYCLIC_GCD_MARKER,
-        BLOCK_GCD_MARKER,
-        "13212",
-        "3303",
-        "7056",
-        "91 -> 57 -> 143",
+        GEOMETRIC_FACTOR_MARKER,
+        PERSISTENCE_MARKER,
+        "71136",
+        "1990",
+        "116",
+        "primary specialization lengths=24",
     )
 
     require(
@@ -171,27 +185,23 @@ def check() -> None:
         GAP_MARKER,
         "L*log2(B/X)<C",
     )
-
     require(
         "docs/MINIMUM_BOUNDARY_RETURN_CREDIT_DICHOTOMY.md",
         POSITIVE_RETURN_FRONTIER,
         "2^-3990",
     )
-
     require(
         "docs/MINIMUM_BOUNDARY_NONPOSITIVE_RETURN_HARMONIC_BARRIER.md",
         NONPOSITIVE_RETURN_FRONTIER,
         PRIMARY_CLASSES,
         GAP_MARKER,
     )
-
     require(
         "docs/FIXED_LOCAL_ENDPOINT_CONGRUENCE_NO_GO.md",
         "1984",
         "Chinese remainder theorem",
         "X^ell",
     )
-
     require(
         "docs/FULL_FINITE_TWO_SIDED_WORD_GLUING_NO_GO.md",
         "Chinese remainder theorem",
@@ -199,7 +209,6 @@ def check() -> None:
         "2^(A_W+A_V)-X^(t+r)",
         "13 -> 33 -> 83 -> 13",
     )
-
     require(
         "docs/CYCLIC_ROTATION_CLOSURE_GCD.md",
         "2^a_k*Q_(k+1)=X*Q_k+Delta",
@@ -208,7 +217,6 @@ def check() -> None:
         "Q(U)=X^r*Q_W+2^A_W*Q_V",
         "Q_t>Q_0",
     )
-
     require(
         "docs/COMPLETE_BLOCK_GCD_COMPRESSION_NO_GO.md",
         "S_ell=(B^ell-X^ell)/d",
@@ -217,14 +225,21 @@ def check() -> None:
         "91 --a=3--> 57 --a=1--> 143",
         "infinitely many exact positive complete blocks",
     )
-
+    require(
+        "docs/GEOMETRIC_FACTOR_STRONG_DIVISIBILITY_PERSISTENCE_NO_GO.md",
+        GEOMETRIC_FACTOR_MARKER,
+        "gcd(S_ell,B*X)=1",
+        "gcd(S_ell,d)=gcd(ell,d)",
+        "infinitely many positive odd starts",
+        PERSISTENCE_MARKER,
+        "gcd(S_ell,N*1093^2)=1",
+    )
     require(
         "docs/MINIMUM_BOUNDARY_POSITIVE_CIRCULATION.md",
         CIRCULATION_MAX_CREDIT,
         CIRCULATION_MAX_BLOCKS,
         GAP_MARKER,
     )
-
     require(
         "docs/GLOBAL_ORDINARY_BLOCK_COUNT_FRONTIER.md",
         GLOBAL_MIN_ORDINARY_BLOCKS,
@@ -256,6 +271,7 @@ def check() -> None:
     print("full finite endpoint-congruence route=no-go without closure")
     print("exact cycle closure=cyclic adjacent-numerator gcd reaches Delta")
     print("naive complete-block boundary-gcd compression=no-go")
+    print("repeated local block compression does not wash out gcd defects")
 
 
 if __name__ == "__main__":
