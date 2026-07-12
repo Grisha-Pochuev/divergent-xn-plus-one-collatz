@@ -198,6 +198,29 @@ docs/MINIMUM_BOUNDARY_NONPOSITIVE_RETURN_HARMONIC_BARRIER.md
 tools/verify_minimum_boundary_nonpositive_return_harmonic_barrier.py
 ```
 
+## Fixed local endpoint congruence route closed
+
+For every fixed incoming ordinary or exceptional complete block and every fixed
+finite outgoing valuation word, the Chinese remainder theorem constructs
+infinitely many positive odd common boundary values realizing both pieces
+exactly. The incoming block prescribes a class modulo `X^ell`; the outgoing word
+prescribes an independent class modulo a power of two.
+
+Consequently a comparison using only finitely many incoming and outgoing labels
+at the common endpoint modulo `X^2` or any other fixed `X^h` cannot itself exclude
+a return. This does not rule out an argument using the entire return word, a
+depth growing with its length, exact cycle closure, or global minimum data.
+
+Files:
+
+```text
+docs/FIXED_LOCAL_ENDPOINT_CONGRUENCE_NO_GO.md
+tools/verify_fixed_local_endpoint_congruence_no_go.py
+```
+
+The standalone checker constructs `1984` small exact examples and five examples
+for the primary candidate.
+
 ## Decisive missing theorem
 
 A hypothetical cycle can now survive only through one of the following actual
@@ -208,15 +231,17 @@ positive credit with Lr>2^3990;
 nonpositive credit with Lr>2^(2^974).
 ```
 
-The primary target is a length-independent return obstruction based on one of:
+A fixed local endpoint comparison is insufficient. The primary target must use
+one of the remaining genuinely nonlocal mechanisms:
 
-1. inverse `X`-adic descent through a positive-credit return word;
-2. endpoint incompatibility modulo `X^2` or a higher power;
-3. regeneration of the expanding exit into a repeatable growing segment;
-4. a global exclusion of the doubly-exponential nonpositive branch.
+1. inverse `X`-adic descent whose depth grows with the positive-credit return
+   word, coupled to exact cycle closure;
+2. regeneration of the expanding exit into a repeatable growing segment;
+3. a global exclusion of the doubly-exponential nonpositive branch;
+4. a different candidate or invariant giving a direct divergence proof.
 
-Further numerical barriers or longer continued-fraction prefixes are not the
-priority.
+Further numerical barriers, longer continued-fraction prefixes, or fixed-depth
+local endpoint classes are not the priority.
 
 ## Reusable family theorem
 
@@ -255,8 +280,8 @@ used by a cycle.
 The standalone checker
 
 ```text
-python tools/verify_minimum_boundary_nonpositive_return_harmonic_barrier.py
+python tools/verify_fixed_local_endpoint_congruence_no_go.py
 ```
 
-passed in the chat environment. Both return checkers are included in
-`run_checks.py`. A complete repository-wide run was not executed.
+passed in the chat environment. It is included in `run_checks.py`. A complete
+repository-wide run was not executed.
