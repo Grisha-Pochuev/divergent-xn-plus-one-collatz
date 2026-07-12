@@ -282,6 +282,94 @@ The standalone verifier checks `6820` exhaustive small words, reconstructs `17`
 closing words in that grid, verifies three known `5n+1` cycles, and checks three
 large exact words for the primary multiplier.
 
+## Complete-block gcd compression no-go
+
+For a complete near-power block
+
+```text
+W=(m,...,m,a),  a!=m,
+```
+
+of length `ell`, define
+
+```text
+S_ell=(B^ell-X^ell)/d.
+```
+
+The block affine constant is exactly `S_ell`, independently of the terminal
+valuation. Every exact positive block from source `n` to endpoint `n'` satisfies
+
+```text
+2^A_W*n'=X^ell*n+S_ell,
+gcd(n,n')=gcd(n,S_ell).                             (6)
+```
+
+For cyclic numerators at the two block boundaries,
+
+```text
+2^A_W*Q_j=X^ell*Q_i+Delta*S_ell,
+gcd(Q_i,Q_j)=gcd(Q_i,Delta*S_ell).                  (7)
+```
+
+If the full word closes, then
+
+```text
+gcd(Q_i,Q_j)=Delta*gcd(n_i,S_ell).                  (8)
+```
+
+Thus complete-block boundary numerators do not retain the sharp adjacent gcd.
+This is not merely a theoretical possibility. Exact word coding fixes one odd
+source class modulo `2^(A_W+1)`, and CRT can simultaneously impose
+`S_ell|n`. Hence infinitely many exact positive blocks satisfy
+
+```text
+gcd(n,n')=S_ell.
+```
+
+For `ell>=2`,
+
+```text
+S_ell>X^(ell-1).
+```
+
+The explicit regression
+
+```text
+X=5,
+91 --a=3--> 57 --a=1--> 143,
+gcd(91,143)=13=(8^2-5^2)/3
+```
+
+shows the extra factor at the smallest useful scale.
+
+Therefore the naive proof architecture that compresses each long block to one
+boundary edge and then forces `gcd(Q_i,Q_j)=Delta` from local word data is
+closed. A successful gcd argument must retain a truly adjacent accelerated pair
+inside the block or prove a global condition such as
+
+```text
+gcd(n_i,S_ell)=1
+```
+
+for the actual cycle source.
+
+Files:
+
+```text
+docs/COMPLETE_BLOCK_GCD_COMPRESSION_NO_GO.md
+tools/verify_complete_block_gcd_compression_no_go.py
+```
+
+The exact standalone checker verifies
+
+```text
+13212 exact block lifts;
+3303 full geometric-factor CRT blocks;
+7056 cyclic compression cases;
+8 closing cyclic cases;
+the regression 91 -> 57 -> 143.
+```
+
 ## Exact closure target
 
 Let `W` be the expanding exit word from `x` to `y`, and let `V` be the remaining
@@ -306,9 +394,9 @@ right numerator with `Q(U)`. Exact cycle closure is equivalent to
 gcd(Q_k,Q_(k+1))=Delta
 ```
 
-for adjacent cyclic numerators. A successful whole-return argument must prove
-that this maximal gcd cannot occur under the minimum-boundary, block-credit, and
-return-length constraints.
+for truly adjacent accelerated cyclic numerators. Complete-block endpoints
+instead carry the additional geometric factor in (7), so they cannot replace
+the adjacent pair without new global coprimality information.
 
 ## Decisive missing theorem
 
@@ -322,17 +410,19 @@ nonpositive credit with Lr>2^(2^974).
 
 The primary remaining routes are:
 
-1. prove that every admissible complete cyclic word has some adjacent numerator
-   gcd strictly smaller than `Delta` under the positive-return and
-   minimum-boundary constraints;
-2. prove regeneration of the expanding exit into a repeatable growing segment;
-3. globally exclude the nonpositive branch beyond its double-exponential
+1. prove that every admissible complete cyclic word has some truly adjacent
+   accelerated numerator gcd strictly smaller than `Delta`, using the
+   minimum-boundary, permanent-sieve, and return constraints;
+2. prove a global coprimality obstruction `gcd(n_i,S_ell)=1` at a strategically
+   chosen actual block source;
+3. prove regeneration of the expanding exit into a repeatable growing segment;
+4. globally exclude the nonpositive branch beyond its double-exponential
    frontier;
-4. find a different candidate or invariant giving a direct divergence proof.
+5. find a different candidate or invariant giving a direct divergence proof.
 
-Further numerical barriers, longer continued-fraction prefixes, and endpoint
-classes modulo higher powers of `X` without new closure information are not the
-priority.
+Further numerical barriers, longer continued-fraction prefixes, higher endpoint
+moduli, and naive block-boundary gcd calculations without new closure information
+are not the priority.
 
 ## Reusable family theorem
 
@@ -371,9 +461,8 @@ used by a cycle.
 The standalone checker
 
 ```text
-python tools/verify_cyclic_rotation_closure_gcd.py
+python tools/verify_complete_block_gcd_compression_no_go.py
 ```
 
 passed in the chat environment and is included in `run_checks.py`. A complete
-repository-wide run had not yet been executed at the time this status was
-written.
+repository-wide run was not executed.
