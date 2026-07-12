@@ -13,14 +13,17 @@ GLOBAL_MIN_ORDINARY_BLOCKS = "245833"
 GLOBAL_LENGTH_UPPER = "544026748963771"
 CIRCULATION_MAX_CREDIT = "20250000"
 CIRCULATION_MAX_BLOCKS = "20254499"
-CIRCULATION_GAP = "2^-4023"
+ACTUAL_MAX_CREDIT = "4500"
+ACTUAL_MAX_EXCESS = "4499"
+ACTUAL_MAX_BLOCKS = "4500"
+GAP_MARKER = "2^-4023"
 RETRACTED_BARRIER = "10^37"
 
 CURRENT_MEMORY_FILES = (
     "START_HERE.md",
     "docs/CURRENT_STATUS.md",
-    "docs/SESSION_CHECKPOINT_2026-07-12_POSITIVE_BOUNDARY_CIRCULATION.md",
-    "docs/MINIMUM_BOUNDARY_POSITIVE_CIRCULATION.md",
+    "docs/SESSION_CHECKPOINT_2026-07-12_ACTUAL_MINIMUM_BOUNDARY_SEGMENT.md",
+    "docs/MINIMUM_BOUNDARY_ACTUAL_EXPANDING_SEGMENT.md",
 )
 
 CURRENT_STRUCTURE_FILES = (
@@ -33,6 +36,8 @@ CURRENT_STRUCTURE_FILES = (
     "tools/verify_global_ordinary_block_count_frontier.py",
     "docs/MINIMUM_BOUNDARY_POSITIVE_CIRCULATION.md",
     "tools/verify_minimum_boundary_positive_circulation.py",
+    "docs/MINIMUM_BOUNDARY_ACTUAL_EXPANDING_SEGMENT.md",
+    "tools/verify_minimum_boundary_actual_expanding_segment.py",
 )
 
 RETRACTION_FILES = (
@@ -49,6 +54,7 @@ LATEST_TOOLS = (
     "verify_one_exception_block_count_frontier.py",
     "verify_global_ordinary_block_count_frontier.py",
     "verify_minimum_boundary_positive_circulation.py",
+    "verify_minimum_boundary_actual_expanding_segment.py",
 )
 
 
@@ -80,8 +86,9 @@ def check() -> None:
         GLOBAL_MIN_ORDINARY_BLOCKS,
         CIRCULATION_MAX_CREDIT,
         CIRCULATION_MAX_BLOCKS,
-        CIRCULATION_GAP,
-        "MINIMUM_BOUNDARY_POSITIVE_CIRCULATION.md",
+        ACTUAL_MAX_EXCESS,
+        GAP_MARKER,
+        "MINIMUM_BOUNDARY_ACTUAL_EXPANDING_SEGMENT.md",
     )
 
     require(
@@ -91,22 +98,32 @@ def check() -> None:
         GLOBAL_MIN_ORDINARY_BLOCKS,
         CIRCULATION_MAX_CREDIT,
         CIRCULATION_MAX_BLOCKS,
-        CIRCULATION_GAP,
+        ACTUAL_MAX_EXCESS,
+        GAP_MARKER,
     )
 
     require(
-        "docs/SESSION_CHECKPOINT_2026-07-12_POSITIVE_BOUNDARY_CIRCULATION.md",
+        "docs/SESSION_CHECKPOINT_2026-07-12_ACTUAL_MINIMUM_BOUNDARY_SEGMENT.md",
         GLOBAL_MIN_ORDINARY_BLOCKS,
-        CIRCULATION_MAX_CREDIT,
-        CIRCULATION_MAX_BLOCKS,
+        ACTUAL_MAX_CREDIT,
+        ACTUAL_MAX_EXCESS,
+        ACTUAL_MAX_BLOCKS,
+    )
+
+    require(
+        "docs/MINIMUM_BOUNDARY_ACTUAL_EXPANDING_SEGMENT.md",
+        ACTUAL_MAX_CREDIT,
+        ACTUAL_MAX_EXCESS,
+        ACTUAL_MAX_BLOCKS,
+        GAP_MARKER,
+        "L*log2(B/X)<C",
     )
 
     require(
         "docs/MINIMUM_BOUNDARY_POSITIVE_CIRCULATION.md",
         CIRCULATION_MAX_CREDIT,
         CIRCULATION_MAX_BLOCKS,
-        CIRCULATION_GAP,
-        "L*delta<C",
+        GAP_MARKER,
     )
 
     require(
@@ -132,10 +149,9 @@ def check() -> None:
 
     print("project-memory consistency verified")
     print(f"primary candidate={PRIMARY_X}")
-    print(f"permanent classes={PRIMARY_CLASSES}")
     print(f"global ordinary-block minimum={GLOBAL_MIN_ORDINARY_BLOCKS}")
-    print(f"circulation maximum credit={CIRCULATION_MAX_CREDIT}")
-    print(f"circulation maximum selected blocks={CIRCULATION_MAX_BLOCKS}")
+    print(f"formal circulation maximum blocks={CIRCULATION_MAX_BLOCKS}")
+    print(f"actual expanding segment maximum blocks={ACTUAL_MAX_BLOCKS}")
 
 
 if __name__ == "__main__":
