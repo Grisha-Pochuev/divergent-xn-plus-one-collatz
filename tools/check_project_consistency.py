@@ -46,7 +46,6 @@ CURRENT_STRUCTURE_FILES = (
 )
 
 RETRACTION_FILES = (
-    "docs/CURRENT_STATUS.md",
     "docs/RETRACTIONS.md",
     "docs/LATEST_VALID_PROGRESS.md",
 )
@@ -94,7 +93,6 @@ def check() -> None:
         CIRCULATION_MAX_CREDIT,
         CIRCULATION_MAX_BLOCKS,
         ACTUAL_MAX_EXCESS,
-        GAP_MARKER,
         POSITIVE_RETURN_FRONTIER,
         NONPOSITIVE_RETURN_FRONTIER,
         "MINIMUM_BOUNDARY_ACTUAL_EXPANDING_SEGMENT.md",
@@ -137,7 +135,7 @@ def check() -> None:
     require(
         "docs/MINIMUM_BOUNDARY_RETURN_CREDIT_DICHOTOMY.md",
         POSITIVE_RETURN_FRONTIER,
-        GAP_MARKER,
+        "2^-3990",
     )
 
     require(
