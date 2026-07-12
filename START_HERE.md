@@ -20,7 +20,7 @@ START_HERE.md
 docs/WORKING_PROTOCOL.md
 docs/CURRENT_STATUS.md
 docs/RETRACTIONS.md
-docs/SESSION_CHECKPOINT_2026-07-12_NONPOSITIVE_RETURN_HARMONIC_BARRIER.md
+docs/SESSION_CHECKPOINT_2026-07-12_FIXED_LOCAL_ENDPOINT_CONGRUENCE_NO_GO.md
 ```
 
 Fetch these files from the current default branch at the start of every session.
@@ -207,6 +207,26 @@ docs/MINIMUM_BOUNDARY_NONPOSITIVE_RETURN_HARMONIC_BARRIER.md
 tools/verify_minimum_boundary_nonpositive_return_harmonic_barrier.py
 ```
 
+## Fixed local endpoint congruence no-go
+
+For any fixed incoming ordinary or exceptional complete block and any fixed
+finite outgoing valuation word, CRT constructs infinitely many positive odd
+common boundary values realizing both pieces exactly. The incoming block fixes a
+class modulo `X^ell`; the outgoing word fixes an independent class modulo a power
+of two.
+
+Therefore finitely many local incoming and outgoing labels cannot contradict one
+another merely modulo `X^2` or any other fixed `X^h`. A useful `X`-adic argument
+must instead use depth growing with the return word, exact closure, or other
+global information.
+
+Files:
+
+```text
+docs/FIXED_LOCAL_ENDPOINT_CONGRUENCE_NO_GO.md
+tools/verify_fixed_local_endpoint_congruence_no_go.py
+```
+
 ## Decisive missing theorem
 
 A hypothetical cycle can now return only through one of two extreme branches:
@@ -216,22 +236,21 @@ positive return credit with Lr>2^3990;
 nonpositive return credit with Lr>2^(2^974).
 ```
 
-The primary next target is a length-independent obstruction proving one of:
+The fixed-depth local endpoint route is closed. The primary next target is a
+genuinely nonlocal obstruction proving one of:
 
-1. inverse `X`-adic descent through a positive-credit return word;
-2. incompatibility of the exit and final return block modulo `X^2` or a higher
-   power;
-3. a regeneration theorem turning the expanding exit into a repeatable growing
-   segment;
-4. a global argument excluding the doubly-exponential nonpositive branch without
-   merely increasing its finite cutoff.
+1. inverse `X`-adic descent whose depth grows through the entire positive-credit
+   return word and is coupled to exact cycle closure;
+2. regeneration of the expanding exit into a repeatable growing segment;
+3. a global argument excluding the doubly-exponential nonpositive branch;
+4. a direct divergence proof for this or a stronger candidate.
 
 This is a priority, not a ban on other routes. A sprint may instead pursue a
 direct divergence proof, a stronger candidate, a literature-derived lemma, or a
 new global cycle obstruction when its expected value is higher.
 
-Do not merely extend a continued-fraction denominator, a finite trajectory, or a
-finite return-length barrier.
+Do not merely extend a continued-fraction denominator, a finite trajectory, a
+finite return-length barrier, or a fixed-depth local endpoint class.
 
 ## Reusable family theorem
 
