@@ -180,7 +180,7 @@ Files:
 
 ```text
 docs/MINIMUM_BOUNDARY_ACTUAL_EXPANDING_SEGMENT.md
-tools/verify_minimum_boundary_actual_expANDING_SEGMENT.py
+tools/verify_minimum_boundary_actual_expanding_segment.py
 ```
 
 ## Actual return frontiers
