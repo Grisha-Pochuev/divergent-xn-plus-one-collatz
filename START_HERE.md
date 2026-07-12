@@ -23,7 +23,62 @@ docs/RETRACTIONS.md
 docs/SESSION_CHECKPOINT_2026-07-12_POSITIVE_BOUNDARY_CIRCULATION.md
 ```
 
-GitHub commits and certificate scripts are the durable source of truth.
+Fetch these files from the current default branch at the start of every session.
+GitHub commits and certificate scripts are the durable source of truth. If an
+in-chat summary or an older checkpoint conflicts with current `main`, current
+`main` wins.
+
+## One-chat research sprint
+
+A broad user request such as `continue solving` authorizes one substantial
+research sprint. Do not ask the user to choose among plausible technical routes;
+choose the route with the best apparent chance of advancing the strict target.
+
+Each sprint should aim for one main deliverable:
+
+1. a proved lemma that advances a proof gate;
+2. a decisive refutation of an approach;
+3. a verified computational certificate with mathematical meaning;
+4. a literature result that materially changes the strategy, after independent
+   checking of the part being used;
+5. a precise obstruction plus the next exact experiment when no theorem is
+   reached.
+
+Within one sprint, multiple methods and short side investigations are allowed.
+Work until one deliverable is reached or the chosen route is rigorously shown to
+fail. Then verify it independently where possible, commit the result immediately,
+and report separately what was proved, what was only tested, and what remains
+open.
+
+Do not claim background work after the response ends. A new sprint begins with a
+new user request.
+
+## Research freedom and priorities
+
+The current splicing/regeneration target below is the primary target, not an
+exclusive restriction. It is explicitly allowed to:
+
+- search current and historical literature, including claimed proofs, surveys,
+  related generalized Collatz maps, Diophantine approximation, dynamical systems,
+  symbolic dynamics, and computer-assisted proof methods;
+- inspect alternative candidates `(X,n0)` and previously retained fallback
+  branches;
+- transfer methods between candidates after checking every hypothesis;
+- use symbolic algebra, exact arithmetic, SAT/SMT, theorem provers, finite-state
+  models, residue graphs, and small or medium exact searches;
+- derive and test new invariants, coordinate systems, block decompositions,
+  congruence sieves, height functions, and descent arguments;
+- temporarily leave the primary branch when another route has a credible chance
+  of closing `G3` faster or proving divergence directly.
+
+Literature search is never prohibited. Prefer primary sources. A claimed proof is
+an idea source, not a retained theorem, until the needed argument has been checked
+line by line or reduced to an independently verifiable certificate.
+
+A side branch should be committed only when it gives a reusable theorem, a
+verified obstruction, a materially better candidate, or a documented strategic
+change. Do not spend a sprint merely enlarging a numerical record with no new
+infinite argument.
 
 ## Primary candidate
 
@@ -122,13 +177,17 @@ need not be consecutive in the original orbit. Their endpoints and the next
 selected starts share the same class modulo `X`, yet may be different integers
 and may belong to different two-adic word cylinders.
 
-The next target is a splicing or regeneration theorem proving one of:
+The primary next target is a splicing or regeneration theorem proving one of:
 
 1. the selected intervals can be concatenated into an admissible growing orbit
    segment;
 2. every nonzero mismatch creates a strict height descent;
 3. the mismatch is impossible after lifting the boundary equation modulo `X^2`
    or a higher power.
+
+This is a priority, not a ban on other routes. A sprint may instead pursue a
+direct divergence proof, a stronger candidate, a literature-derived lemma, or a
+new global cycle obstruction when its expected value is higher.
 
 Do not merely extend the continued-fraction denominator or enlarge the finite
 cycle barrier.
@@ -170,7 +229,9 @@ used by a cycle. Do not present a finite computation as divergence.
 
 - commit each theorem, checker, decisive refutation, and major strategy change;
 - state exactly which checks ran;
-- do not claim a complete repository run unless it completed.
+- do not claim a complete repository run unless it completed;
+- compare every proposed result with current `main` before calling it new;
+- preserve failed approaches when the failure prevents future repetition.
 
 ## Reproduction
 
