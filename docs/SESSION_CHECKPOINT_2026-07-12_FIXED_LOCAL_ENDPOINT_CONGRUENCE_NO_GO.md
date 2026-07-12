@@ -9,6 +9,13 @@ X=2^4501-349*2^500+347,
 n0=1.
 ```
 
+## Retained global frontiers
+
+- every hypothetical cycle has at least `245833` ordinary complete blocks;
+- the actual minimum-boundary exit has credit `1<=C<=4500`;
+- its exceptional excess is at most `4499`;
+- it contains at most `4500` complete blocks and ends at a larger boundary.
+
 ## Retained return frontiers
 
 For the actual return from the larger endpoint of the minimum-boundary expanding
