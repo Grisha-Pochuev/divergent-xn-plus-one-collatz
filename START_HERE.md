@@ -20,7 +20,7 @@ START_HERE.md
 docs/WORKING_PROTOCOL.md
 docs/CURRENT_STATUS.md
 docs/RETRACTIONS.md
-docs/SESSION_CHECKPOINT_2026-07-12_GLOBAL_BLOCK_COUNT_FRONTIER.md
+docs/SESSION_CHECKPOINT_2026-07-12_POSITIVE_BOUNDARY_CIRCULATION.md
 ```
 
 GitHub commits and certificate scripts are the durable source of truth.
@@ -28,9 +28,7 @@ GitHub commits and certificate scripts are the durable source of truth.
 ## Primary candidate
 
 ```text
-k=500,
 N=2^500-1,
-m=4501,
 B=2^4501,
 d=349*2^500-347=2+349*N,
 X=B-d=2^4501-349*2^500+347,
@@ -51,55 +49,24 @@ G5 final independent certificate: waits for G3.
 
 - `N|X` and `1093||X`;
 - the orbit leaves `1` and never returns;
-- exactly `16562000` permanent classes survive modulo `(2^500-1)*1093^2`;
-- every cycle value is greater than `2^500-1`;
+- exactly `16562000` permanent classes survive modulo `N*1093^2`;
+- every cycle value is greater than `N`;
 - every exceptional source has at least `1505` decimal digits;
 - every cycle length through a number between `10^1201` and `10^1202` is
   impossible;
-- every hypothetical cycle satisfies the logarithmic harmonic window recorded
-  in `docs/MERSENNE_DIVISOR_WIEFERICH_FAMILY.md`.
+- the full harmonic and `X`-adic bounds remain available.
 
-## New global block frontier
+## Global ordinary-block frontier
 
-Let
-
-```text
-J = number of ordinary complete blocks,
-R = number of exceptional complete blocks,
-E = sum ordinary deficits,
-F = sum exceptional excesses,
-D = E-F = 4501*p-A.
-```
-
-Exact signed block elimination proves:
+For a hypothetical cycle let `J` be its number of ordinary complete blocks.
+Exact signed elimination, continued fractions, and the finite cycle barrier prove
 
 ```text
-Every hypothetical nontrivial positive cycle has J>=245833.   (1)
+Every hypothetical nontrivial positive cycle has J>=245833.
 ```
 
-This holds for every number `R` of exceptional blocks and arbitrary block
-lengths. It is not a cycle-length cutoff.
-
-The proof uses:
-
-1. the continued-fraction gap for every `D<1106246945`;
-2. a signed closure identity in which ordinary blocks are positive terms and
-   exceptional blocks are negative terms;
-3. the consequences, when `J<=245832`,
-
-```text
-every ordinary block length <=2J+6;
-every exceptional block length <=2J+5;
-R<=4500J-1;
-```
-
-4. hence
-
-```text
-p<=544026748963771<10^15,
-```
-
-contradicting the retained barrier `p>10^1201`.
+This allows arbitrary exceptional-block populations and arbitrary block lengths.
+It is not a cycle-length cutoff.
 
 Main files:
 
@@ -108,33 +75,63 @@ docs/GLOBAL_ORDINARY_BLOCK_COUNT_FRONTIER.md
 tools/verify_global_ordinary_block_count_frontier.py
 ```
 
-Earlier strict subresults remain valid:
+## New bounded positive circulation
 
-- no cycle with one or two ordinary blocks and no exceptional block;
-- no cycle with one exceptional block and one ordinary block;
-- the `X`-adic ladder and all `4500` exact terminal classes.
+For each occurring ordinary terminal deficit `e`, choose the smallest cycle
+boundary value `x_e` of that type. Follow its actual orbit to the next ordinary
+boundary of type `f(e)` and value `y_e`. Minimality gives
+
+```text
+y_e>=x_(f(e)).
+```
+
+The functional graph on at most `4500` types contains a directed cycle. The
+selected disjoint orbit intervals satisfy
+
+```text
+q<=4500,
+1<=C<=20250000,
+T<=20254499,
+L*delta<C,
+delta=log2(B/X).
+```
+
+Here `q` is the number of selected ordinary intervals, `C` their total net
+credit, `T` the total number of selected complete blocks, and `L` their total
+accelerated length. Therefore their formal base multiplier is strictly expanding:
+
+```text
+2^C*(X/B)^L>1.
+```
+
+The last inequality is strict. If it failed, the exact continued-fraction gap
+would exceed `2^-4023`, while all selected additive corrections together are
+strictly below `2^-4023`.
+
+Main files:
+
+```text
+docs/MINIMUM_BOUNDARY_POSITIVE_CIRCULATION.md
+tools/verify_minimum_boundary_positive_circulation.py
+```
 
 ## Decisive missing theorem
 
-The small-block branches have been unified. Every remaining hypothetical cycle
-has at least `245833` ordinary blocks.
+The selected intervals form an expanding circulation of boundary types, but they
+need not be consecutive in the original orbit. Their endpoints and the next
+selected starts share the same class modulo `X`, yet may be different integers
+and may belong to different two-adic word cylinders.
 
-The next target is a genuine many-block population theorem using together:
+The next target is a splicing or regeneration theorem proving one of:
 
-1. only `4500` possible ordinary terminal deficits;
-2. repeated boundary classes modulo `X` and `N=2^500-1`;
-3. the credit budget `F=E-D` for all exceptional blocks;
-4. the `X`-adic ladder inside long valuation-`4501` runs;
-5. a height-dependent argument, not a fixed finite-state positive-mean
-   potential.
-
-A first unavoidable population fact is that at least one ordinary deficit occurs
-at least `55` times. This alone is not yet the missing contradiction; the task is
-to convert repeated deficit classes into a shorter positive-credit segment,
-height descent, or an impossible closure congruence.
+1. the selected intervals can be concatenated into an admissible growing orbit
+   segment;
+2. every nonzero mismatch creates a strict height descent;
+3. the mismatch is impossible after lifting the boundary equation modulo `X^2`
+   or a higher power.
 
 Do not merely extend the continued-fraction denominator or enlarge the finite
-cycle barrier for a new record.
+cycle barrier.
 
 ## Reusable family theorem
 
@@ -149,25 +146,12 @@ X=2^m-d,
 
 with `364` not dividing `k`, one can choose parity-correct `t<2*1093^2` with
 `1093||X`. This gives no return to `1`, an exponentially thin permanent sieve,
-and an arbitrarily large finite cycle barrier. Increasing parameters alone is
-therefore not a priority.
-
-## Independent fallback branches
-
-Retain independently:
-
-- `X=2^3803-4162203,n0=1`;
-- `X=2^156-9,n0=1`;
-- `X=2^260-3,n0=1`;
-- `X=15,n0=3`;
-- `X=9,n0=1`;
-- the old fixed candidate with two surviving cycle lengths.
-
-Methods may move between branches only after checking hypotheses.
+and an arbitrarily large finite barrier. Increasing parameters alone is not a
+priority.
 
 ## Non-negotiable corrections
 
-Do not use the false relation
+Do not use
 
 ```text
 2^A==1 (mod X).
