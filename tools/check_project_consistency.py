@@ -23,11 +23,13 @@ FIXED_ENDPOINT_NO_GO = "FIXED_LOCAL_ENDPOINT_CONGRUENCE_NO_GO"
 FULL_WORD_NO_GO = "FULL_FINITE_TWO_SIDED_WORD_GLUING_NO_GO"
 CYCLIC_GCD_THEOREM = "CYCLIC_ROTATION_CLOSURE_GCD"
 CYCLIC_GCD_MARKER = "gcd(Q_k,Q_(k+1))=Delta"
+BLOCK_GCD_NO_GO = "COMPLETE_BLOCK_GCD_COMPRESSION_NO_GO"
+BLOCK_GCD_MARKER = "gcd(n,n')=gcd(n,S_ell)"
 RETRACTED_BARRIER = "10^37"
 
 CURRENT_CHECKPOINT = (
     "docs/SESSION_CHECKPOINT_2026-07-12_"
-    "CYCLIC_ROTATION_CLOSURE_GCD.md"
+    "COMPLETE_BLOCK_GCD_COMPRESSION_NO_GO.md"
 )
 
 CURRENT_MEMORY_FILES = (
@@ -58,6 +60,8 @@ CURRENT_STRUCTURE_FILES = (
     "tools/verify_full_finite_two_sided_word_gluing_no_go.py",
     "docs/CYCLIC_ROTATION_CLOSURE_GCD.md",
     "tools/verify_cyclic_rotation_closure_gcd.py",
+    "docs/COMPLETE_BLOCK_GCD_COMPRESSION_NO_GO.md",
+    "tools/verify_complete_block_gcd_compression_no_go.py",
 )
 
 RETRACTION_FILES = (
@@ -79,6 +83,7 @@ LATEST_TOOLS = (
     "verify_fixed_local_endpoint_congruence_no_go.py",
     "verify_full_finite_two_sided_word_gluing_no_go.py",
     "verify_cyclic_rotation_closure_gcd.py",
+    "verify_complete_block_gcd_compression_no_go.py",
 )
 
 
@@ -117,6 +122,8 @@ def check() -> None:
         FULL_WORD_NO_GO,
         CYCLIC_GCD_THEOREM,
         CYCLIC_GCD_MARKER,
+        BLOCK_GCD_NO_GO,
+        BLOCK_GCD_MARKER,
         CURRENT_CHECKPOINT,
     )
 
@@ -135,18 +142,25 @@ def check() -> None:
         FULL_WORD_NO_GO,
         CYCLIC_GCD_THEOREM,
         CYCLIC_GCD_MARKER,
+        BLOCK_GCD_NO_GO,
+        BLOCK_GCD_MARKER,
         "1536",
         "6820",
+        "13212",
+        "3303",
+        "7056",
     )
 
     require(
         CURRENT_CHECKPOINT,
         POSITIVE_RETURN_FRONTIER,
         NONPOSITIVE_RETURN_FRONTIER,
-        FULL_WORD_NO_GO,
         CYCLIC_GCD_MARKER,
-        "6820",
-        "known 5n+1 cycles checked=3",
+        BLOCK_GCD_MARKER,
+        "13212",
+        "3303",
+        "7056",
+        "91 -> 57 -> 143",
     )
 
     require(
@@ -196,6 +210,15 @@ def check() -> None:
     )
 
     require(
+        "docs/COMPLETE_BLOCK_GCD_COMPRESSION_NO_GO.md",
+        "S_ell=(B^ell-X^ell)/d",
+        BLOCK_GCD_MARKER,
+        "gcd(Q_i,Q_j)=gcd(Q_i,Delta*S_ell)",
+        "91 --a=3--> 57 --a=1--> 143",
+        "infinitely many exact positive complete blocks",
+    )
+
+    require(
         "docs/MINIMUM_BOUNDARY_POSITIVE_CIRCULATION.md",
         CIRCULATION_MAX_CREDIT,
         CIRCULATION_MAX_BLOCKS,
@@ -232,6 +255,7 @@ def check() -> None:
     print(f"nonpositive-return frontier={NONPOSITIVE_RETURN_FRONTIER}")
     print("full finite endpoint-congruence route=no-go without closure")
     print("exact cycle closure=cyclic adjacent-numerator gcd reaches Delta")
+    print("naive complete-block boundary-gcd compression=no-go")
 
 
 if __name__ == "__main__":
