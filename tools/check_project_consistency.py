@@ -19,12 +19,13 @@ ACTUAL_MAX_BLOCKS = "4500"
 GAP_MARKER = "2^-4023"
 POSITIVE_RETURN_FRONTIER = "2^3990"
 NONPOSITIVE_RETURN_FRONTIER = "2^(2^974)"
-LOCAL_ENDPOINT_NO_GO = "FIXED_LOCAL_ENDPOINT_CONGRUENCE_NO_GO"
+FIXED_ENDPOINT_NO_GO = "FIXED_LOCAL_ENDPOINT_CONGRUENCE_NO_GO"
+FULL_WORD_NO_GO = "FULL_FINITE_TWO_SIDED_WORD_GLUING_NO_GO"
 RETRACTED_BARRIER = "10^37"
 
 CURRENT_CHECKPOINT = (
     "docs/SESSION_CHECKPOINT_2026-07-12_"
-    "FIXED_LOCAL_ENDPOINT_CONGRUENCE_NO_GO.md"
+    "FULL_TWO_SIDED_WORD_GLUING_NO_GO.md"
 )
 
 CURRENT_MEMORY_FILES = (
@@ -51,6 +52,8 @@ CURRENT_STRUCTURE_FILES = (
     "tools/verify_minimum_boundary_nonpositive_return_harmonic_barrier.py",
     "docs/FIXED_LOCAL_ENDPOINT_CONGRUENCE_NO_GO.md",
     "tools/verify_fixed_local_endpoint_congruence_no_go.py",
+    "docs/FULL_FINITE_TWO_SIDED_WORD_GLUING_NO_GO.md",
+    "tools/verify_full_finite_two_sided_word_gluing_no_go.py",
 )
 
 RETRACTION_FILES = (
@@ -70,6 +73,7 @@ LATEST_TOOLS = (
     "verify_minimum_boundary_return_credit_dichotomy.py",
     "verify_minimum_boundary_nonpositive_return_harmonic_barrier.py",
     "verify_fixed_local_endpoint_congruence_no_go.py",
+    "verify_full_finite_two_sided_word_gluing_no_go.py",
 )
 
 
@@ -104,10 +108,9 @@ def check() -> None:
         ACTUAL_MAX_EXCESS,
         POSITIVE_RETURN_FRONTIER,
         NONPOSITIVE_RETURN_FRONTIER,
-        "MINIMUM_BOUNDARY_ACTUAL_EXPANDING_SEGMENT.md",
-        "verify_minimum_boundary_actual_expanding_segment.py",
-        "MINIMUM_BOUNDARY_NONPOSITIVE_RETURN_HARMONIC_BARRIER.md",
-        LOCAL_ENDPOINT_NO_GO,
+        FIXED_ENDPOINT_NO_GO,
+        FULL_WORD_NO_GO,
+        CURRENT_CHECKPOINT,
     )
 
     require(
@@ -115,24 +118,24 @@ def check() -> None:
         PRIMARY_CLASSES,
         PRIMARY_BARRIER,
         GLOBAL_MIN_ORDINARY_BLOCKS,
+        GLOBAL_LENGTH_UPPER,
         CIRCULATION_MAX_CREDIT,
         CIRCULATION_MAX_BLOCKS,
         ACTUAL_MAX_EXCESS,
         GAP_MARKER,
         POSITIVE_RETURN_FRONTIER,
         NONPOSITIVE_RETURN_FRONTIER,
-        LOCAL_ENDPOINT_NO_GO,
+        FULL_WORD_NO_GO,
+        "1536",
     )
 
     require(
         CURRENT_CHECKPOINT,
-        GLOBAL_MIN_ORDINARY_BLOCKS,
-        ACTUAL_MAX_CREDIT,
-        ACTUAL_MAX_EXCESS,
-        ACTUAL_MAX_BLOCKS,
         POSITIVE_RETURN_FRONTIER,
         NONPOSITIVE_RETURN_FRONTIER,
-        LOCAL_ENDPOINT_NO_GO,
+        FULL_WORD_NO_GO,
+        "1536",
+        "13 -> 33 -> 83 -> 13",
     )
 
     require(
@@ -162,6 +165,14 @@ def check() -> None:
         "1984",
         "Chinese remainder theorem",
         "X^ell",
+    )
+
+    require(
+        "docs/FULL_FINITE_TWO_SIDED_WORD_GLUING_NO_GO.md",
+        "Chinese remainder theorem",
+        "X^r*2^(A_W+1)",
+        "2^(A_W+A_V)-X^(t+r)",
+        "13 -> 33 -> 83 -> 13",
     )
 
     require(
@@ -199,7 +210,7 @@ def check() -> None:
     print(f"actual expanding segment maximum blocks={ACTUAL_MAX_BLOCKS}")
     print(f"positive-return frontier={POSITIVE_RETURN_FRONTIER}")
     print(f"nonpositive-return frontier={NONPOSITIVE_RETURN_FRONTIER}")
-    print("fixed local endpoint congruence route=no-go")
+    print("full finite endpoint-congruence route=no-go without closure")
 
 
 if __name__ == "__main__":
