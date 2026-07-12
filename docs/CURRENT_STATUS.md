@@ -50,10 +50,8 @@ Every hypothetical nontrivial positive cycle contains at least
 ```
 
 This permits arbitrary exceptional-block populations and arbitrary block
-lengths. It is not a trajectory or cycle-length cutoff.
-
-The exact signed closure proof shows that if the ordinary-block count were at
-most `245832`, then
+lengths. It is not a trajectory or cycle-length cutoff. If the ordinary-block
+count were at most `245832`, the exact signed closure argument would force
 
 ```text
 every ordinary block length <=2J+6;
@@ -74,8 +72,8 @@ tools/verify_global_ordinary_block_count_frontier.py
 ## Bounded positive circulation
 
 Choosing the smallest cycle boundary in every occurring ordinary deficit type
-produces a functional graph on at most `4500` types. One directed cycle in that
-graph gives disjoint orbit intervals satisfying
+produces a functional graph on at most `4500` types. One directed cycle gives
+disjoint orbit intervals satisfying
 
 ```text
 q<=4500,
@@ -101,27 +99,25 @@ tools/verify_minimum_boundary_positive_circulation.py
 ## Actual minimum-boundary expanding segment
 
 Choose the least cycle value immediately following an ordinary complete block
-and follow the actual orbit to the next such boundary. If the segment has total
-credit `C`, length `L`, and exceptional excess sum `F`, exact minimum-height
+and follow the actual orbit to the next such boundary. Exact minimum-height
 comparison gives
 
 ```text
 1<=C<=4500,
-F<=4499,
+exceptional excess sum F<=4499,
 number of complete blocks <=4500.
 ```
 
-If its base multiplier were nonexpanding, the exact continued-fraction gap would
-be greater than `2^-4023`, while the sum of every additive block correction is
-less than `2^-4023`. Therefore
+The exact continued-fraction gap is greater than `2^-4023`, while the total
+additive correction is less than `2^-4023`. Therefore
 
 ```text
 L*delta<C,
 2^C*(X/B)^L>1,
-endpoint y > starting value x.
+endpoint y>starting value x.
 ```
 
-This is an actual consecutive orbit segment, not a formal splice.
+This is one actual consecutive orbit segment, not a formal splice.
 
 Files:
 
@@ -135,8 +131,8 @@ tools/verify_minimum_boundary_actual_expanding_segment.py
 Follow the remaining actual orbit from `y` back to `x`. Let
 
 ```text
-R = ordinary-deficit sum - exceptional-excess sum,
-Lr = accelerated return length.
+R=ordinary-deficit sum-exceptional-excess sum,
+Lr=accelerated return length.
 ```
 
 The exact return ratio proves
@@ -145,10 +141,9 @@ The exact return ratio proves
 R>=1 => Lr>2^3990.
 ```
 
-If `R<=0`, then total cycle credit satisfies `1<=D<=4500`. The one-sided
-continued-fraction certificate forces a gap greater than `2^-4023`, while the
-permanent `16562000`-class sieve and harmonic packing make the total correction
-too small through a double-exponential frontier. Hence
+If `R<=0`, then total cycle credit satisfies `1<=D<=4500`. The permanent
+`16562000`-class sieve, harmonic packing, the expanding-exit correction, and a
+one-sided continued-fraction gap give
 
 ```text
 R<=0 => Lr>2^(2^974).
@@ -172,32 +167,17 @@ tools/verify_minimum_boundary_nonpositive_return_harmonic_barrier.py
 
 ## Endpoint-congruence routes closed
 
-The fixed local theorem shows that every prescribed incoming ordinary or
-exceptional complete block is compatible with every prescribed finite outgoing
-valuation word at infinitely many positive odd boundaries.
+Every prescribed incoming ordinary or exceptional complete block can be
+followed by every prescribed finite outgoing valuation word at infinitely many
+positive odd boundaries. The stronger theorem allows the entire finite incoming
+word. The incoming endpoint condition is one class modulo `X^r`, while the
+outgoing word fixes one odd class modulo a power of two; the moduli are coprime.
 
-The stronger theorem allows an arbitrary entire finite incoming word `V`. Its
-endpoint condition is one class modulo
+Therefore fixed-depth endpoint data and full finite incoming endpoint data cannot
+alone exclude a return. Exact source matching remains global.
 
-```text
-X^len(V),
-```
-
-whereas an arbitrary finite outgoing word `W` fixes one odd class modulo
-
-```text
-2^(sum(W)+1).
-```
-
-The moduli are coprime, so the Chinese remainder theorem constructs infinitely
-many positive odd boundaries realizing both words exactly. This remains true
-when the incoming `X`-adic depth grows with the complete finite return word and
-after any fixed finite lower height bound.
-
-Therefore neither fixed-depth endpoint data nor the full finite incoming
-endpoint residue can itself exclude a return. The checker verifies `1536` small
-exact gluings, six gluings for the primary multiplier, and the known accelerated
-`5n+1` cycle `13 -> 33 -> 83 -> 13`.
+The checker verifies `1536` small exact gluings, six primary-multiplier gluings,
+and the known `5n+1` cycle `13 -> 33 -> 83 -> 13`.
 
 Files:
 
@@ -218,22 +198,21 @@ A=sum_i a_i,
 Delta=2^A-X^p,
 ```
 
-let `U_k` be its cyclic rotation starting at `a_k`, and let `Q_k` be the standard
-affine numerator of `U_k`. Exact algebra gives
+let `U_k` be its cyclic rotations and `Q_k` their affine numerators. Exact
+algebra gives
 
 ```text
 2^a_k*Q_(k+1)=X*Q_k+Delta.                         (1)
 ```
 
-Consequently, for every positive word, whether or not it closes,
+Consequently
 
 ```text
 gcd(Q_0,...,Q_(p-1))=gcd(Q_0,Delta),               (2)
 gcd(Q_k,Q_(k+1))=gcd(Q_k,Delta).                   (3)
 ```
 
-The word is the exact valuation word of a positive accelerated cycle if and only
-if
+The word closes to a positive accelerated cycle if and only if
 
 ```text
 Delta>0 and Delta|Q_0.                              (4)
@@ -245,31 +224,12 @@ Equivalently,
 gcd(Q_k,Q_(k+1))=Delta                             (5)
 ```
 
-for one, hence every, adjacent pair. In a closing word the cycle states are
+for one, hence every, truly adjacent pair. In a closing word `n_k=Q_k/Delta`.
+All primary-candidate rotations obey
 
 ```text
-n_k=Q_k/Delta.
+Q_k>Delta*(2^500-1).
 ```
-
-Thus all minimum-boundary comparisons become comparisons among the cyclic
-numerators. For the actual expanding exit, the numerator at the next ordinary
-boundary is strictly larger than the numerator at the least ordinary boundary.
-Every primary-candidate cycle word must also obey
-
-```text
-Q_k>Delta*(2^500-1)
-```
-
-for every rotation.
-
-For a split `U=W followed by V`, the concatenation identity
-
-```text
-Q(U)=X^r*Q_W+2^A_W*Q_V
-```
-
-shows that (4) is exactly the previous source-matching equation. Local CRT
-compatibility does not supply this full common divisor.
 
 Files:
 
@@ -287,21 +247,16 @@ large exact words for the primary multiplier.
 For a complete near-power block
 
 ```text
-W=(m,...,m,a),  a!=m,
+W=(m,...,m,a), a!=m,
+S_ell=(B^ell-X^ell)/d,
 ```
 
-of length `ell`, define
-
-```text
-S_ell=(B^ell-X^ell)/d.
-```
-
-The block affine constant is exactly `S_ell`, independently of the terminal
-valuation. Every exact positive block from source `n` to endpoint `n'` satisfies
+the affine constant is `S_ell`, independently of the terminal valuation. Every
+exact block from source `n` to endpoint `n'` satisfies
 
 ```text
 2^A_W*n'=X^ell*n+S_ell,
-gcd(n,n')=gcd(n,S_ell).                             (6)
+gcd(n,n')=gcd(n,S_ell).                              (6)
 ```
 
 For cyclic numerators at the two block boundaries,
@@ -317,41 +272,18 @@ If the full word closes, then
 gcd(Q_i,Q_j)=Delta*gcd(n_i,S_ell).                  (8)
 ```
 
-Thus complete-block boundary numerators do not retain the sharp adjacent gcd.
-This is not merely a theoretical possibility. Exact word coding fixes one odd
-source class modulo `2^(A_W+1)`, and CRT can simultaneously impose
-`S_ell|n`. Hence infinitely many exact positive blocks satisfy
-
-```text
-gcd(n,n')=S_ell.
-```
-
-For `ell>=2`,
-
-```text
-S_ell>X^(ell-1).
-```
-
-The explicit regression
+Exact word coding and CRT produce infinitely many exact positive complete blocks
+with the entire extra geometric factor. For `ell>=2`, `S_ell>X^(ell-1)`. The
+regression is
 
 ```text
 X=5,
 91 --a=3--> 57 --a=1--> 143,
-gcd(91,143)=13=(8^2-5^2)/3
+gcd(91,143)=13=(8^2-5^2)/3.
 ```
 
-shows the extra factor at the smallest useful scale.
-
-Therefore the naive proof architecture that compresses each long block to one
-boundary edge and then forces `gcd(Q_i,Q_j)=Delta` from local word data is
-closed. A successful gcd argument must retain a truly adjacent accelerated pair
-inside the block or prove a global condition such as
-
-```text
-gcd(n_i,S_ell)=1
-```
-
-for the actual cycle source.
+Thus block boundaries cannot replace a truly adjacent accelerated pair without
+new global coprimality information.
 
 Files:
 
@@ -360,7 +292,7 @@ docs/COMPLETE_BLOCK_GCD_COMPRESSION_NO_GO.md
 tools/verify_complete_block_gcd_compression_no_go.py
 ```
 
-The exact standalone checker verifies
+The standalone checker verifies
 
 ```text
 13212 exact block lifts;
@@ -370,17 +302,102 @@ The exact standalone checker verifies
 the regression 91 -> 57 -> 143.
 ```
 
+## Geometric-factor strong divisibility and persistence no-go
+
+For
+
+```text
+S_ell=(B^ell-X^ell)/d,
+B=2^m,
+X=B-d,
+```
+
+the geometric factors satisfy the exact strong-divisibility law
+
+```text
+gcd(S_r,S_s)=S_gcd(r,s).                            (9)
+```
+
+They also obey
+
+```text
+S_ell is odd,
+gcd(S_ell,B*X)=1,
+gcd(S_ell,d)=gcd(ell,d).                             (10)
+```
+
+For block-boundary defects
+
+```text
+g_i=gcd(n_i,n_(i+1))=gcd(n_i,S_(ell_i)),
+```
+
+any common prime is therefore controlled by the gcd of the corresponding block
+lengths. If selected lengths have gcd `1`, their defects share no prime.
+
+However, this does not yield a local cycle obstruction. Given any finite list of
+complete blocks whose lengths have common divisor `h>=2`, choose any odd prime
+`q|S_h`. Exact valuation-word coding and CRT give infinitely many positive odd
+starts for which `q` divides every block boundary. Hence the same defect prime
+can survive through arbitrarily many prescribed finite complete-block
+compressions.
+
+Explicit regression:
+
+```text
+X=5,
+lengths=(2,4,6),
+q=13,
+n0=2620090395,
+boundaries=
+2620090395 -> 4093891243 -> 1249356459 -> 297869793,
+boundary gcd defects=(13,13,39).
+```
+
+This closes the local shortcut that repeated block compression must eventually
+recover adjacent coprimality.
+
+For the primary candidate,
+
+```text
+gcd(S_ell,N*1093^2)=1                              (11)
+```
+
+for every `ell`. Thus no geometric defect prime lies in the prime support of the
+permanent sieve modulus. Any useful sieve interaction must use the actual source
+classes, not direct factor overlap.
+
+Files:
+
+```text
+docs/GEOMETRIC_FACTOR_STRONG_DIVISIBILITY_PERSISTENCE_NO_GO.md
+tools/verify_geometric_factor_strong_divisibility.py
+```
+
+The standalone checker verifies
+
+```text
+71136 strong-divisibility pair cases;
+1990 exact complete blocks;
+116 persistent-boundary CRT constructions;
+24 primary-candidate lengths;
+the explicit X=5 three-block regression.
+```
+
+An independent brute-force check verified unique exact word residues in `30`
+small cases. A complete repository-wide run was not executed.
+
 ## Exact closure target
 
-Let `W` be the expanding exit word from `x` to `y`, and let `V` be the remaining
-return word from `y` to `x`. Define their exact affine constants by
+Let `W` be the expanding exit word from `x` to `y`, and `V` the remaining return
+word from `y` to `x`. If
 
 ```text
 2^A_W*y=X^t*x+Q_W,
-2^A_V*x=X^r*y+Q_V.
+2^A_V*x=X^r*y+Q_V,
 ```
 
-Eliminating `y` gives
+then exact elimination gives
 
 ```text
 [2^(A_W+A_V)-X^(t+r)]*x
@@ -388,41 +405,38 @@ Eliminating `y` gives
 ```
 
 The cyclic-gcd theorem identifies the left coefficient with `Delta` and the
-right numerator with `Q(U)`. Exact cycle closure is equivalent to
+right side with the cyclic affine numerator. Closure remains equivalent to
 
 ```text
 gcd(Q_k,Q_(k+1))=Delta
 ```
 
-for truly adjacent accelerated cyclic numerators. Complete-block endpoints
-instead carry the additional geometric factor in (7), so they cannot replace
-the adjacent pair without new global coprimality information.
+for truly adjacent cyclic numerators.
 
 ## Decisive missing theorem
 
-A hypothetical cycle can survive only through one of the following actual
-return branches:
+A hypothetical cycle can survive only through
 
 ```text
 positive credit with Lr>2^3990;
 nonpositive credit with Lr>2^(2^974).
 ```
 
-The primary remaining routes are:
+The primary remaining routes are now:
 
-1. prove that every admissible complete cyclic word has some truly adjacent
-   accelerated numerator gcd strictly smaller than `Delta`, using the
-   minimum-boundary, permanent-sieve, and return constraints;
-2. prove a global coprimality obstruction `gcd(n_i,S_ell)=1` at a strategically
-   chosen actual block source;
-3. prove regeneration of the expanding exit into a repeatable growing segment;
-4. globally exclude the nonpositive branch beyond its double-exponential
-   frontier;
-5. find a different candidate or invariant giving a direct divergence proof.
+1. use actual return or sieve constraints to force a selected family of actual
+   complete-block lengths to have gcd `1`;
+2. exclude every prime divisor of `S_gcd(lengths)` from the corresponding actual
+   cycle boundaries;
+3. prove that some truly adjacent cyclic numerator gcd is smaller than `Delta`;
+4. prove regeneration of the actual expanding exit into a repeatable growing
+   segment;
+5. globally exclude the doubly-exponential nonpositive branch;
+6. find a different candidate or invariant giving direct divergence.
 
 Further numerical barriers, longer continued-fraction prefixes, higher endpoint
-moduli, and naive block-boundary gcd calculations without new closure information
-are not the priority.
+moduli, naive block-boundary gcd calculations, and arbitrary finite block
+concatenations without new closure information are not the priority.
 
 ## Reusable family theorem
 
@@ -458,11 +472,12 @@ used by a cycle.
 
 ## Verification
 
-The standalone checker
+The current standalone commands are
 
 ```text
-python tools/verify_complete_block_gcd_compression_no_go.py
+python tools/verify_geometric_factor_strong_divisibility.py
+python tools/check_project_consistency.py
 ```
 
-passed in the chat environment and is included in `run_checks.py`. A complete
-repository-wide run was not executed.
+The new verifier passed in the chat environment. The project-wide `run_checks.py`
+was updated to include it, but a complete repository-wide run was not executed.
