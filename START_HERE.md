@@ -20,7 +20,7 @@ START_HERE.md
 docs/WORKING_PROTOCOL.md
 docs/CURRENT_STATUS.md
 docs/RETRACTIONS.md
-docs/SESSION_CHECKPOINT_2026-07-12_FULL_TWO_SIDED_WORD_GLUING_NO_GO.md
+docs/SESSION_CHECKPOINT_2026-07-12_CYCLIC_ROTATION_CLOSURE_GCD.md
 ```
 
 Fetch these files from the current default branch at the start of every session.
@@ -213,9 +213,9 @@ The fixed local theorem proves that any incoming ordinary or exceptional block
 can be followed by any prescribed finite outgoing valuation word at infinitely
 many positive odd boundaries.
 
-The stronger full-word theorem now allows the entire incoming word `V`. It fixes
-one endpoint class modulo `X^len(V)`, while the outgoing word `W` fixes one odd
-class modulo `2^(sum(W)+1)`. The Chinese remainder theorem makes the two complete
+The stronger full-word theorem allows the entire incoming word `V`. It fixes one
+endpoint class modulo `X^len(V)`, while the outgoing word `W` fixes one odd class
+modulo `2^(sum(W)+1)`. The Chinese remainder theorem makes the two complete
 finite words compatible at infinitely many positive odd boundaries, even when
 the `X`-adic depth grows with the full finite return word.
 
@@ -232,26 +232,55 @@ docs/FULL_FINITE_TWO_SIDED_WORD_GLUING_NO_GO.md
 tools/verify_full_finite_two_sided_word_gluing_no_go.py
 ```
 
-## Exact remaining closure equation
+## Exact closure and cyclic-gcd target
 
-Let `W` be the actual expanding exit word from `x` to `y`, and let `V` be the
-remaining return word from `y` to `x`. Write
+Let `U` be the complete cyclic valuation word, with length `p`, total valuation
+`A`, cyclic rotations `U_k`, and standard affine numerators `Q_k=Q(U_k)`. Put
 
 ```text
-2^A_W*y=X^t*x+Q_W,
-2^A_V*x=X^r*y+Q_V.
+Delta=2^A-X^p.
 ```
 
-Then exact source matching is equivalent to
+The exact rotation recurrence is
+
+```text
+2^a_k*Q_(k+1)=X*Q_k+Delta.
+```
+
+A positive word closes to an actual accelerated cycle if and only if
+
+```text
+Delta>0 and Delta|Q_0.
+```
+
+Equivalently,
+
+```text
+gcd(Q_k,Q_(k+1))=Delta
+```
+
+for one, hence every, adjacent pair. Also
+
+```text
+gcd(Q_0,...,Q_(p-1))=gcd(Q_0,Delta).
+```
+
+For a split `U=W followed by V`, this is exactly the previous closure equation
 
 ```text
 [2^(A_W+A_V)-X^(t+r)]*x
   =X^r*Q_W+2^A_W*Q_V.
 ```
 
-Local CRT compatibility is automatic. A successful proof must extract a
-length-independent divisibility or size contradiction from this equation using
-the actual minimum-boundary and credit constraints.
+The minimum-boundary inequalities become comparisons among the `Q_k`; in
+particular the next ordinary boundary has a strictly larger cyclic numerator.
+
+Files:
+
+```text
+docs/CYCLIC_ROTATION_CLOSURE_GCD.md
+tools/verify_cyclic_rotation_closure_gcd.py
+```
 
 ## Decisive missing theorem
 
@@ -265,8 +294,8 @@ nonpositive return credit with Lr>2^(2^974).
 The fixed-depth and uncoupled full finite endpoint-congruence routes are closed.
 The primary next target is a genuinely global obstruction proving one of:
 
-1. the closure coefficient above cannot divide its explicit numerator under the
-   positive-return and minimum-boundary constraints;
+1. for every admissible complete cyclic word, some adjacent numerator gcd is
+   strictly smaller than `Delta` under the minimum-boundary and credit constraints;
 2. the expanding exit regenerates as a repeatable growing segment;
 3. the doubly-exponential nonpositive branch is globally impossible;
 4. a direct divergence proof for this or a stronger candidate.

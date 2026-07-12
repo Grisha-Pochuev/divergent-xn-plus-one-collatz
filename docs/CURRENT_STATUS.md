@@ -101,8 +101,8 @@ tools/verify_minimum_boundary_positive_circulation.py
 ## Actual minimum-boundary expanding segment
 
 Choose the least cycle value immediately following an ordinary complete block
-and follow the actual orbit to the next such value. If the segment has total
-credit `C`, length `L`, and exceptional excess sum `F`, then exact minimum-height
+and follow the actual orbit to the next such boundary. If the segment has total
+credit `C`, length `L`, and exceptional excess sum `F`, exact minimum-height
 comparison gives
 
 ```text
@@ -176,8 +176,8 @@ The fixed local theorem shows that every prescribed incoming ordinary or
 exceptional complete block is compatible with every prescribed finite outgoing
 valuation word at infinitely many positive odd boundaries.
 
-The stronger theorem now allows an arbitrary entire finite incoming word `V`.
-Its endpoint condition is one class modulo
+The stronger theorem allows an arbitrary entire finite incoming word `V`. Its
+endpoint condition is one class modulo
 
 ```text
 X^len(V),
@@ -195,9 +195,9 @@ when the incoming `X`-adic depth grows with the complete finite return word and
 after any fixed finite lower height bound.
 
 Therefore neither fixed-depth endpoint data nor the full finite incoming
-endpoint residue can itself exclude a return. The new checker verifies `1536`
-small exact gluings, six gluings for the primary multiplier, and the known
-accelerated `5n+1` cycle `13 -> 33 -> 83 -> 13`.
+endpoint residue can itself exclude a return. The checker verifies `1536` small
+exact gluings, six gluings for the primary multiplier, and the known accelerated
+`5n+1` cycle `13 -> 33 -> 83 -> 13`.
 
 Files:
 
@@ -207,6 +207,80 @@ tools/verify_fixed_local_endpoint_congruence_no_go.py
 docs/FULL_FINITE_TWO_SIDED_WORD_GLUING_NO_GO.md
 tools/verify_full_finite_two_sided_word_gluing_no_go.py
 ```
+
+## Cyclic-rotation closure gcd theorem
+
+For a complete positive valuation word
+
+```text
+U=(a_0,...,a_(p-1)),
+A=sum_i a_i,
+Delta=2^A-X^p,
+```
+
+let `U_k` be its cyclic rotation starting at `a_k`, and let `Q_k` be the standard
+affine numerator of `U_k`. Exact algebra gives
+
+```text
+2^a_k*Q_(k+1)=X*Q_k+Delta.                         (1)
+```
+
+Consequently, for every positive word, whether or not it closes,
+
+```text
+gcd(Q_0,...,Q_(p-1))=gcd(Q_0,Delta),               (2)
+gcd(Q_k,Q_(k+1))=gcd(Q_k,Delta).                   (3)
+```
+
+The word is the exact valuation word of a positive accelerated cycle if and only
+if
+
+```text
+Delta>0 and Delta|Q_0.                              (4)
+```
+
+Equivalently,
+
+```text
+gcd(Q_k,Q_(k+1))=Delta                             (5)
+```
+
+for one, hence every, adjacent pair. In a closing word the cycle states are
+
+```text
+n_k=Q_k/Delta.
+```
+
+Thus all minimum-boundary comparisons become comparisons among the cyclic
+numerators. For the actual expanding exit, the numerator at the next ordinary
+boundary is strictly larger than the numerator at the least ordinary boundary.
+Every primary-candidate cycle word must also obey
+
+```text
+Q_k>Delta*(2^500-1)
+```
+
+for every rotation.
+
+For a split `U=W followed by V`, the concatenation identity
+
+```text
+Q(U)=X^r*Q_W+2^A_W*Q_V
+```
+
+shows that (4) is exactly the previous source-matching equation. Local CRT
+compatibility does not supply this full common divisor.
+
+Files:
+
+```text
+docs/CYCLIC_ROTATION_CLOSURE_GCD.md
+tools/verify_cyclic_rotation_closure_gcd.py
+```
+
+The standalone verifier checks `6820` exhaustive small words, reconstructs `17`
+closing words in that grid, verifies three known `5n+1` cycles, and checks three
+large exact words for the primary multiplier.
 
 ## Exact closure target
 
@@ -225,12 +299,16 @@ Eliminating `y` gives
   =X^r*Q_W+2^A_W*Q_V.
 ```
 
-The two finite words are automatically locally compatible by CRT. Exact cycle
-closure is the additional requirement that the left coefficient divide the
-explicit right numerator and produce the actual minimum boundary. A successful
-whole-return argument must extract new divisibility or size information from
-this equation; increasing the endpoint modulus alone repeats a consequence of
-the same equation.
+The cyclic-gcd theorem identifies the left coefficient with `Delta` and the
+right numerator with `Q(U)`. Exact cycle closure is equivalent to
+
+```text
+gcd(Q_k,Q_(k+1))=Delta
+```
+
+for adjacent cyclic numerators. A successful whole-return argument must prove
+that this maximal gcd cannot occur under the minimum-boundary, block-credit, and
+return-length constraints.
 
 ## Decisive missing theorem
 
@@ -244,8 +322,9 @@ nonpositive credit with Lr>2^(2^974).
 
 The primary remaining routes are:
 
-1. prove that the exact closure coefficient cannot divide its numerator under
-   the positive-return, minimum-boundary, and credit constraints;
+1. prove that every admissible complete cyclic word has some adjacent numerator
+   gcd strictly smaller than `Delta` under the positive-return and
+   minimum-boundary constraints;
 2. prove regeneration of the expanding exit into a repeatable growing segment;
 3. globally exclude the nonpositive branch beyond its double-exponential
    frontier;
@@ -292,8 +371,9 @@ used by a cycle.
 The standalone checker
 
 ```text
-python tools/verify_full_finite_two_sided_word_gluing_no_go.py
+python tools/verify_cyclic_rotation_closure_gcd.py
 ```
 
 passed in the chat environment and is included in `run_checks.py`. A complete
-repository-wide run was not executed.
+repository-wide run had not yet been executed at the time this status was
+written.

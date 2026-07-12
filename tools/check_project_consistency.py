@@ -21,11 +21,13 @@ POSITIVE_RETURN_FRONTIER = "2^3990"
 NONPOSITIVE_RETURN_FRONTIER = "2^(2^974)"
 FIXED_ENDPOINT_NO_GO = "FIXED_LOCAL_ENDPOINT_CONGRUENCE_NO_GO"
 FULL_WORD_NO_GO = "FULL_FINITE_TWO_SIDED_WORD_GLUING_NO_GO"
+CYCLIC_GCD_THEOREM = "CYCLIC_ROTATION_CLOSURE_GCD"
+CYCLIC_GCD_MARKER = "gcd(Q_k,Q_(k+1))=Delta"
 RETRACTED_BARRIER = "10^37"
 
 CURRENT_CHECKPOINT = (
     "docs/SESSION_CHECKPOINT_2026-07-12_"
-    "FULL_TWO_SIDED_WORD_GLUING_NO_GO.md"
+    "CYCLIC_ROTATION_CLOSURE_GCD.md"
 )
 
 CURRENT_MEMORY_FILES = (
@@ -54,6 +56,8 @@ CURRENT_STRUCTURE_FILES = (
     "tools/verify_fixed_local_endpoint_congruence_no_go.py",
     "docs/FULL_FINITE_TWO_SIDED_WORD_GLUING_NO_GO.md",
     "tools/verify_full_finite_two_sided_word_gluing_no_go.py",
+    "docs/CYCLIC_ROTATION_CLOSURE_GCD.md",
+    "tools/verify_cyclic_rotation_closure_gcd.py",
 )
 
 RETRACTION_FILES = (
@@ -74,6 +78,7 @@ LATEST_TOOLS = (
     "verify_minimum_boundary_nonpositive_return_harmonic_barrier.py",
     "verify_fixed_local_endpoint_congruence_no_go.py",
     "verify_full_finite_two_sided_word_gluing_no_go.py",
+    "verify_cyclic_rotation_closure_gcd.py",
 )
 
 
@@ -110,6 +115,8 @@ def check() -> None:
         NONPOSITIVE_RETURN_FRONTIER,
         FIXED_ENDPOINT_NO_GO,
         FULL_WORD_NO_GO,
+        CYCLIC_GCD_THEOREM,
+        CYCLIC_GCD_MARKER,
         CURRENT_CHECKPOINT,
     )
 
@@ -126,7 +133,10 @@ def check() -> None:
         POSITIVE_RETURN_FRONTIER,
         NONPOSITIVE_RETURN_FRONTIER,
         FULL_WORD_NO_GO,
+        CYCLIC_GCD_THEOREM,
+        CYCLIC_GCD_MARKER,
         "1536",
+        "6820",
     )
 
     require(
@@ -134,8 +144,9 @@ def check() -> None:
         POSITIVE_RETURN_FRONTIER,
         NONPOSITIVE_RETURN_FRONTIER,
         FULL_WORD_NO_GO,
-        "1536",
-        "13 -> 33 -> 83 -> 13",
+        CYCLIC_GCD_MARKER,
+        "6820",
+        "known 5n+1 cycles checked=3",
     )
 
     require(
@@ -176,6 +187,15 @@ def check() -> None:
     )
 
     require(
+        "docs/CYCLIC_ROTATION_CLOSURE_GCD.md",
+        "2^a_k*Q_(k+1)=X*Q_k+Delta",
+        CYCLIC_GCD_MARKER,
+        "Delta|Q_0",
+        "Q(U)=X^r*Q_W+2^A_W*Q_V",
+        "Q_t>Q_0",
+    )
+
+    require(
         "docs/MINIMUM_BOUNDARY_POSITIVE_CIRCULATION.md",
         CIRCULATION_MAX_CREDIT,
         CIRCULATION_MAX_BLOCKS,
@@ -211,6 +231,7 @@ def check() -> None:
     print(f"positive-return frontier={POSITIVE_RETURN_FRONTIER}")
     print(f"nonpositive-return frontier={NONPOSITIVE_RETURN_FRONTIER}")
     print("full finite endpoint-congruence route=no-go without closure")
+    print("exact cycle closure=cyclic adjacent-numerator gcd reaches Delta")
 
 
 if __name__ == "__main__":
