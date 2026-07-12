@@ -20,7 +20,7 @@ START_HERE.md
 docs/WORKING_PROTOCOL.md
 docs/CURRENT_STATUS.md
 docs/RETRACTIONS.md
-docs/SESSION_CHECKPOINT_2026-07-12_ACTUAL_MINIMUM_BOUNDARY_SEGMENT.md
+docs/SESSION_CHECKPOINT_2026-07-12_NONPOSITIVE_RETURN_HARMONIC_BARRIER.md
 ```
 
 Fetch these files from the current default branch at the start of every session.
@@ -180,30 +180,58 @@ Files:
 
 ```text
 docs/MINIMUM_BOUNDARY_ACTUAL_EXPANDING_SEGMENT.md
-tools/verify_minimum_boundary_actual_expanding_segment.py
+tools/verify_minimum_boundary_actual_expANDING_SEGMENT.py
+```
+
+## Actual return frontiers
+
+Let `R` and `Lr` be the net credit and accelerated length of the remaining actual
+orbit from the larger endpoint back to the least ordinary boundary. Two strict
+results are retained:
+
+```text
+R>=1 => Lr>2^3990;
+R<=0 => Lr>2^(2^974).
+```
+
+The second result combines the permanent `16562000`-class sieve, harmonic
+packing, the small correction on the expanding exit, and the one-sided
+continued-fraction gap. It is not a trajectory computation.
+
+Files:
+
+```text
+docs/MINIMUM_BOUNDARY_RETURN_CREDIT_DICHOTOMY.md
+tools/verify_minimum_boundary_return_credit_dichotomy.py
+docs/MINIMUM_BOUNDARY_NONPOSITIVE_RETURN_HARMONIC_BARRIER.md
+tools/verify_minimum_boundary_nonpositive_return_harmonic_barrier.py
 ```
 
 ## Decisive missing theorem
 
-The rest of a hypothetical cycle would have to return from the larger endpoint
-of this short expanding segment to the least ordinary boundary.
+A hypothetical cycle can now return only through one of two extreme branches:
 
-The primary next target is a return obstruction proving one of:
+```text
+positive return credit with Lr>2^3990;
+nonpositive return credit with Lr>2^(2^974).
+```
 
-1. inverse `X`-adic descent through the return word;
+The primary next target is a length-independent obstruction proving one of:
+
+1. inverse `X`-adic descent through a positive-credit return word;
 2. incompatibility of the exit and final return block modulo `X^2` or a higher
    power;
-3. a lower bound on exceptional return credit that contradicts the global
-   harmonic window;
-4. regeneration of the expanding word into a genuinely repeatable growing
-   segment.
+3. a regeneration theorem turning the expanding exit into a repeatable growing
+   segment;
+4. a global argument excluding the doubly-exponential nonpositive branch without
+   merely increasing its finite cutoff.
 
 This is a priority, not a ban on other routes. A sprint may instead pursue a
 direct divergence proof, a stronger candidate, a literature-derived lemma, or a
 new global cycle obstruction when its expected value is higher.
 
-Do not merely extend the continued-fraction denominator or enlarge the finite
-cycle barrier.
+Do not merely extend a continued-fraction denominator, a finite trajectory, or a
+finite return-length barrier.
 
 ## Reusable family theorem
 
