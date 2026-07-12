@@ -20,7 +20,7 @@ START_HERE.md
 docs/WORKING_PROTOCOL.md
 docs/CURRENT_STATUS.md
 docs/RETRACTIONS.md
-docs/SESSION_CHECKPOINT_2026-07-12_FIXED_LOCAL_ENDPOINT_CONGRUENCE_NO_GO.md
+docs/SESSION_CHECKPOINT_2026-07-12_FULL_TWO_SIDED_WORD_GLUING_NO_GO.md
 ```
 
 Fetch these files from the current default branch at the start of every session.
@@ -207,25 +207,51 @@ docs/MINIMUM_BOUNDARY_NONPOSITIVE_RETURN_HARMONIC_BARRIER.md
 tools/verify_minimum_boundary_nonpositive_return_harmonic_barrier.py
 ```
 
-## Fixed local endpoint congruence no-go
+## Endpoint-congruence no-go results
 
-For any fixed incoming ordinary or exceptional complete block and any fixed
-finite outgoing valuation word, CRT constructs infinitely many positive odd
-common boundary values realizing both pieces exactly. The incoming block fixes a
-class modulo `X^ell`; the outgoing word fixes an independent class modulo a power
-of two.
+The fixed local theorem proves that any incoming ordinary or exceptional block
+can be followed by any prescribed finite outgoing valuation word at infinitely
+many positive odd boundaries.
 
-Therefore finitely many local incoming and outgoing labels cannot contradict one
-another merely modulo `X^2` or any other fixed `X^h`. A useful `X`-adic argument
-must instead use depth growing with the return word, exact closure, or other
-global information.
+The stronger full-word theorem now allows the entire incoming word `V`. It fixes
+one endpoint class modulo `X^len(V)`, while the outgoing word `W` fixes one odd
+class modulo `2^(sum(W)+1)`. The Chinese remainder theorem makes the two complete
+finite words compatible at infinitely many positive odd boundaries, even when
+the `X`-adic depth grows with the full finite return word.
+
+Therefore neither a fixed class modulo `X^2` nor the full finite incoming
+endpoint class modulo `X^len(V)` can by itself exclude a return. Exact source
+matching is the missing global condition.
 
 Files:
 
 ```text
 docs/FIXED_LOCAL_ENDPOINT_CONGRUENCE_NO_GO.md
 tools/verify_fixed_local_endpoint_congruence_no_go.py
+docs/FULL_FINITE_TWO_SIDED_WORD_GLUING_NO_GO.md
+tools/verify_full_finite_two_sided_word_gluing_no_go.py
 ```
+
+## Exact remaining closure equation
+
+Let `W` be the actual expanding exit word from `x` to `y`, and let `V` be the
+remaining return word from `y` to `x`. Write
+
+```text
+2^A_W*y=X^t*x+Q_W,
+2^A_V*x=X^r*y+Q_V.
+```
+
+Then exact source matching is equivalent to
+
+```text
+[2^(A_W+A_V)-X^(t+r)]*x
+  =X^r*Q_W+2^A_W*Q_V.
+```
+
+Local CRT compatibility is automatic. A successful proof must extract a
+length-independent divisibility or size contradiction from this equation using
+the actual minimum-boundary and credit constraints.
 
 ## Decisive missing theorem
 
@@ -236,21 +262,18 @@ positive return credit with Lr>2^3990;
 nonpositive return credit with Lr>2^(2^974).
 ```
 
-The fixed-depth local endpoint route is closed. The primary next target is a
-genuinely nonlocal obstruction proving one of:
+The fixed-depth and uncoupled full finite endpoint-congruence routes are closed.
+The primary next target is a genuinely global obstruction proving one of:
 
-1. inverse `X`-adic descent whose depth grows through the entire positive-credit
-   return word and is coupled to exact cycle closure;
-2. regeneration of the expanding exit into a repeatable growing segment;
-3. a global argument excluding the doubly-exponential nonpositive branch;
+1. the closure coefficient above cannot divide its explicit numerator under the
+   positive-return and minimum-boundary constraints;
+2. the expanding exit regenerates as a repeatable growing segment;
+3. the doubly-exponential nonpositive branch is globally impossible;
 4. a direct divergence proof for this or a stronger candidate.
 
-This is a priority, not a ban on other routes. A sprint may instead pursue a
-direct divergence proof, a stronger candidate, a literature-derived lemma, or a
-new global cycle obstruction when its expected value is higher.
-
 Do not merely extend a continued-fraction denominator, a finite trajectory, a
-finite return-length barrier, or a fixed-depth local endpoint class.
+finite return-length barrier, or an endpoint residue modulo a higher power of
+`X` without new closure information.
 
 ## Reusable family theorem
 
