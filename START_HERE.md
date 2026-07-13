@@ -97,6 +97,19 @@ full cycle p>2^(2^4979),
 actual return Lr>2^(2^4978).
 ```
 
+The signed complete-block elimination theorem and the small credit range now also
+force enormous ordinary-block populations:
+
+```text
+any nonpositive return:
+  ordinary blocks J>2^(2^973-7),
+  one deficit type repeats >2^(2^973-20) times;
+
+nonpositive with h>=2:
+  ordinary blocks J>2^(2^4978-7),
+  one deficit type repeats >2^(2^4978-20) times.
+```
+
 Detailed sources:
 
 ```text
@@ -104,19 +117,23 @@ docs/GLOBAL_BLOCK_GCD_PHASE_SIEVE.md
 tools/verify_global_block_gcd_phase_sieve.py
 docs/ODD_H_PHASE_HARMONIC_BARRIER.md
 tools/verify_odd_h_phase_harmonic_barrier.py
+docs/NONPOSITIVE_RETURN_ORDINARY_BLOCK_EXPLOSION.md
+tools/verify_nonpositive_return_ordinary_block_explosion.py
 ```
 
 ## Surviving branches and next target
 
 ```text
 positive credit: Lr>2^3990;
-nonpositive, h>=2: Lr>2^(2^4978), still not excluded;
-nonpositive, h=1: only the general Lr>2^(2^974) barrier applies.
+nonpositive, h>=2: Lr>2^(2^4978) and J>2^(2^4978-7), still not excluded;
+nonpositive, h=1: Lr>2^(2^974) and J>2^(2^973-7).
 ```
 
-Primary next target: prove that the actual minimum-boundary return cannot have
-`h=1`, or obtain a length-independent adjacent-numerator gcd contradiction for
-`h>=2`. Secondary target: exclude the positive-credit return branch.
+Primary next target: exploit the doubly exponential repetition of one ordinary
+deficit type. Its boundaries lie in one explicit class `d*n==2^e (mod X)`;
+combine that class with the `N`-adic depth ladder or an adjacent-numerator gcd to
+obtain a cycle-length-independent correction bound. Secondary target: exclude the
+positive-credit return branch.
 
 ## Non-negotiable corrections
 
