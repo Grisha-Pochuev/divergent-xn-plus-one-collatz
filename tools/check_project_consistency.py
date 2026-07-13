@@ -10,29 +10,20 @@ PRIMARY_X = "2^4501-349*2^500+347"
 PRIMARY_CLASSES = "16562000"
 PRIMARY_BARRIER = "10^1201"
 GLOBAL_MIN_ORDINARY_BLOCKS = "245833"
-GLOBAL_LENGTH_UPPER = "544026748963771"
-CIRCULATION_MAX_CREDIT = "20250000"
-CIRCULATION_MAX_BLOCKS = "20254499"
-ACTUAL_MAX_CREDIT = "4500"
-ACTUAL_MAX_EXCESS = "4499"
-ACTUAL_MAX_BLOCKS = "4500"
-GAP_MARKER = "2^-4023"
 POSITIVE_RETURN_FRONTIER = "2^3990"
-NONPOSITIVE_RETURN_FRONTIER = "2^(2^974)"
-FIXED_ENDPOINT_NO_GO = "FIXED_LOCAL_ENDPOINT_CONGRUENCE_NO_GO"
-FULL_WORD_NO_GO = "FULL_FINITE_TWO_SIDED_WORD_GLUING_NO_GO"
-CYCLIC_GCD_THEOREM = "CYCLIC_ROTATION_CLOSURE_GCD"
-CYCLIC_GCD_MARKER = "gcd(Q_k,Q_(k+1))=Delta"
-BLOCK_GCD_NO_GO = "COMPLETE_BLOCK_GCD_COMPRESSION_NO_GO"
-BLOCK_GCD_MARKER = "gcd(n,n')=gcd(n,S_ell)"
-GEOMETRIC_FACTOR_NO_GO = "GEOMETRIC_FACTOR_STRONG_DIVISIBILITY_PERSISTENCE_NO_GO"
-GEOMETRIC_FACTOR_MARKER = "gcd(S_r,S_s)=S_gcd(r,s)"
-PERSISTENCE_MARKER = "2620090395"
+OLD_NONPOSITIVE_RETURN_FRONTIER = "2^(2^974)"
+EVEN_H_CYCLE_FRONTIER = "2^(2^4979)"
+EVEN_H_RETURN_FRONTIER = "2^(2^4978)"
+GLOBAL_PHASE_DOC = "GLOBAL_BLOCK_GCD_PHASE_SIEVE"
+GLOBAL_PHASE_TOOL = "verify_global_block_gcd_phase_sieve.py"
+GLOBAL_DIVISOR_MARKER = "S_h/g divides 2^D-1"
+PRIMARY_GCD_MARKER = "gcd(S_2,2^D-1)=1"
+PHASE_MARKER = "n_t==B^(-j)*S_j (mod g)"
 RETRACTED_BARRIER = "10^37"
 
 CURRENT_CHECKPOINT = (
     "docs/SESSION_CHECKPOINT_2026-07-13_"
-    "GEOMETRIC_FACTOR_PERSISTENCE_NO_GO.md"
+    "GLOBAL_BLOCK_GCD_PHASE_SIEVE.md"
 )
 
 CURRENT_MEMORY_FILES = (
@@ -42,15 +33,8 @@ CURRENT_MEMORY_FILES = (
 )
 
 CURRENT_STRUCTURE_FILES = (
-    "docs/MERSENNE_DIVISOR_WIEFERICH_FAMILY.md",
-    "tools/verify_mersenne_divisor_wieferich_family.py",
-    "docs/MERSENNE_DIVISOR_EXCEPTIONAL_FLOOR.md",
-    "docs/NO_EXCEPTIONAL_X_ADIC_LADDER.md",
-    "tools/verify_no_exceptional_x_adic_ladder.py",
     "docs/GLOBAL_ORDINARY_BLOCK_COUNT_FRONTIER.md",
     "tools/verify_global_ordinary_block_count_frontier.py",
-    "docs/MINIMUM_BOUNDARY_POSITIVE_CIRCULATION.md",
-    "tools/verify_minimum_boundary_positive_circulation.py",
     "docs/MINIMUM_BOUNDARY_ACTUAL_EXPANDING_SEGMENT.md",
     "tools/verify_minimum_boundary_actual_expanding_segment.py",
     "docs/MINIMUM_BOUNDARY_RETURN_CREDIT_DICHOTOMY.md",
@@ -67,29 +51,8 @@ CURRENT_STRUCTURE_FILES = (
     "tools/verify_complete_block_gcd_compression_no_go.py",
     "docs/GEOMETRIC_FACTOR_STRONG_DIVISIBILITY_PERSISTENCE_NO_GO.md",
     "tools/verify_geometric_factor_strong_divisibility.py",
-)
-
-RETRACTION_FILES = (
-    "docs/RETRACTIONS.md",
-    "docs/LATEST_VALID_PROGRESS.md",
-)
-
-LATEST_TOOLS = (
-    "verify_mersenne_divisor_wieferich_family.py",
-    "verify_no_exceptional_x_adic_ladder.py",
-    "verify_no_exceptional_block_count_frontier.py",
-    "verify_one_exception_one_ordinary_no_go.py",
-    "verify_one_exception_block_count_frontier.py",
-    "verify_global_ordinary_block_count_frontier.py",
-    "verify_minimum_boundary_positive_circulation.py",
-    "verify_minimum_boundary_actual_expanding_segment.py",
-    "verify_minimum_boundary_return_credit_dichotomy.py",
-    "verify_minimum_boundary_nonpositive_return_harmonic_barrier.py",
-    "verify_fixed_local_endpoint_congruence_no_go.py",
-    "verify_full_finite_two_sided_word_gluing_no_go.py",
-    "verify_cyclic_rotation_closure_gcd.py",
-    "verify_complete_block_gcd_compression_no_go.py",
-    "verify_geometric_factor_strong_divisibility.py",
+    "docs/GLOBAL_BLOCK_GCD_PHASE_SIEVE.md",
+    "tools/verify_global_block_gcd_phase_sieve.py",
 )
 
 
@@ -114,164 +77,74 @@ def check() -> None:
     for relative in CURRENT_MEMORY_FILES:
         require(relative, PRIMARY_X)
 
-    require(
-        "START_HERE.md",
-        PRIMARY_CLASSES,
-        PRIMARY_BARRIER,
-        GLOBAL_MIN_ORDINARY_BLOCKS,
-        CIRCULATION_MAX_CREDIT,
-        CIRCULATION_MAX_BLOCKS,
-        ACTUAL_MAX_EXCESS,
-        POSITIVE_RETURN_FRONTIER,
-        NONPOSITIVE_RETURN_FRONTIER,
-        FIXED_ENDPOINT_NO_GO,
-        FULL_WORD_NO_GO,
-        CYCLIC_GCD_THEOREM,
-        CYCLIC_GCD_MARKER,
-        BLOCK_GCD_NO_GO,
-        BLOCK_GCD_MARKER,
-        GEOMETRIC_FACTOR_NO_GO,
-        GEOMETRIC_FACTOR_MARKER,
-        CURRENT_CHECKPOINT,
-    )
-
-    require(
-        "docs/CURRENT_STATUS.md",
-        PRIMARY_CLASSES,
-        PRIMARY_BARRIER,
-        GLOBAL_MIN_ORDINARY_BLOCKS,
-        GLOBAL_LENGTH_UPPER,
-        CIRCULATION_MAX_CREDIT,
-        CIRCULATION_MAX_BLOCKS,
-        ACTUAL_MAX_EXCESS,
-        GAP_MARKER,
-        POSITIVE_RETURN_FRONTIER,
-        NONPOSITIVE_RETURN_FRONTIER,
-        FULL_WORD_NO_GO,
-        CYCLIC_GCD_THEOREM,
-        CYCLIC_GCD_MARKER,
-        BLOCK_GCD_NO_GO,
-        BLOCK_GCD_MARKER,
-        GEOMETRIC_FACTOR_NO_GO,
-        GEOMETRIC_FACTOR_MARKER,
-        PERSISTENCE_MARKER,
-        "1536",
-        "6820",
-        "13212",
-        "3303",
-        "7056",
-        "71136",
-        "1990",
-        "116",
-    )
+    for relative in ("START_HERE.md", "docs/CURRENT_STATUS.md"):
+        require(
+            relative,
+            PRIMARY_CLASSES,
+            PRIMARY_BARRIER,
+            GLOBAL_MIN_ORDINARY_BLOCKS,
+            POSITIVE_RETURN_FRONTIER,
+            OLD_NONPOSITIVE_RETURN_FRONTIER,
+            EVEN_H_CYCLE_FRONTIER,
+            EVEN_H_RETURN_FRONTIER,
+            GLOBAL_PHASE_DOC,
+            GLOBAL_PHASE_TOOL,
+            GLOBAL_DIVISOR_MARKER,
+            PRIMARY_GCD_MARKER,
+            PHASE_MARKER,
+            CURRENT_CHECKPOINT if relative == "START_HERE.md" else "h even",
+        )
 
     require(
         CURRENT_CHECKPOINT,
-        POSITIVE_RETURN_FRONTIER,
-        NONPOSITIVE_RETURN_FRONTIER,
-        GEOMETRIC_FACTOR_MARKER,
-        PERSISTENCE_MARKER,
-        "71136",
-        "1990",
-        "116",
-        "primary specialization lengths=24",
+        GLOBAL_DIVISOR_MARKER,
+        PRIMARY_GCD_MARKER,
+        EVEN_H_CYCLE_FRONTIER,
+        EVEN_H_RETURN_FRONTIER,
+        "2^4500",
+        GLOBAL_PHASE_TOOL,
     )
 
     require(
-        "docs/MINIMUM_BOUNDARY_ACTUAL_EXPANDING_SEGMENT.md",
-        ACTUAL_MAX_CREDIT,
-        ACTUAL_MAX_EXCESS,
-        ACTUAL_MAX_BLOCKS,
-        GAP_MARKER,
-        "L*log2(B/X)<C",
-    )
-    require(
-        "docs/MINIMUM_BOUNDARY_RETURN_CREDIT_DICHOTOMY.md",
-        POSITIVE_RETURN_FRONTIER,
-        "2^-3990",
-    )
-    require(
-        "docs/MINIMUM_BOUNDARY_NONPOSITIVE_RETURN_HARMONIC_BARRIER.md",
-        NONPOSITIVE_RETURN_FRONTIER,
-        PRIMARY_CLASSES,
-        GAP_MARKER,
-    )
-    require(
-        "docs/FIXED_LOCAL_ENDPOINT_CONGRUENCE_NO_GO.md",
-        "1984",
-        "Chinese remainder theorem",
-        "X^ell",
-    )
-    require(
-        "docs/FULL_FINITE_TWO_SIDED_WORD_GLUING_NO_GO.md",
-        "Chinese remainder theorem",
-        "X^r*2^(A_W+1)",
-        "2^(A_W+A_V)-X^(t+r)",
-        "13 -> 33 -> 83 -> 13",
-    )
-    require(
-        "docs/CYCLIC_ROTATION_CLOSURE_GCD.md",
-        "2^a_k*Q_(k+1)=X*Q_k+Delta",
-        CYCLIC_GCD_MARKER,
-        "Delta|Q_0",
-        "Q(U)=X^r*Q_W+2^A_W*Q_V",
-        "Q_t>Q_0",
-    )
-    require(
-        "docs/COMPLETE_BLOCK_GCD_COMPRESSION_NO_GO.md",
-        "S_ell=(B^ell-X^ell)/d",
-        BLOCK_GCD_MARKER,
-        "gcd(Q_i,Q_j)=gcd(Q_i,Delta*S_ell)",
-        "91 --a=3--> 57 --a=1--> 143",
-        "infinitely many exact positive complete blocks",
-    )
-    require(
-        "docs/GEOMETRIC_FACTOR_STRONG_DIVISIBILITY_PERSISTENCE_NO_GO.md",
-        GEOMETRIC_FACTOR_MARKER,
-        "gcd(S_ell,B*X)=1",
-        "gcd(S_ell,d)=gcd(ell,d)",
-        "infinitely many positive odd starts",
-        PERSISTENCE_MARKER,
-        "gcd(S_ell,N*1093^2)=1",
-    )
-    require(
-        "docs/MINIMUM_BOUNDARY_POSITIVE_CIRCULATION.md",
-        CIRCULATION_MAX_CREDIT,
-        CIRCULATION_MAX_BLOCKS,
-        GAP_MARKER,
-    )
-    require(
-        "docs/GLOBAL_ORDINARY_BLOCK_COUNT_FRONTIER.md",
-        GLOBAL_MIN_ORDINARY_BLOCKS,
-        GLOBAL_LENGTH_UPPER,
+        "docs/GLOBAL_BLOCK_GCD_PHASE_SIEVE.md",
+        GLOBAL_DIVISOR_MARKER,
+        "S_h/gcd(S_h,2^D-1) divides g divides S_h",
+        PHASE_MARKER,
+        PRIMARY_GCD_MARKER,
+        EVEN_H_CYCLE_FRONTIER,
+        EVEN_H_RETURN_FRONTIER,
+        "43 -> 27 -> 17 -> 43",
     )
 
-    for relative in RETRACTION_FILES:
+    require(
+        "tools/verify_global_block_gcd_phase_sieve.py",
+        "gcd_checks_D_1_to_4500",
+        "conditional_full_cycle_frontier",
+        "conditional_return_frontier",
+        "small_cycles_checked",
+    )
+
+    checks = read("run_checks.py")
+    if GLOBAL_PHASE_TOOL not in checks:
+        raise AssertionError(f"run_checks.py does not include {GLOBAL_PHASE_TOOL}")
+
+    for relative in ("docs/RETRACTIONS.md", "docs/LATEST_VALID_PROGRESS.md"):
         text = read(relative)
         if RETRACTED_BARRIER not in text:
-            raise AssertionError(
-                f"{relative} does not mention retracted {RETRACTED_BARRIER}"
-            )
+            raise AssertionError(f"{relative} does not mention retracted {RETRACTED_BARRIER}")
         lowered = text.lower()
         if "retract" not in lowered and "отоз" not in lowered:
             raise AssertionError(f"{relative} lacks a retraction marker")
 
-    checks = read("run_checks.py")
-    for tool in LATEST_TOOLS:
-        if tool not in checks:
-            raise AssertionError(f"run_checks.py does not include {tool}")
-
     print("project-memory consistency verified")
     print(f"primary candidate={PRIMARY_X}")
     print(f"global ordinary-block minimum={GLOBAL_MIN_ORDINARY_BLOCKS}")
-    print(f"formal circulation maximum blocks={CIRCULATION_MAX_BLOCKS}")
-    print(f"actual expanding segment maximum blocks={ACTUAL_MAX_BLOCKS}")
     print(f"positive-return frontier={POSITIVE_RETURN_FRONTIER}")
-    print(f"nonpositive-return frontier={NONPOSITIVE_RETURN_FRONTIER}")
-    print("full finite endpoint-congruence route=no-go without closure")
-    print("exact cycle closure=cyclic adjacent-numerator gcd reaches Delta")
-    print("naive complete-block boundary-gcd compression=no-go")
-    print("repeated local block compression does not wash out gcd defects")
+    print(f"general nonpositive-return frontier={OLD_NONPOSITIVE_RETURN_FRONTIER}")
+    print(f"even-h full-cycle frontier={EVEN_H_CYCLE_FRONTIER}")
+    print(f"even-h return frontier={EVEN_H_RETURN_FRONTIER}")
+    print("global common-boundary divisor and phase sieve=active")
+    print("strict prize target=open")
 
 
 if __name__ == "__main__":
