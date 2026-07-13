@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check that durable project-memory files agree on the current frontier."""
+"""Check that compact durable project-memory files agree on the frontier."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -11,7 +11,7 @@ PRIMARY_CLASSES = "16562000"
 PRIMARY_BARRIER = "10^1201"
 GLOBAL_MIN_ORDINARY_BLOCKS = "245833"
 POSITIVE_RETURN_FRONTIER = "2^3990"
-OLD_NONPOSITIVE_RETURN_FRONTIER = "2^(2^974)"
+GENERAL_NONPOSITIVE_RETURN_FRONTIER = "2^(2^974)"
 EVEN_H_CYCLE_FRONTIER = "2^(2^4979)"
 EVEN_H_RETURN_FRONTIER = "2^(2^4978)"
 GLOBAL_PHASE_DOC = "GLOBAL_BLOCK_GCD_PHASE_SIEVE"
@@ -19,17 +19,20 @@ GLOBAL_PHASE_TOOL = "verify_global_block_gcd_phase_sieve.py"
 GLOBAL_DIVISOR_MARKER = "S_h/g divides 2^D-1"
 PRIMARY_GCD_MARKER = "gcd(S_2,2^D-1)=1"
 PHASE_MARKER = "n_t==B^(-j)*S_j (mod g)"
+CORRECT_CYCLE_RELATION = "2^A*product_i(n_i)==1 (mod X)"
 RETRACTED_BARRIER = "10^37"
 
-CURRENT_CHECKPOINT = (
-    "docs/SESSION_CHECKPOINT_2026-07-13_"
-    "GLOBAL_BLOCK_GCD_PHASE_SIEVE.md"
+CORE_MEMORY_FILES = (
+    "START_HERE.md",
+    "docs/WORKING_PROTOCOL.md",
+    "docs/CURRENT_STATUS.md",
+    "docs/RETRACTIONS.md",
 )
 
-CURRENT_MEMORY_FILES = (
-    "START_HERE.md",
-    "docs/CURRENT_STATUS.md",
-    CURRENT_CHECKPOINT,
+HISTORICAL_FILES = (
+    "docs/SESSION_CHECKPOINT_2026-07-13_GLOBAL_BLOCK_GCD_PHASE_SIEVE.md",
+    "docs/LATEST_VALID_PROGRESS.md",
+    "docs/archive/LEGACY_LATEST_VALID_PROGRESS_PRE_NEAR_POWER.md",
 )
 
 CURRENT_STRUCTURE_FILES = (
@@ -71,38 +74,57 @@ def require(relative: str, *markers: str) -> None:
 
 
 def check() -> None:
-    for relative in CURRENT_STRUCTURE_FILES:
+    for relative in CORE_MEMORY_FILES + HISTORICAL_FILES + CURRENT_STRUCTURE_FILES:
         read(relative)
 
-    for relative in CURRENT_MEMORY_FILES:
-        require(relative, PRIMARY_X)
-
-    for relative in ("START_HERE.md", "docs/CURRENT_STATUS.md"):
-        require(
-            relative,
-            PRIMARY_CLASSES,
-            PRIMARY_BARRIER,
-            GLOBAL_MIN_ORDINARY_BLOCKS,
-            POSITIVE_RETURN_FRONTIER,
-            OLD_NONPOSITIVE_RETURN_FRONTIER,
-            EVEN_H_CYCLE_FRONTIER,
-            EVEN_H_RETURN_FRONTIER,
-            GLOBAL_PHASE_DOC,
-            GLOBAL_PHASE_TOOL,
-            GLOBAL_DIVISOR_MARKER,
-            PRIMARY_GCD_MARKER,
-            PHASE_MARKER,
-            CURRENT_CHECKPOINT if relative == "START_HERE.md" else "h even",
-        )
-
     require(
-        CURRENT_CHECKPOINT,
+        "START_HERE.md",
+        "docs/WORKING_PROTOCOL.md",
+        "docs/CURRENT_STATUS.md",
+        PRIMARY_X,
+        "G3 all nontrivial positive cycles excluded: open",
+        POSITIVE_RETURN_FRONTIER,
+        GENERAL_NONPOSITIVE_RETURN_FRONTIER,
+        EVEN_H_RETURN_FRONTIER,
+        GLOBAL_PHASE_DOC,
+        GLOBAL_PHASE_TOOL,
         GLOBAL_DIVISOR_MARKER,
         PRIMARY_GCD_MARKER,
+        PHASE_MARKER,
+        "odd h>=3",
+        CORRECT_CYCLE_RELATION,
+    )
+
+    require(
+        "docs/WORKING_PROTOCOL.md",
+        "START_HERE.md",
+        "docs/CURRENT_STATUS.md",
+        "one primary proof target",
+        "at most two active exploratory directions",
+        "Run the new standalone checker first",
+        "Prefer one coherent result commit per sprint",
+        "docs/LATEST_VALID_PROGRESS.md",
+    )
+
+    require(
+        "docs/CURRENT_STATUS.md",
+        PRIMARY_X,
+        PRIMARY_CLASSES,
+        PRIMARY_BARRIER,
+        GLOBAL_MIN_ORDINARY_BLOCKS,
+        POSITIVE_RETURN_FRONTIER,
+        GENERAL_NONPOSITIVE_RETURN_FRONTIER,
         EVEN_H_CYCLE_FRONTIER,
         EVEN_H_RETURN_FRONTIER,
-        "2^4500",
+        GLOBAL_PHASE_DOC,
         GLOBAL_PHASE_TOOL,
+        GLOBAL_DIVISOR_MARKER,
+        "S_h/gcd(S_h,2^D-1) divides g divides S_h",
+        PRIMARY_GCD_MARKER,
+        PHASE_MARKER,
+        "43 -> 27 -> 17 -> 43",
+        "2^4500",
+        CORRECT_CYCLE_RELATION,
     )
 
     require(
@@ -128,19 +150,33 @@ def check() -> None:
     if GLOBAL_PHASE_TOOL not in checks:
         raise AssertionError(f"run_checks.py does not include {GLOBAL_PHASE_TOOL}")
 
-    for relative in ("docs/RETRACTIONS.md", "docs/LATEST_VALID_PROGRESS.md"):
-        text = read(relative)
-        if RETRACTED_BARRIER not in text:
-            raise AssertionError(f"{relative} does not mention retracted {RETRACTED_BARRIER}")
-        lowered = text.lower()
-        if "retract" not in lowered and "отоз" not in lowered:
-            raise AssertionError(f"{relative} lacks a retraction marker")
+    require(
+        "docs/RETRACTIONS.md",
+        RETRACTED_BARRIER,
+        CORRECT_CYCLE_RELATION,
+        "least-source endpoint identification",
+    )
 
-    print("project-memory consistency verified")
+    require(
+        "docs/LATEST_VALID_PROGRESS.md",
+        "docs/CURRENT_STATUS.md",
+        "not the current source",
+        RETRACTED_BARRIER,
+        "docs/archive/LEGACY_LATEST_VALID_PROGRESS_PRE_NEAR_POWER.md",
+    )
+
+    require(
+        "docs/archive/LEGACY_LATEST_VALID_PROGRESS_PRE_NEAR_POWER.md",
+        "104350542602662257699",
+        "older candidate",
+    )
+
+    print("compact project-memory consistency verified")
+    print("startup files=3")
     print(f"primary candidate={PRIMARY_X}")
     print(f"global ordinary-block minimum={GLOBAL_MIN_ORDINARY_BLOCKS}")
     print(f"positive-return frontier={POSITIVE_RETURN_FRONTIER}")
-    print(f"general nonpositive-return frontier={OLD_NONPOSITIVE_RETURN_FRONTIER}")
+    print(f"general nonpositive-return frontier={GENERAL_NONPOSITIVE_RETURN_FRONTIER}")
     print(f"even-h full-cycle frontier={EVEN_H_CYCLE_FRONTIER}")
     print(f"even-h return frontier={EVEN_H_RETURN_FRONTIER}")
     print("global common-boundary divisor and phase sieve=active")
