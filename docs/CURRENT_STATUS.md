@@ -51,14 +51,15 @@ least ordinary boundary `x` to the next ordinary boundary `y>x` with
 1<=C<=4500,
 exceptional excess<=4499,
 complete blocks<=4500,
-L*log2(B/X)<C.
+L_exit*log2(B/X)<C,
+L_exit<2^4006.
 ```
 
 The remaining actual return satisfies
 
 ```text
-R>=1 => Lr>2^3990,
-R<=0 => Lr>2^(2^974).
+R>=1 => L_return>2^3990,
+R<=0 => L_return>2^(2^974).
 ```
 
 Sources:
@@ -155,46 +156,88 @@ docs/GLOBAL_BLOCK_GCD_PHASE_SIEVE.md
 tools/verify_global_block_gcd_phase_sieve.py
 ```
 
-## Nonpositive-return specialization
+## Nonpositive-return specialization: all h>=2
 
-On `R<=0`, total credit satisfies `1<=D<=4500`. For the primary candidate,
+On `R<=0`, total credit satisfies `1<=D<=4500`.
+
+### Even h
+
+The exact certificate proves
 
 ```text
 gcd(S_2,2^D-1)=1 for every 1<=D<=4500,
 S_2=B+X.
 ```
 
-If `h` is even, then `S_2|g`. The phase sieve reduces the entire cycle to two odd
-residue classes modulo `2*S_2`. Exact harmonic packing and the retained
-continued-fraction gap prove
+If `h` is even, then `S_2|g`. The phase sieve reduces the cycle to two odd
+residue classes modulo `2*S_2`. Exact harmonic packing gives
 
 ```text
 full cycle p>2^(2^4979),
-actual return Lr>2^(2^4978),
-L_exit<2^4006.
+actual return L_return>2^(2^4978).
 ```
 
-This improves the general `2^(2^974)` nonpositive frontier on the even-`h`
-subcase, but does not exclude that subcase.
+### Odd h>=3
 
-For every nonpositive-return cycle with `h>=2`, all complete-block boundaries
-share a divisor greater than `2^4500`, coprime to
+The new odd-phase theorem uses
+
+```text
+S_h>h*X^(h-1)
+```
+
+and the global quotient divisibility to obtain
+
+```text
+g/h>X^2/2^4500.
+```
+
+The actual exit contains a complete block and has length `<2^4006`, so `h<2^4006`.
+For each phase, its cycle states are spaced by at least `2*g`; the `h` phase
+minima are distinct odd values above `N`. This gives
+
+```text
+sum_cycle 1/n<2^11+h*H_(p/h-1)/(2*g).
+```
+
+Under `p<=2^(2^4979)`, the right side is less than
+
+```text
+2^11+2^9479/X^2<X/2^4023,
+```
+
+contradicting the retained continued-fraction gap and product identity. Hence the
+same frontier holds:
+
+```text
+full cycle p>2^(2^4979),
+actual return L_return>2^(2^4978).
+```
+
+Sources:
+
+```text
+docs/ODD_H_PHASE_HARMONIC_BARRIER.md
+tools/verify_odd_h_phase_harmonic_barrier.py
+```
+
+Consequently every nonpositive-return cycle with `h>=2` has the above
+full-cycle and return-length lower bounds. In every such cycle all complete-block
+boundaries share a divisor greater than `2^4500`, coprime to
 `(2^500-1)*1093^2`.
 
 ## Surviving branches
 
 ```text
-positive credit: Lr>2^3990;
-nonpositive, h even: Lr>2^(2^4978), still not excluded;
-nonpositive, odd h>=3: large phase-divisor sieve remains to exploit;
-nonpositive, h=1: no common geometric divisor is forced.
+positive credit: L_return>2^3990;
+nonpositive, h>=2: L_return>2^(2^4978), still not excluded;
+nonpositive, h=1: only the general L_return>2^(2^974) barrier applies.
 ```
 
-Decisive next target: derive a harmonic or adjacent-numerator gcd contradiction
-from the odd-`h` phase classes. Secondary targets are forcing the actual return
-into `h=1` or another impossible length pattern, and excluding positive credit.
-A different candidate or a direct divergence invariant remains allowed if these
-routes stall.
+The decisive next target is to prove that the actual minimum-boundary return
+cannot have `h=1`, or to obtain a length-independent adjacent-numerator gcd
+contradiction for `h>=2`. Excluding the positive-credit return is the secondary
+route. A different candidate or a direct divergence invariant remains allowed if
+these routes stall.
 
 ## Critical corrections
 
@@ -210,13 +253,15 @@ by a cycle. Finite computation is not divergence. Full history is in
 
 ## Verification state
 
-The standalone checker
+The standalone checkers
 
 ```text
 python tools/verify_global_block_gcd_phase_sieve.py
+python tools/verify_odd_h_phase_harmonic_barrier.py
 ```
 
-passed all `4500` primary gcd cases, exact harmonic and exit inequalities, three
-independently generated small cycles, and the `X=5` regression. It is included in
-`run_checks.py`. A complete repository-wide run was not executed in the research
-chat environment.
+verify the global divisor and phase identities, all `4500` primary even-`h` gcd
+cases, the two-phase harmonic inequality, the odd-`h` divisor-per-phase estimate,
+the exact odd-phase contradiction, `80` phase-spacing regressions, and the
+`X=5` cycle regression. The new odd-`h` standalone checker passed in the research
+environment. A complete repository-wide run was not executed there.
