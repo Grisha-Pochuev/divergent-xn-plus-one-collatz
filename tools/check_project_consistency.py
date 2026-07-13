@@ -14,10 +14,16 @@ POSITIVE_RETURN_FRONTIER = "2^3990"
 GENERAL_NONPOSITIVE_RETURN_FRONTIER = "2^(2^974)"
 H_GE_2_CYCLE_FRONTIER = "2^(2^4979)"
 H_GE_2_RETURN_FRONTIER = "2^(2^4978)"
+GENERAL_BLOCK_EXPLOSION = "2^(2^973-7)"
+H_GE_2_BLOCK_EXPLOSION = "2^(2^4978-7)"
+GENERAL_TYPE_REPETITION = "2^(2^973-20)"
+H_GE_2_TYPE_REPETITION = "2^(2^4978-20)"
 GLOBAL_PHASE_DOC = "GLOBAL_BLOCK_GCD_PHASE_SIEVE"
 GLOBAL_PHASE_TOOL = "verify_global_block_gcd_phase_sieve.py"
 ODD_H_DOC = "ODD_H_PHASE_HARMONIC_BARRIER"
 ODD_H_TOOL = "verify_odd_h_phase_harmonic_barrier.py"
+BLOCK_EXPLOSION_DOC = "NONPOSITIVE_RETURN_ORDINARY_BLOCK_EXPLOSION"
+BLOCK_EXPLOSION_TOOL = "verify_nonpositive_return_ordinary_block_explosion.py"
 GLOBAL_DIVISOR_MARKER = "S_h/g divides 2^D-1"
 PRIMARY_GCD_MARKER = "gcd(S_2,2^D-1)=1"
 PHASE_MARKER = "n_t==B^(-j)*S_j (mod g)"
@@ -61,6 +67,8 @@ CURRENT_STRUCTURE_FILES = (
     "tools/verify_global_block_gcd_phase_sieve.py",
     "docs/ODD_H_PHASE_HARMONIC_BARRIER.md",
     "tools/verify_odd_h_phase_harmonic_barrier.py",
+    "docs/NONPOSITIVE_RETURN_ORDINARY_BLOCK_EXPLOSION.md",
+    "tools/verify_nonpositive_return_ordinary_block_explosion.py",
 )
 
 
@@ -91,10 +99,16 @@ def check() -> None:
         POSITIVE_RETURN_FRONTIER,
         GENERAL_NONPOSITIVE_RETURN_FRONTIER,
         H_GE_2_RETURN_FRONTIER,
+        GENERAL_BLOCK_EXPLOSION,
+        H_GE_2_BLOCK_EXPLOSION,
+        GENERAL_TYPE_REPETITION,
+        H_GE_2_TYPE_REPETITION,
         GLOBAL_PHASE_DOC,
         GLOBAL_PHASE_TOOL,
         ODD_H_DOC,
         ODD_H_TOOL,
+        BLOCK_EXPLOSION_DOC,
+        BLOCK_EXPLOSION_TOOL,
         GLOBAL_DIVISOR_MARKER,
         PRIMARY_GCD_MARKER,
         PHASE_MARKER,
@@ -124,10 +138,16 @@ def check() -> None:
         GENERAL_NONPOSITIVE_RETURN_FRONTIER,
         H_GE_2_CYCLE_FRONTIER,
         H_GE_2_RETURN_FRONTIER,
+        GENERAL_BLOCK_EXPLOSION,
+        H_GE_2_BLOCK_EXPLOSION,
+        GENERAL_TYPE_REPETITION,
+        H_GE_2_TYPE_REPETITION,
         GLOBAL_PHASE_DOC,
         GLOBAL_PHASE_TOOL,
         ODD_H_DOC,
         ODD_H_TOOL,
+        BLOCK_EXPLOSION_DOC,
+        BLOCK_EXPLOSION_TOOL,
         GLOBAL_DIVISOR_MARKER,
         "S_h/gcd(S_h,2^D-1) divides g divides S_h",
         PRIMARY_GCD_MARKER,
@@ -174,8 +194,28 @@ def check() -> None:
         "strict_prize_solution",
     )
 
+    require(
+        "docs/NONPOSITIVE_RETURN_ORDINARY_BLOCK_EXPLOSION.md",
+        "Delta_D(p)>2^(m*p-D-4024)",
+        "p>2^(2^K)  =>  J>2^(2^(K-1)-7)",
+        GENERAL_BLOCK_EXPLOSION,
+        H_GE_2_BLOCK_EXPLOSION,
+        GENERAL_TYPE_REPETITION,
+        H_GE_2_TYPE_REPETITION,
+        "d*n==2^e (mod X)",
+    )
+
+    require(
+        "tools/verify_nonpositive_return_ordinary_block_explosion.py",
+        "verify_tower_case(974)",
+        "verify_tower_case(4979)",
+        "forced_ordinary_blocks",
+        "forced_repetition_one_type",
+        "strict_prize_solution",
+    )
+
     checks = read("run_checks.py")
-    for tool in (GLOBAL_PHASE_TOOL, ODD_H_TOOL):
+    for tool in (GLOBAL_PHASE_TOOL, ODD_H_TOOL, BLOCK_EXPLOSION_TOOL):
         if tool not in checks:
             raise AssertionError(f"run_checks.py does not include {tool}")
 
@@ -208,8 +248,11 @@ def check() -> None:
     print(f"general nonpositive-return frontier={GENERAL_NONPOSITIVE_RETURN_FRONTIER}")
     print(f"h>=2 full-cycle frontier={H_GE_2_CYCLE_FRONTIER}")
     print(f"h>=2 return frontier={H_GE_2_RETURN_FRONTIER}")
+    print(f"general ordinary-block explosion={GENERAL_BLOCK_EXPLOSION}")
+    print(f"h>=2 ordinary-block explosion={H_GE_2_BLOCK_EXPLOSION}")
     print("global common-boundary divisor and phase sieve=active")
     print("odd-h harmonic barrier=active")
+    print("nonpositive ordinary-block explosion=active")
     print("strict prize target=open")
 
 
