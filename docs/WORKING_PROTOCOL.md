@@ -1,216 +1,172 @@
 # Working protocol
 
-This file contains operational rules for future research sessions. It is meant
-to reduce chat drift, duplicated work, and tool overhead without forbidding
-useful methods.
+Operational rules for reliable web-chat research without unnecessary context or
+tool overhead.
 
-## 1. Session startup
+## 1. Startup and source roles
 
-At the beginning of a new session read, in this order:
+At the beginning of a new chat read, in order:
 
 ```text
 START_HERE.md
 docs/WORKING_PROTOCOL.md
 docs/CURRENT_STATUS.md
-docs/RETRACTIONS.md
-the single latest checkpoint named in START_HERE.md
 ```
 
-Read `docs/VALIDATED_RESULTS.md` and older checkpoints only when a concrete
-argument needs them. Do not load the whole repository into context by default.
+Read each once unless it changes. Do not load the whole repository by default.
+Open theorem files, old checkpoints, `docs/RETRACTIONS.md`, or archive files only
+when a concrete argument needs them.
 
-Within one chat, do not reread an unchanged startup file. Do not fetch the same
-file or commit through several tools unless needed to resolve an inconsistency.
+Durable source hierarchy:
 
-GitHub files and committed certificates are the durable source of truth. Chat
-memory is secondary.
+1. committed theorem documents and exact checkers;
+2. `docs/CURRENT_STATUS.md` for the current frontier;
+3. `START_HERE.md` for routing and the decisive obstruction;
+4. chat summaries only as a convenience.
+
+If these disagree, inspect the latest commits and repair the durable files before
+continuing research.
 
 ## 2. Research focus
 
-Use:
+Maintain:
 
 - one primary proof target;
 - at most two active exploratory directions;
-- one clearly stated next obstruction for each active direction.
+- one explicit obstruction for each active direction.
 
-A third idea may be screened briefly, but it must either be discarded quickly or
-replace one of the two active exploratory directions. Do not keep three or more
-full branches active in parallel.
+A third idea may be screened briefly, but must be discarded or replace an active
+direction. Re-rank routes when a new theorem changes their prospects. Do not stay
+on a branch merely because it was previously called a priority.
 
-Parallel conceptual work is allowed. Methods and lemmas may be transferred
-between branches, but conclusions may not be transferred without a proof that
-the hypotheses match.
+A request to continue authorizes one substantial sprint. Select the strongest
+available route and work until a checked result, a rigorous no-go, or a precisely
+located obstruction is obtained.
 
-Do not stay on an old priority merely because it was previously called
-`Priority 1`. Re-rank branches when a new theorem changes their prospects.
+## 3. Claim discipline
 
-## 3. Status labels
+Internally classify every substantial claim as:
 
-Every substantial claim must be labeled internally as one of:
+- `theorem`: complete written proof;
+- `certificate`: exact finite computation;
+- `evidence`: experiment or heuristic;
+- `refutation`: explicit flaw or counterexample;
+- `open target`: exact missing lemma.
 
-- **theorem**: a complete argument is written;
-- **certificate**: exact computation verifies a finite statement;
-- **evidence**: experiment or heuristic only;
-- **refutation**: an explicit flaw or counterexample closes a claim;
-- **open target**: a precisely stated missing lemma.
+Never promote evidence to a theorem. In particular, none of these alone proves
+divergence:
 
-Never promote evidence to a theorem. In particular, none of the following is a
-proof of divergence by itself:
-
-- a very large finite trajectory;
+- a very long or very large finite trajectory;
 - positive heuristic drift;
 - a finite cycle barrier;
 - arbitrarily long finite growing words;
 - avoidance of `1`;
-- a compatible 2-adic construction without one ordinary positive orbit.
+- a compatible 2-adic construction without an ordinary positive orbit.
 
 ## 4. Computation policy
 
-Short symbolic, modular, and trajectory experiments are allowed when they help
-form or test a precise conjecture.
+Short symbolic, modular, trajectory, SAT/SMT, word, and residue experiments are
+allowed when they test a precise conjecture.
 
-Before a large computation, write down:
+Before a large computation record:
 
 1. the exact mathematical question;
-2. what output would count as success or refutation;
+2. success and refutation conditions;
 3. the stopping rule;
-4. how the result would contribute to an infinite proof;
-5. what reproducible artifact will be saved.
+4. how the result could contribute to an infinite proof;
+5. the reproducible artifact to save.
 
-Do not enlarge cutoffs merely to obtain a larger record. A larger finite barrier
-counts as progress only when it closes a stated finite frontier or supports a new
-global lemma.
+Do not enlarge a cutoff merely to improve a record. A finite computation counts
+as progress only when it closes a stated finite frontier or supports a new global
+lemma.
 
-Finite-state, SAT, word-search, and residue-search methods are not banned in
-general. They may be used for exploration, exact sublemmas, or certificates.
-What is ruled out is only a proof form already contradicted by a no-go theorem,
-such as a fixed finite-state telescoping potential with a universal positive
-mean on all zero-layer transitions.
-
-## 5. Proof and verification policy
+## 5. Proof and verification
 
 For each new theorem:
 
 1. state hypotheses and conclusion exactly;
-2. test it against known small cycles or a regression example;
+2. test known small cycles or a regression example;
 3. add an exact checker when practical;
-4. record limitations explicitly;
+4. state limitations;
 5. connect it to the strict prize target.
 
-Run the new standalone checker first. Run the complete `run_checks.py` suite only
-before a major public milestone, after shared infrastructure changes, when a new
-result could affect many older claims, or when the environment can execute it
-reliably. Do not spend a web-chat research sprint repeatedly rerunning unchanged
-checks.
+Run the new standalone checker first. Run the full `run_checks.py` suite only
+before a major public milestone, after shared-infrastructure changes, when a new
+result may affect many older claims, or in an environment that can execute it
+reliably. Never claim a repository-wide run unless it completed.
 
-If only standalone checks were run, say so. Do not claim a repository-wide run
-unless it actually completed.
+When literature is used, independently audit the exact lemma needed. Publication
+alone does not make a claim a trusted dependency.
 
-When external literature is used, audit the exact lemma needed. A published
-claim is not a dependency until its relevant proof has been independently
-checked.
+## 6. Commits and durable memory
 
-## 6. Commit policy
+Prefer one coherent result commit per sprint when theorem, checker, and status
+form one result. Separate commits are appropriate for independently reusable
+results, retractions, regression fixes, or major strategy changes. Sequential
+file-update commits caused by the GitHub tool are acceptable; identify the final
+head clearly.
 
-Default to one coherent commit for one research sprint when the theorem, its
-checker, and status updates form one result.
+Update:
 
-Use separate logical commits when:
+- theorem/checker files for detailed mathematics;
+- `docs/CURRENT_STATUS.md` after a major mathematical result;
+- `START_HERE.md` only when the candidate, proof gates, decisive obstruction, or
+  startup routing changes;
+- `docs/RETRACTIONS.md` when a committed argument is invalidated.
 
-- results are independently reusable;
-- an error, retraction, or regression fix must remain auditable;
-- a major strategy change should be isolated;
-- the available GitHub tool can only update files sequentially.
+Create a session checkpoint only when a handoff cannot be represented adequately
+in `START_HERE.md` and `CURRENT_STATUS.md`, or when an urgent retraction must be
+seen immediately. Checkpoints are historical after their contents are absorbed.
 
-When tool limitations produce a short sequence of commits, keep the sequence
-coherent and end with one clearly identified head commit. Do not create a
-separate commit for every wording edit or minor checker adjustment.
+Do not use `docs/LATEST_VALID_PROGRESS.md` as current memory; it is only a
+compatibility pointer.
 
-After a major mathematical result update `CURRENT_STATUS.md`. Update
-`START_HERE.md` only when the primary branch, decisive obstruction, startup
-sequence, or critical safety rule changes.
-
-## 7. Progress reporting
-
-Do not report one precise proof percentage unless a weighting scheme was fixed
-in advance.
-
-Report separately:
-
-- strict proof gates closed or open;
-- exact finite frontiers;
-- reusable infinite-family structure;
-- the single decisive missing theorem.
-
-A subjective research-maturity estimate may be given only if clearly labeled as
-subjective and not as the probability that the proof is nearly complete.
-
-## 8. Handling errors and dead ends
+## 7. Errors and dead ends
 
 When an error is found:
 
-1. identify the false premise;
+1. identify the exact false premise;
 2. give a small counterexample when possible;
 3. add or update a regression checker;
 4. remove the invalid conclusion from current status files;
-5. record the history in `docs/RETRACTIONS.md`;
+5. record the retraction without deleting audit history;
 6. restart from the last valid statement.
 
-Do not delete audit history.
+A failed method must not be banned more broadly than the proof of failure
+supports.
 
-A failed method should not be banned more broadly than the proof of failure
-supports. Record exactly which claim or proof architecture is impossible and
-which nearby uses remain allowed.
-
-## 9. Recovery after interruption
+## 8. Interruption recovery
 
 After a lag, tool failure, or new chat:
 
-1. inspect the latest commits;
-2. read the startup files from Section 1;
-3. verify the current primary candidate and missing theorem;
-4. do not repeat a computation unless its artifact or result is absent;
-5. continue from the latest committed checkpoint, not from an uncertain chat
-   recollection.
+1. inspect the latest confirmed head;
+2. read the three startup files;
+3. verify the primary candidate and decisive obstruction;
+4. reuse committed artifacts instead of repeating computations;
+5. continue from the last confirmed write or fetched SHA.
 
-After a tool failure inside the same chat, resume from the last confirmed write
-or fetched SHA. Do not restart the entire research setup unless state is actually
-uncertain.
+Do not restart the entire setup inside the same chat unless repository state is
+actually uncertain.
 
-## 10. End-of-session checkpoint
+## 9. Reporting
 
-Create or replace a dedicated session checkpoint only when at least one of these
-changes:
+Report separately:
 
-- the primary candidate or proof gate;
-- the main mathematical frontier;
-- the decisive obstruction or next target;
-- a retraction that future sessions must see immediately;
-- the work must be handed off before `START_HERE.md` and `CURRENT_STATUS.md` can
-  be made sufficient.
-
-If `START_HERE.md` and `CURRENT_STATUS.md` already record the result and next
-obstruction, a separate checkpoint is optional.
-
-When a checkpoint is needed, keep it concise and record:
-
-- strict results proved;
+- proof gates closed and open;
+- exact finite frontiers;
+- reusable infinite-family structure;
+- the decisive missing theorem;
 - checks actually run;
-- refutations discovered;
 - files and commits created;
-- the exact next target;
-- any environment limitation.
+- environment limitations.
 
-Link to detailed theorem files instead of copying them.
+A percentage may be given only as a clearly subjective research-maturity estimate,
+not as a probability of imminent solution.
 
-## 11. Web-chat efficiency
+## 10. Web-chat efficiency
 
-In a web-chat research sprint:
-
-- prefer targeted file reads and standalone checks;
-- avoid repeated tool calls that return the same information;
-- save a rigorous partial theorem or strict no-go as soon as it is stable;
-- keep detailed proofs in repository files and chat updates short;
-- do not trade mathematical verification for speed;
-- if the current workflow is stable, change it only for a concrete observed
-  bottleneck rather than pre-emptively adding new restrictions.
+Prefer targeted reads and standalone checks. Avoid repeated calls returning the
+same information. Save a rigorous partial result as soon as it is stable. Keep
+detailed proofs in repository files and user updates short. Do not trade
+mathematical verification for speed, and do not add new restrictions without a
+concrete bottleneck.
