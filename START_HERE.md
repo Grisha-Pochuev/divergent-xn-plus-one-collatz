@@ -84,40 +84,39 @@ S_h/g divides 2^D-1,
 n_t==B^(-j)*S_j (mod g),  j=t mod h.
 ```
 
-On the nonpositive-return branch, the exact certificate
+On the nonpositive-return branch, `1<=D<=4500`.
+
+- `h` even: `gcd(S_2,2^D-1)=1` forces the two-phase sieve.
+- `h` odd and `h>=3`: `S_h>h*X^(h-1)` gives
+  `g/h>X^2/2^4500`; phase-wise harmonic packing then gives the same frontier.
+
+Therefore every nonpositive-return cycle with `h>=2` satisfies
 
 ```text
-gcd(S_2,2^D-1)=1 for 1<=D<=4500
+full cycle p>2^(2^4979),
+actual return Lr>2^(2^4978).
 ```
 
-gives
-
-```text
-h even => full cycle p>2^(2^4979)
-          and actual return Lr>2^(2^4978);
-h>=2   => every block boundary shares a divisor >2^4500;
-h=1    => no common geometric divisor is forced.
-```
-
-Detailed source:
+Detailed sources:
 
 ```text
 docs/GLOBAL_BLOCK_GCD_PHASE_SIEVE.md
 tools/verify_global_block_gcd_phase_sieve.py
+docs/ODD_H_PHASE_HARMONIC_BARRIER.md
+tools/verify_odd_h_phase_harmonic_barrier.py
 ```
 
 ## Surviving branches and next target
 
 ```text
 positive credit: Lr>2^3990;
-nonpositive, h even: Lr>2^(2^4978), not excluded;
-nonpositive, odd h>=3: phase-divisor sieve remains to exploit;
-nonpositive, h=1: no common geometric divisor is forced.
+nonpositive, h>=2: Lr>2^(2^4978), still not excluded;
+nonpositive, h=1: only the general Lr>2^(2^974) barrier applies.
 ```
 
-Primary next target: turn the odd-`h` phase classes into a harmonic or adjacent-
-numerator gcd contradiction. Secondary targets are forcing `h=1` into an
-impossible return pattern and excluding the positive-credit branch.
+Primary next target: prove that the actual minimum-boundary return cannot have
+`h=1`, or obtain a length-independent adjacent-numerator gcd contradiction for
+`h>=2`. Secondary target: exclude the positive-credit return branch.
 
 ## Non-negotiable corrections
 
