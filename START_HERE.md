@@ -23,7 +23,9 @@ docs/RETRACTIONS.md
 docs/SESSION_CHECKPOINT_2026-07-13_GLOBAL_BLOCK_GCD_PHASE_SIEVE.md
 ```
 
-Current `main` and committed checkers override chat summaries.
+Current `main` and committed checkers override chat summaries. Read these startup
+files once per chat unless one of them changes. Do not load the full repository
+or repeat an unchanged fetch without a concrete need.
 
 ## Research protocol
 
@@ -32,6 +34,14 @@ route, verify it, commit it, and distinguish theorem, certificate, evidence,
 refutation, and open target. Literature, exact arithmetic, symbolic methods,
 finite searches, SAT/SMT, and theorem provers are allowed. Do not enlarge a
 finite record without new information about an infinite orbit or exact closure.
+
+Keep one primary proof target and at most two active exploratory directions. A
+third idea may be screened briefly only to discard it or replace an active
+branch. Run targeted standalone checks first; reserve the full repository suite
+for major milestones, shared-infrastructure changes, or a reliable environment.
+Prefer one coherent result commit per sprint. A separate session checkpoint is
+needed only when the primary frontier, decisive obstruction, retraction, or
+handoff state changes.
 
 ## Primary candidate and proof gates
 
