@@ -179,7 +179,7 @@ actual return L_return>2^(2^4978).
 
 ### Odd h>=3
 
-The new odd-phase theorem uses
+The odd-phase theorem uses
 
 ```text
 S_h>h*X^(h-1)
@@ -225,19 +225,71 @@ full-cycle and return-length lower bounds. In every such cycle all complete-bloc
 boundaries share a divisor greater than `2^4500`, coprime to
 `(2^500-1)*1093^2`.
 
+## Nonpositive returns force ordinary-block explosion
+
+Let `J` be the number of ordinary complete blocks.  The signed block-elimination
+identities give, for each ordinary block length `L` and exceptional block length
+`k`,
+
+```text
+0<Delta_D(p)*u<J*B^(p-L+J+1),
+0<Delta_D(p)*v<J*B^(p-k+J),
+```
+
+with positive odd `u,v`.  For `1<=D<=4500`, the exact continued-fraction gap
+implies
+
+```text
+Delta_D(p)>2^(4501*p-D-4024).
+```
+
+A reusable tower argument now proves
+
+```text
+p>2^(2^K)  =>  J>2^(2^(K-1)-7),  K>=974.
+```
+
+Applying the existing cycle frontiers gives
+
+```text
+any nonpositive return:
+  J>2^(2^973-7),
+  one ordinary deficit type repeats >2^(2^973-20) times;
+
+nonpositive return with h>=2:
+  J>2^(2^4978-7),
+  one ordinary deficit type repeats >2^(2^4978-20) times.
+```
+
+All boundaries of one repeated deficit type `e` lie in the exact class
+
+```text
+d*n==2^e (mod X).
+```
+
+Sources:
+
+```text
+docs/NONPOSITIVE_RETURN_ORDINARY_BLOCK_EXPLOSION.md
+tools/verify_nonpositive_return_ordinary_block_explosion.py
+```
+
 ## Surviving branches
 
 ```text
 positive credit: L_return>2^3990;
-nonpositive, h>=2: L_return>2^(2^4978), still not excluded;
-nonpositive, h=1: only the general L_return>2^(2^974) barrier applies.
+nonpositive, h>=2:
+  L_return>2^(2^4978), J>2^(2^4978-7), still not excluded;
+nonpositive, h=1:
+  L_return>2^(2^974), J>2^(2^973-7).
 ```
 
-The decisive next target is to prove that the actual minimum-boundary return
-cannot have `h=1`, or to obtain a length-independent adjacent-numerator gcd
-contradiction for `h>=2`. Excluding the positive-credit return is the secondary
-route. A different candidate or a direct divergence invariant remains allowed if
-these routes stall.
+The decisive next target is the enormous repeated population of one ordinary
+deficit type.  Its boundaries lie in one explicit class modulo `X`; combine this
+with the `N`-adic depth ladder or an adjacent-numerator gcd identity to seek a
+cycle-length-independent correction bound. Excluding the positive-credit return
+is the secondary route. A different candidate or direct divergence invariant
+remains allowed if these routes stall.
 
 ## Critical corrections
 
@@ -258,10 +310,12 @@ The standalone checkers
 ```text
 python tools/verify_global_block_gcd_phase_sieve.py
 python tools/verify_odd_h_phase_harmonic_barrier.py
+python tools/verify_nonpositive_return_ordinary_block_explosion.py
 ```
 
 verify the global divisor and phase identities, all `4500` primary even-`h` gcd
-cases, the two-phase harmonic inequality, the odd-`h` divisor-per-phase estimate,
-the exact odd-phase contradiction, `80` phase-spacing regressions, and the
-`X=5` cycle regression. The new odd-`h` standalone checker passed in the research
-environment. A complete repository-wide run was not executed there.
+cases, both phase-harmonic contradictions, the exact continued-fraction gap for
+`1<=D<=4500`, the new block-length exponent margins, the two ordinary-block
+tower frontiers, repeated-type exponents, phase-spacing regressions, and the
+`X=5` cycle regression. The new ordinary-block standalone checker passed in the
+research environment. A complete repository-wide run was not executed there.
