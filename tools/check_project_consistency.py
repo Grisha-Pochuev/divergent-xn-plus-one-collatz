@@ -12,13 +12,16 @@ PRIMARY_BARRIER = "10^1201"
 GLOBAL_MIN_ORDINARY_BLOCKS = "245833"
 POSITIVE_RETURN_FRONTIER = "2^3990"
 GENERAL_NONPOSITIVE_RETURN_FRONTIER = "2^(2^974)"
-EVEN_H_CYCLE_FRONTIER = "2^(2^4979)"
-EVEN_H_RETURN_FRONTIER = "2^(2^4978)"
+H_GE_2_CYCLE_FRONTIER = "2^(2^4979)"
+H_GE_2_RETURN_FRONTIER = "2^(2^4978)"
 GLOBAL_PHASE_DOC = "GLOBAL_BLOCK_GCD_PHASE_SIEVE"
 GLOBAL_PHASE_TOOL = "verify_global_block_gcd_phase_sieve.py"
+ODD_H_DOC = "ODD_H_PHASE_HARMONIC_BARRIER"
+ODD_H_TOOL = "verify_odd_h_phase_harmonic_barrier.py"
 GLOBAL_DIVISOR_MARKER = "S_h/g divides 2^D-1"
 PRIMARY_GCD_MARKER = "gcd(S_2,2^D-1)=1"
 PHASE_MARKER = "n_t==B^(-j)*S_j (mod g)"
+ODD_H_MARKER = "g/h>X^2/2^4500"
 CORRECT_CYCLE_RELATION = "2^A*product_i(n_i)==1 (mod X)"
 RETRACTED_BARRIER = "10^37"
 
@@ -56,6 +59,8 @@ CURRENT_STRUCTURE_FILES = (
     "tools/verify_geometric_factor_strong_divisibility.py",
     "docs/GLOBAL_BLOCK_GCD_PHASE_SIEVE.md",
     "tools/verify_global_block_gcd_phase_sieve.py",
+    "docs/ODD_H_PHASE_HARMONIC_BARRIER.md",
+    "tools/verify_odd_h_phase_harmonic_barrier.py",
 )
 
 
@@ -85,13 +90,16 @@ def check() -> None:
         "G3 all nontrivial positive cycles excluded: open",
         POSITIVE_RETURN_FRONTIER,
         GENERAL_NONPOSITIVE_RETURN_FRONTIER,
-        EVEN_H_RETURN_FRONTIER,
+        H_GE_2_RETURN_FRONTIER,
         GLOBAL_PHASE_DOC,
         GLOBAL_PHASE_TOOL,
+        ODD_H_DOC,
+        ODD_H_TOOL,
         GLOBAL_DIVISOR_MARKER,
         PRIMARY_GCD_MARKER,
         PHASE_MARKER,
-        "odd h>=3",
+        ODD_H_MARKER,
+        "nonpositive, h=1",
         CORRECT_CYCLE_RELATION,
     )
 
@@ -114,14 +122,17 @@ def check() -> None:
         GLOBAL_MIN_ORDINARY_BLOCKS,
         POSITIVE_RETURN_FRONTIER,
         GENERAL_NONPOSITIVE_RETURN_FRONTIER,
-        EVEN_H_CYCLE_FRONTIER,
-        EVEN_H_RETURN_FRONTIER,
+        H_GE_2_CYCLE_FRONTIER,
+        H_GE_2_RETURN_FRONTIER,
         GLOBAL_PHASE_DOC,
         GLOBAL_PHASE_TOOL,
+        ODD_H_DOC,
+        ODD_H_TOOL,
         GLOBAL_DIVISOR_MARKER,
         "S_h/gcd(S_h,2^D-1) divides g divides S_h",
         PRIMARY_GCD_MARKER,
         PHASE_MARKER,
+        ODD_H_MARKER,
         "43 -> 27 -> 17 -> 43",
         "2^4500",
         CORRECT_CYCLE_RELATION,
@@ -133,8 +144,8 @@ def check() -> None:
         "S_h/gcd(S_h,2^D-1) divides g divides S_h",
         PHASE_MARKER,
         PRIMARY_GCD_MARKER,
-        EVEN_H_CYCLE_FRONTIER,
-        EVEN_H_RETURN_FRONTIER,
+        H_GE_2_CYCLE_FRONTIER,
+        H_GE_2_RETURN_FRONTIER,
         "43 -> 27 -> 17 -> 43",
     )
 
@@ -146,9 +157,27 @@ def check() -> None:
         "small_cycles_checked",
     )
 
+    require(
+        "docs/ODD_H_PHASE_HARMONIC_BARRIER.md",
+        ODD_H_MARKER,
+        "sum_cycle 1/n<2^11+h*H_(q-1)/(2*g)",
+        H_GE_2_CYCLE_FRONTIER,
+        H_GE_2_RETURN_FRONTIER,
+        "strict prize problem remains open",
+    )
+
+    require(
+        "tools/verify_odd_h_phase_harmonic_barrier.py",
+        "phase_packing_regressions",
+        "odd_h_divisor_per_phase",
+        "exact_final_inequality",
+        "strict_prize_solution",
+    )
+
     checks = read("run_checks.py")
-    if GLOBAL_PHASE_TOOL not in checks:
-        raise AssertionError(f"run_checks.py does not include {GLOBAL_PHASE_TOOL}")
+    for tool in (GLOBAL_PHASE_TOOL, ODD_H_TOOL):
+        if tool not in checks:
+            raise AssertionError(f"run_checks.py does not include {tool}")
 
     require(
         "docs/RETRACTIONS.md",
@@ -177,9 +206,10 @@ def check() -> None:
     print(f"global ordinary-block minimum={GLOBAL_MIN_ORDINARY_BLOCKS}")
     print(f"positive-return frontier={POSITIVE_RETURN_FRONTIER}")
     print(f"general nonpositive-return frontier={GENERAL_NONPOSITIVE_RETURN_FRONTIER}")
-    print(f"even-h full-cycle frontier={EVEN_H_CYCLE_FRONTIER}")
-    print(f"even-h return frontier={EVEN_H_RETURN_FRONTIER}")
+    print(f"h>=2 full-cycle frontier={H_GE_2_CYCLE_FRONTIER}")
+    print(f"h>=2 return frontier={H_GE_2_RETURN_FRONTIER}")
     print("global common-boundary divisor and phase sieve=active")
+    print("odd-h harmonic barrier=active")
     print("strict prize target=open")
 
 
