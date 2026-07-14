@@ -1,5 +1,10 @@
 # Same-deficit complete blocks have arbitrary finite local persistence
 
+> **Status update, 2026-07-14.** This local no-go theorem remains valid, but the
+> nonpositive-return branch that motivated it has since been excluded globally by
+> `NONPOSITIVE_RETURN_BLOCK_CORRECTION_EXCLUSION.md`. The active problem is now
+> the positive-credit return branch.
+
 Date: 2026-07-14
 
 ## Scope
@@ -22,7 +27,7 @@ with `m>=3`. An ordinary complete block of length `ell>=1` and terminal
 
 with `ell-1` copies of `m`.
 
-The current nonpositive-return theorem forces one ordinary deficit type to occur
+The former nonpositive-return theorem forced one ordinary deficit type to occur
 doubly exponentially many times in a hypothetical cycle. This note determines
 what can and cannot follow from that repetition by local block arithmetic alone.
 
@@ -195,8 +200,8 @@ conclude that so many occurrences are impossible.
 Arbitrarily long finite counterexamples to that local conclusion exist for every
 choice of the common deficit and every prescribed finite list of block lengths.
 
-A successful use of the doubly exponential repetition must retain genuinely
-global information, for example:
+A successful use of same-deficit repetition in any future branch would have to
+retain genuinely global information, for example:
 
 1. the exact cyclic source-matching divisibility;
 2. the minimum-boundary exit/return inequalities;
@@ -204,9 +209,8 @@ global information, for example:
 4. an interaction with exceptional blocks that cannot be reproduced inside an
    arbitrary finite exact word.
 
-This theorem does not exclude a cycle and does not prove divergence. It narrows
-the next target: the repeated population must be converted into a global
-cycle-closing correction, not another finite local congruence ladder.
+This theorem does not exclude a cycle and does not prove divergence. Its original
+nonpositive-return application is now historical because that branch is closed.
 
 ## Verification
 
