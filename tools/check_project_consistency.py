@@ -11,25 +11,16 @@ PRIMARY_CLASSES = "16562000"
 PRIMARY_BARRIER = "10^1201"
 GLOBAL_MIN_ORDINARY_BLOCKS = "245833"
 POSITIVE_RETURN_FRONTIER = "2^3990"
-GENERAL_NONPOSITIVE_RETURN_FRONTIER = "2^(2^974)"
-H_GE_2_CYCLE_FRONTIER = "2^(2^4979)"
-H_GE_2_RETURN_FRONTIER = "2^(2^4978)"
-GENERAL_BLOCK_EXPLOSION = "2^(2^973-7)"
-H_GE_2_BLOCK_EXPLOSION = "2^(2^4978-7)"
-GENERAL_TYPE_REPETITION = "2^(2^973-20)"
-H_GE_2_TYPE_REPETITION = "2^(2^4978-20)"
+NONPOSITIVE_RETURN_LOWER = "2^(2^974)"
+NONPOSITIVE_CYCLE_UPPER = "2^4006"
+EXCLUSION_DOC = "NONPOSITIVE_RETURN_BLOCK_CORRECTION_EXCLUSION"
+EXCLUSION_TOOL = "verify_nonpositive_return_block_correction_exclusion.py"
 GLOBAL_PHASE_DOC = "GLOBAL_BLOCK_GCD_PHASE_SIEVE"
 GLOBAL_PHASE_TOOL = "verify_global_block_gcd_phase_sieve.py"
-ODD_H_DOC = "ODD_H_PHASE_HARMONIC_BARRIER"
-ODD_H_TOOL = "verify_odd_h_phase_harmonic_barrier.py"
-BLOCK_EXPLOSION_DOC = "NONPOSITIVE_RETURN_ORDINARY_BLOCK_EXPLOSION"
-BLOCK_EXPLOSION_TOOL = "verify_nonpositive_return_ordinary_block_explosion.py"
 SAME_DEFICIT_DOC = "SAME_DEFICIT_FINITE_PERSISTENCE_NO_GO"
 SAME_DEFICIT_TOOL = "verify_same_deficit_finite_persistence.py"
 GLOBAL_DIVISOR_MARKER = "S_h/g divides 2^D-1"
-PRIMARY_GCD_MARKER = "gcd(S_2,2^D-1)=1"
 PHASE_MARKER = "n_t==B^(-j)*S_j (mod g)"
-ODD_H_MARKER = "g/h>X^2/2^4500"
 CORRECT_CYCLE_RELATION = "2^A*product_i(n_i)==1 (mod X)"
 RETRACTED_BARRIER = "10^37"
 
@@ -55,6 +46,10 @@ CURRENT_STRUCTURE_FILES = (
     "tools/verify_minimum_boundary_return_credit_dichotomy.py",
     "docs/MINIMUM_BOUNDARY_NONPOSITIVE_RETURN_HARMONIC_BARRIER.md",
     "tools/verify_minimum_boundary_nonpositive_return_harmonic_barrier.py",
+    "docs/NEAR_POWER_CYCLE_BLOCK_LEDGER.md",
+    "tools/verify_near_power_cycle_block_ledger.py",
+    "docs/NONPOSITIVE_RETURN_BLOCK_CORRECTION_EXCLUSION.md",
+    "tools/verify_nonpositive_return_block_correction_exclusion.py",
     "docs/FIXED_LOCAL_ENDPOINT_CONGRUENCE_NO_GO.md",
     "tools/verify_fixed_local_endpoint_congruence_no_go.py",
     "docs/FULL_FINITE_TWO_SIDED_WORD_GLUING_NO_GO.md",
@@ -101,25 +96,11 @@ def check() -> None:
         PRIMARY_X,
         "G3 all nontrivial positive cycles excluded: open",
         POSITIVE_RETURN_FRONTIER,
-        GENERAL_NONPOSITIVE_RETURN_FRONTIER,
-        H_GE_2_RETURN_FRONTIER,
-        GENERAL_BLOCK_EXPLOSION,
-        H_GE_2_BLOCK_EXPLOSION,
-        GENERAL_TYPE_REPETITION,
-        H_GE_2_TYPE_REPETITION,
-        GLOBAL_PHASE_DOC,
-        GLOBAL_PHASE_TOOL,
-        ODD_H_DOC,
-        ODD_H_TOOL,
-        BLOCK_EXPLOSION_DOC,
-        BLOCK_EXPLOSION_TOOL,
-        SAME_DEFICIT_DOC,
-        SAME_DEFICIT_TOOL,
-        GLOBAL_DIVISOR_MARKER,
-        PRIMARY_GCD_MARKER,
-        PHASE_MARKER,
-        ODD_H_MARKER,
-        "nonpositive, h=1",
+        NONPOSITIVE_RETURN_LOWER,
+        NONPOSITIVE_CYCLE_UPPER,
+        EXCLUSION_DOC,
+        EXCLUSION_TOOL,
+        "The only surviving branch is now",
         CORRECT_CYCLE_RELATION,
     )
 
@@ -141,30 +122,36 @@ def check() -> None:
         PRIMARY_BARRIER,
         GLOBAL_MIN_ORDINARY_BLOCKS,
         POSITIVE_RETURN_FRONTIER,
-        GENERAL_NONPOSITIVE_RETURN_FRONTIER,
-        H_GE_2_CYCLE_FRONTIER,
-        H_GE_2_RETURN_FRONTIER,
-        GENERAL_BLOCK_EXPLOSION,
-        H_GE_2_BLOCK_EXPLOSION,
-        GENERAL_TYPE_REPETITION,
-        H_GE_2_TYPE_REPETITION,
+        NONPOSITIVE_RETURN_LOWER,
+        NONPOSITIVE_CYCLE_UPPER,
+        "R<=0 is impossible",
+        "Only surviving return branch",
+        EXCLUSION_DOC,
+        EXCLUSION_TOOL,
         GLOBAL_PHASE_DOC,
         GLOBAL_PHASE_TOOL,
-        ODD_H_DOC,
-        ODD_H_TOOL,
-        BLOCK_EXPLOSION_DOC,
-        BLOCK_EXPLOSION_TOOL,
-        SAME_DEFICIT_DOC,
-        SAME_DEFICIT_TOOL,
         GLOBAL_DIVISOR_MARKER,
         "S_h/gcd(S_h,2^D-1) divides g divides S_h",
-        PRIMARY_GCD_MARKER,
         PHASE_MARKER,
-        ODD_H_MARKER,
-        "43 -> 27 -> 17 -> 43",
-        "2^4500",
         "fixed finite `N`-adic depth",
         CORRECT_CYCLE_RELATION,
+    )
+
+    require(
+        "docs/NONPOSITIVE_RETURN_BLOCK_CORRECTION_EXCLUSION.md",
+        "p < 2*D*B*X/[d*(X-d)]",
+        "2*4500*B*X < 2^4006*d*(X-d)",
+        "A hypothetical positive cycle cannot have R<=0",
+        POSITIVE_RETURN_FRONTIER,
+        "strict prize problem is not yet solved",
+    )
+
+    require(
+        "tools/verify_nonpositive_return_block_correction_exclusion.py",
+        "verify_block_correction_grid",
+        "verify_primary_exclusion",
+        "nonpositive_return_excluded",
+        "strict_prize_solution",
     )
 
     require(
@@ -172,9 +159,6 @@ def check() -> None:
         GLOBAL_DIVISOR_MARKER,
         "S_h/gcd(S_h,2^D-1) divides g divides S_h",
         PHASE_MARKER,
-        PRIMARY_GCD_MARKER,
-        H_GE_2_CYCLE_FRONTIER,
-        H_GE_2_RETURN_FRONTIER,
         "43 -> 27 -> 17 -> 43",
     )
 
@@ -184,43 +168,6 @@ def check() -> None:
         "conditional_full_cycle_frontier",
         "conditional_return_frontier",
         "small_cycles_checked",
-    )
-
-    require(
-        "docs/ODD_H_PHASE_HARMONIC_BARRIER.md",
-        ODD_H_MARKER,
-        "sum_cycle 1/n<2^11+h*H_(q-1)/(2*g)",
-        H_GE_2_CYCLE_FRONTIER,
-        H_GE_2_RETURN_FRONTIER,
-        "strict prize problem remains open",
-    )
-
-    require(
-        "tools/verify_odd_h_phase_harmonic_barrier.py",
-        "phase_packing_regressions",
-        "odd_h_divisor_per_phase",
-        "exact_final_inequality",
-        "strict_prize_solution",
-    )
-
-    require(
-        "docs/NONPOSITIVE_RETURN_ORDINARY_BLOCK_EXPLOSION.md",
-        "Delta_D(p)>2^(m*p-D-4024)",
-        "p>2^(2^K)  =>  J>2^(2^(K-1)-7)",
-        GENERAL_BLOCK_EXPLOSION,
-        H_GE_2_BLOCK_EXPLOSION,
-        GENERAL_TYPE_REPETITION,
-        H_GE_2_TYPE_REPETITION,
-        "d*n==2^e (mod X)",
-    )
-
-    require(
-        "tools/verify_nonpositive_return_ordinary_block_explosion.py",
-        "verify_tower_case(974)",
-        "verify_tower_case(4979)",
-        "forced_ordinary_blocks",
-        "forced_repetition_one_type",
-        "strict_prize_solution",
     )
 
     require(
@@ -240,9 +187,8 @@ def check() -> None:
 
     checks = read("run_checks.py")
     for tool in (
+        EXCLUSION_TOOL,
         GLOBAL_PHASE_TOOL,
-        ODD_H_TOOL,
-        BLOCK_EXPLOSION_TOOL,
         SAME_DEFICIT_TOOL,
     ):
         if tool not in checks:
@@ -274,15 +220,10 @@ def check() -> None:
     print(f"primary candidate={PRIMARY_X}")
     print(f"global ordinary-block minimum={GLOBAL_MIN_ORDINARY_BLOCKS}")
     print(f"positive-return frontier={POSITIVE_RETURN_FRONTIER}")
-    print(f"general nonpositive-return frontier={GENERAL_NONPOSITIVE_RETURN_FRONTIER}")
-    print(f"h>=2 full-cycle frontier={H_GE_2_CYCLE_FRONTIER}")
-    print(f"h>=2 return frontier={H_GE_2_RETURN_FRONTIER}")
-    print(f"general ordinary-block explosion={GENERAL_BLOCK_EXPLOSION}")
-    print(f"h>=2 ordinary-block explosion={H_GE_2_BLOCK_EXPLOSION}")
-    print("global common-boundary divisor and phase sieve=active")
-    print("odd-h harmonic barrier=active")
-    print("nonpositive ordinary-block explosion=active")
-    print("same-deficit finite-depth no-go=active")
+    print(f"nonpositive-return lower={NONPOSITIVE_RETURN_LOWER}")
+    print(f"nonpositive-cycle upper={NONPOSITIVE_CYCLE_UPPER}")
+    print("nonpositive-return branch=excluded")
+    print("only surviving branch=positive-credit return")
     print("strict prize target=open")
 
 
