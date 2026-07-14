@@ -1,5 +1,10 @@
 # Nonpositive returns force doubly exponentially many ordinary blocks
 
+> **Status update, 2026-07-14.** The conditional theorem below remains valid,
+> but every nonpositive return has now been excluded by
+> `NONPOSITIVE_RETURN_BLOCK_CORRECTION_EXCLUSION.md`. The repeated-type
+> population is therefore no longer an active surviving branch.
+
 Date: 2026-07-14
 
 ## Scope
@@ -228,24 +233,22 @@ All boundaries of one deficit type satisfy the same exact congruence
 d*n==2^e (mod X).
 ```
 
-Thus (18) converts the remaining cycle problem into an enormous repeated
+Thus (18) converts the conditional cycle problem into an enormous repeated
 population inside one explicit boundary class modulo `X`.
 
-## 6. Meaning and limitation
+## 6. Meaning and current status
 
-This theorem does not exclude a cycle.  It strengthens the structural burden on
-the surviving nonpositive branches:
+The theorem is a valid conditional consequence of `R<=0`, but that hypothesis is
+now impossible. The active proof problem has moved to the sole surviving branch
 
-- `h=1` no longer means only a long return; it requires more than
-  `2^(2^973-7)` ordinary blocks;
-- `h>=2` requires more than `2^(2^4978-7)` ordinary blocks;
-- in either case one exact ordinary boundary type repeats doubly exponentially
-  many times.
+```text
+R>=1,
+L_return>2^3990.
+```
 
-The next useful target is to combine this repeated same-type population with the
-`N`-adic depth ladder or an adjacent-numerator gcd identity, seeking a correction
-bound that depends on the number of boundary types rather than on the full cycle
-length.
+The repeated-type theorem remains useful as an audited example of how much
+structure the former branch would have forced, but it should not be used as the
+next research target.
 
 ## 7. Verification
 
