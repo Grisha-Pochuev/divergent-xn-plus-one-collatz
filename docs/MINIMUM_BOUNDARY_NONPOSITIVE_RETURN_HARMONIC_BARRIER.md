@@ -1,5 +1,11 @@
 # Nonpositive minimum-boundary returns are doubly exponentially long
 
+> **Status update, 2026-07-14.** This theorem remains valid, but its branch is now
+> completely excluded by `NONPOSITIVE_RETURN_BLOCK_CORRECTION_EXCLUSION.md`.
+> The lower bound `L>2^(2^974)` combines with the global upper bound
+> `p<2^4006` to give a contradiction. Statements below saying the branch was not
+> yet excluded describe the historical frontier before that combination.
+
 Use the primary candidate
 
 ```text
@@ -163,15 +169,14 @@ R>=1  => L>2^3990,
 R<=0  => L>2^(2^974).                                     (13)
 ```
 
-In particular every hypothetical return has length greater than `2^3990`, and
-any return of length at most `2^(2^974)` would have to carry positive integer
-credit.
+The second branch is now impossible by
+`NONPOSITIVE_RETURN_BLOCK_CORRECTION_EXCLUSION.md`. Therefore every hypothetical
+cycle return must satisfy
 
-This is not yet a cycle exclusion. The remaining branch is a positive-credit
-return longer than `2^3990`, together with the formally possible nonpositive
-return beyond the double-exponential barrier. The next useful target is an
-inverse `X`-adic or endpoint-congruence obstruction that does not weaken as the
-return length grows.
+```text
+R>=1,
+L>2^3990.
+```
 
 ## 5. Verification
 
