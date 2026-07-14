@@ -110,6 +110,12 @@ nonpositive with h>=2:
   one deficit type repeats >2^(2^4978-20) times.
 ```
 
+A new exact no-go proves that every finite list of same-deficit complete blocks,
+with arbitrary prescribed lengths, is realized by infinitely many positive exact
+segments. For the primary candidate, even the endpoint classes modulo every
+fixed finite power `N^s` remain locally realizable. Thus finite repetition and
+finite `N`-adic depth cannot by themselves close G3.
+
 Detailed sources:
 
 ```text
@@ -119,6 +125,8 @@ docs/ODD_H_PHASE_HARMONIC_BARRIER.md
 tools/verify_odd_h_phase_harmonic_barrier.py
 docs/NONPOSITIVE_RETURN_ORDINARY_BLOCK_EXPLOSION.md
 tools/verify_nonpositive_return_ordinary_block_explosion.py
+docs/SAME_DEFICIT_FINITE_PERSISTENCE_NO_GO.md
+tools/verify_same_deficit_finite_persistence.py
 ```
 
 ## Surviving branches and next target
@@ -129,10 +137,12 @@ nonpositive, h>=2: Lr>2^(2^4978) and J>2^(2^4978-7), still not excluded;
 nonpositive, h=1: Lr>2^(2^974) and J>2^(2^973-7).
 ```
 
-Primary next target: exploit the doubly exponential repetition of one ordinary
-deficit type. Its boundaries lie in one explicit class `d*n==2^e (mod X)`;
-combine that class with the `N`-adic depth ladder or an adjacent-numerator gcd to
-obtain a cycle-length-independent correction bound. Secondary target: exclude the
+Primary next target: turn the doubly exponential repeated population into a
+genuinely global correction. The proof must use exact cyclic source matching,
+force a harmonic or height contribution from the repeated type, or exploit an
+interaction with exceptional blocks that arbitrary finite word coding cannot
+reproduce. Do not pursue the same residue class plus any fixed finite `N`-adic
+ladder as a standalone contradiction. Secondary target: exclude the
 positive-credit return branch.
 
 ## Non-negotiable corrections
