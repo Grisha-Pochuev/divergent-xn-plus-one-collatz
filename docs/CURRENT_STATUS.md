@@ -95,8 +95,10 @@ gcd(S_r,S_s)=S_gcd(r,s).
 ```
 
 Fixed local endpoint congruences, finite two-sided word gluing, naive block
-compression, and finite repeated-defect persistence do not force exact cyclic
-source matching; CRT realizes those local constraints at infinitely many starts.
+compression, finite repeated-defect persistence, arbitrary finite same-deficit
+runs, and any fixed finite `N`-adic depth do not force exact cyclic source
+matching; exact valuation-word coding and CRT realize those local constraints at
+infinitely many positive starts.
 
 Sources:
 
@@ -106,6 +108,8 @@ docs/FIXED_LOCAL_ENDPOINT_CONGRUENCE_NO_GO.md
 docs/FULL_FINITE_TWO_SIDED_WORD_GLUING_NO_GO.md
 docs/COMPLETE_BLOCK_GCD_COMPRESSION_NO_GO.md
 docs/GEOMETRIC_FACTOR_STRONG_DIVISIBILITY_PERSISTENCE_NO_GO.md
+docs/SAME_DEFICIT_FINITE_PERSISTENCE_NO_GO.md
+tools/verify_same_deficit_finite_persistence.py
 ```
 
 ## Global block-gcd and phase sieve
@@ -227,7 +231,7 @@ boundaries share a divisor greater than `2^4500`, coprime to
 
 ## Nonpositive returns force ordinary-block explosion
 
-Let `J` be the number of ordinary complete blocks.  The signed block-elimination
+Let `J` be the number of ordinary complete blocks. The signed block-elimination
 identities give, for each ordinary block length `L` and exceptional block length
 `k`,
 
@@ -236,7 +240,7 @@ identities give, for each ordinary block length `L` and exceptional block length
 0<Delta_D(p)*v<J*B^(p-k+J),
 ```
 
-with positive odd `u,v`.  For `1<=D<=4500`, the exact continued-fraction gap
+with positive odd `u,v`. For `1<=D<=4500`, the exact continued-fraction gap
 implies
 
 ```text
@@ -274,6 +278,34 @@ docs/NONPOSITIVE_RETURN_ORDINARY_BLOCK_EXPLOSION.md
 tools/verify_nonpositive_return_ordinary_block_explosion.py
 ```
 
+## Same-deficit finite-persistence obstruction
+
+For every fixed ordinary deficit `e`, every finite list of positive complete-block
+lengths is realized by infinitely many positive exact orbit segments whose
+retained consecutive boundaries all satisfy
+
+```text
+d*n==2^e (mod X).
+```
+
+For the primary candidate these boundaries also obey
+
+```text
+n==2^(e-1) (mod N).
+```
+
+A block of length `ell` fixes its endpoint modulo every `N^s` with `s<=ell`, but
+arbitrary finite same-deficit segments with arbitrary prescribed lengths remain
+exactly realizable. Therefore the repeated population and any fixed finite
+`N`-adic ladder do not by themselves yield a contradiction.
+
+Sources:
+
+```text
+docs/SAME_DEFICIT_FINITE_PERSISTENCE_NO_GO.md
+tools/verify_same_deficit_finite_persistence.py
+```
+
 ## Surviving branches
 
 ```text
@@ -284,12 +316,14 @@ nonpositive, h=1:
   L_return>2^(2^974), J>2^(2^973-7).
 ```
 
-The decisive next target is the enormous repeated population of one ordinary
-deficit type.  Its boundaries lie in one explicit class modulo `X`; combine this
-with the `N`-adic depth ladder or an adjacent-numerator gcd identity to seek a
-cycle-length-independent correction bound. Excluding the positive-credit return
-is the secondary route. A different candidate or direct divergence invariant
-remains allowed if these routes stall.
+The enormous repeated population remains the strongest nonpositive-return
+structure, but finite same-type windows and finite `N`-adic depth are now closed
+as standalone routes. The decisive next target is a genuinely global correction:
+connect the repeated type to the exact cyclic source-matching divisibility, force
+a harmonic or height contribution from that type, or exploit an interaction with
+exceptional blocks that arbitrary finite word coding cannot reproduce. Excluding
+the positive-credit return is the secondary route. A different candidate or
+direct divergence invariant remains allowed if these routes stall.
 
 ## Critical corrections
 
@@ -311,11 +345,13 @@ The standalone checkers
 python tools/verify_global_block_gcd_phase_sieve.py
 python tools/verify_odd_h_phase_harmonic_barrier.py
 python tools/verify_nonpositive_return_ordinary_block_explosion.py
+python tools/verify_same_deficit_finite_persistence.py
 ```
 
 verify the global divisor and phase identities, all `4500` primary even-`h` gcd
 cases, both phase-harmonic contradictions, the exact continued-fraction gap for
-`1<=D<=4500`, the new block-length exponent margins, the two ordinary-block
-tower frontiers, repeated-type exponents, phase-spacing regressions, and the
-`X=5` cycle regression. The new ordinary-block standalone checker passed in the
-research environment. A complete repository-wide run was not executed there.
+`1<=D<=4500`, the block-length exponent margins, the two ordinary-block tower
+frontiers, repeated-type exponents, arbitrary finite same-deficit exact coding,
+primary finite-depth `N`-adic regressions, phase-spacing regressions, and the
+`X=5` regressions. The new same-deficit standalone checker passed in the research
+environment. A complete repository-wide run was not executed there.
