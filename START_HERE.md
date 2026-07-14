@@ -61,89 +61,77 @@ Retained global facts include `N|X`, `1093||X`, `16562000` permanent classes,
 cycle values above `N`, exclusion through the `10^1201` window, and at least
 `245833` ordinary complete blocks in every hypothetical cycle.
 
-For the actual return from the minimum-boundary expanding exit:
+Every hypothetical cycle has an actual expanding exit from its least ordinary
+boundary `x` to the next ordinary boundary `y>x` with
 
 ```text
-R>=1 => Lr>2^3990,
-R<=0 => Lr>2^(2^974).
+1<=C<=4500,
+L_exit<2^4006.
 ```
 
-For complete-block lengths `ell_i`, put
+Let `R` and `Lr` be the credit and accelerated length of the remaining actual
+return from `y` to `x`.
+
+A new general block-correction theorem proves that every near-power cycle obeys
 
 ```text
-h=gcd_i ell_i,
-D=sum_i(4501-a_i),
-S_h=(B^h-X^h)/d,
-g=gcd of all complete-block boundaries.
+p < 2*D*B*X/[d*(X-d)],
 ```
 
-Exact cyclic closure proves
+where `D` is total cycle credit. If `R<=0`, then `1<=D<=4500`, and exact integer
+comparison gives
 
 ```text
-S_h/g divides 2^D-1,
-n_t==B^(-j)*S_j (mod g),  j=t mod h.
+p<2^4006.
 ```
 
-On the nonpositive-return branch, `1<=D<=4500`.
-
-- `h` even: `gcd(S_2,2^D-1)=1` forces the two-phase sieve.
-- `h` odd and `h>=3`: `S_h>h*X^(h-1)` gives
-  `g/h>X^2/2^4500`; phase-wise harmonic packing then gives the same frontier.
-
-Therefore every nonpositive-return cycle with `h>=2` satisfies
+The retained harmonic theorem simultaneously gives
 
 ```text
-full cycle p>2^(2^4979),
-actual return Lr>2^(2^4978).
+p>Lr>2^(2^974).
 ```
 
-The signed complete-block elimination theorem and the small credit range now also
-force enormous ordinary-block populations:
+Therefore the entire nonpositive-return branch is impossible.
+
+The only surviving branch is now
 
 ```text
-any nonpositive return:
-  ordinary blocks J>2^(2^973-7),
-  one deficit type repeats >2^(2^973-20) times;
-
-nonpositive with h>=2:
-  ordinary blocks J>2^(2^4978-7),
-  one deficit type repeats >2^(2^4978-20) times.
+R>=1,
+Lr>2^3990.
 ```
-
-A new exact no-go proves that every finite list of same-deficit complete blocks,
-with arbitrary prescribed lengths, is realized by infinitely many positive exact
-segments. For the primary candidate, even the endpoint classes modulo every
-fixed finite power `N^s` remain locally realizable. Thus finite repetition and
-finite `N`-adic depth cannot by themselves close G3.
 
 Detailed sources:
 
 ```text
-docs/GLOBAL_BLOCK_GCD_PHASE_SIEVE.md
-tools/verify_global_block_gcd_phase_sieve.py
-docs/ODD_H_PHASE_HARMONIC_BARRIER.md
-tools/verify_odd_h_phase_harmonic_barrier.py
-docs/NONPOSITIVE_RETURN_ORDINARY_BLOCK_EXPLOSION.md
-tools/verify_nonpositive_return_ordinary_block_explosion.py
-docs/SAME_DEFICIT_FINITE_PERSISTENCE_NO_GO.md
-tools/verify_same_deficit_finite_persistence.py
+docs/NONPOSITIVE_RETURN_BLOCK_CORRECTION_EXCLUSION.md
+tools/verify_nonpositive_return_block_correction_exclusion.py
+docs/MINIMUM_BOUNDARY_ACTUAL_EXPANDING_SEGMENT.md
+docs/MINIMUM_BOUNDARY_RETURN_CREDIT_DICHOTOMY.md
+docs/MINIMUM_BOUNDARY_NONPOSITIVE_RETURN_HARMONIC_BARRIER.md
 ```
 
-## Surviving branches and next target
+## Surviving branch and next target
+
+Primary next target: exclude the positive-credit return from `y>x` to the least
+ordinary boundary `x`.
+
+Use the exact return equation
 
 ```text
-positive credit: Lr>2^3990;
-nonpositive, h>=2: Lr>2^(2^4978) and J>2^(2^4978-7), still not excluded;
-nonpositive, h=1: Lr>2^(2^974) and J>2^(2^973-7).
+ln(x/y)=R*ln(2)-Lr*ln(B/X)+K_return<0
 ```
 
-Primary next target: turn the doubly exponential repeated population into a
-genuinely global correction. The proof must use exact cyclic source matching,
-force a harmonic or height contribution from the repeated type, or exploit an
-interaction with exceptional blocks that arbitrary finite word coding cannot
-reproduce. Do not pursue the same residue class plus any fixed finite `N`-adic
-ladder as a standalone contradiction. Secondary target: exclude the
-positive-credit return branch.
+together with the cycle-wide block-correction inequality. Seek either:
+
+1. a quantitative restriction on `R/Lr` incompatible with cyclic closure;
+2. a forced placement or repetition pattern for the positive ordinary deficits;
+3. a global divisor/source-matching obstruction that remains effective when
+   total credit `D` is not bounded by `4500`;
+4. an explicit linear-form-in-logarithms bound only if its constants beat the
+   actual correction terms.
+
+Do not return to the now-closed nonpositive branch. Do not use finite same-type
+windows or any fixed finite `N`-adic ladder as a standalone contradiction.
 
 ## Non-negotiable corrections
 
