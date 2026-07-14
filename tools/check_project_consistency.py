@@ -24,6 +24,8 @@ ODD_H_DOC = "ODD_H_PHASE_HARMONIC_BARRIER"
 ODD_H_TOOL = "verify_odd_h_phase_harmonic_barrier.py"
 BLOCK_EXPLOSION_DOC = "NONPOSITIVE_RETURN_ORDINARY_BLOCK_EXPLOSION"
 BLOCK_EXPLOSION_TOOL = "verify_nonpositive_return_ordinary_block_explosion.py"
+SAME_DEFICIT_DOC = "SAME_DEFICIT_FINITE_PERSISTENCE_NO_GO"
+SAME_DEFICIT_TOOL = "verify_same_deficit_finite_persistence.py"
 GLOBAL_DIVISOR_MARKER = "S_h/g divides 2^D-1"
 PRIMARY_GCD_MARKER = "gcd(S_2,2^D-1)=1"
 PHASE_MARKER = "n_t==B^(-j)*S_j (mod g)"
@@ -69,6 +71,8 @@ CURRENT_STRUCTURE_FILES = (
     "tools/verify_odd_h_phase_harmonic_barrier.py",
     "docs/NONPOSITIVE_RETURN_ORDINARY_BLOCK_EXPLOSION.md",
     "tools/verify_nonpositive_return_ordinary_block_explosion.py",
+    "docs/SAME_DEFICIT_FINITE_PERSISTENCE_NO_GO.md",
+    "tools/verify_same_deficit_finite_persistence.py",
 )
 
 
@@ -109,6 +113,8 @@ def check() -> None:
         ODD_H_TOOL,
         BLOCK_EXPLOSION_DOC,
         BLOCK_EXPLOSION_TOOL,
+        SAME_DEFICIT_DOC,
+        SAME_DEFICIT_TOOL,
         GLOBAL_DIVISOR_MARKER,
         PRIMARY_GCD_MARKER,
         PHASE_MARKER,
@@ -148,6 +154,8 @@ def check() -> None:
         ODD_H_TOOL,
         BLOCK_EXPLOSION_DOC,
         BLOCK_EXPLOSION_TOOL,
+        SAME_DEFICIT_DOC,
+        SAME_DEFICIT_TOOL,
         GLOBAL_DIVISOR_MARKER,
         "S_h/gcd(S_h,2^D-1) divides g divides S_h",
         PRIMARY_GCD_MARKER,
@@ -155,6 +163,7 @@ def check() -> None:
         ODD_H_MARKER,
         "43 -> 27 -> 17 -> 43",
         "2^4500",
+        "fixed finite `N`-adic depth",
         CORRECT_CYCLE_RELATION,
     )
 
@@ -214,8 +223,28 @@ def check() -> None:
         "strict_prize_solution",
     )
 
+    require(
+        "docs/SAME_DEFICIT_FINITE_PERSISTENCE_NO_GO.md",
+        "d*x_j==2^e (mod X)",
+        "x_j==2^(e-1) (mod N)",
+        "arbitrary finite same-deficit",
+        "does not prove divergence",
+    )
+
+    require(
+        "tools/verify_same_deficit_finite_persistence.py",
+        "construct_instance",
+        "verify_primary_depth_ladder",
+        "3705",
+    )
+
     checks = read("run_checks.py")
-    for tool in (GLOBAL_PHASE_TOOL, ODD_H_TOOL, BLOCK_EXPLOSION_TOOL):
+    for tool in (
+        GLOBAL_PHASE_TOOL,
+        ODD_H_TOOL,
+        BLOCK_EXPLOSION_TOOL,
+        SAME_DEFICIT_TOOL,
+    ):
         if tool not in checks:
             raise AssertionError(f"run_checks.py does not include {tool}")
 
@@ -253,6 +282,7 @@ def check() -> None:
     print("global common-boundary divisor and phase sieve=active")
     print("odd-h harmonic barrier=active")
     print("nonpositive ordinary-block explosion=active")
+    print("same-deficit finite-depth no-go=active")
     print("strict prize target=open")
 
 
