@@ -142,6 +142,7 @@ def main() -> None:
     run("tools/verify_global_block_gcd_phase_sieve.py")
     run("tools/verify_odd_h_phase_harmonic_barrier.py")
     run("tools/verify_nonpositive_return_ordinary_block_explosion.py")
+    run("tools/verify_same_deficit_finite_persistence.py")
     run("tools/check_project_consistency.py")
     run("tools/check_x9_digital_invariant.py", "--steps", "10000")
     run("tools/generate_two_parameter_barrier.py", "--length", "1000000000000", "--height", "1000000000")
