@@ -235,7 +235,7 @@ def check() -> None:
         "tools/verify_same_deficit_finite_persistence.py",
         "construct_instance",
         "verify_primary_depth_ladder",
-        "3705",
+        "small same-deficit constructions",
     )
 
     checks = read("run_checks.py")
