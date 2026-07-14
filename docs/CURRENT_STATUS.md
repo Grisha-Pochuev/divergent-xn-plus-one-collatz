@@ -42,7 +42,7 @@ G5 final certificate: waits for G3.
 - the cycle window through `[10^1201,10^1202]` is impossible;
 - every hypothetical cycle has at least `245833` ordinary complete blocks.
 
-## Actual minimum-boundary exit and return
+## Minimum-boundary exit and return
 
 Every hypothetical cycle contains an actual consecutive expanding exit from its
 least ordinary boundary `x` to the next ordinary boundary `y>x` with
@@ -55,7 +55,8 @@ L_exit*log2(B/X)<C,
 L_exit<2^4006.
 ```
 
-The remaining actual return satisfies
+Write `R` for the credit of the remaining actual return from `y` to `x`. The
+retained dichotomy gives
 
 ```text
 R>=1 => L_return>2^3990,
@@ -69,6 +70,102 @@ docs/MINIMUM_BOUNDARY_ACTUAL_EXPANDING_SEGMENT.md
 docs/MINIMUM_BOUNDARY_RETURN_CREDIT_DICHOTOMY.md
 docs/MINIMUM_BOUNDARY_NONPOSITIVE_RETURN_HARMONIC_BARRIER.md
 ```
+
+## New theorem: every nonpositive return is impossible
+
+For any near-power multiplier
+
+```text
+B=2^m,
+X=B-d,
+0<d<B/2,
+```
+
+partition a hypothetical positive cycle into complete blocks. If `p` is its
+accelerated length and
+
+```text
+D=m*p-A
+```
+
+is its total credit, the exact block-correction identity and a uniform correction
+bound prove
+
+```text
+p < 2*D*B*X/[d*(X-d)].
+```
+
+The proof uses
+
+```text
+sum_j ln(1+q_j)=p*ln(B/X)-D*ln(2),
+0<q_j<ell_j*d/(2*X^ell_j),
+sum_j ell_j=p,
+ln(B/X)>d/B.
+```
+
+On a nonpositive return,
+
+```text
+D=C+R,
+1<=D<=4500.
+```
+
+For the primary candidate exact integer arithmetic gives
+
+```text
+2*4500*B*X < 2^4006*d*(X-d),
+```
+
+hence
+
+```text
+p<2^4006.
+```
+
+But the retained return theorem gives
+
+```text
+p>L_return>2^(2^974)>2^4006.
+```
+
+Contradiction. Therefore
+
+```text
+R<=0 is impossible.
+```
+
+Sources:
+
+```text
+docs/NONPOSITIVE_RETURN_BLOCK_CORRECTION_EXCLUSION.md
+tools/verify_nonpositive_return_block_correction_exclusion.py
+```
+
+This closes both former nonpositive subdivisions `h=1` and `h>=2`. The earlier
+phase-sieve, block-explosion, and repeated-type theorems remain valid conditional
+theorems, but their common hypothesis now cannot occur in a positive cycle.
+
+## Only surviving return branch
+
+Every hypothetical nontrivial positive cycle must now satisfy
+
+```text
+R>=1,
+L_return>2^3990.
+```
+
+Thus G3 has been reduced to one branch: exclude an actual positive-credit return
+from `y>x` to the least ordinary boundary `x`.
+
+The total cycle credit is
+
+```text
+D=C+R>=2,
+```
+
+but it is no longer uniformly bounded by `4500`, so the new length upper bound
+does not by itself exclude this branch.
 
 ## Exact cyclic closure and closed local routes
 
@@ -109,10 +206,9 @@ docs/FULL_FINITE_TWO_SIDED_WORD_GLUING_NO_GO.md
 docs/COMPLETE_BLOCK_GCD_COMPRESSION_NO_GO.md
 docs/GEOMETRIC_FACTOR_STRONG_DIVISIBILITY_PERSISTENCE_NO_GO.md
 docs/SAME_DEFICIT_FINITE_PERSISTENCE_NO_GO.md
-tools/verify_same_deficit_finite_persistence.py
 ```
 
-## Global block-gcd and phase sieve
+## Retained global block-gcd identity
 
 Let `ell_i` be all complete-block lengths of a hypothetical cycle and put
 
@@ -123,35 +219,18 @@ S_h=(B^h-X^h)/d,
 g=gcd of all complete-block boundaries b_i.
 ```
 
-Exact closure proves
+Exact cyclic closure proves
 
 ```text
 g=gcd(b_i,S_h) for every b_i,
 S_h/g divides 2^D-1,
-S_h/gcd(S_h,2^D-1) divides g divides S_h.
+S_h/gcd(S_h,2^D-1) divides g divides S_h,
+n_t==B^(-j)*S_j (mod g),  j=t mod h.
 ```
 
-Every cycle state also obeys the endogenous phase sieve
-
-```text
-n_t==B^(-j)*S_j (mod g),
-j=t mod h.
-```
-
-Thus the entire cycle lies in at most `h` explicit residue classes modulo a
-common boundary divisor forced by global closure.
-
-Regression:
-
-```text
-X=5,
-43 -> 27 -> 17 -> 43,
-h=3,
-D=2,
-S_3=129,
-g=43,
-S_3/g=3 divides 2^2-1.
-```
+These identities remain available on the positive-credit branch. The former
+strong `h>=2` harmonic consequences used the now-impossible small-credit range
+`1<=D<=4500` and should not be applied unchanged when `R>=1`.
 
 Sources:
 
@@ -160,170 +239,27 @@ docs/GLOBAL_BLOCK_GCD_PHASE_SIEVE.md
 tools/verify_global_block_gcd_phase_sieve.py
 ```
 
-## Nonpositive-return specialization: all h>=2
+## Decisive next target
 
-On `R<=0`, total credit satisfies `1<=D<=4500`.
+Exclude the positive-credit return. The strongest current routes are:
 
-### Even h
+1. combine the segment equation
 
-The exact certificate proves
+   ```text
+   ln(x/y)=R*ln(2)-L_return*ln(B/X)+K_return<0
+   ```
 
-```text
-gcd(S_2,2^D-1)=1 for every 1<=D<=4500,
-S_2=B+X.
-```
+   with the cycle-wide block-correction lower bound to narrow the possible
+   density `R/L_return`;
+2. obtain a global restriction on where the positive ordinary deficits can occur
+   relative to exceptional blocks and the minimum boundary;
+3. use exact cyclic source matching or the global divisor `g` in a way that does
+   not require `D<=4500`;
+4. seek an explicit linear-form-in-logarithms estimate only if it produces a
+   quantitative bound strong enough for the actual parameters.
 
-If `h` is even, then `S_2|g`. The phase sieve reduces the cycle to two odd
-residue classes modulo `2*S_2`. Exact harmonic packing gives
-
-```text
-full cycle p>2^(2^4979),
-actual return L_return>2^(2^4978).
-```
-
-### Odd h>=3
-
-The odd-phase theorem uses
-
-```text
-S_h>h*X^(h-1)
-```
-
-and the global quotient divisibility to obtain
-
-```text
-g/h>X^2/2^4500.
-```
-
-The actual exit contains a complete block and has length `<2^4006`, so `h<2^4006`.
-For each phase, its cycle states are spaced by at least `2*g`; the `h` phase
-minima are distinct odd values above `N`. This gives
-
-```text
-sum_cycle 1/n<2^11+h*H_(p/h-1)/(2*g).
-```
-
-Under `p<=2^(2^4979)`, the right side is less than
-
-```text
-2^11+2^9479/X^2<X/2^4023,
-```
-
-contradicting the retained continued-fraction gap and product identity. Hence the
-same frontier holds:
-
-```text
-full cycle p>2^(2^4979),
-actual return L_return>2^(2^4978).
-```
-
-Sources:
-
-```text
-docs/ODD_H_PHASE_HARMONIC_BARRIER.md
-tools/verify_odd_h_phase_harmonic_barrier.py
-```
-
-Consequently every nonpositive-return cycle with `h>=2` has the above
-full-cycle and return-length lower bounds. In every such cycle all complete-block
-boundaries share a divisor greater than `2^4500`, coprime to
-`(2^500-1)*1093^2`.
-
-## Nonpositive returns force ordinary-block explosion
-
-Let `J` be the number of ordinary complete blocks. The signed block-elimination
-identities give, for each ordinary block length `L` and exceptional block length
-`k`,
-
-```text
-0<Delta_D(p)*u<J*B^(p-L+J+1),
-0<Delta_D(p)*v<J*B^(p-k+J),
-```
-
-with positive odd `u,v`. For `1<=D<=4500`, the exact continued-fraction gap
-implies
-
-```text
-Delta_D(p)>2^(4501*p-D-4024).
-```
-
-A reusable tower argument now proves
-
-```text
-p>2^(2^K)  =>  J>2^(2^(K-1)-7),  K>=974.
-```
-
-Applying the existing cycle frontiers gives
-
-```text
-any nonpositive return:
-  J>2^(2^973-7),
-  one ordinary deficit type repeats >2^(2^973-20) times;
-
-nonpositive return with h>=2:
-  J>2^(2^4978-7),
-  one ordinary deficit type repeats >2^(2^4978-20) times.
-```
-
-All boundaries of one repeated deficit type `e` lie in the exact class
-
-```text
-d*n==2^e (mod X).
-```
-
-Sources:
-
-```text
-docs/NONPOSITIVE_RETURN_ORDINARY_BLOCK_EXPLOSION.md
-tools/verify_nonpositive_return_ordinary_block_explosion.py
-```
-
-## Same-deficit finite-persistence obstruction
-
-For every fixed ordinary deficit `e`, every finite list of positive complete-block
-lengths is realized by infinitely many positive exact orbit segments whose
-retained consecutive boundaries all satisfy
-
-```text
-d*n==2^e (mod X).
-```
-
-For the primary candidate these boundaries also obey
-
-```text
-n==2^(e-1) (mod N).
-```
-
-A block of length `ell` fixes its endpoint modulo every `N^s` with `s<=ell`, but
-arbitrary finite same-deficit segments with arbitrary prescribed lengths remain
-exactly realizable. Therefore the repeated population and any fixed finite
-`N`-adic ladder do not by themselves yield a contradiction.
-
-Sources:
-
-```text
-docs/SAME_DEFICIT_FINITE_PERSISTENCE_NO_GO.md
-tools/verify_same_deficit_finite_persistence.py
-```
-
-## Surviving branches
-
-```text
-positive credit: L_return>2^3990;
-nonpositive, h>=2:
-  L_return>2^(2^4978), J>2^(2^4978-7), still not excluded;
-nonpositive, h=1:
-  L_return>2^(2^974), J>2^(2^973-7).
-```
-
-The enormous repeated population remains the strongest nonpositive-return
-structure, but finite same-type windows and finite `N`-adic depth are now closed
-as standalone routes. The decisive next target is a genuinely global correction:
-connect the repeated type to the exact cyclic source-matching divisibility, force
-a harmonic or height contribution from that type, or exploit an interaction with
-exceptional blocks that arbitrary finite word coding cannot reproduce. Excluding
-the positive-credit return is the secondary route. A different candidate or
-direct divergence invariant remains allowed if these routes stall.
+A finite trajectory calculation, a fixed finite residue ladder, or another lower
+bound on the already excluded nonpositive branch is not useful.
 
 ## Critical corrections
 
@@ -339,19 +275,23 @@ by a cycle. Finite computation is not divergence. Full history is in
 
 ## Verification state
 
-The standalone checkers
+The new standalone checker
 
 ```text
-python tools/verify_global_block_gcd_phase_sieve.py
-python tools/verify_odd_h_phase_harmonic_barrier.py
-python tools/verify_nonpositive_return_ordinary_block_explosion.py
-python tools/verify_same_deficit_finite_persistence.py
+python tools/verify_nonpositive_return_block_correction_exclusion.py
 ```
 
-verify the global divisor and phase identities, all `4500` primary even-`h` gcd
-cases, both phase-harmonic contradictions, the exact continued-fraction gap for
-`1<=D<=4500`, the block-length exponent margins, the two ordinary-block tower
-frontiers, repeated-type exponents, arbitrary finite same-deficit exact coding,
-primary finite-depth `N`-adic regressions, phase-spacing regressions, and the
-`X=5` regressions. The new same-deficit standalone checker passed in the research
-environment. A complete repository-wide run was not executed there.
+verified `22993` exact complete-block correction cases, all three known
+accelerated `5n+1` cycle regressions, the exact primary comparison giving
+`p<2^4006`, and the exponent contradiction with `p>2^(2^974)`.
+
+The related retained standalone checkers are
+
+```text
+python tools/verify_near_power_cycle_block_ledger.py
+python tools/verify_minimum_boundary_return_credit_dichotomy.py
+python tools/verify_minimum_boundary_nonpositive_return_harmonic_barrier.py
+```
+
+The new standalone checker passed in the research environment. A complete
+repository-wide run was not executed there.
