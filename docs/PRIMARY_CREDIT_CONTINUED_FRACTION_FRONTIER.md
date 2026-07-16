@@ -47,6 +47,16 @@ lambda=ln(B/X),
 beta=ln(2)/lambda.
 ```
 
+The number `beta` is irrational. Indeed, if `beta=r/s` with positive integers
+`r,s`, then
+
+```text
+2^s=(B/X)^r,
+X^r=2^(4501*r-s),
+```
+
+which is impossible because `X>1` is odd.
+
 The exact accelerated cycle product gives
 
 ```text
