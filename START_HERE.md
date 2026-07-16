@@ -57,6 +57,13 @@ The strict problem remains open because G3 remains open.
 
 ## Retained global facts
 
+Put
+
+```text
+Q_credit=
+924679364903952241768234680715310598867316370441120757898246831506500507205080014535351439406991342585993538327845986892977536682537320095988153612270886695873966778097766981798062925612878469213187733241206117142814414961418054803443235355123715316220902421623921086365374327267387194352877014114959.
+```
+
 Every hypothetical cycle satisfies all of the following:
 
 ```text
@@ -65,13 +72,29 @@ N|X and 1093||X;
 every cycle value>N;
 every exceptional source has at least 1505 decimal digits;
 no cycle value in the checked window through 10^1201;
-at least 245833 ordinary complete blocks.
+total credit D>=Q_credit>2^996;
+full accelerated length p>2^4988;
+at least ceil(Q_credit/4500) ordinary complete blocks.
+```
+
+The exact ordinary-block lower bound is
+
+```text
+205484303311989387059607706825624577526070304542471279532943740334777890490017781007855875423775853907998564072854663753995008151674960021330700802726863710194214839577281551510680650136195215380708385164712470476180981102537345511876274523360825625826867204805315796970083183837197154300639336470.
+```
+
+This supersedes the former bound `245833`, which is retained only as an audit
+marker for older consistency checks.
+
+Sources:
+
+```text
+docs/PRIMARY_CREDIT_CONTINUED_FRACTION_FRONTIER.md
+tools/verify_primary_credit_continued_fraction_frontier.py
 ```
 
 The former nonpositive-return branch is completely excluded. Its retained
 comparison was `p<2^4006` against `p>2^(2^974)`. Do not revisit it.
-
-Sources:
 
 ```text
 docs/NONPOSITIVE_RETURN_BLOCK_CORRECTION_EXCLUSION.md
@@ -133,15 +156,15 @@ docs/CYCLE_FLOOR_LOCAL_CORRECTION_SHARPENING.md
 tools/verify_cycle_floor_local_correction_sharpening.py
 ```
 
-They are now sharpened to the adjacent-coefficient bracket
+They are now sharpened to
 
 ```text
 1007*2^-4002 < delta-epsilon,
 delta < 1008*2^-4002.                                  (1)
 ```
 
-Therefore every actual consecutive complete-block segment of net credit `C`,
-accelerated length `L`, source `x`, and endpoint `y` satisfies
+Every actual consecutive complete-block segment of net credit `C`, accelerated
+length `L`, source `x`, and endpoint `y` satisfies
 
 ```text
 log2(y/x)<C-1007*L*2^-4002.                            (2)
@@ -171,7 +194,7 @@ tools/verify_zero_credit_arch_quantitative_contraction.py
 
 ## Global one-over-1007 cycle strip
 
-For full cycle length `p` and total credit `D`, (1)--(2) give
+For full cycle length `p` and total credit `D`,
 
 ```text
 D*2^4002/1008
@@ -179,8 +202,7 @@ D*2^4002/1008
  <D*2^4002/1007.                                      (4)
 ```
 
-The upper endpoint divided by the lower endpoint is `1008/1007`, so the relative
-width is exactly
+The relative width is exactly
 
 ```text
 1/1007<0.1%.
@@ -205,6 +227,7 @@ The remaining actual return from `y` to `z` satisfies
 
 ```text
 R>=1,
+D=C+R>=Q_credit,
 L_return>R*2^4002/1008,
 L_return<(R+4500)*2^4002/1007.
 ```
@@ -220,14 +243,18 @@ Q>=1-C>=-4499.
 Exclude the positive-credit return after the bounded initial sponsor nest. The
 strongest route is now:
 
-1. use the `1/1007` global strip, not the older coarse length bounds;
+1. use both the 300-digit total-credit frontier and the `1/1007` global strip;
 2. charge every zero-credit arch by the quantitative loss (3);
 3. apply the adjacent `1007/1008` length dichotomy to every remaining macroblock;
-4. combine arch endpoints with the permanent `N` and `1093^2` labels and the
-   exceptional-source floor;
-5. prove a lower correction bound incompatible with (4), a repeated exact source
-   class, an incompatible adjacent-label lift, or excessive harmonic correction;
+4. exploit the enormous forced population of ordinary blocks together with the
+   permanent `N` and `1093^2` transition labels;
+5. improve the harmonic occupancy/correction bound or force a repeated exact
+   source class, an incompatible adjacent-label lift, or a global-divisor clash;
 6. use `Q>=-4499`, so no return prefix can use an unbounded exceptional reserve.
+
+The scalar continued-fraction method alone now reaches its certified 300-digit
+credit frontier. Further progress must exploit transition occupancy or stronger
+arithmetic, not merely print more finite trajectory values.
 
 Secondary routes remain the exact cyclic source-matching divisor and an explicit
 linear-form-in-logarithms estimate, but only if their constants beat the actual
