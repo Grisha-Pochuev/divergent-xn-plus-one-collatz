@@ -151,26 +151,41 @@ tools/verify_exceptional_sponsor_arch_macro_exit.py
 ## Sharp local length theorems
 
 For any actual consecutive block segment of net credit `C`, accelerated length
-`L`, source `x`, and endpoint `y`, the exact correction estimates give
+`L`, source `x`, and endpoint `y`, the retained general correction estimate is
 
 ```text
 ln(y/x)
  <C*ln(2)-L*[ln(B/X)-d/(2*X)].                        (6)
 ```
 
-If `y>=x`, elementary rational logarithmic bounds imply
+The new cycle-floor theorem uses the global fact that every hypothetical cycle
+value is greater than `N`. For a complete block of length `ell`, its correction
+parameter now satisfies
 
 ```text
-L < 2*C*B*X/[d*(X-d)] < C*2^3994.                    (7)
+q<ell/(X*N),
+kappa<ell/(X*N*ln(2)).
 ```
 
-For `C<=4500`, exact integer comparison also gives
+Exact rational comparison gives
 
 ```text
-L<2^4006.                                             (8)
+delta-1/(X*N*ln(2))>997*2^-4002.
 ```
 
-A new exact rational estimate sharpens the primary drift to
+Hence every positive-credit nondecreasing segment satisfies
+
+```text
+L<C*2^4002/997<C*2^3993.                              (7)
+```
+
+For `C<=4500`, this gives the sharper uniform bound
+
+```text
+L<2^4005.                                             (8)
+```
+
+The exact rational drift upper estimate remains
 
 ```text
 delta=log2(B/X)<2^-3992.                              (9)
@@ -196,10 +211,10 @@ gives
 C>=1 and y<x  =>  L>C*2^3992.                        (10)
 ```
 
-Thus every positive-credit macroblock has an explicit height-sign dichotomy:
+Thus every positive-credit macroblock has the sharpened height-sign dichotomy:
 
 ```text
-nondecreasing: L<C*2^3994;
+nondecreasing: L<C*2^4002/997<C*2^3993;
 contracting:   L>C*2^3992.
 ```
 
@@ -210,6 +225,8 @@ Sources:
 ```text
 docs/PRIMARY_DELTA_TWO_BIT_SHARPENING.md
 tools/verify_primary_delta_two_bit_sharpening.py
+docs/CYCLE_FLOOR_LOCAL_CORRECTION_SHARPENING.md
+tools/verify_cycle_floor_local_correction_sharpening.py
 docs/EXCEPTIONAL_SPONSOR_ARCH_MACRO_EXIT.md
 ```
 
@@ -233,7 +250,7 @@ Therefore
 ```text
 z<y,
 1<=C<=4500,
-L_macro<2^4006.                                      (11)
+L_macro<2^4005.                                      (11)
 ```
 
 The macro-exit absorbs the entire maximal nest of early exceptions sponsored
@@ -269,6 +286,8 @@ docs/EXCEPTIONAL_SPONSOR_ARCH_MACRO_EXIT.md
 tools/verify_exceptional_sponsor_arch_macro_exit.py
 docs/PRIMARY_DELTA_TWO_BIT_SHARPENING.md
 tools/verify_primary_delta_two_bit_sharpening.py
+docs/CYCLE_FLOOR_LOCAL_CORRECTION_SHARPENING.md
+tools/verify_cycle_floor_local_correction_sharpening.py
 docs/MINIMUM_BLOCK_BOUNDARY_PURE_ORDINARY_EXIT.md
 tools/verify_minimum_block_boundary_pure_ordinary_exit.py
 ```
@@ -384,6 +403,7 @@ The new standalone checkers passed in the research environment:
 ```text
 python tools/verify_exceptional_sponsor_arch_macro_exit.py
 python tools/verify_primary_delta_two_bit_sharpening.py
+python tools/verify_cycle_floor_local_correction_sharpening.py
 ```
 
 They verified:
@@ -393,12 +413,15 @@ They verified:
 canonical arches, laminarity, maximal coverage, and credit conservation;
 113288 exact local near-power segment cases;
 all three known accelerated 5n+1 positive-cycle regressions;
-L_macro<2^4006;
+L_macro<2^4005;
 exact delta<2^-3992;
+cycle-floor correction coefficient epsilon=1/(X*N*ln(2));
+delta-epsilon>997*2^-4002;
 contracting positive-credit bound L>C*2^3992;
 return bound L_return>R*2^3992;
-nondecreasing bound L<C*2^3994.
+nondecreasing bound L<C*2^4002/997<C*2^3993.
 ```
 
-Both checkers are included in `run_checks.py`. A complete repository-wide run
-was not executed in this environment.
+The two prior checkers remain included in `run_checks.py`. The new cycle-floor
+checker passed standalone; a complete repository-wide run was not executed in this
+environment.
