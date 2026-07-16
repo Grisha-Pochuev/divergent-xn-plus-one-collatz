@@ -68,7 +68,15 @@ no cycle value in the checked window through 10^1201;
 at least 245833 ordinary complete blocks.
 ```
 
-The former nonpositive-return branch is completely excluded. Do not revisit it.
+The former nonpositive-return branch is completely excluded. Its retained
+comparison was `p<2^4006` against `p>2^(2^974)`. Do not revisit it.
+
+Sources:
+
+```text
+docs/NONPOSITIVE_RETURN_BLOCK_CORRECTION_EXCLUSION.md
+tools/verify_nonpositive_return_block_correction_exclusion.py
+```
 
 ## Positive ballot and sponsor arches
 
@@ -100,73 +108,86 @@ docs/EXCEPTIONAL_SPONSOR_ARCH_MACRO_EXIT.md
 tools/verify_exceptional_sponsor_arch_macro_exit.py
 ```
 
-## Unified floor-sensitive height theorem
+## Sharp floor-sensitive height theorem
 
-Every hypothetical cycle value is greater than `N`. Therefore every actual
-consecutive complete-block segment of net credit `C`, accelerated length `L`,
-source `x`, and endpoint `y` satisfies
+Every hypothetical cycle value is greater than `N`. Put
 
 ```text
-log2(y/x)<C-alpha*L,
-alpha=997*2^-4002.                                    (1)
+delta=log2(B/X),
+epsilon=1/(X*N*ln(2)).
 ```
 
-Consequences for positive-credit segments:
+The former exact estimates
 
 ```text
-nondecreasing: L<C*2^4002/997<C*2^3993;
-contracting:   L>C*2^3992.
+delta<2^-3992,
+delta-epsilon>997*2^-4002
 ```
 
-A zero-credit sponsor arch now has the quantitative contraction
-
-```text
-log2(source/endpoint)>alpha*L.                        (2)
-```
-
-In particular,
-
-```text
-L>=2^4002  =>  source>2^997*endpoint>2^997*N.
-```
-
-For all pairwise disjoint zero-credit arches of total length `Z`,
-
-```text
-Z<D*2^4002/997.
-```
-
-Sources:
+remain valid and are checked in
 
 ```text
 docs/PRIMARY_DELTA_TWO_BIT_SHARPENING.md
 tools/verify_primary_delta_two_bit_sharpening.py
 docs/CYCLE_FLOOR_LOCAL_CORRECTION_SHARPENING.md
 tools/verify_cycle_floor_local_correction_sharpening.py
+```
+
+They are now sharpened to the adjacent-coefficient bracket
+
+```text
+1007*2^-4002 < delta-epsilon,
+delta < 1008*2^-4002.                                  (1)
+```
+
+Therefore every actual consecutive complete-block segment of net credit `C`,
+accelerated length `L`, source `x`, and endpoint `y` satisfies
+
+```text
+log2(y/x)<C-1007*L*2^-4002.                            (2)
+```
+
+Consequences for positive-credit segments:
+
+```text
+nondecreasing: L<C*2^4002/1007;
+contracting:   L>C*2^4002/1008.
+```
+
+A zero-credit sponsor arch has the quantitative contraction
+
+```text
+log2(source/endpoint)>1007*L*2^-4002.                  (3)
+```
+
+Sources:
+
+```text
+docs/PRIMARY_ONE_OVER_1007_CYCLE_STRIP.md
+tools/verify_primary_one_over_1007_cycle_strip.py
 docs/ZERO_CREDIT_ARCH_QUANTITATIVE_CONTRACTION.md
 tools/verify_zero_credit_arch_quantitative_contraction.py
 ```
 
-## New global near-critical strip
+## Global one-over-1007 cycle strip
 
-For full cycle length `p` and total credit `D`, equation (1) and the retained
-upper drift bound `delta<2^-3992` give
+For full cycle length `p` and total credit `D`, (1)--(2) give
 
 ```text
-D*2^3992
+D*2^4002/1008
  <p
- <D*2^4002/997
- =(1024/997)*D*2^3992.                                (3)
+ <D*2^4002/1007.                                      (4)
 ```
 
-The relative width is only
+The upper endpoint divided by the lower endpoint is `1008/1007`, so the relative
+width is exactly
 
 ```text
-1024/997-1=27/997<2.71%.
+1/1007<0.1%.
 ```
 
-This is the strongest current cycle-wide restriction. Future work must use this
-narrow strip rather than the older coarse `2^3994` correction scale.
+This replaces the older `27/997<2.71%` strip as the strongest current
+cycle-wide restriction. It is more than 27 times narrower.
 
 ## Strongest exit-return decomposition
 
@@ -177,15 +198,15 @@ bounded sponsored macro-exit from `z` to `y` with
 ```text
 z<y,
 1<=C<=4500,
-L_macro<2^4005.
+L_macro<C*2^4002/1007<2^4005.
 ```
 
 The remaining actual return from `y` to `z` satisfies
 
 ```text
 R>=1,
-L_return>R*2^3992>=2^3992,
-L_return<(R+4500)*2^4002/997.
+L_return>R*2^4002/1008,
+L_return<(R+4500)*2^4002/1007.
 ```
 
 Every return prefix ending at a complete-block boundary has credit
@@ -196,15 +217,15 @@ Q>=1-C>=-4499.
 
 ## Decisive next target
 
-Exclude the positive-credit return after the bounded initial sponsor nest.
-The strongest route is now:
+Exclude the positive-credit return after the bounded initial sponsor nest. The
+strongest route is now:
 
-1. use the global `27/997` near-critical strip;
-2. charge every zero-credit arch by the quantitative loss (2);
-3. apply the positive-credit length dichotomy to every remaining macroblock;
+1. use the `1/1007` global strip, not the older coarse length bounds;
+2. charge every zero-credit arch by the quantitative loss (3);
+3. apply the adjacent `1007/1008` length dichotomy to every remaining macroblock;
 4. combine arch endpoints with the permanent `N` and `1093^2` labels and the
    exceptional-source floor;
-5. prove a lower correction bound incompatible with (3), a repeated exact source
+5. prove a lower correction bound incompatible with (4), a repeated exact source
    class, an incompatible adjacent-label lift, or excessive harmonic correction;
 6. use `Q>=-4499`, so no return prefix can use an unbounded exceptional reserve.
 
