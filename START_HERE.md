@@ -68,47 +68,28 @@ no cycle value in the checked window through 10^1201;
 at least 245833 ordinary complete blocks.
 ```
 
-The former nonpositive-return branch is completely excluded. The general
-cycle-wide block-correction theorem gives
-
-```text
-p < 2*D*B*X/[d*(X-d)].
-```
-
-When a return has nonpositive credit, `1<=D<=4500`, so `p<2^4006`, while the
-retained harmonic theorem forces `p>2^(2^974)`. This contradiction is closed and
-must not be revisited.
+The former nonpositive-return branch is completely excluded. Do not revisit it.
 
 ## Positive ballot and sponsor arches
 
 Use the canonical complete-block partition and let `z` be the least value among
-all complete-block boundaries. Every block of credit `c` satisfies
-
-```text
-endpoint/source < 2^c.
-```
-
-Therefore every nonempty cumulative block-credit prefix from `z` is positive:
+all complete-block boundaries. Every nonempty cumulative block-credit prefix
+from `z` is positive:
 
 ```text
 P_j>=1.
 ```
 
-For each exceptional block, let `h` be the prefix credit immediately after it,
-and choose the last earlier boundary whose prefix credit is at most `h`. The
-resulting actual consecutive sponsor arch:
+Every exceptional block lies in a canonical ordinary-to-exceptional sponsor arch
+with
 
 ```text
-starts with an ordinary block;
-ends with the chosen exceptional block;
-has net credit 0<=C<=4499;
-stays strictly above its final credit level at every internal boundary.
+0<=C<=4499,
 ```
 
-Canonical sponsor arches are laminar: two are disjoint or nested, never
-crossing. Their maximal members are pairwise disjoint, cover every exceptional
-block, and leave only ordinary blocks outside. Thus all exceptional complexity
-is compressed into actual nonnegative-credit macroblocks.
+and every internal boundary stays strictly above the final credit level. The
+arches are laminar. Their maximal members are pairwise disjoint, cover every
+exceptional block, and leave only ordinary blocks outside.
 
 Detailed sources:
 
@@ -119,41 +100,41 @@ docs/EXCEPTIONAL_SPONSOR_ARCH_MACRO_EXIT.md
 tools/verify_exceptional_sponsor_arch_macro_exit.py
 ```
 
-## Sharp local length scales
+## Unified floor-sensitive height theorem
 
-The global cycle-value floor `n>N` sharpens the correction of every complete
-block to
-
-```text
-kappa<ell/(X*N*ln(2)).
-```
-
-Exact rational comparison then gives, for every positive-credit nondecreasing
-complete-block segment,
+Every hypothetical cycle value is greater than `N`. Therefore every actual
+consecutive complete-block segment of net credit `C`, accelerated length `L`,
+source `x`, and endpoint `y` satisfies
 
 ```text
-L<C*2^4002/997<C*2^3993.
+log2(y/x)<C-alpha*L,
+alpha=997*2^-4002.                                    (1)
 ```
 
-For `C<=4500`, the sharper uniform bound is
+Consequences for positive-credit segments:
 
 ```text
-L<2^4005.
+nondecreasing: L<C*2^4002/997<C*2^3993;
+contracting:   L>C*2^3992.
 ```
 
-The primary logarithmic drift has the exact two-bit upper sharpening
+A zero-credit sponsor arch now has the quantitative contraction
 
 ```text
-delta=log2(B/X)<2^-3992.
+log2(source/endpoint)>alpha*L.                        (2)
 ```
 
-Therefore every positive-credit segment which actually contracts satisfies
+In particular,
 
 ```text
-y<x and C>=1  =>  L>C*2^3992.
+L>=2^4002  =>  source>2^997*endpoint>2^997*N.
 ```
 
-A zero-credit sponsor arch always contracts by exact height-credit domination.
+For all pairwise disjoint zero-credit arches of total length `Z`,
+
+```text
+Z<D*2^4002/997.
+```
 
 Sources:
 
@@ -162,17 +143,36 @@ docs/PRIMARY_DELTA_TWO_BIT_SHARPENING.md
 tools/verify_primary_delta_two_bit_sharpening.py
 docs/CYCLE_FLOOR_LOCAL_CORRECTION_SHARPENING.md
 tools/verify_cycle_floor_local_correction_sharpening.py
-docs/EXCEPTIONAL_SPONSOR_ARCH_MACRO_EXIT.md
+docs/ZERO_CREDIT_ARCH_QUANTITATIVE_CONTRACTION.md
+tools/verify_zero_credit_arch_quantitative_contraction.py
 ```
 
-## New strongest exit-return decomposition
+## New global near-critical strip
 
-At the least boundary `z`, take:
+For full cycle length `p` and total credit `D`, equation (1) and the retained
+upper drift bound `delta<2^-3992` give
 
-1. the maximal sponsor arch beginning with block `0`, if one exists; or
-2. otherwise the first pure ordinary block.
+```text
+D*2^3992
+ <p
+ <D*2^4002/997
+ =(1024/997)*D*2^3992.                                (3)
+```
 
-This gives an actual bounded sponsored macro-exit from `z` to `y` with
+The relative width is only
+
+```text
+1024/997-1=27/997<2.71%.
+```
+
+This is the strongest current cycle-wide restriction. Future work must use this
+narrow strip rather than the older coarse `2^3994` correction scale.
+
+## Strongest exit-return decomposition
+
+At the least boundary `z`, take the maximal sponsor arch beginning with block `0`,
+if one exists, or otherwise the first pure ordinary block. This gives an actual
+bounded sponsored macro-exit from `z` to `y` with
 
 ```text
 z<y,
@@ -180,13 +180,12 @@ z<y,
 L_macro<2^4005.
 ```
 
-If the first ordinary block sponsors a nested family of early exceptions, the
-whole maximal nest is absorbed into this macro-exit. The remaining actual return
-from `y` to `z` still satisfies
+The remaining actual return from `y` to `z` satisfies
 
 ```text
 R>=1,
-L_return>R*2^3992>=2^3992.
+L_return>R*2^3992>=2^3992,
+L_return<(R+4500)*2^4002/997.
 ```
 
 Every return prefix ending at a complete-block boundary has credit
@@ -195,44 +194,26 @@ Every return prefix ending at a complete-block boundary has credit
 Q>=1-C>=-4499.
 ```
 
-Sources:
-
-```text
-docs/EXCEPTIONAL_SPONSOR_ARCH_MACRO_EXIT.md
-tools/verify_exceptional_sponsor_arch_macro_exit.py
-docs/PRIMARY_DELTA_TWO_BIT_SHARPENING.md
-tools/verify_primary_delta_two_bit_sharpening.py
-docs/CYCLE_FLOOR_LOCAL_CORRECTION_SHARPENING.md
-tools/verify_cycle_floor_local_correction_sharpening.py
-docs/MINIMUM_BLOCK_BOUNDARY_PURE_ORDINARY_EXIT.md
-tools/verify_minimum_block_boundary_pure_ordinary_exit.py
-```
-
 ## Decisive next target
 
-Exclude the astronomically long positive-credit return after removing the
-bounded initial sponsor nest. Work with the disjoint maximal sponsor arches on
-the return:
+Exclude the positive-credit return after the bounded initial sponsor nest.
+The strongest route is now:
 
-1. every exception lies in an actual arch of credit at most `4499`;
-2. a noncontracting positive-credit arch has
-   `L<C*2^4002/997<C*2^3993`, while a contracting one has `L>C*2^3992`;
-3. zero-credit arches always contract and are now the only macroblocks lacking a
-   credit-proportional length lower bound;
+1. use the global `27/997` near-critical strip;
+2. charge every zero-credit arch by the quantitative loss (2);
+3. apply the positive-credit length dichotomy to every remaining macroblock;
 4. combine arch endpoints with the permanent `N` and `1093^2` labels and the
    exceptional-source floor;
-5. prove that the long return requires too many contracting arches, a repeated
-   exact source class, an incompatible adjacent-label lift, or too much harmonic
-   correction;
-6. use `Q>=-4499` so no return prefix can use an unbounded exceptional reserve.
+5. prove a lower correction bound incompatible with (3), a repeated exact source
+   class, an incompatible adjacent-label lift, or excessive harmonic correction;
+6. use `Q>=-4499`, so no return prefix can use an unbounded exceptional reserve.
 
 Secondary routes remain the exact cyclic source-matching divisor and an explicit
 linear-form-in-logarithms estimate, but only if their constants beat the actual
 correction terms.
 
-Do not return to the closed nonpositive branch. Do not use finite same-type
-windows, a fixed finite `N`-adic ladder, or long finite trajectories as a
-standalone contradiction.
+Do not use finite same-type windows, a fixed finite `N`-adic ladder, or long
+finite trajectories as a standalone contradiction.
 
 ## Non-negotiable corrections
 
