@@ -35,152 +35,111 @@ G5 final certificate: waits for G3.
 
 ## Retained global structure
 
-- `N|X` and `1093||X`;
-- `16562000` permanent classes survive modulo `N*1093^2`;
-- every cycle value is greater than `N`;
-- every exceptional source has at least `1505` decimal digits;
-- the cycle window through `[10^1201,10^1202]` is impossible;
-- every hypothetical cycle has at least `245833` ordinary complete blocks.
-
-## Exact complete-block ledger
-
-For a hypothetical cycle, let
+Every hypothetical cycle satisfies:
 
 ```text
-p = accelerated length,
-A = total valuation,
-D=4501*p-A.
+N|X and 1093||X;
+16562000 permanent classes modulo N*1093^2;
+every cycle value>N;
+every exceptional source has at least 1505 decimal digits;
+no cycle value in the checked window through 10^1201;
+at least 245833 ordinary complete blocks.
 ```
 
-The canonical complete-block partition has ordinary credits `e` with
-`1<=e<=4500` and exceptional credits `-b` with `b>=1`. It obeys
+## Complete-block ledger and ballot
+
+For accelerated length `p`, total valuation `A`, and total credit
+
+```text
+D=4501*p-A,
+```
+
+the canonical complete blocks have ordinary credits `1<=e<=4500` and
+exceptional credits `-b`, `b>=1`, with
 
 ```text
 D=sum ordinary deficits-sum exceptional excesses>=1.
 ```
 
-For a complete block of length `ell`, source `n`, endpoint `n'`, and credit `c`,
+For a block of length `ell`, source `n`, endpoint `n'`, and credit `c`,
 
 ```text
 n'/n
  =2^c*(X/B)^ell
-  *[1+((B/X)^ell-1)/(d*n)].
+  *[1+((B/X)^ell-1)/(d*n)]
+ <2^c.                                                 (1)
 ```
 
-Since `d*n>1`, the correction factor is strictly smaller than `(B/X)^ell`.
-Therefore
-
-```text
-n'/n<2^c.                                             (1)
-```
-
-Source:
-
-```text
-docs/NEAR_POWER_CYCLE_BLOCK_LEDGER.md
-```
-
-## Positive credit ballot at the least block boundary
-
-Let
+Rotate the block boundaries
 
 ```text
 z_0,z_1,...,z_q=z_0
 ```
 
-be the complete-block boundaries in cyclic order, rotated so that `z_0` is the
-least boundary value. If
-
-```text
-P_j=sum_(i<j)c_i,
-```
-
-then multiplying (1) gives
+so that `z_0` is least, and put `P_j=sum_(i<j)c_i`. From (1),
 
 ```text
 z_j/z_0<2^P_j.
 ```
 
-Minimality gives `z_j/z_0>=1`, hence
+Minimality therefore gives the positive ballot
 
 ```text
 P_j>=1 for every 1<=j<=q.                             (2)
 ```
 
-Consequences retained from the first ballot theorem:
+Consequences retained from the ballot theorem:
 
-- the first complete block after `z_0` is ordinary;
-- every exceptional excess unit is matched to an earlier ordinary deficit unit
-  in actual cyclic order;
-- the unit matching may be chosen noncrossing by a stack construction;
-- exactly `D` ordinary deficit units remain unmatched;
-- after the first `j` ordinary blocks,
-
-  ```text
-  E_j<=4500*j-1;
-  ```
-
-- an exceptional excess `b` cannot occur that early unless
-
-  ```text
-  j>=ceil((b+1)/4500).
-  ```
+```text
+the first block is ordinary;
+every exceptional unit has an earlier ordinary sponsor;
+exactly D ordinary units remain unmatched;
+E_j<=4500*j-1 after the first j ordinary blocks;
+an excess b requires j>=ceil((b+1)/4500).
+```
 
 Sources:
 
 ```text
+docs/NEAR_POWER_CYCLE_BLOCK_LEDGER.md
 docs/MINIMUM_BLOCK_BOUNDARY_CREDIT_BALLOT.md
 tools/verify_minimum_block_boundary_credit_ballot.py
 ```
 
-## New theorem: canonical sponsor arches
+## Canonical sponsor arches
 
-For an exceptional block `j`, put
-
-```text
-h=P_(j+1).
-```
-
-Choose the last index `i<=j` with
+For an exceptional block `j`, put `h=P_(j+1)` and choose the last `i<=j` with
 
 ```text
 P_i<=h.
 ```
 
-Then `i<j`, block `i` is ordinary, and the actual consecutive segment of blocks
-`i,...,j` has net credit
+Then `i<j`, block `i` is ordinary, and the actual consecutive segment `i,...,j`
+has credit
 
 ```text
-C=P_(j+1)-P_i.
+C=P_(j+1)-P_i,
+0<=C<c_i<=4500,
+0<=C<=4499.                                           (3)
 ```
 
-The defining last-crossing property proves
+Every internal boundary stays strictly above the final credit level:
 
 ```text
-0<=C<c_i<=4500,
-0<=C<=4499,                                           (3)
 P_t>h for every i<t<=j.                               (4)
 ```
 
-This segment is the canonical sponsor arch of exceptional block `j`.
+Two such arches cannot cross. If `i<u<=j<v`, the first arch gives
+`P_u>P_(j+1)`, while the second gives `P_(j+1)>P_(v+1)` and its source condition
+gives `P_u<=P_(v+1)`, a contradiction.
 
-Two canonical sponsor arches cannot cross: if their intervals were
-
-```text
-i<u<=j<v,
-```
-
-then the first arch would force `P_u>P_(j+1)`, while the second would force
-`P_(j+1)>P_(v+1)`, contradicting the source condition `P_u<=P_(v+1)`.
-Therefore sponsor arches are laminar: they are disjoint or nested.
-
-Their maximal members are pairwise disjoint, cover every exceptional block, and
-leave only ordinary blocks outside. Thus every hypothetical cycle has an actual
-consecutive macro-decomposition into:
+Therefore the arches are laminar. Their maximal members are disjoint, cover
+every exceptional block, and leave only ordinary blocks outside. The cycle is
+compressed into actual macroblocks:
 
 ```text
-maximal sponsor arches with credit 0<=C<=4499;
-uncovered ordinary blocks with credit 1<=e<=4500.
+maximal sponsor arches: credit 0..4499;
+uncovered ordinary blocks: credit 1..4500.
 ```
 
 Multiplying (1) across an arch gives
@@ -189,7 +148,7 @@ Multiplying (1) across an arch gives
 arch endpoint / arch source <2^C.                     (5)
 ```
 
-In particular, every zero-credit arch strictly contracts.
+Hence every zero-credit arch strictly contracts.
 
 Sources:
 
@@ -198,132 +157,73 @@ docs/EXCEPTIONAL_SPONSOR_ARCH_MACRO_EXIT.md
 tools/verify_exceptional_sponsor_arch_macro_exit.py
 ```
 
-## New local block-correction bound
+## Local length theorem
 
-Consider any actual consecutive complete-block segment with
-
-```text
-C = net credit,
-L = accelerated length,
-x = source,
-y = endpoint.
-```
-
-The exact segment identity and the block correction estimate give
+For any actual consecutive block segment of net credit `C`, accelerated length
+`L`, source `x`, and endpoint `y`, the exact correction estimates give
 
 ```text
 ln(y/x)
  <C*ln(2)-L*[ln(B/X)-d/(2*X)].                        (6)
 ```
 
-If `y>=x`, then
-
-```text
-L*[ln(B/X)-d/(2*X)]<C*ln(2).
-```
-
-Using
-
-```text
-ln(B/X)>d/B,
-ln(2)<1,
-d/B-d/(2*X)=d*(X-d)/(2*B*X)>0,
-```
-
-we obtain the exact local theorem
+If `y>=x`, then elementary rational logarithmic bounds imply
 
 ```text
 L < 2*C*B*X/[d*(X-d)].                                (7)
 ```
 
-Thus every nondecreasing segment has `C>=1`. For the primary candidate,
-`C<=4500` implies
+Thus a nondecreasing segment has `C>=1`. For the primary candidate,
 
 ```text
-L<2^4006.                                             (8)
+C<=4500 and y>=x  =>  L<2^4006.                       (8)
 ```
 
-This is a segment theorem, not only a cycle-wide estimate. It has no assumed
-upper cutoff on `L`.
+This is a local theorem with no assumed length cutoff.
 
-## New strongest exit-return decomposition
+## Strongest current exit-return decomposition
 
 Let `z` be the least complete-block boundary. The retained pure-exit theorem
-proves that the first block is ordinary, has deficit `1<=e<=4500`, ends above
-`z`, and leaves a return of credit `R_0>=1`.
+proves that the first block is ordinary with `1<=e<=4500`, ends above `z`, and
+leaves return credit `R_0>=1`.
 
-Now use the maximal sponsor-arch decomposition.
+Take as initial macro-exit:
 
-- If no maximal arch begins at block `0`, take the first ordinary block as the
-  initial macro-exit.
-- If a maximal arch begins at block `0`, take that whole arch. Its credit is
-  `0<=C<e`. It cannot be the full cycle, because full closure would give
-  `D=C<e`, while the retained pure-exit theorem gives `D=e+R_0>e`.
+1. the maximal sponsor arch beginning at block `0`, if one exists; or
+2. otherwise the first ordinary block.
 
-In either case the macro-exit ends at a proper boundary `y>z`. Equation (5)
-rules out zero credit, so
+An arch beginning at block `0` has `0<=C<e` and cannot be the full cycle, because
+full closure would give `D=C<e`, while `D=e+R_0>e`. Its endpoint is therefore a
+proper boundary above `z`; equation (5) rules out `C=0`.
+
+In both cases the actual initial macro-exit satisfies
 
 ```text
 z<y,
-1<=C<=4500.                                           (9)
+1<=C<=4500,
+L_macro<2^4006.                                      (9)
 ```
 
-The local theorem (8) gives
+It absorbs the entire maximal nest of early exceptions sponsored through the
+first ordinary crossing.
+
+For the remaining actual return from `y` to `z`, put `R=D-C`. Then
 
 ```text
-L_macro<2^4006.                                      (10)
+R>=1,
+L_return>2^3990.                                     (10)
 ```
 
-If the first ordinary block sponsors a nested family of early exceptional
-blocks, the entire maximal nest is absorbed into this bounded macro-exit.
-
-Let
-
-```text
-R=D-C
-```
-
-be the credit of the remaining actual return from `y` to `z`.
-
-- for a one-block macro-exit, `R=R_0>=1`;
-- for an arch macro-exit, `R=e+R_0-C>=2`.
-
-Therefore
-
-```text
-R>=1.                                                 (11)
-```
-
-The exact return equation and `log2(B/X)<2^-3990` yield
-
-```text
-L_return>2^3990.                                      (12)
-```
-
-For any prefix of the compressed return ending at a complete-block boundary,
-write `Q` for its credit. The ballot theorem gives
+Every return prefix ending at a block boundary has credit `Q` satisfying
 
 ```text
 C+Q>=1,
-Q>=1-C>=-4499.                                       (13)
+Q>=1-C>=-4499.                                       (11)
 ```
 
-Thus the strongest current form of G3 is:
-
-```text
-bounded sponsored macro-exit:
-  z<y,
-  1<=C<=4500,
-  L_macro<2^4006;
-
-remaining actual return:
-  R>=1,
-  L_return>2^3990,
-  every block-boundary prefix has Q>=-4499;
-
-all return exceptions:
-  contained in disjoint maximal sponsor arches of credit <=4499.
-```
+Thus G3 is reduced to an astronomically long positive-credit return after a
+bounded sponsored macro-exit. All exceptions on that return lie in disjoint
+maximal arches of credit at most `4499`.
 
 Sources:
 
@@ -331,39 +231,21 @@ Sources:
 docs/EXCEPTIONAL_SPONSOR_ARCH_MACRO_EXIT.md
 tools/verify_exceptional_sponsor_arch_macro_exit.py
 docs/MINIMUM_BLOCK_BOUNDARY_PURE_ORDINARY_EXIT.md
-tools/verify_minimum_block_boundary_pure_ORDINARY_EXIT.py
+tools/verify_minimum_block_boundary_pure_ordinary_exit.py
 ```
 
-## Closed nonpositive-return branch
+## Closed nonpositive branch
 
-For any near-power multiplier
+The cycle-wide block-correction theorem gives
 
 ```text
-B=2^m,
-X=B-d,
-0<d<B/2,
+p < 2*D*B*X/[d*(X-d)].                               (12)
 ```
 
-the exact block-correction identity proves
-
-```text
-p < 2*D*B*X/[d*(X-d)].                               (14)
-```
-
-For the primary candidate, a nonpositive return gives `1<=D<=4500`, hence
-
-```text
-p<2^4006.
-```
-
-The retained permanent-class harmonic theorem gives
-
-```text
-p>2^(2^974),
-```
-
-so all nonpositive returns are excluded. Former `h=1` and `h>=2` subdivisions
-remain valid conditional results, but their common hypothesis is impossible.
+A nonpositive return has `1<=D<=4500`, hence `p<2^4006`. The retained
+permanent-class harmonic theorem instead gives `p>2^(2^974)`. Therefore every
+nonpositive return is impossible. Do not revisit its former `h=1` or `h>=2`
+subdivisions as live branches.
 
 Sources:
 
@@ -372,7 +254,7 @@ docs/NONPOSITIVE_RETURN_BLOCK_CORRECTION_EXCLUSION.md
 tools/verify_nonpositive_return_block_correction_exclusion.py
 ```
 
-## Exact cyclic closure and retained global divisor
+## Exact cyclic closure retained
 
 For a cyclic valuation word and rotated affine numerators `Q_k`,
 
@@ -381,14 +263,13 @@ Delta=2^A-X^p,
 2^a_k*Q_(k+1)=X*Q_k+Delta.
 ```
 
-The word closes to a positive cycle iff `Delta>0` and `Delta|Q_0`. Equivalently,
-a truly adjacent pair satisfies
+Closure is equivalent to `Delta>0` and `Delta|Q_0`; for a truly adjacent pair,
 
 ```text
 gcd(Q_k,Q_(k+1))=Delta.
 ```
 
-For complete block lengths `ell_i`, put
+For complete-block lengths `ell_i`, let
 
 ```text
 h=gcd_i ell_i,
@@ -396,7 +277,7 @@ S_h=(B^h-X^h)/d,
 g=gcd of all complete-block boundaries.
 ```
 
-Exact closure gives
+Then
 
 ```text
 g=gcd(b_i,S_h) for every boundary b_i,
@@ -405,11 +286,9 @@ S_h/gcd(S_h,2^D-1) divides g divides S_h,
 n_t==B^(-j)*S_j (mod g),  j=t mod h.
 ```
 
-Fixed local endpoint congruences, finite two-sided word gluing, naive block
-compression, finite repeated-defect persistence, arbitrary finite same-deficit
-runs, and any fixed finite `N`-adic depth do not force exact cyclic source
-matching. Exact valuation-word coding and CRT realize those local constraints at
-infinitely many positive starts.
+Finite local endpoint congruences, finite word gluing, repeated finite patterns,
+and fixed finite `N`-adic ladders do not force exact source matching; the
+repository contains explicit no-go theorems for those routes.
 
 Sources:
 
@@ -425,40 +304,41 @@ docs/SAME_DEFICIT_FINITE_PERSISTENCE_NO_GO.md
 
 ## Decisive next target
 
-Exclude the positive-credit return in (11)--(13), after the bounded initial
-sponsor nest has been removed. The strongest current route is:
+Exclude the return in (10)--(11). The strongest current route is:
 
-1. work with the disjoint maximal sponsor arches on the return;
-2. use (7) to show that every noncontracting arch has accelerated length below
-   `2^4006`;
-3. combine each arch's source and endpoint with the permanent `N` and `1093^2`
-   labels and the exceptional-source floor;
-4. prove that the return cannot contain enough contracting arches without an
-   impossible height loss, exact source-class repetition, incompatible
-   adjacent-label lift, or excessive harmonic correction;
-5. exploit `Q>=-4499` so no prefix can use an unbounded exceptional reserve.
+1. use the disjoint maximal sponsor arches on the return;
+2. by (7), every noncontracting arch has accelerated length below `2^4006`;
+3. combine arch endpoints with the permanent `N` and `1093^2` labels and the
+   exceptional-source floor;
+4. prove that the long return requires too many contracting arches, an exact
+   source-class repetition, an incompatible adjacent-label lift, or excessive
+   harmonic correction;
+5. exploit `Q>=-4499`, so no prefix can use an unbounded exceptional reserve.
 
-Secondary routes are the exact global divisor `g` and a linear-form-in-logarithms
-estimate, but only if their constants beat the actual correction terms.
-
-A finite trajectory calculation, a fixed finite residue ladder, or another lower
-bound on the already excluded nonpositive branch is not useful.
+Secondary routes are the exact global divisor `g` and an explicit
+linear-form-in-logarithms estimate, only if their constants beat the actual
+correction terms.
 
 ## Critical corrections
 
-Do not use `2^A==1 (mod X)`. The correct cycle congruence is
+Do not use
+
+```text
+2^A==1 (mod X).
+```
+
+The correct relation is
 
 ```text
 2^A*product_i(n_i)==1 (mod X).
 ```
 
-Do not identify a least admissible predecessor with the predecessor actually used
-by a cycle. Finite computation is not divergence. Full history is in
-`docs/RETRACTIONS.md`.
+Do not identify a least admissible predecessor with the predecessor actually
+used by a cycle. Finite computation is not divergence.
 
 ## Verification state
 
-The new standalone checker passed in the research environment:
+The new checker passed in the research environment:
 
 ```text
 python tools/verify_exceptional_sponsor_arch_macro_exit.py
@@ -466,21 +346,14 @@ python tools/verify_exceptional_sponsor_arch_macro_exit.py
 
 It verified:
 
-- `2123272` positive-prefix integer ledgers;
-- canonical sponsor construction, laminarity, maximal-arch coverage, and exact
-  macro-credit conservation;
-- `113288` exact local near-power segment cases;
-- all three known accelerated `5n+1` positive-cycle regressions;
-- the primary bound `L_macro<2^4006`;
-- positive compressed-return credit, `L_return>2^3990`, and prefix debt
-  `Q>=-4499`.
-
-The related retained standalone checkers are
-
 ```text
-python tools/verify_minimum_block_boundary_credit_ballot.py
-python tools/verify_minimum_block_boundary_pure_ordinary_exit.py
-python tools/verify_nonpositive_return_block_correction_exclusion.py
+2123272 positive-prefix integer ledgers;
+canonical arches, laminarity, maximal coverage, and credit conservation;
+113288 exact local near-power segment cases;
+all three known accelerated 5n+1 positive-cycle regressions;
+L_macro<2^4006;
+R>=1, L_return>2^3990, and Q>=-4499.
 ```
 
-A complete repository-wide run was not executed in this environment.
+The checker was added to `run_checks.py`. A complete repository-wide run was not
+executed in this environment.
