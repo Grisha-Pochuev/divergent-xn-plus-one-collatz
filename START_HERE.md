@@ -119,22 +119,45 @@ docs/EXCEPTIONAL_SPONSOR_ARCH_MACRO_EXIT.md
 tools/verify_exceptional_sponsor_arch_macro_exit.py
 ```
 
-## New strongest exit-return decomposition
+## Sharp local length scales
 
 For any actual consecutive complete-block segment of net credit `C`, accelerated
-length `L`, source `x`, and endpoint `y>=x`, the local block-correction argument
+length `L`, source `x`, and endpoint `y>=x`, the local block-correction theorem
 proves
 
 ```text
-L < 2*C*B*X/[d*(X-d)].
+L < 2*C*B*X/[d*(X-d)] < C*2^3994.
 ```
 
-Hence, for the primary candidate, every nondecreasing segment with `C<=4500`
-has
+For `C<=4500`, exact integer comparison also gives the sharper uniform bound
 
 ```text
 L<2^4006.
 ```
+
+The primary logarithmic drift now has the exact two-bit sharpening
+
+```text
+delta=log2(B/X)<2^-3992.
+```
+
+Therefore every positive-credit segment which actually contracts satisfies
+
+```text
+y<x and C>=1  =>  L>C*2^3992.
+```
+
+A zero-credit sponsor arch always contracts by exact height-credit domination.
+
+Sources:
+
+```text
+docs/PRIMARY_DELTA_TWO_BIT_SHARPENING.md
+tools/verify_primary_delta_two_bit_sharpening.py
+docs/EXCEPTIONAL_SPONSOR_ARCH_MACRO_EXIT.md
+```
+
+## New strongest exit-return decomposition
 
 At the least boundary `z`, take:
 
@@ -155,7 +178,7 @@ from `y` to `z` still satisfies
 
 ```text
 R>=1,
-L_return>2^3990.
+L_return>R*2^3992>=2^3992.
 ```
 
 Every return prefix ending at a complete-block boundary has credit
@@ -169,10 +192,10 @@ Sources:
 ```text
 docs/EXCEPTIONAL_SPONSOR_ARCH_MACRO_EXIT.md
 tools/verify_exceptional_sponsor_arch_macro_exit.py
+docs/PRIMARY_DELTA_TWO_BIT_SHARPENING.md
+tools/verify_primary_delta_two_bit_sharpening.py
 docs/MINIMUM_BLOCK_BOUNDARY_PURE_ORDINARY_EXIT.md
 tools/verify_minimum_block_boundary_pure_ordinary_exit.py
-docs/NONPOSITIVE_RETURN_BLOCK_CORRECTION_EXCLUSION.md
-tools/verify_nonpositive_return_block_correction_exclusion.py
 ```
 
 ## Decisive next target
@@ -182,14 +205,15 @@ bounded initial sponsor nest. Work with the disjoint maximal sponsor arches on
 the return:
 
 1. every exception lies in an actual arch of credit at most `4499`;
-2. any noncontracting such arch has accelerated length below `2^4006` by the
-   local segment bound;
-3. combine arch endpoints with the permanent `N` and `1093^2` labels and the
+2. a noncontracting positive-credit arch has `L<C*2^3994`, while a contracting
+   one has `L>C*2^3992`;
+3. zero-credit arches always contract;
+4. combine arch endpoints with the permanent `N` and `1093^2` labels and the
    exceptional-source floor;
-4. prove that the long return requires either too many contracting arches, a
-   repeated exact source class, an incompatible adjacent-label lift, or too much
-   harmonic correction;
-5. use `Q>=-4499` so no return prefix can use an unbounded exceptional reserve.
+5. prove that the long return requires too many contracting arches, a repeated
+   exact source class, an incompatible adjacent-label lift, or too much harmonic
+   correction;
+6. use `Q>=-4499` so no return prefix can use an unbounded exceptional reserve.
 
 Secondary routes remain the exact cyclic source-matching divisor and an explicit
 linear-form-in-logarithms estimate, but only if their constants beat the actual
