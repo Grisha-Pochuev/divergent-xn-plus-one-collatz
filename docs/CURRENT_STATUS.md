@@ -82,13 +82,13 @@ so that `z_0` is least, and put `P_j=sum_(i<j)c_i`. From (1),
 z_j/z_0<2^P_j.
 ```
 
-Minimality therefore gives the positive ballot
+Minimality gives
 
 ```text
 P_j>=1 for every 1<=j<=q.                             (2)
 ```
 
-Consequences retained from the ballot theorem:
+Consequences:
 
 ```text
 the first block is ordinary;
@@ -109,13 +109,8 @@ tools/verify_minimum_block_boundary_credit_ballot.py
 ## Canonical sponsor arches
 
 For an exceptional block `j`, put `h=P_(j+1)` and choose the last `i<=j` with
-
-```text
-P_i<=h.
-```
-
-Then `i<j`, block `i` is ordinary, and the actual consecutive segment `i,...,j`
-has credit
+`P_i<=h`. Then `i<j`, block `i` is ordinary, and the actual consecutive segment
+`i,...,j` has credit
 
 ```text
 C=P_(j+1)-P_i,
@@ -129,13 +124,9 @@ Every internal boundary stays strictly above the final credit level:
 P_t>h for every i<t<=j.                               (4)
 ```
 
-Two such arches cannot cross. If `i<u<=j<v`, the first arch gives
-`P_u>P_(j+1)`, while the second gives `P_(j+1)>P_(v+1)` and its source condition
-gives `P_u<=P_(v+1)`, a contradiction.
-
-Therefore the arches are laminar. Their maximal members are disjoint, cover
-every exceptional block, and leave only ordinary blocks outside. The cycle is
-compressed into actual macroblocks:
+Two sponsor arches cannot cross. Hence they are laminar; their maximal members
+are disjoint, cover every exceptional block, and leave only ordinary blocks
+outside. The cycle is compressed into
 
 ```text
 maximal sponsor arches: credit 0..4499;
@@ -148,7 +139,7 @@ Multiplying (1) across an arch gives
 arch endpoint / arch source <2^C.                     (5)
 ```
 
-Hence every zero-credit arch strictly contracts.
+Every zero-credit arch therefore strictly contracts.
 
 Sources:
 
@@ -157,7 +148,7 @@ docs/EXCEPTIONAL_SPONSOR_ARCH_MACRO_EXIT.md
 tools/verify_exceptional_sponsor_arch_macro_exit.py
 ```
 
-## Local length theorem
+## Sharp local length theorems
 
 For any actual consecutive block segment of net credit `C`, accelerated length
 `L`, source `x`, and endpoint `y`, the exact correction estimates give
@@ -167,19 +158,60 @@ ln(y/x)
  <C*ln(2)-L*[ln(B/X)-d/(2*X)].                        (6)
 ```
 
-If `y>=x`, then elementary rational logarithmic bounds imply
+If `y>=x`, elementary rational logarithmic bounds imply
 
 ```text
-L < 2*C*B*X/[d*(X-d)].                                (7)
+L < 2*C*B*X/[d*(X-d)] < C*2^3994.                    (7)
 ```
 
-Thus a nondecreasing segment has `C>=1`. For the primary candidate,
+For `C<=4500`, exact integer comparison also gives
 
 ```text
-C<=4500 and y>=x  =>  L<2^4006.                       (8)
+L<2^4006.                                             (8)
 ```
 
-This is a local theorem with no assumed length cutoff.
+A new exact rational estimate sharpens the primary drift to
+
+```text
+delta=log2(B/X)<2^-3992.                              (9)
+```
+
+The proof uses
+
+```text
+2^3992*d/X<349/511<11/16<56/81<ln(2),
+-ln(1-d/B)<d/X.
+```
+
+If a positive-credit segment contracts, its exact equation
+
+```text
+log2(y/x)=C-L*delta+K<0,
+K>0,
+```
+
+gives
+
+```text
+C>=1 and y<x  =>  L>C*2^3992.                        (10)
+```
+
+Thus every positive-credit macroblock has an explicit height-sign dichotomy:
+
+```text
+nondecreasing: L<C*2^3994;
+contracting:   L>C*2^3992.
+```
+
+Zero-credit sponsor arches always contract, but (10) does not apply to them.
+
+Sources:
+
+```text
+docs/PRIMARY_DELTA_TWO_BIT_SHARPENING.md
+tools/verify_primary_delta_two_bit_sharpening.py
+docs/EXCEPTIONAL_SPONSOR_ARCH_MACRO_EXIT.md
+```
 
 ## Strongest current exit-return decomposition
 
@@ -193,32 +225,37 @@ Take as initial macro-exit:
 2. otherwise the first ordinary block.
 
 An arch beginning at block `0` has `0<=C<e` and cannot be the full cycle, because
-full closure would give `D=C<e`, while `D=e+R_0>e`. Its endpoint is therefore a
-proper boundary above `z`; equation (5) rules out `C=0`.
+full closure would give `D=C<e`, while `D=e+R_0>e`. Its endpoint is a proper
+boundary above `z`; equation (5) rules out `C=0`.
 
-In both cases the actual initial macro-exit satisfies
+Therefore
 
 ```text
 z<y,
 1<=C<=4500,
-L_macro<2^4006.                                      (9)
+L_macro<2^4006.                                      (11)
 ```
 
-It absorbs the entire maximal nest of early exceptions sponsored through the
-first ordinary crossing.
+The macro-exit absorbs the entire maximal nest of early exceptions sponsored
+through the first ordinary crossing.
 
 For the remaining actual return from `y` to `z`, put `R=D-C`. Then
 
 ```text
-R>=1,
-L_return>2^3990.                                     (10)
+R>=1.                                                 (12)
+```
+
+Applying the sharpened drift estimate (9) to this contracting return gives
+
+```text
+L_return>R*2^3992>=2^3992.                            (13)
 ```
 
 Every return prefix ending at a block boundary has credit `Q` satisfying
 
 ```text
 C+Q>=1,
-Q>=1-C>=-4499.                                       (11)
+Q>=1-C>=-4499.                                       (14)
 ```
 
 Thus G3 is reduced to an astronomically long positive-credit return after a
@@ -230,6 +267,8 @@ Sources:
 ```text
 docs/EXCEPTIONAL_SPONSOR_ARCH_MACRO_EXIT.md
 tools/verify_exceptional_sponsor_arch_macro_exit.py
+docs/PRIMARY_DELTA_TWO_BIT_SHARPENING.md
+tools/verify_primary_delta_two_bit_sharpening.py
 docs/MINIMUM_BLOCK_BOUNDARY_PURE_ORDINARY_EXIT.md
 tools/verify_minimum_block_boundary_pure_ordinary_exit.py
 ```
@@ -239,11 +278,11 @@ tools/verify_minimum_block_boundary_pure_ordinary_exit.py
 The cycle-wide block-correction theorem gives
 
 ```text
-p < 2*D*B*X/[d*(X-d)].                               (12)
+p < 2*D*B*X/[d*(X-d)].                               (15)
 ```
 
 A nonpositive return has `1<=D<=4500`, hence `p<2^4006`. The retained
-permanent-class harmonic theorem instead gives `p>2^(2^974)`. Therefore every
+permanent-class harmonic theorem gives `p>2^(2^974)`. Therefore every
 nonpositive return is impossible. Do not revisit its former `h=1` or `h>=2`
 subdivisions as live branches.
 
@@ -263,7 +302,7 @@ Delta=2^A-X^p,
 2^a_k*Q_(k+1)=X*Q_k+Delta.
 ```
 
-Closure is equivalent to `Delta>0` and `Delta|Q_0`; for a truly adjacent pair,
+Closure is equivalent to `Delta>0` and `Delta|Q_0`; for an adjacent pair,
 
 ```text
 gcd(Q_k,Q_(k+1))=Delta.
@@ -304,16 +343,18 @@ docs/SAME_DEFICIT_FINITE_PERSISTENCE_NO_GO.md
 
 ## Decisive next target
 
-Exclude the return in (10)--(11). The strongest current route is:
+Exclude the return in (12)--(14). The strongest route is:
 
 1. use the disjoint maximal sponsor arches on the return;
-2. by (7), every noncontracting arch has accelerated length below `2^4006`;
-3. combine arch endpoints with the permanent `N` and `1093^2` labels and the
+2. apply the length dichotomy (7), (10) to every positive-credit arch;
+3. isolate zero-credit arches, which always contract and are now the only
+   contracting macroblocks without a credit-proportional length lower bound;
+4. combine arch endpoints with the permanent `N` and `1093^2` labels and the
    exceptional-source floor;
-4. prove that the long return requires too many contracting arches, an exact
-   source-class repetition, an incompatible adjacent-label lift, or excessive
+5. prove that the long return requires an impossible height loss, exact
+   source-class repetition, incompatible adjacent-label lift, or excessive
    harmonic correction;
-5. exploit `Q>=-4499`, so no prefix can use an unbounded exceptional reserve.
+6. exploit `Q>=-4499`, so no prefix can use an unbounded exceptional reserve.
 
 Secondary routes are the exact global divisor `g` and an explicit
 linear-form-in-logarithms estimate, only if their constants beat the actual
@@ -338,13 +379,14 @@ used by a cycle. Finite computation is not divergence.
 
 ## Verification state
 
-The new checker passed in the research environment:
+The new standalone checkers passed in the research environment:
 
 ```text
 python tools/verify_exceptional_sponsor_arch_macro_exit.py
+python tools/verify_primary_delta_two_bit_sharpening.py
 ```
 
-It verified:
+They verified:
 
 ```text
 2123272 positive-prefix integer ledgers;
@@ -352,8 +394,11 @@ canonical arches, laminarity, maximal coverage, and credit conservation;
 113288 exact local near-power segment cases;
 all three known accelerated 5n+1 positive-cycle regressions;
 L_macro<2^4006;
-R>=1, L_return>2^3990, and Q>=-4499.
+exact delta<2^-3992;
+contracting positive-credit bound L>C*2^3992;
+return bound L_return>R*2^3992;
+nondecreasing bound L<C*2^3994.
 ```
 
-The checker was added to `run_checks.py`. A complete repository-wide run was not
-executed in this environment.
+Both checkers are included in `run_checks.py`. A complete repository-wide run
+was not executed in this environment.
