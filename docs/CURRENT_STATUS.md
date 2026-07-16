@@ -42,36 +42,165 @@ G5 final certificate: waits for G3.
 - the cycle window through `[10^1201,10^1202]` is impossible;
 - every hypothetical cycle has at least `245833` ordinary complete blocks.
 
-## Minimum-boundary exit and return
+## Exact complete-block ledger
 
-Every hypothetical cycle contains an actual consecutive expanding exit from its
-least ordinary boundary `x` to the next ordinary boundary `y>x` with
-
-```text
-1<=C<=4500,
-exceptional excess<=4499,
-complete blocks<=4500,
-L_exit*log2(B/X)<C,
-L_exit<2^4006.
-```
-
-Write `R` for the credit of the remaining actual return from `y` to `x`. The
-retained dichotomy gives
+For a hypothetical cycle, let
 
 ```text
-R>=1 => L_return>2^3990,
-R<=0 => L_return>2^(2^974).
+p = accelerated length,
+A = total valuation,
+D=4501*p-A.
 ```
+
+The canonical complete-block partition has ordinary credits `e` with
+`1<=e<=4500` and exceptional credits `-b` with `b>=1`. It obeys
+
+```text
+D=sum ordinary deficits-sum exceptional excesses>=1.
+```
+
+For a complete block of length `ell`, source `n`, endpoint `n'`, and credit `c`,
+
+```text
+n'/n
+ =2^c*(X/B)^ell
+  *[1+((B/X)^ell-1)/(d*n)].
+```
+
+Since `d*n>1`, the correction factor is strictly smaller than `(B/X)^ell`.
+Therefore every complete block satisfies the exact height-credit domination
+
+```text
+n'/n<2^c.                                             (1)
+```
+
+Source:
+
+```text
+docs/NEAR_POWER_CYCLE_BLOCK_LEDGER.md
+```
+
+## New theorem: positive credit ballot from the least block boundary
+
+Let
+
+```text
+z_0,z_1,...,z_q=z_0
+```
+
+be the complete-block boundaries in cyclic order, rotated so that `z_0` is the
+least boundary value. If
+
+```text
+P_j=sum_(i<j)c_i
+```
+
+is the cumulative credit of the first `j` complete blocks, multiplying (1) gives
+
+```text
+z_j/z_0<2^P_j.
+```
+
+Minimality gives `z_j/z_0>=1`, hence
+
+```text
+P_j>=1 for every 1<=j<=q.                             (2)
+```
+
+Consequences:
+
+- the first complete block after `z_0` is ordinary;
+- every exceptional excess unit is matched to an earlier ordinary deficit unit
+  in actual cyclic order;
+- the matching may be chosen noncrossing by a stack construction;
+- exactly `D` ordinary deficit units remain unmatched after the full cycle;
+- after the first `j` ordinary blocks, cumulative exceptional excess satisfies
+
+  ```text
+  E_j<=4500*j-1;
+  ```
+
+- an exceptional excess `b` cannot occur that early unless
+
+  ```text
+  j>=ceil((b+1)/4500).
+  ```
 
 Sources:
 
 ```text
-docs/MINIMUM_BOUNDARY_ACTUAL_EXPANDING_SEGMENT.md
-docs/MINIMUM_BOUNDARY_RETURN_CREDIT_DICHOTOMY.md
-docs/MINIMUM_BOUNDARY_NONPOSITIVE_RETURN_HARMONIC_BARRIER.md
+docs/MINIMUM_BLOCK_BOUNDARY_CREDIT_BALLOT.md
+tools/verify_minimum_block_boundary_credit_ballot.py
 ```
 
-## New theorem: every nonpositive return is impossible
+## New strongest exit-return decomposition
+
+Let `z` be the least complete-block boundary and let `z'` be the endpoint of the
+first complete block.
+
+By (1) and minimality, that first block cannot be exceptional. It is one pure
+ordinary block with
+
+```text
+1<=e<=4500.
+```
+
+The retained one-sided continued-fraction gap and the sharper one-block
+correction bound prove
+
+```text
+L_exit*log2(B/X)<e,
+z'>z.
+```
+
+Thus the actual first exit is consecutive, contains no exceptional block, and
+its base multiplier already expands.
+
+Write `R` and `L_return` for the credit and accelerated length of the remaining
+actual return from `z'` to `z`. If `R<=0`, then
+
+```text
+1<=D=e+R<=4500.
+```
+
+The permanent-class harmonic estimate forces
+
+```text
+L_return>2^(2^974),
+```
+
+while the global block-correction theorem forces
+
+```text
+p<2^4006.
+```
+
+This is impossible. Therefore the only surviving return satisfies
+
+```text
+R>=1,
+L_return>2^3990.                                      (3)
+```
+
+The ballot theorem also controls every return prefix ending at a complete-block
+boundary. If its return-prefix credit is `Q`, then
+
+```text
+e+Q>=1,
+Q>=1-e>=-4499.                                       (4)
+```
+
+So the surviving return cannot hide an arbitrarily large exceptional debt at its
+front. This is the strongest current structural form of G3.
+
+Sources:
+
+```text
+docs/MINIMUM_BLOCK_BOUNDARY_PURE_ORDINARY_EXIT.md
+tools/verify_minimum_block_boundary_pure_ordinary_exit.py
+```
+
+## Closed nonpositive-return branch
 
 For any near-power multiplier
 
@@ -81,59 +210,21 @@ X=B-d,
 0<d<B/2,
 ```
 
-partition a hypothetical positive cycle into complete blocks. If `p` is its
-accelerated length and
+the exact block-correction identity proves the cycle-wide upper bound
 
 ```text
-D=m*p-A
+p < 2*D*B*X/[d*(X-d)].                               (5)
 ```
 
-is its total credit, the exact block-correction identity and a uniform correction
-bound prove
-
-```text
-p < 2*D*B*X/[d*(X-d)].
-```
-
-The proof uses
-
-```text
-sum_j ln(1+q_j)=p*ln(B/X)-D*ln(2),
-0<q_j<ell_j*d/(2*X^ell_j),
-sum_j ell_j=p,
-ln(B/X)>d/B.
-```
-
-On a nonpositive return,
-
-```text
-D=C+R,
-1<=D<=4500.
-```
-
-For the primary candidate exact integer arithmetic gives
-
-```text
-2*4500*B*X < 2^4006*d*(X-d),
-```
-
-hence
+For the primary candidate, every nonpositive return gives `1<=D<=4500`, hence
 
 ```text
 p<2^4006.
 ```
 
-But the retained return theorem gives
-
-```text
-p>L_return>2^(2^974)>2^4006.
-```
-
-Contradiction. Therefore
-
-```text
-R<=0 is impossible.
-```
+The retained harmonic theorem gives `p>2^(2^974)`, so all nonpositive returns are
+excluded. Former `h=1` and `h>=2` subdivisions remain valid conditional results,
+but their common hypothesis is impossible.
 
 Sources:
 
@@ -142,34 +233,9 @@ docs/NONPOSITIVE_RETURN_BLOCK_CORRECTION_EXCLUSION.md
 tools/verify_nonpositive_return_block_correction_exclusion.py
 ```
 
-This closes both former nonpositive subdivisions `h=1` and `h>=2`. The earlier
-phase-sieve, block-explosion, and repeated-type theorems remain valid conditional
-theorems, but their common hypothesis now cannot occur in a positive cycle.
+## Exact cyclic closure and retained global divisor
 
-## Only surviving return branch
-
-Every hypothetical nontrivial positive cycle must now satisfy
-
-```text
-R>=1,
-L_return>2^3990.
-```
-
-Thus G3 has been reduced to one branch: exclude an actual positive-credit return
-from `y>x` to the least ordinary boundary `x`.
-
-The total cycle credit is
-
-```text
-D=C+R>=2,
-```
-
-but it is no longer uniformly bounded by `4500`, so the new length upper bound
-does not by itself exclude this branch.
-
-## Exact cyclic closure and closed local routes
-
-For a cyclic valuation word and its rotated affine numerators `Q_k`,
+For a cyclic valuation word and rotated affine numerators `Q_k`,
 
 ```text
 Delta=2^A-X^p,
@@ -183,24 +249,34 @@ a truly adjacent pair satisfies
 gcd(Q_k,Q_(k+1))=Delta.
 ```
 
-For complete blocks,
+For complete block lengths `ell_i`, put
 
 ```text
-S_ell=(B^ell-X^ell)/d,
-gcd(n,n')=gcd(n,S_ell),
-gcd(S_r,S_s)=S_gcd(r,s).
+h=gcd_i ell_i,
+S_h=(B^h-X^h)/d,
+g=gcd of all complete-block boundaries.
+```
+
+Exact closure gives
+
+```text
+g=gcd(b_i,S_h) for every boundary b_i,
+S_h/g divides 2^D-1,
+S_h/gcd(S_h,2^D-1) divides g divides S_h,
+n_t==B^(-j)*S_j (mod g),  j=t mod h.
 ```
 
 Fixed local endpoint congruences, finite two-sided word gluing, naive block
 compression, finite repeated-defect persistence, arbitrary finite same-deficit
 runs, and any fixed finite `N`-adic depth do not force exact cyclic source
-matching; exact valuation-word coding and CRT realize those local constraints at
+matching. Exact valuation-word coding and CRT realize those local constraints at
 infinitely many positive starts.
 
 Sources:
 
 ```text
 docs/CYCLIC_ROTATION_CLOSURE_GCD.md
+docs/GLOBAL_BLOCK_GCD_PHASE_SIEVE.md
 docs/FIXED_LOCAL_ENDPOINT_CONGRUENCE_NO_GO.md
 docs/FULL_FINITE_TWO_SIDED_WORD_GLUING_NO_GO.md
 docs/COMPLETE_BLOCK_GCD_COMPRESSION_NO_GO.md
@@ -208,55 +284,22 @@ docs/GEOMETRIC_FACTOR_STRONG_DIVISIBILITY_PERSISTENCE_NO_GO.md
 docs/SAME_DEFICIT_FINITE_PERSISTENCE_NO_GO.md
 ```
 
-## Retained global block-gcd identity
-
-Let `ell_i` be all complete-block lengths of a hypothetical cycle and put
-
-```text
-h=gcd_i ell_i,
-D=sum_i(4501-a_i),
-S_h=(B^h-X^h)/d,
-g=gcd of all complete-block boundaries b_i.
-```
-
-Exact cyclic closure proves
-
-```text
-g=gcd(b_i,S_h) for every b_i,
-S_h/g divides 2^D-1,
-S_h/gcd(S_h,2^D-1) divides g divides S_h,
-n_t==B^(-j)*S_j (mod g),  j=t mod h.
-```
-
-These identities remain available on the positive-credit branch. The former
-strong `h>=2` harmonic consequences used the now-impossible small-credit range
-`1<=D<=4500` and should not be applied unchanged when `R>=1`.
-
-Sources:
-
-```text
-docs/GLOBAL_BLOCK_GCD_PHASE_SIEVE.md
-tools/verify_global_block_gcd_phase_sieve.py
-```
-
 ## Decisive next target
 
-Exclude the positive-credit return. The strongest current routes are:
+Exclude the positive-credit return in (3), using the prefix control (4). The
+strongest current route is:
 
-1. combine the segment equation
+1. use the noncrossing ballot matching to assign every exceptional excess unit
+   to an earlier ordinary deficit unit;
+2. combine each sponsor-exception pair with the permanent `N` and `1093^2`
+   labels and the exceptional-source floor;
+3. prove that a valid sponsor either repeats an exact source class, violates an
+   adjacent-label lift, or contributes too much harmonic correction;
+4. exploit `Q>=-4499` so no return prefix can use an unbounded exceptional
+   reserve.
 
-   ```text
-   ln(x/y)=R*ln(2)-L_return*ln(B/X)+K_return<0
-   ```
-
-   with the cycle-wide block-correction lower bound to narrow the possible
-   density `R/L_return`;
-2. obtain a global restriction on where the positive ordinary deficits can occur
-   relative to exceptional blocks and the minimum boundary;
-3. use exact cyclic source matching or the global divisor `g` in a way that does
-   not require `D<=4500`;
-4. seek an explicit linear-form-in-logarithms estimate only if it produces a
-   quantitative bound strong enough for the actual parameters.
+Secondary routes are the exact global divisor `g` and a linear-form-in-logarithms
+estimate, but only if their constants beat the actual correction terms.
 
 A finite trajectory calculation, a fixed finite residue ladder, or another lower
 bound on the already excluded nonpositive branch is not useful.
@@ -275,23 +318,20 @@ by a cycle. Finite computation is not divergence. Full history is in
 
 ## Verification state
 
-The new standalone checker
+The two new standalone checkers passed in the research environment:
 
 ```text
-python tools/verify_nonpositive_return_block_correction_exclusion.py
+python tools/verify_minimum_block_boundary_credit_ballot.py
+python tools/verify_minimum_block_boundary_pure_ordinary_exit.py
 ```
 
-verified `22993` exact complete-block correction cases, all three known
-accelerated `5n+1` cycle regressions, the exact primary comparison giving
-`p<2^4006`, and the exponent contradiction with `p>2^(2^974)`.
+They verified:
 
-The related retained standalone checkers are
+- `251994` exact complete-block domination cases;
+- all three known accelerated `5n+1` positive-cycle regressions;
+- `699337` small positive-prefix stack-matching ledgers;
+- the primary bounds `E_j<=4500*j-1` and `Q>=-4499`;
+- the continued-fraction gap and one-block exit correction;
+- the harmonic return bound and global length contradiction.
 
-```text
-python tools/verify_near_power_cycle_block_ledger.py
-python tools/verify_minimum_boundary_return_credit_dichotomy.py
-python tools/verify_minimum_boundary_nonpositive_return_harmonic_barrier.py
-```
-
-The new standalone checker passed in the research environment. A complete
-repository-wide run was not executed there.
+A complete repository-wide run was not executed in this environment.
