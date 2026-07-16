@@ -147,6 +147,7 @@ def main() -> None:
     run("tools/verify_minimum_block_boundary_credit_ballot.py")
     run("tools/verify_minimum_block_boundary_pure_ordinary_exit.py")
     run("tools/verify_exceptional_sponsor_arch_macro_exit.py")
+    run("tools/verify_primary_delta_two_bit_sharpening.py")
     run("tools/check_project_consistency.py")
     run("tools/check_x9_digital_invariant.py", "--steps", "10000")
     run("tools/generate_two_parameter_barrier.py", "--length", "1000000000000", "--height", "1000000000")
