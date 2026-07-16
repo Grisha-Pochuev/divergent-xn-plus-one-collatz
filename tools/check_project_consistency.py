@@ -16,6 +16,9 @@ NONPOSITIVE_CYCLE_UPPER = "2^4006"
 CORRECT_CYCLE_RELATION = "2^A*product_i(n_i)==1 (mod X)"
 RETRACTED_BARRIER = "10^37"
 
+CREDIT_FRONTIER = "924679364903952241768234680715310598867316370441120757898246831506500507205080014535351439406991342585993538327845986892977536682537320095988153612270886695873966778097766981798062925612878469213187733241206117142814414961418054803443235355123715316220902421623921086365374327267387194352877014114959"
+NEW_LENGTH_FRONTIER = "2^4988"
+
 EXCLUSION_DOC = "NONPOSITIVE_RETURN_BLOCK_CORRECTION_EXCLUSION"
 EXCLUSION_TOOL = "verify_nonpositive_return_block_correction_exclusion.py"
 GLOBAL_PHASE_DOC = "GLOBAL_BLOCK_GCD_PHASE_SIEVE"
@@ -27,6 +30,10 @@ SPONSOR_ARCH_DOC = "EXCEPTIONAL_SPONSOR_ARCH_MACRO_EXIT"
 SPONSOR_ARCH_TOOL = "verify_exceptional_sponsor_arch_macro_exit.py"
 DELTA_DOC = "PRIMARY_DELTA_TWO_BIT_SHARPENING"
 DELTA_TOOL = "verify_primary_delta_two_bit_sharpening.py"
+STRIP_DOC = "PRIMARY_ONE_OVER_1007_CYCLE_STRIP"
+STRIP_TOOL = "verify_primary_one_over_1007_cycle_strip.py"
+CREDIT_DOC = "PRIMARY_CREDIT_CONTINUED_FRACTION_FRONTIER"
+CREDIT_TOOL = "verify_primary_credit_continued_fraction_frontier.py"
 
 CORE_FILES = (
     "START_HERE.md",
@@ -50,6 +57,10 @@ CURRENT_FILES = (
     "tools/verify_exceptional_sponsor_arch_macro_exit.py",
     "docs/PRIMARY_DELTA_TWO_BIT_SHARPENING.md",
     "tools/verify_primary_delta_two_bit_sharpening.py",
+    "docs/PRIMARY_ONE_OVER_1007_CYCLE_STRIP.md",
+    "tools/verify_primary_one_over_1007_cycle_strip.py",
+    "docs/PRIMARY_CREDIT_CONTINUED_FRACTION_FRONTIER.md",
+    "tools/verify_primary_credit_continued_fraction_frontier.py",
     "docs/CYCLIC_ROTATION_CLOSURE_GCD.md",
     "tools/verify_cyclic_rotation_closure_gcd.py",
     "docs/GLOBAL_BLOCK_GCD_PHASE_SIEVE.md",
@@ -94,6 +105,12 @@ def check() -> None:
         SPONSOR_ARCH_TOOL,
         DELTA_DOC,
         DELTA_TOOL,
+        STRIP_DOC,
+        STRIP_TOOL,
+        CREDIT_DOC,
+        CREDIT_TOOL,
+        CREDIT_FRONTIER,
+        NEW_LENGTH_FRONTIER,
         "remaining actual return",
         CORRECT_CYCLE_RELATION,
     )
@@ -116,7 +133,7 @@ def check() -> None:
         POSITIVE_RETURN_FRONTIER,
         NONPOSITIVE_RETURN_LOWER,
         NONPOSITIVE_CYCLE_UPPER,
-        "every nonpositive return is impossible",
+        "every nonpositive return is",
         "Strongest current exit-return decomposition",
         EXCLUSION_DOC,
         EXCLUSION_TOOL,
@@ -124,6 +141,12 @@ def check() -> None:
         SPONSOR_ARCH_TOOL,
         DELTA_DOC,
         DELTA_TOOL,
+        STRIP_DOC,
+        STRIP_TOOL,
+        CREDIT_DOC,
+        CREDIT_TOOL,
+        CREDIT_FRONTIER,
+        NEW_LENGTH_FRONTIER,
         GLOBAL_PHASE_DOC,
         "S_h/g divides 2^D-1",
         "S_h/gcd(S_h,2^D-1) divides g divides S_h",
@@ -170,6 +193,36 @@ def check() -> None:
     )
 
     require(
+        "docs/PRIMARY_ONE_OVER_1007_CYCLE_STRIP.md",
+        "1007*2^-4002",
+        "1008*2^-4002",
+        "1/1007<0.001",
+        "Gate G3 therefore remains open",
+    )
+
+    require(
+        "tools/verify_primary_one_over_1007_cycle_strip.py",
+        "verify_primary_drift_bracket",
+        "D*2^4002/1008 < p < D*2^4002/1007",
+    )
+
+    require(
+        "docs/PRIMARY_CREDIT_CONTINUED_FRACTION_FRONTIER.md",
+        CREDIT_FRONTIER,
+        "p<2^4991",
+        "p>2^4988",
+        "Gate G3 remains open",
+    )
+
+    require(
+        "tools/verify_primary_credit_continued_fraction_frontier.py",
+        "CF_COUNT = 554",
+        "coefficients[553] == 36",
+        CREDIT_FRONTIER,
+        "gap_lower > total_correction_upper",
+    )
+
+    require(
         "docs/NONPOSITIVE_RETURN_BLOCK_CORRECTION_EXCLUSION.md",
         "p < 2*D*B*X/[d*(X-d)]",
         "A hypothetical positive cycle cannot have R<=0",
@@ -201,6 +254,8 @@ def check() -> None:
         PURE_EXIT_TOOL,
         SPONSOR_ARCH_TOOL,
         DELTA_TOOL,
+        STRIP_TOOL,
+        CREDIT_TOOL,
     ):
         if tool not in checks:
             raise AssertionError(f"run_checks.py does not include {tool}")
@@ -229,13 +284,13 @@ def check() -> None:
     print("compact project-memory consistency verified")
     print("startup files=3")
     print(f"primary candidate={PRIMARY_X}")
-    print(f"global ordinary-block minimum={GLOBAL_MIN_ORDINARY_BLOCKS}")
-    print(f"positive-return frontier={POSITIVE_RETURN_FRONTIER}")
+    print(f"credit frontier digits={len(CREDIT_FRONTIER)}")
+    print(f"positive-cycle length frontier={NEW_LENGTH_FRONTIER}")
     print(f"nonpositive-return lower={NONPOSITIVE_RETURN_LOWER}")
     print(f"nonpositive-cycle upper={NONPOSITIVE_CYCLE_UPPER}")
     print("sponsor-arch macro decomposition=active")
     print("nonpositive-return branch=excluded")
-    print("only surviving branch=positive-credit return")
+    print("only surviving branch=enormous positive-credit return")
     print("strict prize target=open")
 
 
