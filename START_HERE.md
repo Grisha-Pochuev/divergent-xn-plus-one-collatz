@@ -63,6 +63,7 @@ Every hypothetical cycle satisfies all of the following:
 N|X and 1093||X;
 16562000 permanent classes modulo N*1093^2;
 every cycle value>N;
+every exceptional source has at least 1505 decimal digits;
 no cycle value in the checked window through 10^1201;
 at least 245833 ordinary complete blocks.
 ```
@@ -78,57 +79,96 @@ When a return has nonpositive credit, `1<=D<=4500`, so `p<2^4006`, while the
 retained harmonic theorem forces `p>2^(2^974)`. This contradiction is closed and
 must not be revisited.
 
-## New strongest decomposition
+## Positive ballot and sponsor arches
 
 Use the canonical complete-block partition and let `z` be the least value among
-all complete-block boundaries.
-
-Every complete block of credit `c` obeys the exact domination
+all complete-block boundaries. Every block of credit `c` satisfies
 
 ```text
 endpoint/source < 2^c.
 ```
 
-Therefore, when blocks are read from `z`, every nonempty cumulative block-credit
-prefix is a positive integer:
+Therefore every nonempty cumulative block-credit prefix from `z` is positive:
 
 ```text
 P_j>=1.
 ```
 
-Consequences:
+For each exceptional block, let `h` be the prefix credit immediately after it,
+and choose the last earlier boundary whose prefix credit is at most `h`. The
+resulting actual consecutive sponsor arch:
 
 ```text
-the first block after z is ordinary;
-its deficit is 1<=e<=4500;
-it is one pure ordinary block, with no exceptional block in the exit;
-its base multiplier already expands;
-its endpoint z' is strictly larger than z.
+starts with an ordinary block;
+ends with the chosen exceptional block;
+has net credit 0<=C<=4499;
+stays strictly above its final credit level at every internal boundary.
 ```
 
-The remaining actual return from `z'` to `z` satisfies
-
-```text
-R>=1,
-L_return>2^3990.
-```
-
-Moreover every return prefix ending at a complete-block boundary has credit
-
-```text
-Q>=1-e>=-4499.
-```
-
-Thus the surviving return cannot front-load an unbounded exceptional debt.
-Every exceptional excess unit is matched, in actual cyclic order, to an earlier
-ordinary deficit unit; exactly `D` ordinary units remain unmatched after the
-whole cycle.
+Canonical sponsor arches are laminar: two are disjoint or nested, never
+crossing. Their maximal members are pairwise disjoint, cover every exceptional
+block, and leave only ordinary blocks outside. Thus all exceptional complexity
+is compressed into actual nonnegative-credit macroblocks.
 
 Detailed sources:
 
 ```text
 docs/MINIMUM_BLOCK_BOUNDARY_CREDIT_BALLOT.md
 tools/verify_minimum_block_boundary_credit_ballot.py
+docs/EXCEPTIONAL_SPONSOR_ARCH_MACRO_EXIT.md
+tools/verify_exceptional_sponsor_arch_macro_exit.py
+```
+
+## New strongest exit-return decomposition
+
+For any actual consecutive complete-block segment of net credit `C`, accelerated
+length `L`, source `x`, and endpoint `y>=x`, the local block-correction argument
+proves
+
+```text
+L < 2*C*B*X/[d*(X-d)].
+```
+
+Hence, for the primary candidate, every nondecreasing segment with `C<=4500`
+has
+
+```text
+L<2^4006.
+```
+
+At the least boundary `z`, take:
+
+1. the maximal sponsor arch beginning with block `0`, if one exists; or
+2. otherwise the first pure ordinary block.
+
+This gives an actual bounded sponsored macro-exit from `z` to `y` with
+
+```text
+z<y,
+1<=C<=4500,
+L_macro<2^4006.
+```
+
+If the first ordinary block sponsors a nested family of early exceptions, the
+whole maximal nest is absorbed into this macro-exit. The remaining actual return
+from `y` to `z` still satisfies
+
+```text
+R>=1,
+L_return>2^3990.
+```
+
+Every return prefix ending at a complete-block boundary has credit
+
+```text
+Q>=1-C>=-4499.
+```
+
+Sources:
+
+```text
+docs/EXCEPTIONAL_SPONSOR_ARCH_MACRO_EXIT.md
+tools/verify_exceptional_sponsor_arch_macro_exit.py
 docs/MINIMUM_BLOCK_BOUNDARY_PURE_ORDINARY_EXIT.md
 tools/verify_minimum_block_boundary_pure_ordinary_exit.py
 docs/NONPOSITIVE_RETURN_BLOCK_CORRECTION_EXCLUSION.md
@@ -137,18 +177,19 @@ tools/verify_nonpositive_return_block_correction_exclusion.py
 
 ## Decisive next target
 
-Exclude the astronomically long positive-credit return after the pure ordinary
-exit. The strongest route is now an ordered sponsor obstruction:
+Exclude the astronomically long positive-credit return after removing the
+bounded initial sponsor nest. Work with the disjoint maximal sponsor arches on
+the return:
 
-1. use the ballot matching to pair every exceptional excess unit with an earlier
-   ordinary deficit unit;
-2. combine each pair with the exceptional-source floor and the permanent `N` and
-   `1093^2` labels;
-3. prove that a sponsor cannot pay for its matched exception without forcing an
-   impossible source repetition, an incompatible adjacent-label lift, or too
-   much harmonic correction;
-4. exploit the uniform return-prefix debt bound `Q>=-4499` so that no argument
-   needs an unbounded initial exceptional reserve.
+1. every exception lies in an actual arch of credit at most `4499`;
+2. any noncontracting such arch has accelerated length below `2^4006` by the
+   local segment bound;
+3. combine arch endpoints with the permanent `N` and `1093^2` labels and the
+   exceptional-source floor;
+4. prove that the long return requires either too many contracting arches, a
+   repeated exact source class, an incompatible adjacent-label lift, or too much
+   harmonic correction;
+5. use `Q>=-4499` so no return prefix can use an unbounded exceptional reserve.
 
 Secondary routes remain the exact cyclic source-matching divisor and an explicit
 linear-form-in-logarithms estimate, but only if their constants beat the actual
