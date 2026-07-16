@@ -10,19 +10,29 @@ PRIMARY_X = "2^4501-349*2^500+347"
 PRIMARY_CLASSES = "16562000"
 PRIMARY_BARRIER = "10^1201"
 GLOBAL_MIN_ORDINARY_BLOCKS = "245833"
-POSITIVE_RETURN_FRONTIER = "2^3990"
+POSITIVE_RETURN_FRONTIER = "2^3992"
 NONPOSITIVE_RETURN_LOWER = "2^(2^974)"
 NONPOSITIVE_CYCLE_UPPER = "2^4006"
+CORRECT_CYCLE_RELATION = "2^A*product_i(n_i)==1 (mod X)"
+RETRACTED_BARRIER = "10^37"
+
 EXCLUSION_DOC = "NONPOSITIVE_RETURN_BLOCK_CORRECTION_EXCLUSION"
 EXCLUSION_TOOL = "verify_nonpositive_return_block_correction_exclusion.py"
 GLOBAL_PHASE_DOC = "GLOBAL_BLOCK_GCD_PHASE_SIEVE"
 GLOBAL_PHASE_TOOL = "verify_global_block_gcd_phase_sieve.py"
 SAME_DEFICIT_DOC = "SAME_DEFICIT_FINITE_PERSISTENCE_NO_GO"
 SAME_DEFICIT_TOOL = "verify_same_deficit_finite_persistence.py"
+BALLOT_DOC = "MINIMUM_BLOCK_BOUNDARY_CREDIT_BALLOT"
+BALLOT_TOOL = "verify_minimum_block_boundary_credit_ballot.py"
+PURE_EXIT_DOC = "MINIMUM_BLOCK_BOUNDARY_PURE_ORDINARY_EXIT"
+PURE_EXIT_TOOL = "verify_minimum_block_boundary_pure_ordinary_exit.py"
+SPONSOR_ARCH_DOC = "EXCEPTIONAL_SPONSOR_ARCH_MACRO_EXIT"
+SPONSOR_ARCH_TOOL = "verify_exceptional_sponsor_arch_macro_exit.py"
+DELTA_DOC = "PRIMARY_DELTA_TWO_BIT_SHARPENING"
+DELTA_TOOL = "verify_primary_delta_two_bit_sharpening.py"
+
 GLOBAL_DIVISOR_MARKER = "S_h/g divides 2^D-1"
 PHASE_MARKER = "n_t==B^(-j)*S_j (mod g)"
-CORRECT_CYCLE_RELATION = "2^A*product_i(n_i)==1 (mod X)"
-RETRACTED_BARRIER = "10^37"
 
 CORE_MEMORY_FILES = (
     "START_HERE.md",
@@ -50,6 +60,14 @@ CURRENT_STRUCTURE_FILES = (
     "tools/verify_near_power_cycle_block_ledger.py",
     "docs/NONPOSITIVE_RETURN_BLOCK_CORRECTION_EXCLUSION.md",
     "tools/verify_nonpositive_return_block_correction_exclusion.py",
+    "docs/MINIMUM_BLOCK_BOUNDARY_CREDIT_BALLOT.md",
+    "tools/verify_minimum_block_boundary_credit_ballot.py",
+    "docs/MINIMUM_BLOCK_BOUNDARY_PURE_ORDINARY_EXIT.md",
+    "tools/verify_minimum_block_boundary_pure_ordinary_exit.py",
+    "docs/EXCEPTIONAL_SPONSOR_ARCH_MACRO_EXIT.md",
+    "tools/verify_exceptional_sponsor_arch_macro_exit.py",
+    "docs/PRIMARY_DELTA_TWO_BIT_SHARPENING.md",
+    "tools/verify_primary_delta_two_bit_sharpening.py",
     "docs/FIXED_LOCAL_ENDPOINT_CONGRUENCE_NO_GO.md",
     "tools/verify_fixed_local_endpoint_congruence_no_go.py",
     "docs/FULL_FINITE_TWO_SIDED_WORD_GLUING_NO_GO.md",
@@ -100,7 +118,11 @@ def check() -> None:
         NONPOSITIVE_CYCLE_UPPER,
         EXCLUSION_DOC,
         EXCLUSION_TOOL,
-        "The only surviving branch is now",
+        SPONSOR_ARCH_DOC,
+        SPONSOR_ARCH_TOOL,
+        DELTA_DOC,
+        DELTA_TOOL,
+        "remaining actual return",
         CORRECT_CYCLE_RELATION,
     )
 
@@ -124,16 +146,19 @@ def check() -> None:
         POSITIVE_RETURN_FRONTIER,
         NONPOSITIVE_RETURN_LOWER,
         NONPOSITIVE_CYCLE_UPPER,
-        "R<=0 is impossible",
-        "Only surviving return branch",
+        "every nonpositive return is impossible",
+        "Strongest current exit-return decomposition",
         EXCLUSION_DOC,
         EXCLUSION_TOOL,
+        SPONSOR_ARCH_DOC,
+        SPONSOR_ARCH_TOOL,
+        DELTA_DOC,
+        DELTA_TOOL,
         GLOBAL_PHASE_DOC,
-        GLOBAL_PHASE_TOOL,
         GLOBAL_DIVISOR_MARKER,
         "S_h/gcd(S_h,2^D-1) divides g divides S_h",
         PHASE_MARKER,
-        "fixed finite `N`-adic depth",
+        "fixed finite `N`-adic ladders",
         CORRECT_CYCLE_RELATION,
     )
 
@@ -142,7 +167,6 @@ def check() -> None:
         "p < 2*D*B*X/[d*(X-d)]",
         "2*4500*B*X < 2^4006*d*(X-d)",
         "A hypothetical positive cycle cannot have R<=0",
-        POSITIVE_RETURN_FRONTIER,
         "strict prize problem is not yet solved",
     )
 
@@ -152,6 +176,42 @@ def check() -> None:
         "verify_primary_exclusion",
         "nonpositive_return_excluded",
         "strict_prize_solution",
+    )
+
+    require(
+        "docs/EXCEPTIONAL_SPONSOR_ARCH_MACRO_EXIT.md",
+        "canonical sponsor arch",
+        "0<=C<=m-2",
+        "Laminarity",
+        "L < 2*C*B*X/[d*(X-d)]",
+        "L_macro<2^4006",
+        "strict prize problem remains open",
+    )
+
+    require(
+        "tools/verify_exceptional_sponsor_arch_macro_exit.py",
+        "sponsor_arches",
+        "maximal_arches",
+        "verify_small_ballot_ledgers",
+        "verify_local_segment_bound_grid",
+        "2123272",
+    )
+
+    require(
+        "docs/PRIMARY_DELTA_TWO_BIT_SHARPENING.md",
+        "delta<2^-3992",
+        "349/511<11/16",
+        "56/81>11/16",
+        "L>C*2^3992",
+        "L_return>R*2^3992",
+    )
+
+    require(
+        "tools/verify_primary_delta_two_bit_sharpening.py",
+        "verify_rational_drift_bound",
+        "verify_segment_consequences",
+        "delta=log2(B/X) < 2^-3992",
+        "L > C*2^3992",
     )
 
     require(
@@ -190,6 +250,10 @@ def check() -> None:
         EXCLUSION_TOOL,
         GLOBAL_PHASE_TOOL,
         SAME_DEFICIT_TOOL,
+        BALLOT_TOOL,
+        PURE_EXIT_TOOL,
+        SPONSOR_ARCH_TOOL,
+        DELTA_TOOL,
     ):
         if tool not in checks:
             raise AssertionError(f"run_checks.py does not include {tool}")
@@ -222,6 +286,7 @@ def check() -> None:
     print(f"positive-return frontier={POSITIVE_RETURN_FRONTIER}")
     print(f"nonpositive-return lower={NONPOSITIVE_RETURN_LOWER}")
     print(f"nonpositive-cycle upper={NONPOSITIVE_CYCLE_UPPER}")
+    print("sponsor-arch macro decomposition=active")
     print("nonpositive-return branch=excluded")
     print("only surviving branch=positive-credit return")
     print("strict prize target=open")
