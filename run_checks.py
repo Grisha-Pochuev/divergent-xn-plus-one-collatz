@@ -151,6 +151,7 @@ def main() -> None:
     run("tools/verify_cycle_floor_local_correction_sharpening.py")
     run("tools/verify_zero_credit_arch_quantitative_contraction.py")
     run("tools/verify_primary_one_over_1007_cycle_strip.py")
+    run("tools/verify_primary_credit_continued_fraction_frontier.py")
     run("tools/check_project_consistency.py")
     run("tools/check_x9_digital_invariant.py", "--steps", "10000")
     run("tools/generate_two_parameter_barrier.py", "--length", "1000000000000", "--height", "1000000000")
