@@ -121,21 +121,27 @@ tools/verify_exceptional_sponsor_arch_macro_exit.py
 
 ## Sharp local length scales
 
-For any actual consecutive complete-block segment of net credit `C`, accelerated
-length `L`, source `x`, and endpoint `y>=x`, the local block-correction theorem
-proves
+The global cycle-value floor `n>N` sharpens the correction of every complete
+block to
 
 ```text
-L < 2*C*B*X/[d*(X-d)] < C*2^3994.
+kappa<ell/(X*N*ln(2)).
 ```
 
-For `C<=4500`, exact integer comparison also gives the sharper uniform bound
+Exact rational comparison then gives, for every positive-credit nondecreasing
+complete-block segment,
 
 ```text
-L<2^4006.
+L<C*2^4002/997<C*2^3993.
 ```
 
-The primary logarithmic drift now has the exact two-bit sharpening
+For `C<=4500`, the sharper uniform bound is
+
+```text
+L<2^4005.
+```
+
+The primary logarithmic drift has the exact two-bit upper sharpening
 
 ```text
 delta=log2(B/X)<2^-3992.
@@ -154,6 +160,8 @@ Sources:
 ```text
 docs/PRIMARY_DELTA_TWO_BIT_SHARPENING.md
 tools/verify_primary_delta_two_bit_sharpening.py
+docs/CYCLE_FLOOR_LOCAL_CORRECTION_SHARPENING.md
+tools/verify_cycle_floor_local_correction_sharpening.py
 docs/EXCEPTIONAL_SPONSOR_ARCH_MACRO_EXIT.md
 ```
 
@@ -169,7 +177,7 @@ This gives an actual bounded sponsored macro-exit from `z` to `y` with
 ```text
 z<y,
 1<=C<=4500,
-L_macro<2^4006.
+L_macro<2^4005.
 ```
 
 If the first ordinary block sponsors a nested family of early exceptions, the
@@ -194,6 +202,8 @@ docs/EXCEPTIONAL_SPONSOR_ARCH_MACRO_EXIT.md
 tools/verify_exceptional_sponsor_arch_macro_exit.py
 docs/PRIMARY_DELTA_TWO_BIT_SHARPENING.md
 tools/verify_primary_delta_two_bit_sharpening.py
+docs/CYCLE_FLOOR_LOCAL_CORRECTION_SHARPENING.md
+tools/verify_cycle_floor_local_correction_sharpening.py
 docs/MINIMUM_BLOCK_BOUNDARY_PURE_ORDINARY_EXIT.md
 tools/verify_minimum_block_boundary_pure_ordinary_exit.py
 ```
@@ -205,9 +215,10 @@ bounded initial sponsor nest. Work with the disjoint maximal sponsor arches on
 the return:
 
 1. every exception lies in an actual arch of credit at most `4499`;
-2. a noncontracting positive-credit arch has `L<C*2^3994`, while a contracting
-   one has `L>C*2^3992`;
-3. zero-credit arches always contract;
+2. a noncontracting positive-credit arch has
+   `L<C*2^4002/997<C*2^3993`, while a contracting one has `L>C*2^3992`;
+3. zero-credit arches always contract and are now the only macroblocks lacking a
+   credit-proportional length lower bound;
 4. combine arch endpoints with the permanent `N` and `1093^2` labels and the
    exceptional-source floor;
 5. prove that the long return requires too many contracting arches, a repeated
