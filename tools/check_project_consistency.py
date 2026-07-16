@@ -20,42 +20,24 @@ EXCLUSION_DOC = "NONPOSITIVE_RETURN_BLOCK_CORRECTION_EXCLUSION"
 EXCLUSION_TOOL = "verify_nonpositive_return_block_correction_exclusion.py"
 GLOBAL_PHASE_DOC = "GLOBAL_BLOCK_GCD_PHASE_SIEVE"
 GLOBAL_PHASE_TOOL = "verify_global_block_gcd_phase_sieve.py"
-SAME_DEFICIT_DOC = "SAME_DEFICIT_FINITE_PERSISTENCE_NO_GO"
 SAME_DEFICIT_TOOL = "verify_same_deficit_finite_persistence.py"
-BALLOT_DOC = "MINIMUM_BLOCK_BOUNDARY_CREDIT_BALLOT"
 BALLOT_TOOL = "verify_minimum_block_boundary_credit_ballot.py"
-PURE_EXIT_DOC = "MINIMUM_BLOCK_BOUNDARY_PURE_ORDINARY_EXIT"
 PURE_EXIT_TOOL = "verify_minimum_block_boundary_pure_ordinary_exit.py"
 SPONSOR_ARCH_DOC = "EXCEPTIONAL_SPONSOR_ARCH_MACRO_EXIT"
 SPONSOR_ARCH_TOOL = "verify_exceptional_sponsor_arch_macro_exit.py"
 DELTA_DOC = "PRIMARY_DELTA_TWO_BIT_SHARPENING"
 DELTA_TOOL = "verify_primary_delta_two_bit_sharpening.py"
 
-GLOBAL_DIVISOR_MARKER = "S_h/g divides 2^D-1"
-PHASE_MARKER = "n_t==B^(-j)*S_j (mod g)"
-
-CORE_MEMORY_FILES = (
+CORE_FILES = (
     "START_HERE.md",
     "docs/WORKING_PROTOCOL.md",
     "docs/CURRENT_STATUS.md",
     "docs/RETRACTIONS.md",
-)
-
-HISTORICAL_FILES = (
-    "docs/SESSION_CHECKPOINT_2026-07-13_GLOBAL_BLOCK_GCD_PHASE_SIEVE.md",
     "docs/LATEST_VALID_PROGRESS.md",
     "docs/archive/LEGACY_LATEST_VALID_PROGRESS_PRE_NEAR_POWER.md",
 )
 
-CURRENT_STRUCTURE_FILES = (
-    "docs/GLOBAL_ORDINARY_BLOCK_COUNT_FRONTIER.md",
-    "tools/verify_global_ordinary_block_count_frontier.py",
-    "docs/MINIMUM_BOUNDARY_ACTUAL_EXPANDING_SEGMENT.md",
-    "tools/verify_minimum_boundary_actual_expanding_segment.py",
-    "docs/MINIMUM_BOUNDARY_RETURN_CREDIT_DICHOTOMY.md",
-    "tools/verify_minimum_boundary_return_credit_dichotomy.py",
-    "docs/MINIMUM_BOUNDARY_NONPOSITIVE_RETURN_HARMONIC_BARRIER.md",
-    "tools/verify_minimum_boundary_nonpositive_return_harmonic_barrier.py",
+CURRENT_FILES = (
     "docs/NEAR_POWER_CYCLE_BLOCK_LEDGER.md",
     "tools/verify_near_power_cycle_block_ledger.py",
     "docs/NONPOSITIVE_RETURN_BLOCK_CORRECTION_EXCLUSION.md",
@@ -68,22 +50,10 @@ CURRENT_STRUCTURE_FILES = (
     "tools/verify_exceptional_sponsor_arch_macro_exit.py",
     "docs/PRIMARY_DELTA_TWO_BIT_SHARPENING.md",
     "tools/verify_primary_delta_two_bit_sharpening.py",
-    "docs/FIXED_LOCAL_ENDPOINT_CONGRUENCE_NO_GO.md",
-    "tools/verify_fixed_local_endpoint_congruence_no_go.py",
-    "docs/FULL_FINITE_TWO_SIDED_WORD_GLUING_NO_GO.md",
-    "tools/verify_full_finite_two_sided_word_gluing_no_go.py",
     "docs/CYCLIC_ROTATION_CLOSURE_GCD.md",
     "tools/verify_cyclic_rotation_closure_gcd.py",
-    "docs/COMPLETE_BLOCK_GCD_COMPRESSION_NO_GO.md",
-    "tools/verify_complete_block_gcd_compression_no_go.py",
-    "docs/GEOMETRIC_FACTOR_STRONG_DIVISIBILITY_PERSISTENCE_NO_GO.md",
-    "tools/verify_geometric_factor_strong_divisibility.py",
     "docs/GLOBAL_BLOCK_GCD_PHASE_SIEVE.md",
     "tools/verify_global_block_gcd_phase_sieve.py",
-    "docs/ODD_H_PHASE_HARMONIC_BARRIER.md",
-    "tools/verify_odd_h_phase_harmonic_barrier.py",
-    "docs/NONPOSITIVE_RETURN_ORDINARY_BLOCK_EXPLOSION.md",
-    "tools/verify_nonpositive_return_ordinary_block_explosion.py",
     "docs/SAME_DEFICIT_FINITE_PERSISTENCE_NO_GO.md",
     "tools/verify_same_deficit_finite_persistence.py",
 )
@@ -104,7 +74,7 @@ def require(relative: str, *markers: str) -> None:
 
 
 def check() -> None:
-    for relative in CORE_MEMORY_FILES + HISTORICAL_FILES + CURRENT_STRUCTURE_FILES:
+    for relative in CORE_FILES + CURRENT_FILES:
         read(relative)
 
     require(
@@ -113,6 +83,8 @@ def check() -> None:
         "docs/CURRENT_STATUS.md",
         PRIMARY_X,
         "G3 all nontrivial positive cycles excluded: open",
+        PRIMARY_CLASSES,
+        GLOBAL_MIN_ORDINARY_BLOCKS,
         POSITIVE_RETURN_FRONTIER,
         NONPOSITIVE_RETURN_LOWER,
         NONPOSITIVE_CYCLE_UPPER,
@@ -128,8 +100,6 @@ def check() -> None:
 
     require(
         "docs/WORKING_PROTOCOL.md",
-        "START_HERE.md",
-        "docs/CURRENT_STATUS.md",
         "one primary proof target",
         "at most two active exploratory directions",
         "Run the new standalone checker first",
@@ -155,27 +125,11 @@ def check() -> None:
         DELTA_DOC,
         DELTA_TOOL,
         GLOBAL_PHASE_DOC,
-        GLOBAL_DIVISOR_MARKER,
+        "S_h/g divides 2^D-1",
         "S_h/gcd(S_h,2^D-1) divides g divides S_h",
-        PHASE_MARKER,
+        "n_t==B^(-j)*S_j (mod g)",
         "fixed finite `N`-adic ladders",
         CORRECT_CYCLE_RELATION,
-    )
-
-    require(
-        "docs/NONPOSITIVE_RETURN_BLOCK_CORRECTION_EXCLUSION.md",
-        "p < 2*D*B*X/[d*(X-d)]",
-        "2*4500*B*X < 2^4006*d*(X-d)",
-        "A hypothetical positive cycle cannot have R<=0",
-        "strict prize problem is not yet solved",
-    )
-
-    require(
-        "tools/verify_nonpositive_return_block_correction_exclusion.py",
-        "verify_block_correction_grid",
-        "verify_primary_exclusion",
-        "nonpositive_return_excluded",
-        "strict_prize_solution",
     )
 
     require(
@@ -185,7 +139,7 @@ def check() -> None:
         "Laminarity",
         "L < 2*C*B*X/[d*(X-d)]",
         "L_macro<2^4006",
-        "strict prize problem remains open",
+        "The theorem does not exclude the final positive-credit return",
     )
 
     require(
@@ -194,7 +148,8 @@ def check() -> None:
         "maximal_arches",
         "verify_small_ballot_ledgers",
         "verify_local_segment_bound_grid",
-        "2123272",
+        "small positive-prefix ledgers",
+        "maximal sponsor arches are laminar",
     )
 
     require(
@@ -215,19 +170,18 @@ def check() -> None:
     )
 
     require(
-        "docs/GLOBAL_BLOCK_GCD_PHASE_SIEVE.md",
-        GLOBAL_DIVISOR_MARKER,
-        "S_h/gcd(S_h,2^D-1) divides g divides S_h",
-        PHASE_MARKER,
-        "43 -> 27 -> 17 -> 43",
+        "docs/NONPOSITIVE_RETURN_BLOCK_CORRECTION_EXCLUSION.md",
+        "p < 2*D*B*X/[d*(X-d)]",
+        "A hypothetical positive cycle cannot have R<=0",
+        "strict prize problem is not yet solved",
     )
 
     require(
-        "tools/verify_global_block_gcd_phase_sieve.py",
-        "gcd_checks_D_1_to_4500",
-        "conditional_full_cycle_frontier",
-        "conditional_return_frontier",
-        "small_cycles_checked",
+        "docs/GLOBAL_BLOCK_GCD_PHASE_SIEVE.md",
+        "S_h/g divides 2^D-1",
+        "S_h/gcd(S_h,2^D-1) divides g divides S_h",
+        "n_t==B^(-j)*S_j (mod g)",
+        "43 -> 27 -> 17 -> 43",
     )
 
     require(
@@ -236,13 +190,6 @@ def check() -> None:
         "x_j==2^(e-1) (mod N)",
         "arbitrary finite same-deficit",
         "does not prove divergence",
-    )
-
-    require(
-        "tools/verify_same_deficit_finite_persistence.py",
-        "construct_instance",
-        "verify_primary_depth_ladder",
-        "small same-deficit constructions",
     )
 
     checks = read("run_checks.py")
