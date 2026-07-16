@@ -76,13 +76,7 @@ Rotate the block boundaries
 z_0,z_1,...,z_q=z_0
 ```
 
-so that `z_0` is least, and put `P_j=sum_(i<j)c_i`. From (1),
-
-```text
-z_j/z_0<2^P_j.
-```
-
-Minimality gives
+so that `z_0` is least, and put `P_j=sum_(i<j)c_i`. Then
 
 ```text
 P_j>=1 for every 1<=j<=q.                             (2)
@@ -109,8 +103,7 @@ tools/verify_minimum_block_boundary_credit_ballot.py
 ## Canonical sponsor arches
 
 For an exceptional block `j`, put `h=P_(j+1)` and choose the last `i<=j` with
-`P_i<=h`. Then `i<j`, block `i` is ordinary, and the actual consecutive segment
-`i,...,j` has credit
+`P_i<=h`. Then the actual consecutive segment `i,...,j` has credit
 
 ```text
 C=P_(j+1)-P_i,
@@ -118,28 +111,20 @@ C=P_(j+1)-P_i,
 0<=C<=4499.                                           (3)
 ```
 
-Every internal boundary stays strictly above the final credit level:
-
-```text
-P_t>h for every i<t<=j.                               (4)
-```
-
-Two sponsor arches cannot cross. Hence they are laminar; their maximal members
-are disjoint, cover every exceptional block, and leave only ordinary blocks
-outside. The cycle is compressed into
+Every internal boundary stays strictly above the final credit level. Canonical
+arches are laminar; their maximal members are disjoint, cover every exceptional
+block, and leave only ordinary blocks outside. The cycle is compressed into
 
 ```text
 maximal sponsor arches: credit 0..4499;
 uncovered ordinary blocks: credit 1..4500.
 ```
 
-Multiplying (1) across an arch gives
+Every arch satisfies
 
 ```text
-arch endpoint / arch source <2^C.                     (5)
+arch endpoint / arch source <2^C.                     (4)
 ```
-
-Every zero-credit arch therefore strictly contracts.
 
 Sources:
 
@@ -148,77 +133,56 @@ docs/EXCEPTIONAL_SPONSOR_ARCH_MACRO_EXIT.md
 tools/verify_exceptional_sponsor_arch_macro_exit.py
 ```
 
-## Sharp local length theorems
+## Floor-sensitive local height theorem
 
-For any actual consecutive block segment of net credit `C`, accelerated length
-`L`, source `x`, and endpoint `y`, the retained general correction estimate is
-
-```text
-ln(y/x)
- <C*ln(2)-L*[ln(B/X)-d/(2*X)].                        (6)
-```
-
-The new cycle-floor theorem uses the global fact that every hypothetical cycle
-value is greater than `N`. For a complete block of length `ell`, its correction
-parameter now satisfies
+Every hypothetical cycle value is greater than `N`. For a complete block of
+length `ell`, its correction parameter satisfies
 
 ```text
 q<ell/(X*N),
 kappa<ell/(X*N*ln(2)).
 ```
 
+Put
+
+```text
+delta=log2(B/X),
+epsilon=1/(X*N*ln(2)),
+alpha=997*2^-4002.
+```
+
 Exact rational comparison gives
 
 ```text
-delta-1/(X*N*ln(2))>997*2^-4002.
+delta-epsilon>alpha.                                  (5)
 ```
 
-Hence every positive-credit nondecreasing segment satisfies
+For every actual consecutive complete-block segment of credit `C`, length `L`,
+source `x`, and endpoint `y`,
 
 ```text
-L<C*2^4002/997<C*2^3993.                              (7)
+log2(y/x)=C-L*delta+K,
+0<K<L*epsilon,
 ```
 
-For `C<=4500`, this gives the sharper uniform bound
+and hence the unified bound
 
 ```text
-L<2^4005.                                             (8)
+log2(y/x)<C-alpha*L.                                  (6)
 ```
 
-The exact rational drift upper estimate remains
-
-```text
-delta=log2(B/X)<2^-3992.                              (9)
-```
-
-The proof uses
-
-```text
-2^3992*d/X<349/511<11/16<56/81<ln(2),
--ln(1-d/B)<d/X.
-```
-
-If a positive-credit segment contracts, its exact equation
-
-```text
-log2(y/x)=C-L*delta+K<0,
-K>0,
-```
-
-gives
-
-```text
-C>=1 and y<x  =>  L>C*2^3992.                        (10)
-```
-
-Thus every positive-credit macroblock has the sharpened height-sign dichotomy:
+Consequences for positive-credit segments:
 
 ```text
 nondecreasing: L<C*2^4002/997<C*2^3993;
 contracting:   L>C*2^3992.
 ```
 
-Zero-credit sponsor arches always contract, but (10) does not apply to them.
+The contracting lower bound uses the retained exact upper estimate
+
+```text
+delta<2^-3992.                                        (7)
+```
 
 Sources:
 
@@ -227,83 +191,132 @@ docs/PRIMARY_DELTA_TWO_BIT_SHARPENING.md
 tools/verify_primary_delta_two_bit_sharpening.py
 docs/CYCLE_FLOOR_LOCAL_CORRECTION_SHARPENING.md
 tools/verify_cycle_floor_local_correction_sharpening.py
-docs/EXCEPTIONAL_SPONSOR_ARCH_MACRO_EXIT.md
 ```
+
+## Quantitative zero-credit arches
+
+For a zero-credit sponsor arch, equation (6) gives
+
+```text
+log2(source/endpoint)>alpha*L,
+source/endpoint>2^(alpha*L).                           (8)
+```
+
+Thus a zero-credit arch is no longer merely known to contract: its binary height
+loss is proportional to its accelerated length. In particular,
+
+```text
+L>=2^4002  =>  source>2^997*endpoint>2^997*N.          (9)
+```
+
+For pairwise disjoint zero-credit arches of total length `Z`,
+
+```text
+product(endpoint/source)<2^(-alpha*Z),
+Z<D*2^4002/997.                                       (10)
+```
+
+Source:
+
+```text
+docs/ZERO_CREDIT_ARCH_QUANTITATIVE_CONTRACTION.md
+tools/verify_zero_credit_arch_quantitative_contraction.py
+```
+
+## Near-critical global cycle strip
+
+Apply equation (6) to the full cycle. Since `x=y`, `C=D`, and `L=p`,
+
+```text
+p<D*2^4002/997.                                       (11)
+```
+
+The exact cycle identity and `K>0`, together with (7), give
+
+```text
+p>D*2^3992.                                           (12)
+```
+
+Therefore every hypothetical primary cycle satisfies
+
+```text
+D*2^3992
+ <p
+ <D*2^4002/997
+ =(1024/997)*D*2^3992.                                (13)
+```
+
+The relative width above the lower endpoint is exactly
+
+```text
+1024/997-1=27/997<2.71%.                              (14)
+```
+
+This is the strongest current cycle-wide length-per-credit restriction.
 
 ## Strongest current exit-return decomposition
 
-Let `z` be the least complete-block boundary. The retained pure-exit theorem
-proves that the first block is ordinary with `1<=e<=4500`, ends above `z`, and
-leaves return credit `R_0>=1`.
+Let `z` be the least complete-block boundary. Take as initial macro-exit:
 
-Take as initial macro-exit:
-
-1. the maximal sponsor arch beginning at block `0`, if one exists; or
+1. the maximal sponsor arch beginning with block `0`, if one exists; or
 2. otherwise the first ordinary block.
 
-An arch beginning at block `0` has `0<=C<e` and cannot be the full cycle, because
-full closure would give `D=C<e`, while `D=e+R_0>e`. Its endpoint is a proper
-boundary above `z`; equation (5) rules out `C=0`.
-
-Therefore
+This gives an actual initial macro-exit from `z` to `y` with
 
 ```text
 z<y,
 1<=C<=4500,
-L_macro<2^4005.                                      (11)
+L_macro<2^4005.                                       (15)
 ```
 
-The macro-exit absorbs the entire maximal nest of early exceptions sponsored
-through the first ordinary crossing.
-
-For the remaining actual return from `y` to `z`, put `R=D-C`. Then
+The remaining actual return from `y` to `z`, with credit `R=D-C`, satisfies
 
 ```text
-R>=1.                                                 (12)
+R>=1,
+L_return>R*2^3992>=2^3992.                            (16)
 ```
 
-Applying the sharpened drift estimate (9) to this contracting return gives
-
-```text
-L_return>R*2^3992>=2^3992.                            (13)
-```
-
-Every return prefix ending at a block boundary has credit `Q` satisfying
+Every return prefix ending at a complete-block boundary has credit `Q` satisfying
 
 ```text
 C+Q>=1,
-Q>=1-C>=-4499.                                       (14)
+Q>=1-C>=-4499.                                        (17)
 ```
 
-Thus G3 is reduced to an astronomically long positive-credit return after a
-bounded sponsored macro-exit. All exceptions on that return lie in disjoint
-maximal arches of credit at most `4499`.
+The global strip adds the return upper window
+
+```text
+L_return
+ <(C+R)*2^4002/997
+ <=(R+4500)*2^4002/997.                               (18)
+```
+
+Thus G3 is reduced to a positive-credit return whose total length per credit is
+near-critical, after a bounded sponsored macro-exit. All exceptions on the return
+lie in disjoint maximal sponsor arches of credit at most `4499`.
 
 Sources:
 
 ```text
 docs/EXCEPTIONAL_SPONSOR_ARCH_MACRO_EXIT.md
 tools/verify_exceptional_sponsor_arch_macro_exit.py
-docs/PRIMARY_DELTA_TWO_BIT_SHARPENING.md
-tools/verify_primary_delta_two_bit_sharpening.py
-docs/CYCLE_FLOOR_LOCAL_CORRECTION_SHARPENING.md
-tools/verify_cycle_floor_local_correction_sharpening.py
 docs/MINIMUM_BLOCK_BOUNDARY_PURE_ORDINARY_EXIT.md
 tools/verify_minimum_block_boundary_pure_ordinary_exit.py
+docs/ZERO_CREDIT_ARCH_QUANTITATIVE_CONTRACTION.md
+tools/verify_zero_credit_arch_quantitative_contraction.py
 ```
 
 ## Closed nonpositive branch
 
-The cycle-wide block-correction theorem gives
+The retained cycle-wide correction theorem gives
 
 ```text
-p < 2*D*B*X/[d*(X-d)].                               (15)
+p < 2*D*B*X/[d*(X-d)].
 ```
 
-A nonpositive return has `1<=D<=4500`, hence `p<2^4006`. The retained
-permanent-class harmonic theorem gives `p>2^(2^974)`. Therefore every
-nonpositive return is impossible. Do not revisit its former `h=1` or `h>=2`
-subdivisions as live branches.
+A nonpositive return has `1<=D<=4500`, hence `p<2^4006`, while the retained
+harmonic theorem gives `p>2^(2^974)`. Therefore every nonpositive return is
+impossible and must not be revisited.
 
 Sources:
 
@@ -327,7 +340,7 @@ Closure is equivalent to `Delta>0` and `Delta|Q_0`; for an adjacent pair,
 gcd(Q_k,Q_(k+1))=Delta.
 ```
 
-For complete-block lengths `ell_i`, let
+For complete-block lengths `ell_i`, put
 
 ```text
 h=gcd_i ell_i,
@@ -362,21 +375,20 @@ docs/SAME_DEFICIT_FINITE_PERSISTENCE_NO_GO.md
 
 ## Decisive next target
 
-Exclude the return in (12)--(14). The strongest route is:
+Exclude the positive-credit return in (16)--(18). The strongest route is now:
 
-1. use the disjoint maximal sponsor arches on the return;
-2. apply the length dichotomy (7), (10) to every positive-credit arch;
-3. isolate zero-credit arches, which always contract and are now the only
-   contracting macroblocks without a credit-proportional length lower bound;
+1. use the narrow global strip (13), not the older coarse length bounds;
+2. charge every zero-credit arch by its quantitative height loss (8);
+3. apply the positive-credit length dichotomy to all remaining macroblocks;
 4. combine arch endpoints with the permanent `N` and `1093^2` labels and the
    exceptional-source floor;
-5. prove that the long return requires an impossible height loss, exact
-   source-class repetition, incompatible adjacent-label lift, or excessive
-   harmonic correction;
-6. exploit `Q>=-4499`, so no prefix can use an unbounded exceptional reserve.
+5. derive either a lower correction bound incompatible with the `27/997` strip,
+   an impossible source-class repetition, or an incompatible adjacent-label lift;
+6. exploit `Q>=-4499`, so no return prefix can use an unbounded exceptional
+   reserve.
 
-Secondary routes are the exact global divisor `g` and an explicit
-linear-form-in-logarithms estimate, only if their constants beat the actual
+Secondary routes remain the exact global divisor `g` and an explicit
+linear-form-in-logarithms estimate, but only if their constants beat the actual
 correction terms.
 
 ## Critical corrections
@@ -398,12 +410,13 @@ used by a cycle. Finite computation is not divergence.
 
 ## Verification state
 
-The new standalone checkers passed in the research environment:
+The latest standalone checkers passed in the research environment:
 
 ```text
 python tools/verify_exceptional_sponsor_arch_macro_exit.py
 python tools/verify_primary_delta_two_bit_sharpening.py
 python tools/verify_cycle_floor_local_correction_sharpening.py
+python tools/verify_zero_credit_arch_quantitative_contraction.py
 ```
 
 They verified:
@@ -412,16 +425,15 @@ They verified:
 2123272 positive-prefix integer ledgers;
 canonical arches, laminarity, maximal coverage, and credit conservation;
 113288 exact local near-power segment cases;
-all three known accelerated 5n+1 positive-cycle regressions;
+all retained accelerated 5n+1 cycle regressions;
 L_macro<2^4005;
-exact delta<2^-3992;
-cycle-floor correction coefficient epsilon=1/(X*N*ln(2));
+delta<2^-3992;
 delta-epsilon>997*2^-4002;
-contracting positive-credit bound L>C*2^3992;
-return bound L_return>R*2^3992;
-nondecreasing bound L<C*2^4002/997<C*2^3993.
+zero-credit loss log2(source/endpoint)>997*L*2^-4002;
+global strip D*2^3992<p<D*2^4002/997;
+relative strip width 27/997<2.71%.
 ```
 
-The two prior checkers remain included in `run_checks.py`. The new cycle-floor
-checker passed standalone; a complete repository-wide run was not executed in this
-environment.
+The two new floor-sensitive checkers are included in `run_checks.py`. The new
+zero-credit checker passed standalone; a complete repository-wide run was not
+executed in this environment.
