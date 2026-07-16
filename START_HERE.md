@@ -55,83 +55,108 @@ G5 final certificate: waits for G3.
 
 The strict problem remains open because G3 remains open.
 
-## Current frontier
+## Retained global facts
 
-Retained global facts include `N|X`, `1093||X`, `16562000` permanent classes,
-cycle values above `N`, exclusion through the `10^1201` window, and at least
-`245833` ordinary complete blocks in every hypothetical cycle.
-
-Every hypothetical cycle has an actual expanding exit from its least ordinary
-boundary `x` to the next ordinary boundary `y>x` with
+Every hypothetical cycle satisfies all of the following:
 
 ```text
-1<=C<=4500,
-L_exit<2^4006.
+N|X and 1093||X;
+16562000 permanent classes modulo N*1093^2;
+every cycle value>N;
+no cycle value in the checked window through 10^1201;
+at least 245833 ordinary complete blocks.
 ```
 
-Let `R` and `Lr` be the credit and accelerated length of the remaining actual
-return from `y` to `x`.
-
-A new general block-correction theorem proves that every near-power cycle obeys
+The former nonpositive-return branch is completely excluded. The general
+cycle-wide block-correction theorem gives
 
 ```text
-p < 2*D*B*X/[d*(X-d)],
+p < 2*D*B*X/[d*(X-d)].
 ```
 
-where `D` is total cycle credit. If `R<=0`, then `1<=D<=4500`, and exact integer
-comparison gives
+When a return has nonpositive credit, `1<=D<=4500`, so `p<2^4006`, while the
+retained harmonic theorem forces `p>2^(2^974)`. This contradiction is closed and
+must not be revisited.
+
+## New strongest decomposition
+
+Use the canonical complete-block partition and let `z` be the least value among
+all complete-block boundaries.
+
+Every complete block of credit `c` obeys the exact domination
 
 ```text
-p<2^4006.
+endpoint/source < 2^c.
 ```
 
-The retained harmonic theorem simultaneously gives
+Therefore, when blocks are read from `z`, every nonempty cumulative block-credit
+prefix is a positive integer:
 
 ```text
-p>Lr>2^(2^974).
+P_j>=1.
 ```
 
-Therefore the entire nonpositive-return branch is impossible.
+Consequences:
 
-The only surviving branch is now
+```text
+the first block after z is ordinary;
+its deficit is 1<=e<=4500;
+it is one pure ordinary block, with no exceptional block in the exit;
+its base multiplier already expands;
+its endpoint z' is strictly larger than z.
+```
+
+The remaining actual return from `z'` to `z` satisfies
 
 ```text
 R>=1,
-Lr>2^3990.
+L_return>2^3990.
 ```
+
+Moreover every return prefix ending at a complete-block boundary has credit
+
+```text
+Q>=1-e>=-4499.
+```
+
+Thus the surviving return cannot front-load an unbounded exceptional debt.
+Every exceptional excess unit is matched, in actual cyclic order, to an earlier
+ordinary deficit unit; exactly `D` ordinary units remain unmatched after the
+whole cycle.
 
 Detailed sources:
 
 ```text
+docs/MINIMUM_BLOCK_BOUNDARY_CREDIT_BALLOT.md
+tools/verify_minimum_block_boundary_credit_ballot.py
+docs/MINIMUM_BLOCK_BOUNDARY_PURE_ORDINARY_EXIT.md
+tools/verify_minimum_block_boundary_pure_ordinary_exit.py
 docs/NONPOSITIVE_RETURN_BLOCK_CORRECTION_EXCLUSION.md
 tools/verify_nonpositive_return_block_correction_exclusion.py
-docs/MINIMUM_BOUNDARY_ACTUAL_EXPANDING_SEGMENT.md
-docs/MINIMUM_BOUNDARY_RETURN_CREDIT_DICHOTOMY.md
-docs/MINIMUM_BOUNDARY_NONPOSITIVE_RETURN_HARMONIC_BARRIER.md
 ```
 
-## Surviving branch and next target
+## Decisive next target
 
-Primary next target: exclude the positive-credit return from `y>x` to the least
-ordinary boundary `x`.
+Exclude the astronomically long positive-credit return after the pure ordinary
+exit. The strongest route is now an ordered sponsor obstruction:
 
-Use the exact return equation
+1. use the ballot matching to pair every exceptional excess unit with an earlier
+   ordinary deficit unit;
+2. combine each pair with the exceptional-source floor and the permanent `N` and
+   `1093^2` labels;
+3. prove that a sponsor cannot pay for its matched exception without forcing an
+   impossible source repetition, an incompatible adjacent-label lift, or too
+   much harmonic correction;
+4. exploit the uniform return-prefix debt bound `Q>=-4499` so that no argument
+   needs an unbounded initial exceptional reserve.
 
-```text
-ln(x/y)=R*ln(2)-Lr*ln(B/X)+K_return<0
-```
+Secondary routes remain the exact cyclic source-matching divisor and an explicit
+linear-form-in-logarithms estimate, but only if their constants beat the actual
+correction terms.
 
-together with the cycle-wide block-correction inequality. Seek either:
-
-1. a quantitative restriction on `R/Lr` incompatible with cyclic closure;
-2. a forced placement or repetition pattern for the positive ordinary deficits;
-3. a global divisor/source-matching obstruction that remains effective when
-   total credit `D` is not bounded by `4500`;
-4. an explicit linear-form-in-logarithms bound only if its constants beat the
-   actual correction terms.
-
-Do not return to the now-closed nonpositive branch. Do not use finite same-type
-windows or any fixed finite `N`-adic ladder as a standalone contradiction.
+Do not return to the closed nonpositive branch. Do not use finite same-type
+windows, a fixed finite `N`-adic ladder, or long finite trajectories as a
+standalone contradiction.
 
 ## Non-negotiable corrections
 
