@@ -35,6 +35,13 @@ G5 final certificate: waits for G3.
 
 ## Retained global structure
 
+Define the exact total-credit frontier
+
+```text
+Q_credit=
+924679364903952241768234680715310598867316370441120757898246831506500507205080014535351439406991342585993538327845986892977536682537320095988153612270886695873966778097766981798062925612878469213187733241206117142814414961418054803443235355123715316220902421623921086365374327267387194352877014114959.
+```
+
 Every hypothetical cycle satisfies:
 
 ```text
@@ -43,7 +50,24 @@ N|X and 1093||X;
 every cycle value>N;
 every exceptional source has at least 1505 decimal digits;
 no cycle value in the checked window through 10^1201;
-at least 245833 ordinary complete blocks.
+D>=Q_credit>2^996;
+p>2^4988;
+at least ceil(Q_credit/4500) ordinary complete blocks.
+```
+
+The exact ordinary-block lower bound is
+
+```text
+205484303311989387059607706825624577526070304542471279532943740334777890490017781007855875423775853907998564072854663753995008151674960021330700802726863710194214839577281551510680650136195215380708385164712470476180981102537345511876274523360825625826867204805315796970083183837197154300639336470.
+```
+
+This supersedes the former lower bound `245833`.
+
+Sources:
+
+```text
+docs/PRIMARY_CREDIT_CONTINUED_FRACTION_FRONTIER.md
+tools/verify_primary_credit_continued_fraction_frontier.py
 ```
 
 ## Complete-block ledger and ballot
@@ -159,7 +183,7 @@ docs/CYCLE_FLOOR_LOCAL_CORRECTION_SHARPENING.md
 tools/verify_cycle_floor_local_correction_sharpening.py
 ```
 
-The new exact atanh-series bracket for `ln(2)` sharpens (5) to
+The exact atanh-series bracket for `ln(2)` sharpens (5) to
 
 ```text
 1007*2^-4002 < delta-epsilon,
@@ -245,8 +269,55 @@ This replaces the former retained strip
 D*2^3992<p<D*2^4002/997,
 ```
 
-whose relative width was `27/997<2.71%`. The scalar cycle window is now more
-than 27 times narrower.
+whose relative width was `27/997<2.71%`. Combining (11) with
+`D>=Q_credit>2^996` proves `p>2^4988`.
+
+## Total-credit continued-fraction exclusion
+
+Put
+
+```text
+lambda=ln(B/X),
+beta=ln(2)/lambda,
+z=p*lambda-D*ln(2)>0.
+```
+
+The exact cycle identity gives
+
+```text
+z=lambda*(p-D*beta)
+ =sum_cycle ln(1+1/(X*n_i)).                           (13)
+```
+
+A rigorous interval calculation fixes the first `554` continued-fraction
+coefficients of `beta`. At odd index `553`, the `t=26` intermediate convergent is
+the final best upper approximation before the `t=27` denominator `Q_credit`.
+The standard one-sided best-approximation lemma therefore supplies a mandatory
+positive gap for every integer `1<=D<Q_credit`.
+
+Under `D<Q_credit`, the global block-correction bound gives
+
+```text
+p<2^4991.                                               (14)
+```
+
+The actual expanding exit has at most `4500` complete blocks. Harmonic packing
+of the remaining return in the `16562000` permanent classes, now with (14),
+gives a full correction upper bound strictly smaller than the mandatory
+continued-fraction gap. This contradiction proves
+
+```text
+D>=Q_credit.                                            (15)
+```
+
+No sign assumption on the return is used.
+
+Source:
+
+```text
+docs/PRIMARY_CREDIT_CONTINUED_FRACTION_FRONTIER.md
+tools/verify_primary_credit_continued_fraction_frontier.py
+```
 
 ## Strongest current exit-return decomposition
 
@@ -260,21 +331,22 @@ This gives an actual initial macro-exit from `z` to `y` with
 ```text
 z<y,
 1<=C<=4500,
-L_macro<C*2^4002/1007<2^4005.                         (13)
+L_macro<C*2^4002/1007<2^4005.                         (16)
 ```
 
 The remaining actual return from `y` to `z`, with credit `R=D-C`, satisfies
 
 ```text
-R>=1,
-L_return>R*2^4002/1008.                               (14)
+D=C+R>=Q_credit,
+R>=Q_credit-4500,
+L_return>R*2^4002/1008.                               (17)
 ```
 
 Every return prefix ending at a complete-block boundary has credit `Q` satisfying
 
 ```text
 C+Q>=1,
-Q>=1-C>=-4499.                                        (15)
+Q>=1-C>=-4499.                                        (18)
 ```
 
 The global strip adds
@@ -282,13 +354,13 @@ The global strip adds
 ```text
 L_return
  <(C+R)*2^4002/1007
- <=(R+4500)*2^4002/1007.                              (16)
+ <=(R+4500)*2^4002/1007.                              (19)
 ```
 
-Thus G3 is reduced to a positive-credit return whose length per credit lies in
-the one-over-1007 near-critical regime after a bounded sponsored macro-exit. All
-exceptions on the return lie in disjoint maximal sponsor arches of credit at
-most `4499`.
+Thus G3 is reduced to an enormous positive-credit return whose length per credit
+lies in the one-over-1007 near-critical regime after a bounded sponsored
+macro-exit. All exceptions on the return lie in disjoint maximal sponsor arches
+of credit at most `4499`.
 
 Sources:
 
@@ -299,6 +371,8 @@ docs/MINIMUM_BLOCK_BOUNDARY_PURE_ORDINARY_EXIT.md
 tools/verify_minimum_block_boundary_pure_ordinary_exit.py
 docs/PRIMARY_ONE_OVER_1007_CYCLE_STRIP.md
 tools/verify_primary_one_over_1007_cycle_strip.py
+docs/PRIMARY_CREDIT_CONTINUED_FRACTION_FRONTIER.md
+tools/verify_primary_credit_continued_fraction_frontier.py
 ```
 
 ## Closed nonpositive branch
@@ -311,7 +385,8 @@ p < 2*D*B*X/[d*(X-d)].
 
 A nonpositive return has `1<=D<=4500`, hence `p<2^4006`, while the retained
 harmonic theorem gives `p>2^(2^974)`. Therefore every nonpositive return is
-impossible and must not be revisited.
+impossible and must not be revisited. This branch is now also contained in the
+much stronger total-credit exclusion (15).
 
 Sources:
 
@@ -370,18 +445,22 @@ docs/SAME_DEFICIT_FINITE_PERSISTENCE_NO_GO.md
 
 ## Decisive next target
 
-Exclude the positive-credit return in (14)--(16). The strongest route is now:
+Exclude the positive-credit return in (17)--(19). The strongest route is now:
 
-1. use the one-over-1007 global strip (11), not the older coarse length bounds;
+1. use both the 300-digit credit frontier (15) and the one-over-1007 strip (11);
 2. charge every zero-credit arch by its strengthened height loss (9);
 3. apply the adjacent `1007/1008` positive-credit length dichotomy (8) to all
    remaining macroblocks;
-4. combine arch endpoints with the permanent `N` and `1093^2` labels and the
-   exceptional-source floor;
-5. derive either a lower correction bound incompatible with the `1/1007` strip,
-   an impossible source-class repetition, or an incompatible adjacent-label lift;
+4. exploit the forced 297-digit population of ordinary blocks together with the
+   permanent `N` and `1093^2` transition labels;
+5. improve harmonic occupancy/correction, force an impossible source-class
+   repetition, or obtain an incompatible adjacent-label lift;
 6. exploit `Q>=-4499`, so no return prefix can use an unbounded exceptional
    reserve.
+
+The current scalar continued-fraction certificate reaches the explicit
+300-digit denominator frontier. Extending it requires a stronger correction
+upper bound or genuinely new transition arithmetic.
 
 Secondary routes remain the exact global divisor `g` and an explicit
 linear-form-in-logarithms estimate, but only if their constants beat the actual
@@ -414,19 +493,22 @@ python tools/verify_primary_delta_two_bit_sharpening.py
 python tools/verify_cycle_floor_local_correction_sharpening.py
 python tools/verify_zero_credit_arch_quantitative_contraction.py
 python tools/verify_primary_one_over_1007_cycle_strip.py
+python tools/verify_primary_credit_continued_fraction_frontier.py
 ```
 
-The new checker verified, using exact integers and rational arithmetic:
+The new checkers verified, using exact integers and rational arithmetic:
 
 ```text
-842/1215<ln(2)<1910051/2755620;
 1007*2^-4002<delta-epsilon;
 delta<1008*2^-4002;
 D*2^4002/1008<p<D*2^4002/1007;
 relative strip width 1/1007<0.1%;
-L_macro<2^4005;
-L_return>R*2^4002/1008.
+554 common continued-fraction coefficients for beta;
+the exact 300-digit Q_credit denominator frontier;
+D<Q_credit implies p<2^4991;
+the mandatory one-sided gap exceeds the full harmonic correction bound;
+D>=Q_credit and p>2^4988.
 ```
 
-The new standalone checker passed. A complete repository-wide run was not
+Both new standalone checkers passed. A complete repository-wide run was not
 executed in this environment.
