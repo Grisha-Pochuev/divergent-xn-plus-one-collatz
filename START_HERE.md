@@ -101,6 +101,37 @@ docs/NONPOSITIVE_RETURN_BLOCK_CORRECTION_EXCLUSION.md
 tools/verify_nonpositive_return_block_correction_exclusion.py
 ```
 
+## Permanent-label closure no-go
+
+The `N` labels and the adjacent `1093^2` labels do not conflict with cyclic
+wraparound. More strongly, every compatible cyclic label word lifts coherently
+through every finite power
+
+```text
+N*1093^r,  r>=2.
+```
+
+At each new `1093`-adic digit, the new valuation-layer digit cancels the new
+transition defect independently on each edge. The number of allowed combined
+classes modulo `N*1093^r` is
+
+```text
+16562000*1093^(r-2),
+```
+
+so the higher lifts are completely saturated above the informative `1093^2`
+level. No finite deeper `1093`-adic label automaton can exclude a cycle by bare
+closure.
+
+Sources:
+
+```text
+docs/PERMANENT_LABEL_CYCLIC_CLOSURE_NO_GO.md
+tools/verify_permanent_label_cyclic_closure_no_go.py
+docs/WIEFERICH_Q_ADIC_LIFT_SATURATION_NO_GO.md
+tools/verify_wieferich_q_adic_lift_saturation.py
+```
+
 ## Positive ballot and sponsor arches
 
 Use the canonical complete-block partition and let `z` be the least value among
@@ -238,30 +269,40 @@ Every return prefix ending at a complete-block boundary has credit
 Q>=1-C>=-4499.
 ```
 
-## Decisive next target
+## Decisive next target and strategy pivot
 
-Exclude the positive-credit return after the bounded initial sponsor nest. The
-strongest route is now:
+Exclude the positive-credit return after the bounded initial sponsor nest.
+The finite `1093`-adic closure route is now rigorously exhausted. Do not spend
+another sprint adding deeper local labels at the same prime.
 
-1. use both the 300-digit total-credit frontier and the `1/1007` global strip;
+The strongest remaining route for the primary candidate is:
+
+1. use the 300-digit total-credit frontier and the `1/1007` global strip;
 2. charge every zero-credit arch by the quantitative loss (3);
-3. apply the adjacent `1007/1008` length dichotomy to every remaining macroblock;
-4. exploit the enormous forced population of ordinary blocks together with the
-   permanent `N` and `1093^2` transition labels;
-5. improve the harmonic occupancy/correction bound or force a repeated exact
-   source class, an incompatible adjacent-label lift, or a global-divisor clash;
-6. use `Q>=-4499`, so no return prefix can use an unbounded exceptional reserve.
+3. apply the adjacent `1007/1008` length dichotomy to every remaining
+   positive-credit macroblock;
+4. use the `N*1093^2` classes only for global occupancy and correction bounds,
+   not for bare cyclic closure;
+5. test whether the exact global divisor `g` forces an incompatibility with the
+   enormous ordinary-block population;
+6. exploit `Q>=-4499`, so no return prefix can use an unbounded exceptional
+   reserve.
 
-The scalar continued-fraction method alone now reaches its certified 300-digit
-credit frontier. Further progress must exploit transition occupancy or stronger
-arithmetic, not merely print more finite trajectory values.
+In parallel, screen alternative candidates for a prime-power invariant whose
+new valuation digits are not locally free. If the exact global-divisor route
+also fails to couple the labels, the primary candidate should be deprioritized
+rather than extended by more local residue layers.
 
-Secondary routes remain the exact cyclic source-matching divisor and an explicit
-linear-form-in-logarithms estimate, but only if their constants beat the actual
-correction terms.
+The scalar continued-fraction method alone has reached its certified 300-digit
+credit frontier. Further progress must use nonlocal arithmetic, stronger
+occupancy/correction, or a better candidate.
 
-Do not use finite same-type windows, a fixed finite `N`-adic ladder, or long
-finite trajectories as a standalone contradiction.
+Secondary routes remain an explicit linear-form-in-logarithms estimate and a
+candidate search targeted at non-saturated prime-power lifts, but only if their
+constants or invariants address the actual positive-credit return.
+
+Do not use finite same-type windows, a fixed finite `N`-adic ladder, any finite
+`1093`-adic lift, or long finite trajectories as a standalone contradiction.
 
 ## Non-negotiable corrections
 
