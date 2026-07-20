@@ -47,7 +47,8 @@ def test_fermat_grouped_exits() -> None:
 
 
 def test_mersenne_coordinate_cases_and_self_similarity() -> None:
-    for m in range(2, 9):
+    # m=2 gives X=3, outside this project's strict X>=5 domain.
+    for m in range(3, 9):
         q = (1 << m) - 1
         for s in range(1, 3 * m + 2):
             for h in range(1, 40, 2):

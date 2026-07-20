@@ -8,7 +8,7 @@ B = 1 << M_EXP
 D0 = 349 * (1 << 500) - 347
 X = B - D0
 N = (1 << 500) - 1
-ALPHA = Fraction(997, 1 << 4002)
+ALPHA = Fraction(1007, 1 << 4002)
 
 
 def v2(n: int) -> int:
@@ -26,24 +26,26 @@ def verify_primary_constant() -> None:
     assert 2 * X > D0 * N
     floor_u = Fraction(1, X * N)
 
-    # -ln(1-d/B)>d/B and ln(2)<7/10 give the exact lower bound
-    # delta-epsilon>(10/7)*(d/B-1/(X*N))>alpha.
-    rational_lower = Fraction(10, 7) * (Fraction(D0, B) - floor_u)
+    # Reuse the sharp rational comparison proved by the one-over-1007 strip:
+    # ln(2)<1910051/2755620 and -ln(1-d/B)>d/B.
+    rational_lower = Fraction(2755620, 1910051) * (
+        Fraction(D0, B) - floor_u
+    )
     assert rational_lower > ALPHA
 
     # Exact global strip constants.
     upper_per_credit = 1 / ALPHA
-    lower_per_credit = 1 << 3992
-    assert upper_per_credit / lower_per_credit == Fraction(1024, 997)
-    assert Fraction(1024, 997) - 1 == Fraction(27, 997)
-    assert Fraction(27, 997) < Fraction(271, 10000)
+    lower_per_credit = Fraction(1 << 4002, 1008)
+    assert upper_per_credit / lower_per_credit == Fraction(1008, 1007)
+    assert Fraction(1008, 1007) - 1 == Fraction(1, 1007)
+    assert Fraction(1, 1007) < Fraction(1, 1000)
 
     # Retained coarse consequences used by the status files.
     assert upper_per_credit < (1 << 3993)
     assert 4500 * upper_per_credit < (1 << 4005)
 
-    # A zero-credit arch of length 2^4002 loses more than 997 bits.
-    assert ALPHA * (1 << 4002) == 997
+    # A zero-credit arch of length 2^4002 loses more than 1007 bits.
+    assert ALPHA * (1 << 4002) == 1007
 
 
 def verify_zero_credit_arch_regression() -> None:
@@ -97,10 +99,10 @@ def main() -> None:
     verify_primary_constant()
     verify_zero_credit_arch_regression()
     print("zero-credit arch quantitative contraction verified")
-    print("alpha=997*2^-4002")
+    print("alpha=1007*2^-4002")
     print("zero-credit arch: log2(source/endpoint) > alpha*L")
-    print("global cycle strip: D*2^3992 < p < D*2^4002/997")
-    print("relative strip width: 27/997 < 2.71%")
+    print("global cycle strip: D*2^4002/1008 < p < D*2^4002/1007")
+    print("relative strip width: 1/1007 < 0.1%")
 
 
 if __name__ == "__main__":

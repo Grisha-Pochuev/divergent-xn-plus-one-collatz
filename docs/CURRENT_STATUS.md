@@ -302,11 +302,31 @@ n_t==B^(-j)*S_j (mod g),  j=t mod h.                 (13)
 This exact global divisor contains information not present in finite local
 endpoint labels and remains an active route.
 
+Moreover,
+
+```text
+gcd(g,(2^500-1)*1093^2)=1.
+```
+
+The 300-digit credit frontier forces one same-credit ordinary boundary type to
+occur more than `2^947` times in a single joint class modulo
+
+```text
+g*(2^500-1)*1093^2.
+```
+
+The corresponding source-boundary diameter is greater than `g*2^1466`.  Thus
+the global divisor enlarges the spacing of a forced huge population without
+creating extra classes.  Bare counting still does not exclude arbitrarily high
+representatives.
+
 Sources:
 
 ```text
 docs/CYCLIC_ROTATION_CLOSURE_GCD.md
 docs/GLOBAL_BLOCK_GCD_PHASE_SIEVE.md
+docs/GLOBAL_DIVISOR_ORDINARY_POPULATION.md
+tools/verify_global_divisor_ordinary_population.py
 ```
 
 ## Permanent-label and prime-power closure no-go
@@ -363,8 +383,8 @@ route for the primary candidate is now:
 3. apply the `1007/1008` length dichotomy to all remaining positive-credit
    macroblocks;
 4. use the `N*1093^2` classes only for global occupancy and correction bounds;
-5. test whether the exact global divisor `g` in (13) conflicts with the forced
-   297-digit population of ordinary blocks;
+5. convert the forced `>2^947` repeated same-credit class modulo
+   `g*(2^500-1)*1093^2` into a height or reciprocal-mass contradiction;
 6. exploit `Q>=-4499`, so exceptional prefixes have only bounded reserve.
 
 In parallel, screen alternative multipliers for a prime-power invariant whose

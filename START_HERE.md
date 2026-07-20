@@ -107,6 +107,22 @@ The exact ordinary-block lower bound is
 205484303311989387059607706825624577526070304542471279532943740334777890490017781007855875423775853907998564072854663753995008151674960021330700802726863710194214839577281551510680650136195215380708385164712470476180981102537345511876274523360825625826867204805315796970083183837197154300639336470.
 ```
 
+Coupling this population to the exact global boundary divisor `g` gives a new
+forced repetition.  Since `g` is coprime to
+
+```text
+M=(2^500-1)*1093^2,
+```
+
+one same-credit ordinary boundary type occurs more than `2^947` times in one
+class modulo `g*M`.  Its source values have diameter greater than
+`g*2^1466`.
+
+```text
+docs/GLOBAL_DIVISOR_ORDINARY_POPULATION.md
+tools/verify_global_divisor_ordinary_population.py
+```
+
 This supersedes the former bound `245833`, which is retained only as an audit
 marker for older consistency checks.
 
@@ -308,8 +324,8 @@ The strongest remaining route for the primary candidate is:
 3. apply the adjacent `1007/1008` length dichotomy to every remaining
    positive-credit macroblock;
 4. use the `N*1093^2` classes for global occupancy and correction bounds;
-5. test whether the exact global divisor `g` forces an incompatibility with the
-   enormous ordinary-block population;
+5. strengthen the proved `>2^947` same-credit population in one class modulo
+   `g*N*1093^2` into a height or reciprocal-mass contradiction;
 6. exploit `Q>=-4499`, so no return prefix can use an unbounded exceptional
    reserve.
 

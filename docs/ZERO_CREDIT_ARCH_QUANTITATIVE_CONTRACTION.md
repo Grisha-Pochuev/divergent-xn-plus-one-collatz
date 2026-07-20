@@ -38,7 +38,7 @@ therefore gives
 ```text
 K<L*epsilon,
 epsilon=1/(X*N*ln(2)),
-delta-epsilon>997*2^-4002.                            (2)
+delta-epsilon>1007*2^-4002.                           (2)
 ```
 
 This note records the consequences for zero-credit sponsor arches and for the
@@ -49,7 +49,7 @@ whole hypothetical cycle.
 Put
 
 ```text
-alpha=997*2^-4002.                                    (3)
+alpha=1007*2^-4002.                                   (3)
 ```
 
 Equations (1)--(2) imply, for every actual consecutive complete-block segment,
@@ -90,14 +90,14 @@ L>=2^4002,
 then
 
 ```text
-alpha*L>=997,
-x>2^997*y>2^997*N.                                   (7)
+alpha*L>=1007,
+x>2^1007*y>2^1007*N.                                 (7)
 ```
 
 More generally, whenever
 
 ```text
-997*L>=k*2^4002,
+1007*L>=k*2^4002,
 ```
 
 one has
@@ -131,7 +131,7 @@ product is `1`, equation (9) forces
 
 ```text
 alpha*Z<D,
-Z<D*2^4002/997.                                       (10)
+Z<D*2^4002/1007.                                      (10)
 ```
 
 Thus zero-credit arches cannot occupy an arbitrary amount of accelerated length
@@ -143,7 +143,7 @@ Apply (4) to the full cycle.  There `x=y`, `C=D`, and `L=p`, so
 
 ```text
 0<D-alpha*p,
-p<D/alpha=D*2^4002/997.                              (11)
+p<D/alpha=D*2^4002/1007.                             (11)
 ```
 
 The retained exact identity also has `K>0`, hence
@@ -156,33 +156,31 @@ D<p*delta.                                            (12)
 Using the retained upper bound
 
 ```text
-delta<2^-3992,
+delta<1008*2^-4002,
 ```
 
 we obtain
 
 ```text
-p>D*2^3992.                                           (13)
+p>D*2^4002/1008.                                      (13)
 ```
 
 Combining (11) and (13), every hypothetical primary cycle lies in the exact
 near-critical strip
 
 ```text
-D*2^3992
+D*2^4002/1008
  <p
- <D*2^4002/997
- =(1024/997)*D*2^3992.                                (14)
+ <D*2^4002/1007.                                      (14)
 ```
 
 The relative width above the lower endpoint is
 
 ```text
-1024/997-1=27/997<0.0271.                             (15)
+1008/1007-1=1/1007<0.001.                             (15)
 ```
 
-So `p/D` is confined to a window only about `2.71%` wide around the principal
-drift scale `2^3992`.
+So `p/D` is confined to a window of relative width below `0.1%`.
 
 ## 5. Return specialization
 
@@ -198,7 +196,7 @@ p=L_macro+L_return.
 The existing contracting-return theorem gives
 
 ```text
-L_return>R*2^3992.                                    (16)
+L_return>R*2^4002/1008.                               (16)
 ```
 
 Equation (11) now adds
@@ -206,8 +204,8 @@ Equation (11) now adds
 ```text
 L_return
  <p
- <(C+R)*2^4002/997
- <=(R+4500)*2^4002/997.                               (17)
+ <(C+R)*2^4002/1007
+ <=(R+4500)*2^4002/1007.                              (17)
 ```
 
 This does not yet exclude the return, because `R` is not bounded.  It does show
@@ -220,10 +218,10 @@ Zero-credit arches are no longer merely known to contract: their binary height
 loss is at least `alpha*L`, proportional to their accelerated length.  The
 surviving obstruction is therefore more precise:
 
-1. the full cycle has only a `27/997` relative length window;
+1. the full cycle has only a `1/1007` relative length window;
 2. the total length of all zero-credit arches is below `D/alpha`;
 3. an individual zero-credit arch of length at least `2^4002` loses more than
-   `997` binary height units;
+   `1007` binary height units;
 4. all positive-credit nondecreasing macroblocks have the retained upper length
    bound, while contracting positive-credit macroblocks have the retained lower
    length bound.
@@ -242,7 +240,7 @@ python tools/verify_zero_credit_arch_quantitative_contraction.py
 ```
 
 The checker uses exact integer and rational arithmetic.  It verifies the primary
-constant `alpha`, the `1024/997` strip ratio, the `27/997` relative width, the
+constant `alpha`, the `1008/1007` strip ratio, the `1/1007` relative width, the
 initial-exit comparison, and the canonical zero-credit sponsor arch
 
 ```text

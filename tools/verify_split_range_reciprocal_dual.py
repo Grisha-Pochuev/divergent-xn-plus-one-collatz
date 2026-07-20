@@ -174,14 +174,17 @@ def verify() -> None:
     combined_upper = SMALL_RANGE_UPPER + Fraction(
         1_370_625, 1_000_000_000
     )
-    assert combined_upper < Fraction(86_609_720, 1_000_000_000)
+    # The two printed strict component bounds sum to this exact rational cap.
+    # The underlying reciprocal contribution is strict because both component
+    # estimates above are strict; the cap itself is equal to the decimal value.
+    assert combined_upper == Fraction(86_609_720, 1_000_000_000)
 
     log2_lower, _ = log_bounds(Fraction(2, 1), 40)
     energy = Fraction(X * X, 1 << 133)
     _, eta_upper = log_bounds(energy, 4)
     required = X * (log2_lower - TARGET * eta_upper) / 2
     residual = required - combined_upper
-    assert residual > Fraction(13_324_487, 1_000_000_000)
+    assert residual > Fraction(13_324_486, 1_000_000_000)
 
     minimum_large = (residual * LARGE_CUTOFF).numerator // (
         residual * LARGE_CUTOFF

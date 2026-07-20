@@ -10,7 +10,7 @@ PRIMARY_X = "2^4501-349*2^500+347"
 PRIMARY_CLASSES = "16562000"
 PRIMARY_BARRIER = "10^1201"
 GLOBAL_MIN_ORDINARY_BLOCKS = "245833"
-POSITIVE_RETURN_FRONTIER = "2^3992"
+POSITIVE_RETURN_FRONTIER = "2^4002/1008"
 NONPOSITIVE_RETURN_LOWER = "2^(2^974)"
 NONPOSITIVE_CYCLE_UPPER = "2^4006"
 CORRECT_CYCLE_RELATION = "2^A*product_i(n_i)==1 (mod X)"
@@ -34,6 +34,9 @@ STRIP_DOC = "PRIMARY_ONE_OVER_1007_CYCLE_STRIP"
 STRIP_TOOL = "verify_primary_one_over_1007_cycle_strip.py"
 CREDIT_DOC = "PRIMARY_CREDIT_CONTINUED_FRACTION_FRONTIER"
 CREDIT_TOOL = "verify_primary_credit_continued_fraction_frontier.py"
+GLOBAL_POPULATION_DOC = "GLOBAL_DIVISOR_ORDINARY_POPULATION"
+GLOBAL_POPULATION_TOOL = "verify_global_divisor_ordinary_population.py"
+ZERO_ARCH_TOOL = "verify_zero_credit_arch_quantitative_contraction.py"
 
 CORE_FILES = (
     "START_HERE.md",
@@ -65,6 +68,10 @@ CURRENT_FILES = (
     "tools/verify_cyclic_rotation_closure_gcd.py",
     "docs/GLOBAL_BLOCK_GCD_PHASE_SIEVE.md",
     "tools/verify_global_block_gcd_phase_sieve.py",
+    "docs/GLOBAL_DIVISOR_ORDINARY_POPULATION.md",
+    "tools/verify_global_divisor_ordinary_population.py",
+    "docs/ZERO_CREDIT_ARCH_QUANTITATIVE_CONTRACTION.md",
+    "tools/verify_zero_credit_arch_quantitative_contraction.py",
     "docs/SAME_DEFICIT_FINITE_PERSISTENCE_NO_GO.md",
     "tools/verify_same_deficit_finite_persistence.py",
 )
@@ -111,16 +118,20 @@ def check() -> None:
         CREDIT_TOOL,
         CREDIT_FRONTIER,
         NEW_LENGTH_FRONTIER,
+        GLOBAL_POPULATION_DOC,
+        GLOBAL_POPULATION_TOOL,
+        "2^947",
+        "g*2^1466",
         "remaining actual return",
         CORRECT_CYCLE_RELATION,
     )
 
     require(
         "docs/WORKING_PROTOCOL.md",
-        "one primary proof target",
-        "at most two active exploratory directions",
-        "Run the new standalone checker first",
-        "Prefer one coherent result commit per sprint",
+        "primary proof target for reporting",
+        "Run standalone checkers",
+        "Prefer coherent result commits",
+        "Use the maximum resources that are actually available",
         "docs/LATEST_VALID_PROGRESS.md",
     )
 
@@ -129,12 +140,9 @@ def check() -> None:
         PRIMARY_X,
         PRIMARY_CLASSES,
         PRIMARY_BARRIER,
-        GLOBAL_MIN_ORDINARY_BLOCKS,
         POSITIVE_RETURN_FRONTIER,
-        NONPOSITIVE_RETURN_LOWER,
-        NONPOSITIVE_CYCLE_UPPER,
-        "every nonpositive return is",
-        "Strongest current exit-return decomposition",
+        "The nonpositive-return branch is completely excluded",
+        "Strongest exit-return decomposition",
         EXCLUSION_DOC,
         EXCLUSION_TOOL,
         SPONSOR_ARCH_DOC,
@@ -148,10 +156,14 @@ def check() -> None:
         CREDIT_FRONTIER,
         NEW_LENGTH_FRONTIER,
         GLOBAL_PHASE_DOC,
+        GLOBAL_POPULATION_DOC,
+        GLOBAL_POPULATION_TOOL,
+        "2^947",
+        "g*2^1466",
         "S_h/g divides 2^D-1",
         "S_h/gcd(S_h,2^D-1) divides g divides S_h",
         "n_t==B^(-j)*S_j (mod g)",
-        "fixed finite `N`-adic ladders",
+        "finite `1093`-adic lift",
         CORRECT_CYCLE_RELATION,
     )
 
@@ -180,8 +192,8 @@ def check() -> None:
         "delta<2^-3992",
         "349/511<11/16",
         "56/81>11/16",
-        "L>C*2^3992",
-        "L_return>R*2^3992",
+        "L>C/delta>C*2^3992",
+        "L_return>R*2^3992>=2^3992",
     )
 
     require(
@@ -223,6 +235,36 @@ def check() -> None:
     )
 
     require(
+        "docs/ZERO_CREDIT_ARCH_QUANTITATIVE_CONTRACTION.md",
+        "alpha=1007*2^-4002",
+        "1/1007<0.001",
+        "Z<D*2^4002/1007",
+        "x>2^1007*y",
+    )
+
+    require(
+        "tools/verify_zero_credit_arch_quantitative_contraction.py",
+        "ALPHA = Fraction(1007, 1 << 4002)",
+        "Fraction(1008, 1007)",
+        "relative strip width: 1/1007 < 0.1%",
+    )
+
+    require(
+        "docs/GLOBAL_DIVISOR_ORDINARY_POPULATION.md",
+        "gcd(g,M)=1",
+        "R_min=ceil(J_min/74,529,000,000)>2^947",
+        "g*2^1466",
+        "does not yet exclude a cycle",
+    )
+
+    require(
+        "tools/verify_global_divisor_ordinary_population.py",
+        "type_count == 74_529_000_000",
+        "repetition_min > (1 << 947)",
+        "boundary-source diameter >g*2^1466",
+    )
+
+    require(
         "docs/NONPOSITIVE_RETURN_BLOCK_CORRECTION_EXCLUSION.md",
         "p < 2*D*B*X/[d*(X-d)]",
         "A hypothetical positive cycle cannot have R<=0",
@@ -256,6 +298,8 @@ def check() -> None:
         DELTA_TOOL,
         STRIP_TOOL,
         CREDIT_TOOL,
+        GLOBAL_POPULATION_TOOL,
+        ZERO_ARCH_TOOL,
     ):
         if tool not in checks:
             raise AssertionError(f"run_checks.py does not include {tool}")
@@ -270,7 +314,7 @@ def check() -> None:
     require(
         "docs/LATEST_VALID_PROGRESS.md",
         "docs/CURRENT_STATUS.md",
-        "not the current source",
+        "current source of project memory",
         RETRACTED_BARRIER,
         "docs/archive/LEGACY_LATEST_VALID_PROGRESS_PRE_NEAR_POWER.md",
     )

@@ -190,7 +190,8 @@ def verify() -> None:
     combined_upper = SMALL_RANGE_UPPER + Fraction(
         1_185_304, 1_000_000_000
     )
-    assert combined_upper < Fraction(86_412_209, 1_000_000_000)
+    # The strict component estimates sum to this exact rational cap.
+    assert combined_upper == Fraction(86_412_209, 1_000_000_000)
 
     log2_lower, _ = log_bounds(Fraction(2, 1), 40)
     energy = Fraction(X * X, 1 << 133)
