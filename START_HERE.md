@@ -13,9 +13,28 @@ C_X(n)=(X*n+1)/2^v2(X*n+1)
 tends to positive infinity. A cycle, avoidance of `1`, finite growth, a finite
 barrier, or heuristic drift is not a solution.
 
+## Unrestricted research mode
+
+Use all research capacity actually available.  There is no project-imposed cap on
+repository reading, literature searches, tool calls, active directions,
+candidate multipliers, symbolic calculations, exhaustive finite searches,
+SAT/SMT or proof-assistant work, GitHub Actions runs, checkers, branches, or
+commits in one session.
+
+A request to continue authorizes broad and sustained work across multiple methods.
+The primary candidate may be replaced when another candidate has better rigorous
+prospects.  Optimize or narrow the work only after a real platform, context,
+runtime, memory, or scientific-value bottleneck is encountered, not because an
+older chat or subscription once lagged.
+
+This removes operational limits only.  Mathematical safeguards remain mandatory:
+finite trajectories are not divergence proofs, evidence is not a theorem,
+retracted arguments stay retracted, and every claimed result must remain
+reproducible and auditable.
+
 ## Read at startup
 
-Read exactly these files, once per chat unless one changes:
+Read at minimum these files once per chat unless one changes:
 
 ```text
 START_HERE.md
@@ -23,17 +42,22 @@ docs/WORKING_PROTOCOL.md
 docs/CURRENT_STATUS.md
 ```
 
+These files are an entry point, not a ceiling.  Read any additional theorem,
+checker, result, commit history, issue, retraction, archive, literature source, or
+the whole repository whenever it may help.
+
 File roles:
 
 - `START_HERE.md`: routing, current candidate, decisive obstruction;
 - `docs/WORKING_PROTOCOL.md`: operating and verification rules;
 - `docs/CURRENT_STATUS.md`: authoritative mathematical frontier;
 - theorem documents and checkers: detailed proofs and certificates;
-- `docs/RETRACTIONS.md`: audit history, read only when a related argument arises;
-- session checkpoints and `docs/archive/`: historical handoffs, not startup memory.
+- `docs/RETRACTIONS.md`: audit history;
+- session checkpoints and `docs/archive/`: historical handoffs.
 
-Current `main` and committed checkers override chat summaries. Do not load the
-whole repository or fetch an unchanged file repeatedly without a concrete need.
+Current `main` and committed checkers override chat summaries.  Search and read
+broadly when it improves the chance of a proof; avoid only redundant re-fetches
+of unchanged material that add no information.
 
 ## Primary candidate and proof gates
 
@@ -94,7 +118,8 @@ tools/verify_primary_credit_continued_fraction_frontier.py
 ```
 
 The former nonpositive-return branch is completely excluded. Its retained
-comparison was `p<2^4006` against `p>2^(2^974)`. Do not revisit it.
+comparison was `p<2^4006` against `p>2^(2^974)`. Do not revisit it unless a
+specific error is found in its proof or checker.
 
 ```text
 docs/NONPOSITIVE_RETURN_BLOCK_CORRECTION_EXCLUSION.md
@@ -272,8 +297,9 @@ Q>=1-C>=-4499.
 ## Decisive next target and strategy pivot
 
 Exclude the positive-credit return after the bounded initial sponsor nest.
-The finite `1093`-adic closure route is now rigorously exhausted. Do not spend
-another sprint adding deeper local labels at the same prime.
+The finite `1093`-adic closure route is rigorously exhausted.  This is a proved
+mathematical no-go, not a restriction on trying other primes, other invariants,
+or other candidates.
 
 The strongest remaining route for the primary candidate is:
 
@@ -281,28 +307,25 @@ The strongest remaining route for the primary candidate is:
 2. charge every zero-credit arch by the quantitative loss (3);
 3. apply the adjacent `1007/1008` length dichotomy to every remaining
    positive-credit macroblock;
-4. use the `N*1093^2` classes only for global occupancy and correction bounds,
-   not for bare cyclic closure;
+4. use the `N*1093^2` classes for global occupancy and correction bounds;
 5. test whether the exact global divisor `g` forces an incompatibility with the
    enormous ordinary-block population;
 6. exploit `Q>=-4499`, so no return prefix can use an unbounded exceptional
    reserve.
 
-In parallel, screen alternative candidates for a prime-power invariant whose
-new valuation digits are not locally free. If the exact global-divisor route
-also fails to couple the labels, the primary candidate should be deprioritized
-rather than extended by more local residue layers.
+In parallel, freely screen alternative candidates, primes, prime powers,
+valuation codes, automata, global divisors, Diophantine estimates, formal proof
+methods, and computational certificates.  If the exact global-divisor route
+fails to couple the labels, deprioritize the primary candidate rather than
+extending a structurally saturated local sieve.
 
 The scalar continued-fraction method alone has reached its certified 300-digit
 credit frontier. Further progress must use nonlocal arithmetic, stronger
-occupancy/correction, or a better candidate.
+occupancy/correction, a genuinely new analytic estimate, or a better candidate.
 
-Secondary routes remain an explicit linear-form-in-logarithms estimate and a
-candidate search targeted at non-saturated prime-power lifts, but only if their
-constants or invariants address the actual positive-credit return.
-
-Do not use finite same-type windows, a fixed finite `N`-adic ladder, any finite
-`1093`-adic lift, or long finite trajectories as a standalone contradiction.
+Finite same-type windows, a fixed finite `N`-adic ladder, finite `1093`-adic
+lifts, or long finite trajectories may be used for reconnaissance and lemma
+discovery, but not as a standalone contradiction or divergence proof.
 
 ## Non-negotiable corrections
 
@@ -317,7 +340,13 @@ by a cycle. Never present finite computation as divergence.
 
 ## Continue instruction
 
-A request to continue authorizes one substantial research sprint. Choose the
-strongest route, verify it, save a rigorous theorem, certificate, or strict no-go,
-and commit the result. Keep chat updates short; keep detailed mathematics in the
-repository.
+A request to continue authorizes an unrestricted research session within actual
+platform limits.  Inspect as much of the repository and literature as useful,
+pursue several routes, change candidates, run substantial calculations, build
+and verify certificates, and commit every durable result or rigorous no-go.
+
+Do not stop merely because an older operating rule preferred short searches or a
+small number of directions.  Stop or narrow only for an actual resource failure,
+a rigorous dead end, loss of relevance to the infinite target, or completion of
+a checked result suitable for handoff.  Report exactly what was proved, tested,
+committed, and left open.
