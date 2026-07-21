@@ -59,7 +59,7 @@ Current `main` and committed checkers override chat summaries.  Search and read
 broadly when it improves the chance of a proof; avoid only redundant re-fetches
 of unchanged material that add no information.
 
-## Primary candidate and proof gates
+## Primary long-form candidate and proof gates
 
 ```text
 N=2^500-1,
@@ -78,6 +78,65 @@ G5 final certificate: waits for G3.
 ```
 
 The strict problem remains open because G3 remains open.
+
+## Parallel short-form candidate: `X=31,n0=3`
+
+Keep the explicit accelerated orbit
+
+```text
+X=31,
+n0=3,
+a_t=v2(31*n_t+1),
+A_t=sum_(j<t) a_j,
+s_2(n)=number of 1 bits of n.
+```
+
+The exact affine iteration bound gives
+
+```text
+n_t>3*31^t/2^A_t.
+```
+
+Consequently the single global estimate
+
+```text
+A_t+s_2(n_t)<=4*t+2 for every t>=1                    (X31)
+```
+
+would imply `A_t<=4*t+1` and therefore
+
+```text
+n_t>(3/2)*(31/16)^t -> +infinity.
+```
+
+Thus a proof of `(X31)` is a complete prize solution.  The exact one-step carry
+identity retained for this route is
+
+```text
+s_2(31*n_t)=a_t+s_2(n_(t+1)-1).
+```
+
+Current status:
+
+```text
+(X31) checked with exact integer arithmetic through 100000 accelerated steps;
+minimum slack 4*t+2-(A_t+s_2(n_t)) is 0, at t=1;
+no proof for all t is known.
+```
+
+Files:
+
+```text
+docs/X31_BINARY_WEIGHT_LEAD.md
+tools/check_x31_binary_weight.py
+```
+
+Treat this as an active parallel priority, not as a proved replacement for the
+long-form candidate.  At each research session compare the expected rigorous
+proof yield of both branches and freely work on the stronger one.  For `X=31`,
+do not merely extend the finite trajectory cutoff unless the computation tests a
+specific carry potential, induction scheme, block inequality, or counterexample
+condition that informs the infinite lemma.
 
 ## Retained global facts
 
@@ -310,14 +369,14 @@ Every return prefix ending at a complete-block boundary has credit
 Q>=1-C>=-4499.
 ```
 
-## Decisive next target and strategy pivot
+## Decisive next targets and strategy pivot
 
-Exclude the positive-credit return after the bounded initial sponsor nest.
-The finite `1093`-adic closure route is rigorously exhausted.  This is a proved
-mathematical no-go, not a restriction on trying other primes, other invariants,
-or other candidates.
+For the long-form candidate, exclude the positive-credit return after the bounded
+initial sponsor nest.  The finite `1093`-adic closure route is rigorously
+exhausted.  This is a proved mathematical no-go, not a restriction on trying
+other primes, other invariants, or other candidates.
 
-The strongest remaining route for the primary candidate is:
+The strongest remaining route for the long-form candidate is:
 
 1. use the 300-digit total-credit frontier and the `1/1007` global strip;
 2. charge every zero-credit arch by the quantitative loss (3);
@@ -329,15 +388,24 @@ The strongest remaining route for the primary candidate is:
 6. exploit `Q>=-4499`, so no return prefix can use an unbounded exceptional
    reserve.
 
+For the short-form `X=31` route, prove `(X31)` by deriving a genuine global
+binary-carry invariant, an induction closed under the exact accelerated map, or
+an unbounded telescoping carry potential.  A counterexample to `(X31)` is also a
+decisive result: record the first failure and use its carry pattern to redesign
+or retire the route.
+
 In parallel, freely screen alternative candidates, primes, prime powers,
 valuation codes, automata, global divisors, Diophantine estimates, formal proof
 methods, and computational certificates.  If the exact global-divisor route
-fails to couple the labels, deprioritize the primary candidate rather than
-extending a structurally saturated local sieve.
+fails to couple the labels, deprioritize the long-form candidate rather than
+extending a structurally saturated local sieve.  If the `X=31` inequality resists
+all structurally informed induction or potential constructions, do not preserve
+it merely because a long finite prefix survives.
 
 The scalar continued-fraction method alone has reached its certified 300-digit
 credit frontier. Further progress must use nonlocal arithmetic, stronger
-occupancy/correction, a genuinely new analytic estimate, or a better candidate.
+occupancy/correction, a genuinely new analytic estimate, a global digital
+invariant, or a better candidate.
 
 Finite same-type windows, a fixed finite `N`-adic ladder, finite `1093`-adic
 lifts, or long finite trajectories may be used for reconnaissance and lemma
