@@ -1,11 +1,13 @@
-# Conjectural binary-weight route for `X=31, n0=3`
+# Binary-weight and zero-bit route for `X=31, n0=3`
 
-Date: 2026-07-20
+Date: 2026-07-21
 
 ## Status
 
-This note records a promising but **unproved** route. It is not a divergence
-proof and must not be presented as a solution to the Althöfer prize problem.
+This note records an exact reduction and a promising but **unproved** sufficient
+inequality. It is not a divergence proof and must not be presented as a solution
+to the Althöfer prize problem.
+
 The exact finite checker is
 
 ```text
@@ -49,7 +51,7 @@ The affine iteration identity gives
 n_t > 3*31^t/2^A_t.                                  (1)
 ```
 
-Therefore the conjectural estimate
+Therefore the estimate
 
 ```text
 A_t+s_2(n_t)<=4*t+2                                  (2)
@@ -74,7 +76,7 @@ X=31,
 n0=3.
 ```
 
-## 3. Exact one-step binary identity
+## 3. Exact one-step carry identity
 
 Every accelerated transition satisfies
 
@@ -107,61 +109,161 @@ creates and destroys binary carries over many consecutive steps. A naive
 one-step monotonicity argument is insufficient because `s_2(n_t)` can increase
 sharply on individual steps.
 
-## 4. Exact finite evidence
+## 4. Exact zero-bit reformulation
+
+Let
+
+```text
+L_t=bit_length(n_t),
+w_t=s_2(n_t),
+z_t=L_t-w_t,
+```
+
+so that `z_t` is the number of zeroes among the `L_t` binary digits of `n_t`.
+Define the one-step length defect
+
+```text
+delta_t=L_t+5-bit_length(31*n_t+1).                  (5)
+```
+
+Since an `L_t`-bit positive integer satisfies
+
+```text
+2^(L_t-1)<=n_t<2^L_t,
+```
+
+and `31` has five binary digits, `31*n_t+1` has either `L_t+4` or `L_t+5`
+bits. Therefore
+
+```text
+delta_t in {0,1}.                                    (6)
+```
+
+Division by `2^a_t` removes exactly `a_t` trailing zeroes. Hence
+
+```text
+L_(t+1)=L_t+5-a_t-delta_t.                           (7)
+```
+
+Put
+
+```text
+Delta_t=sum_(j<t) delta_j.
+```
+
+Since `L_0=2`, summing (7) gives
+
+```text
+L_t=2+5*t-A_t-Delta_t.                               (8)
+```
+
+Using `w_t=L_t-z_t` in (8) yields the exact identity
+
+```text
+4*t+2-(A_t+s_2(n_t))=z_t+Delta_t-t.                 (9)
+```
+
+Thus the desired binary-weight estimate (2) is **equivalent** to
+
+```text
+z_t+Delta_t>=t for every t>=1.                       (10)
+```
+
+This is a genuine simplification of the missing lemma: each step must be paid
+for either by a zero digit currently present in `n_t` or by a previous
+one-bit loss in the product length.
+
+## 5. Stronger sufficient zero-count conjecture
+
+A simpler but stronger sufficient statement is
+
+```text
+z_t>=t for every t>=1.                               (11)
+```
+
+Because `Delta_t>=0`, (11) implies (10), hence (2), and therefore the explicit
+divergence conclusion (3).
+
+Statement (11) is not known for all `t`. It should be treated as a focused
+research target, not as a theorem.
+
+## 6. Exact finite evidence
 
 The command
 
 ```text
-python tools/check_x31_binary_weight.py --steps 100000
+python tools/check_x31_binary_weight.py --steps 300000
 ```
 
-was run with exact Python integer arithmetic. It returned
+was run with exact Python integer arithmetic. It verified at every checked step:
 
 ```text
-steps_checked:                 100000
-finite_inequality_holds:       true
-minimum_slack:                 0
-minimum_slack_step:            1
-final_orbit_value_bits:        296182
-final_cumulative_halvings:     199240
-final_binary_weight:           147795
-is_proof_of_infinite_divergence: false
+original slack = 4*t+2-(A_t+s_2(n_t))
+               = z_t+Delta_t-t,
 ```
 
-Here
+and returned the following final data:
 
 ```text
-slack_t=4*t+2-(A_t+s_2(n_t)).
+steps_checked:                    300000
+final_orbit_value_bits:           888152
+final_cumulative_halvings:        598109
+final_binary_weight:              444348
+final_zero_bits:                  443804
+final_cumulative_length_defects:  13741
+minimum_original_slack:           0 at t=1
+minimum_strong_zero_slack:        0 at t=1
+first_original_failure_step:      none
+first_strong_zero_failure_step:   none
 ```
 
-Thus (2) holds on the first `100000` accelerated steps, with equality at the
-first step. This is finite evidence only. It does not exclude a later failure.
+At the final checked step the stronger zero-count inequality has slack
 
-## 5. Exact missing lemma
+```text
+z_t-t=143804.
+```
 
-The route is completed by proving:
+This is finite evidence only. It does not exclude a later failure.
 
-> For the accelerated `31n+1` orbit starting from `n_0=3`, prove
-> `A_t+s_2(n_t)<=4*t+2` for every integer `t>=1`.
+## 7. Exact missing lemma
 
-A useful strengthening would construct a nonnegative carry potential `P(n)` and
-prove a telescoping inequality of the form
+This route is completed by either of the following:
+
+1. prove the equivalent inequality
+
+```text
+z_t+Delta_t>=t
+```
+
+for every `t>=1`; or
+
+2. prove the stronger and simpler inequality
+
+```text
+z_t>=t
+```
+
+for every `t>=1`.
+
+A useful strengthening would construct a nonnegative, possibly unbounded carry
+potential `P(n)` and prove a telescoping inequality of the form
 
 ```text
 A_t+s_2(n_t)+P(n_t)<=4*t+constant.
 ```
 
 Any proposed potential must be tested against the existing no-go results for
-fixed finite-state positive-mean certificates: it may need unbounded digital
+fixed finite-state positive-mean certificates. It may need unbounded digital
 information rather than only a fixed residue class.
 
-## 6. Verification
+## 8. Verification discipline
 
 Run
 
 ```text
-python tools/check_x31_binary_weight.py --steps 100000
+python tools/check_x31_binary_weight.py --steps 300000
 ```
 
-The checker reports the first failure if one occurs and explicitly marks its
-output as not being an infinite proof.
+The checker reports the first failure of either conjectural inequality, verifies
+the exact slack identity (9), and explicitly marks its output as not being an
+infinite proof.
